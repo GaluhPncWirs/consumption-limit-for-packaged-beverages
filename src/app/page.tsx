@@ -1,14 +1,13 @@
 import DisplayInputUser from "./components/inputUser/page";
 
 export default function Home() {
-  const clientID = "c94e3677e63145e1a05fe557f002e60b";
-  const clientSecret = "4570aa7010cb46ccacec36c900e7a64f";
   async function getData() {
     const url = "https://oauth.fatsecret.com/connect/token";
-
     const header = new Headers({
       "Content-Type": "application/x-www-form-urlencoded",
-      Authorization: "Basic " + btoa(clientID + ":" + clientSecret),
+      Authorization:
+        "Basic " +
+        btoa(process.env.CLIENT_ID + ":" + process.env.CLIENT_SECRET),
     });
 
     const body = new URLSearchParams({

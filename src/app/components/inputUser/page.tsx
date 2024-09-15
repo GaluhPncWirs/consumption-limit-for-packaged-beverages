@@ -82,19 +82,19 @@ export default function DisplayInputUser() {
   //     }
   //   }
 
-  const male = useRef(null);
-  const female = useRef(null);
-  const ages = useRef(null);
-  const bodyHeight = useRef(null);
-  const bodyWeight = useRef(null);
-  const activityLevel = useRef(null);
-  const healthStatus = useRef(null);
+  const male = useRef<HTMLInputElement>(null);
+  const female = useRef<HTMLInputElement>(null);
+  const ages = useRef<HTMLInputElement>(null);
+  const bodyHeight = useRef<HTMLInputElement>(null);
+  const bodyWeight = useRef<HTMLInputElement>(null);
+  const activityLevel = useRef<HTMLSelectElement>(null);
+  const healthStatus = useRef<HTMLSelectElement>(null);
   const [yourCalories, setYourCalories] = useState("");
 
   function calculateCalories() {
-    const age = parseInt(ages.current?.value);
-    const weight = parseInt(bodyWeight.current?.value);
-    const height = parseFloat(bodyHeight.current?.value);
+    const age = parseInt(ages.current?.value || "0");
+    const weight = parseInt(bodyWeight.current?.value || "0");
+    const height = parseFloat(bodyHeight.current?.value || "0");
     let BMR; // Basal Metabolic Rate
 
     if (male.current?.checked) {
