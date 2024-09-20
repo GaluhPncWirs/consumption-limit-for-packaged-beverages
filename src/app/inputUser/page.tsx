@@ -91,10 +91,10 @@ export default function DisplayInputUser() {
   const bodyWeight = useRef<HTMLInputElement>(null);
   const activityLevel = useRef<HTMLSelectElement>(null);
   const healthStatus = useRef<HTMLSelectElement>(null);
-  const { setYourCalories } = useCalories();
+  const { setYourMaxSugar } = useCalories();
   const [modalBox, setModalBox] = useState(false);
 
-  function calculateCalories() {
+  function calculateMaxSugar() {
     const age = parseInt(ages.current?.value || "0");
     const weight = parseInt(bodyWeight.current?.value || "0");
     const height = parseFloat(bodyHeight.current?.value || "0");
@@ -133,7 +133,19 @@ export default function DisplayInputUser() {
     }
 
     const TDEE = BMR! * activityFactor;
-    setYourCalories(TDEE);
+    let maxSugarCalories;
+
+    // Sesuaikan berdasarkan status kesehatan
+    if (healthStatus.current?.value === "overweight") {
+      maxSugarCalories = TDEE * 0.08;
+    } else if (healthStatus.current?.value === "diabetic") {
+      maxSugarCalories = TDEE * 0.05;
+    } else {
+      maxSugarCalories = TDEE * 0.1;
+    }
+
+    const maxSugarPerGrams = maxSugarCalories / 4; // Karena 1 gram gula = 4 kalori
+    setYourMaxSugar(maxSugarPerGrams);
     // console.log("Kebutuhan Kalori Harian (TDEE):" + TDEE.toFixed(2));
   }
 
@@ -141,17 +153,16 @@ export default function DisplayInputUser() {
     <>
       <div className="w-full">
         <div>
-          {/* {yourCalories} */}
           <h1 className="text-center mb-5 text-xl font-bold">
             Penghitung Konsumsi Batas Aman Konsumsi Gula Harian{" "}
           </h1>
           <div className="bg-blue-300 rounded-lg py-5 px-3 max-w-xl mx-auto shadow-lg">
-            <div className="mb-5 text-center text-lg font-semibold">
+            {/* <div className="mb-5 text-center text-lg font-semibold">
               <h2>
                 silahkan inputkan di bawah ini agar bisa mengetahui berapa
                 kalori anda{" "}
               </h2>
-            </div>
+            </div> */}
             <form
               id="sugarForm"
               className="flex flex-col justify-center gap-4 ml-5"
@@ -256,7 +267,7 @@ export default function DisplayInputUser() {
               </div>
             </form>
             <div className="mt-4 mx-auto text-center max-w-20 rounded-md bg-slate-300 hover:bg-slate-400">
-              <button onClick={calculateCalories}>Hitung</button>
+              <button onClick={calculateMaxSugar}>Hitung</button>
             </div>
           </div>
           <div>{modalBox && <ModalBox setModalBox={setModalBox} />}</div>
@@ -264,14 +275,4 @@ export default function DisplayInputUser() {
       </div>
     </>
   );
-}
-
-{
-  /* <label htmlFor="sugarContent">Kadar Gula dalam kemasan Minuman (dalam satuan gram) :</label>
-<input type="number" id="sugarContent" step="0.01" required/>
-
-<label htmlFor="volumeKemasan">volume kemasan (dalam satuan ml) :</label>
-<input type="number" id="volumeKemasan" step="0.01" required/>
-
-<button type="button" >Hitung Konsumsi Maksimal</button> */
 }
