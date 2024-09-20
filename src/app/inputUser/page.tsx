@@ -1,4 +1,6 @@
 "use client";
+import ModalBox from "@/components/modalBox/page";
+import { useCalories } from "@/context/useContex";
 import { useRef, useState } from "react";
 
 export default function DisplayInputUser() {
@@ -89,13 +91,15 @@ export default function DisplayInputUser() {
   const bodyWeight = useRef<HTMLInputElement>(null);
   const activityLevel = useRef<HTMLSelectElement>(null);
   const healthStatus = useRef<HTMLSelectElement>(null);
-  const [yourCalories, setYourCalories] = useState("");
+  const { setYourCalories } = useCalories();
+  const [modalBox, setModalBox] = useState(false);
 
   function calculateCalories() {
     const age = parseInt(ages.current?.value || "0");
     const weight = parseInt(bodyWeight.current?.value || "0");
     const height = parseFloat(bodyHeight.current?.value || "0");
     let BMR; // Basal Metabolic Rate
+    setModalBox(true);
 
     if (male.current?.checked) {
       if (male.current?.value === "male") {
@@ -129,30 +133,18 @@ export default function DisplayInputUser() {
     }
 
     const TDEE = BMR! * activityFactor;
-    setYourCalories(TDEE.toFixed(2));
-    // let maxSugarCalories;
-
-    // // Sesuaikan berdasarkan status kesehatan
-    // if (healthStatus.current?.value === "overweight") {
-    //   maxSugarCalories = TDEE * 0.08;
-    // } else if (healthStatus.current?.value === "diabetic") {
-    //   maxSugarCalories = TDEE * 0.05;
-    // } else {
-    //   maxSugarCalories = TDEE * 0.1;
-    // }
-
-    console.log("Kebutuhan Kalori Harian (TDEE):" + TDEE.toFixed(2));
+    setYourCalories(TDEE);
+    // console.log("Kebutuhan Kalori Harian (TDEE):" + TDEE.toFixed(2));
   }
 
   return (
     <>
       <div className="w-full">
         <div>
-          {yourCalories}
+          {/* {yourCalories} */}
           <h1 className="text-center mb-5 text-xl font-bold">
             Penghitung Konsumsi Batas Aman Konsumsi Gula Harian{" "}
           </h1>
-
           <div className="bg-blue-300 rounded-lg py-5 px-3 max-w-xl mx-auto shadow-lg">
             <div className="mb-5 text-center text-lg font-semibold">
               <h2>
@@ -166,9 +158,21 @@ export default function DisplayInputUser() {
             >
               <div id="inputGender" className="flex gap-2 items-center">
                 <span className="text-lg">Gender : </span>
-                <input type="radio" value="male" name="option" ref={male} />
+                <input
+                  type="radio"
+                  value="male"
+                  name="option"
+                  ref={male}
+                  className="cursor-pointer"
+                />
                 <label htmlFor="gender">Pria</label>
-                <input type="radio" value="female" name="option" ref={female} />
+                <input
+                  type="radio"
+                  value="female"
+                  name="option"
+                  ref={female}
+                  className="cursor-pointer"
+                />
                 <label htmlFor="gender">Wanita</label>
               </div>
 
@@ -242,7 +246,7 @@ export default function DisplayInputUser() {
                 </label>
                 <select
                   id="healthStatus"
-                  className="p-2 rounded-md bg-slate-300 text-sm"
+                  className="p-2 rounded-md bg-slate-300 text-sm cursor-pointer"
                   ref={healthStatus}
                 >
                   <option value="normal">Normal</option>
@@ -255,6 +259,7 @@ export default function DisplayInputUser() {
               <button onClick={calculateCalories}>Hitung</button>
             </div>
           </div>
+          <div>{modalBox && <ModalBox setModalBox={setModalBox} />}</div>
         </div>
       </div>
     </>

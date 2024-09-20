@@ -1,4 +1,4 @@
-import DisplayInputUser from "./components/inputUser/page";
+import DisplayInputUser from "./inputUser/page";
 
 export default function Home() {
   async function getData() {
