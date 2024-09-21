@@ -137,8 +137,6 @@ export default function DisplayInputUser() {
 
     // Sesuaikan berdasarkan status kesehatan
     if (healthStatus.current?.value === "overweight") {
-      maxSugarCalories = TDEE * 0.08;
-    } else if (healthStatus.current?.value === "diabetic") {
       maxSugarCalories = TDEE * 0.05;
     } else {
       maxSugarCalories = TDEE * 0.1;
@@ -262,7 +260,6 @@ export default function DisplayInputUser() {
                 >
                   <option value="normal">Normal</option>
                   <option value="overweight">Obesitas</option>
-                  <option value="diabetic">Diabetes</option>
                 </select>
               </div>
             </form>
