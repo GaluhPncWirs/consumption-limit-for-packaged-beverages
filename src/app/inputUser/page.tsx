@@ -90,7 +90,6 @@ export default function DisplayInputUser() {
   const bodyHeight = useRef<HTMLInputElement>(null);
   const bodyWeight = useRef<HTMLInputElement>(null);
   const activityLevel = useRef<HTMLSelectElement>(null);
-  const healthStatus = useRef<HTMLSelectElement>(null);
   const { setYourMaxSugar } = useCalories();
   const [modalBox, setModalBox] = useState(false);
 
@@ -135,10 +134,14 @@ export default function DisplayInputUser() {
     const TDEE = BMR! * activityFactor;
     let maxSugarCalories;
 
-    // Sesuaikan berdasarkan status kesehatan
-    if (healthStatus.current?.value === "overweight") {
+    const convertToMeters = height / 100;
+    const heightSquares = Math.pow(convertToMeters, 2);
+    let bodyMassIndex = weight / heightSquares;
+    if (Math.floor(bodyMassIndex) >= 30) {
+      // obesitas
       maxSugarCalories = TDEE * 0.05;
     } else {
+      // normal
       maxSugarCalories = TDEE * 0.1;
     }
 
@@ -151,16 +154,16 @@ export default function DisplayInputUser() {
     <>
       <div className="w-full">
         <div>
-          <h1 className="text-center mb-5 text-xl font-bold">
-            Penghitung Konsumsi Batas Aman Konsumsi Gula Harian{" "}
-          </h1>
-          <div className="bg-blue-300 rounded-lg py-5 px-3 max-w-xl mx-auto shadow-lg">
+          <div className="bg-blue-300 rounded-lg py-10 px-5 max-w-xl mx-auto shadow-lg">
             {/* <div className="mb-5 text-center text-lg font-semibold">
               <h2>
                 silahkan inputkan di bawah ini agar bisa mengetahui berapa
                 kalori anda{" "}
               </h2>
             </div> */}
+            <h1 className="text-center mb-8 text-xl font-bold">
+              Penghitung Konsumsi Batas Aman Konsumsi Gula Harian{" "}
+            </h1>
             <form
               id="sugarForm"
               className="flex flex-col justify-center gap-4 ml-5"
@@ -248,22 +251,8 @@ export default function DisplayInputUser() {
                   </option>
                 </select>
               </div>
-
-              <div>
-                <label htmlFor="healthStatus" className="block mb-2 text-lg">
-                  Status Kesehatan
-                </label>
-                <select
-                  id="healthStatus"
-                  className="p-2 rounded-md bg-slate-300 text-sm cursor-pointer"
-                  ref={healthStatus}
-                >
-                  <option value="normal">Normal</option>
-                  <option value="overweight">Obesitas</option>
-                </select>
-              </div>
             </form>
-            <div className="mt-4 mx-auto text-center max-w-20 rounded-md bg-slate-300 hover:bg-slate-400">
+            <div className="mt-8 mx-auto text-center max-w-20 rounded-md bg-slate-300 hover:bg-slate-400">
               <button onClick={calculateMaxSugar}>Hitung</button>
             </div>
           </div>

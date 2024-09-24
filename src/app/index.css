@@ -57,4 +57,28 @@
       #inputGender input[type="radio"]:checked::before {
         opacity: 1;
       }
+
+      .bottleInside{
+        width: 300px;
+        height: 400px;
+        position: relative;
+        background-image: url("/images/plastic-bottle-water.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        mask-image: url("/images/plastic-bottle-water.png");
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        -webkit-mask-image: url("/images/plastic-bottle-water.png");
+      }
+
+      .fill{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: rgba(0, 200, 255, 0.7);
+        transition: height 0.2s ease-in-out;
+      }
 }

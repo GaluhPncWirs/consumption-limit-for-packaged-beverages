@@ -1,28 +1,32 @@
 "use client";
 
 import { useCalories } from "@/context/useContex";
-import Image from "next/image";
 import { useRef } from "react";
 
 export default function MainContent() {
   const { yourMaxSugar } = useCalories();
   const sugarMinumanRef = useRef<HTMLInputElement>(null);
   const volumeKemasanRef = useRef<HTMLInputElement>(null);
+  const fillBottle = useRef<any>(null);
   function calculateMaximal() {
     const sugarMinuman = parseInt(sugarMinumanRef.current?.value || "0");
     const volumeKemasan = parseInt(volumeKemasanRef.current?.value || "0");
     const product = sugarMinuman / volumeKemasan;
     const maxConsumptionMl = yourMaxSugar / product;
+    const convert = maxConsumptionMl / volumeKemasan;
+    console.log(convert);
     if (maxConsumptionMl >= volumeKemasan) {
       console.log(
         `Konsumsi per: ${Math.floor(maxConsumptionMl / volumeKemasan)} botol`
       );
+      // fillBottle.current!.style.height = maxConsumptionMl / volumeKemasan + "%";
     } else {
       console.log(
         `Minuman ini bisa anda konsumsi :  ${maxConsumptionMl.toFixed(
           2
         )} ml, kurang dari satu botol.`
       );
+      fillBottle.current!.style.height = convert + "%";
     }
     console.log(
       maxConsumptionMl.toLocaleString("id-ID", {
@@ -79,14 +83,8 @@ export default function MainContent() {
                 </label>
               </div>
             </form>
-            <div className="basis-2/6">
-              <Image
-                src="/images/plastic-bottle-water.png"
-                alt="bottle"
-                width={300}
-                height={400}
-                className="bg-slate-100"
-              />
+            <div className="basis-2/6 bottleInside">
+              <div className="fill" ref={fillBottle}></div>
             </div>
           </div>
           <button
