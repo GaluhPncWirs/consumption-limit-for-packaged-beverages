@@ -1,38 +1,45 @@
 "use client";
 
 import { useCalories } from "@/context/useContex";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 export default function MainContent() {
   const { yourMaxSugar } = useCalories();
   const sugarMinumanRef = useRef<HTMLInputElement>(null);
   const volumeKemasanRef = useRef<HTMLInputElement>(null);
-  const fillBottle = useRef<any>(null);
+  const fillBottle = useRef<any>([]);
+  const [maxsimalConsume, setMaxsimalConsume] = useState(0);
   function calculateMaximal() {
     const sugarMinuman = parseInt(sugarMinumanRef.current?.value || "0");
     const volumeKemasan = parseInt(volumeKemasanRef.current?.value || "0");
     const product = sugarMinuman / volumeKemasan;
     const maxConsumptionMl = yourMaxSugar / product;
-    const convert = maxConsumptionMl / volumeKemasan;
-    console.log(convert);
+    const result = maxConsumptionMl / volumeKemasan;
+    const contvertTo = result * 99 + 1;
+    const test = contvertTo + 1;
+    setMaxsimalConsume(Math.floor(result));
     if (maxConsumptionMl >= volumeKemasan) {
-      console.log(
-        `Konsumsi per: ${Math.floor(maxConsumptionMl / volumeKemasan)} botol`
-      );
-      // fillBottle.current!.style.height = maxConsumptionMl / volumeKemasan + "%";
+      console.log(`Konsumsi per: ${Math.floor(result)} botol`);
+      fillBottle.current.forEach((ref: any, index: any) => {
+        if (ref) {
+          ref.style.height = Math.floor(test) + "%";
+        }
+      });
     } else {
       console.log(
         `Minuman ini bisa anda konsumsi :  ${maxConsumptionMl.toFixed(
           2
         )} ml, kurang dari satu botol.`
       );
-      fillBottle.current!.style.height = convert + "%";
+      if (fillBottle.current[0]) {
+        fillBottle.current[0].style.height = Math.floor(test) + "%";
+      }
     }
-    console.log(
-      maxConsumptionMl.toLocaleString("id-ID", {
-        maximumFractionDigits: 0,
-      })
-    );
+    // console.log(
+    //   maxConsumptionMl.toLocaleString("id-ID", {
+    //     maximumFractionDigits: 0,
+    //   })
+    // );
   }
   return (
     <div className="bg-orange-300">
@@ -54,9 +61,9 @@ export default function MainContent() {
           <div className="mt-7 flex items-center">
             <form
               action=""
-              className="basis-4/6 flex flex-col items-center justify-center"
+              className="basis-2/5 flex flex-col items-center justify-center"
             >
-              <div className="relative w-1/2 py-3">
+              <div className="relative w-4/5 py-3">
                 <input
                   type="number"
                   id="sugarContent"
@@ -69,7 +76,7 @@ export default function MainContent() {
                   Kadar Gula dalam Minuman (gram) :
                 </label>
               </div>
-              <div className="relative w-1/2 py-3">
+              <div className="relative w-4/5 py-3">
                 <input
                   type="number"
                   id="volumeKemasan"
@@ -79,12 +86,32 @@ export default function MainContent() {
                   ref={volumeKemasanRef}
                 />
                 <label htmlFor="volumeKemasan" className="labelText">
-                  Volume Kemasan (dalam satuan ml) :
+                  Volume Kemasan (ml) :
                 </label>
               </div>
             </form>
-            <div className="basis-2/6 bottleInside">
-              <div className="fill" ref={fillBottle}></div>
+            <div className="basis-3/5 mb-5 flex justify-center items-center">
+              {maxsimalConsume >= 1 ? (
+                Array.from({ length: maxsimalConsume }).map((_, i) => (
+                  <div key={i} className="bottleInside w-1/5">
+                    <div
+                      className="fill"
+                      ref={(el) => {
+                        fillBottle.current[i] = el;
+                      }}
+                    ></div>
+                  </div>
+                ))
+              ) : (
+                <div className="bottleInside">
+                  <div
+                    className="fill"
+                    ref={(el) => {
+                      fillBottle.current[0] = el;
+                    }}
+                  ></div>
+                </div>
+              )}
             </div>
           </div>
           <button

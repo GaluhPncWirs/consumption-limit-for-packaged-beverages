@@ -60,7 +60,7 @@
 
       .bottleInside{
         width: 300px;
-        height: 400px;
+        height: 300px;
         position: relative;
         background-image: url("/images/plastic-bottle-water.png");
         background-size: contain;
@@ -71,6 +71,7 @@
         mask-repeat: no-repeat;
         mask-position: center;
         -webkit-mask-image: url("/images/plastic-bottle-water.png");
+        display: flex;
       }
 
       .fill{
@@ -78,6 +79,7 @@
         bottom: 0;
         left: 0;
         width: 100%;
+        height: 0%;
         background-color: rgba(0, 200, 255, 0.7);
         transition: height 0.2s ease-in-out;
       }
