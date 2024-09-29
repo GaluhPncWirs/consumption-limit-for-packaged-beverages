@@ -5,47 +5,57 @@ import { useRef, useState } from "react";
 
 export default function MainContent() {
   const { yourMaxSugar } = useCalories();
-  const sugarMinumanRef = useRef<HTMLInputElement>(null);
-  const volumeKemasanRef = useRef<HTMLInputElement>(null);
-  const fillBottle = useRef<any>([]);
-  const [maxsimalConsume, setMaxsimalConsume] = useState(0);
+  const sugarContentInsideProductRef = useRef<HTMLInputElement>(null);
+  const totalVolumeInsideProductRef = useRef<HTMLInputElement>(null);
+  const [fillBottle, setFillBottle] = useState([]);
+  const [totalBottle, setTotalBottle] = useState(0);
+
   function calculateMaximal() {
-    const sugarMinuman = parseInt(sugarMinumanRef.current?.value || "0");
-    const volumeKemasan = parseInt(volumeKemasanRef.current?.value || "0");
-    const product = sugarMinuman / volumeKemasan;
-    const maxConsumptionMl = yourMaxSugar / product;
-    const result = maxConsumptionMl / volumeKemasan;
-    const contvertTo = result * 99 + 1;
-    const test = contvertTo + 1;
-    setMaxsimalConsume(Math.floor(result));
-    if (maxConsumptionMl >= volumeKemasan) {
-      console.log(`Konsumsi per: ${Math.floor(result)} botol`);
-      fillBottle.current.forEach((ref: any, index: any) => {
-        if (ref) {
-          ref.style.height = Math.floor(test) + "%";
-        }
-      });
-    } else {
-      console.log(
-        `Minuman ini bisa anda konsumsi :  ${maxConsumptionMl.toFixed(
-          2
-        )} ml, kurang dari satu botol.`
-      );
-      if (fillBottle.current[0]) {
-        fillBottle.current[0].style.height = Math.floor(test) + "%";
-      }
+    const sugarContentInsideProduct = parseFloat(
+      sugarContentInsideProductRef.current?.value || "0"
+    );
+    const totalVolumeInsideProduct = parseFloat(
+      totalVolumeInsideProductRef.current?.value || "0"
+    );
+    const resultTotalContentProduct =
+      sugarContentInsideProduct / totalVolumeInsideProduct;
+
+    const maxConsumptionMl = yourMaxSugar / resultTotalContentProduct;
+    const numberOfBottles = Math.floor(
+      maxConsumptionMl / totalVolumeInsideProduct
+    );
+    setTotalBottle(numberOfBottles);
+
+    const remainder = maxConsumptionMl % totalVolumeInsideProduct;
+    const percentageFillForRemainder = Math.floor(
+      (remainder / totalVolumeInsideProduct) * 100
+    );
+
+    const fillArray: any = Array(numberOfBottles).fill(100);
+    if (percentageFillForRemainder > 0) {
+      fillArray.push(percentageFillForRemainder);
     }
-    // console.log(
-    //   maxConsumptionMl.toLocaleString("id-ID", {
-    //     maximumFractionDigits: 0,
-    //   })
-    // );
+    setFillBottle(fillArray);
+    console.log(fillBottle);
+
+    // if (numberOfBottles >= 1) {
+    //   console.log(`Konsumsi per: ${numberOfBottles} botol`);
+    // } else {
+    //   console.log(
+    //     `Minuman ini bisa anda konsumsi :  ${maxConsumptionMl.toFixed(
+    //       2
+    //     )} ml, kurang dari satu botol.`
+    //   );
+    //   if (fillBottle.current[0]) {
+    //     fillBottle.current[0].style.height = `${percentageFillForRemainder}%`;
+    //   }
+    // }
   }
   return (
     <div className="bg-orange-300">
-      <div className="w-5/6 mx-auto">
+      <div className="w-5/6 mx-auto h-screen">
         <div className="w-11/12 mx-auto bg-blue-300 h-full flex flex-col justify-center">
-          <div className="mt-10 flex justify-around">
+          <div className="flex ml-5">
             <p className="mr-2">
               Your Max Consume Sugar Per Day :{" "}
               <span>
@@ -54,9 +64,6 @@ export default function MainContent() {
                 })}
               </span>
             </p>
-            <div className="bg-red-400 h-48 w-60">
-              <p>LeaderBoard</p>
-            </div>
           </div>
           <div className="mt-7 flex items-center">
             <form
@@ -67,10 +74,9 @@ export default function MainContent() {
                 <input
                   type="number"
                   id="sugarContent"
-                  step="0.01"
                   required
                   className="inputField peer"
-                  ref={sugarMinumanRef}
+                  ref={sugarContentInsideProductRef}
                 />
                 <label htmlFor="sugarContent" className="labelText">
                   Kadar Gula dalam Minuman (gram) :
@@ -80,10 +86,9 @@ export default function MainContent() {
                 <input
                   type="number"
                   id="volumeKemasan"
-                  step="0.01"
                   required
                   className="inputField peer"
-                  ref={volumeKemasanRef}
+                  ref={totalVolumeInsideProductRef}
                 />
                 <label htmlFor="volumeKemasan" className="labelText">
                   Volume Kemasan (ml) :
@@ -91,36 +96,24 @@ export default function MainContent() {
               </div>
             </form>
             <div className="basis-3/5 mb-5 flex justify-center items-center">
-              {maxsimalConsume >= 1 ? (
-                Array.from({ length: maxsimalConsume }).map((_, i) => (
+              {fillBottle.length > 0 ? (
+                fillBottle.map((item: any, i: number) => (
                   <div key={i} className="bottleInside w-1/5">
-                    <div
-                      className="fill"
-                      ref={(el) => {
-                        fillBottle.current[i] = el;
-                      }}
-                    ></div>
+                    <div className="fill" style={{ height: `${item}%` }}></div>
                   </div>
                 ))
               ) : (
                 <div className="bottleInside">
-                  <div
-                    className="fill"
-                    ref={(el) => {
-                      fillBottle.current[0] = el;
-                    }}
-                  ></div>
+                  <div className="fill" style={{ height: "0%" }}></div>
                 </div>
               )}
             </div>
           </div>
-          <button
-            type="button"
-            className="bg-blue-500 px-3 py-1 rounded-lg hover:bg-blue-400"
-            onClick={calculateMaximal}
-          >
-            Hitung
-          </button>
+          <div className="bg-blue-500 px-3 py-1 rounded-lg hover:bg-blue-400 text-center mt-20">
+            <button type="button" onClick={calculateMaximal}>
+              Hitung
+            </button>
+          </div>
         </div>
       </div>
     </div>

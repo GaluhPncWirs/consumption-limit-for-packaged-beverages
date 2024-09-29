@@ -96,7 +96,7 @@ export default function DisplayInputUser() {
   function calculateMaxSugar() {
     const age = parseInt(ages.current?.value || "0");
     const weight = parseInt(bodyWeight.current?.value || "0");
-    const height = parseFloat(bodyHeight.current?.value || "0");
+    const height = parseInt(bodyHeight.current?.value || "0");
     let BMR; // Basal Metabolic Rate
     setModalBox(true);
 
@@ -104,7 +104,9 @@ export default function DisplayInputUser() {
       if (male.current?.value === "male") {
         BMR = 10 * weight + 6.25 * height - 5 * age + 5;
       }
-    } else {
+    }
+
+    if (female.current?.checked) {
       if (female.current?.value === "female") {
         BMR = 10 * weight + 6.25 * height - 5 * age - 161;
       }
@@ -136,8 +138,9 @@ export default function DisplayInputUser() {
 
     const convertToMeters = height / 100;
     const heightSquares = Math.pow(convertToMeters, 2);
-    let bodyMassIndex = weight / heightSquares;
-    if (Math.floor(bodyMassIndex) >= 30) {
+    let bodyMassIndex = Math.floor(weight / heightSquares);
+
+    if (bodyMassIndex >= 30) {
       // obesitas
       maxSugarCalories = TDEE * 0.05;
     } else {
@@ -162,7 +165,7 @@ export default function DisplayInputUser() {
               </h2>
             </div> */}
             <h1 className="text-center mb-8 text-xl font-bold">
-              Penghitung Konsumsi Batas Aman Konsumsi Gula Harian{" "}
+              Penghitung Batas Aman Konsumsi Minuman Kemasan
             </h1>
             <form
               id="sugarForm"

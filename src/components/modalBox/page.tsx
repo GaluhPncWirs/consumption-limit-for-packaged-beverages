@@ -17,10 +17,8 @@ export default function ModalBox({ setModalBox }: any) {
           {yourMaxSugar.toLocaleString("id-ID", { maximumFractionDigits: 0 })}{" "}
           Gram Gula/Hari
         </p>
-        <div className="bg-slate-300 py-1 px-4 rounded-lg mt-3">
-          <button onClick={handleClick} className="font-semibold text-lg">
-            oke
-          </button>
+        <div className="bg-slate-300 py-1 px-4 rounded-lg mt-3 font-semibold text-lg cursor-pointer hover:bg-slate-400">
+          <button onClick={handleClick}>oke</button>
         </div>
       </div>
     </div>
