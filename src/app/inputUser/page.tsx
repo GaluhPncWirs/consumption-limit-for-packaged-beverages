@@ -1,7 +1,7 @@
 "use client";
 import ModalBox from "@/components/modalBox/page";
 import { useCalories } from "@/context/useContex";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function DisplayInputUser() {
   // function calculateCalories() {
@@ -165,13 +165,16 @@ export default function DisplayInputUser() {
               </h2>
             </div> */}
             <h1 className="text-center mb-8 text-xl font-bold">
-              Penghitung Batas Aman Konsumsi Minuman Kemasan
+              Penghitung Batas Aman Konsumsi Produk Manis Kemasan
             </h1>
             <form
               id="sugarForm"
               className="flex flex-col justify-center gap-4 ml-5"
             >
-              <div id="inputGender" className="flex gap-2 items-center">
+              <div
+                id="inputGender"
+                className="flex gap-2 items-center font-medium"
+              >
                 <span className="text-lg">Gender : </span>
                 <input
                   type="radio"
@@ -191,7 +194,7 @@ export default function DisplayInputUser() {
                 <label htmlFor="gender">Wanita</label>
               </div>
 
-              <div className="relative w-1/2 py-3">
+              <div className="relative w-1/2 py-3 font-medium">
                 <input
                   type="number"
                   id="age"
@@ -203,7 +206,7 @@ export default function DisplayInputUser() {
                 </label>
               </div>
 
-              <div className="relative w-1/2 py-3">
+              <div className="relative w-1/2 py-3 font-medium">
                 <input
                   type="number"
                   id="height"
@@ -215,7 +218,7 @@ export default function DisplayInputUser() {
                 </label>
               </div>
 
-              <div className="relative w-1/2 pt-3">
+              <div className="relative w-1/2 pt-3 font-medium">
                 <input
                   type="number"
                   id="weight"
@@ -227,7 +230,7 @@ export default function DisplayInputUser() {
                 </label>
               </div>
 
-              <div>
+              <div className="font-medium">
                 <label htmlFor="activityLevel" className="block mb-2 text-lg">
                   Activity Level
                 </label>
@@ -255,7 +258,7 @@ export default function DisplayInputUser() {
                 </select>
               </div>
             </form>
-            <div className="mt-8 mx-auto text-center max-w-20 rounded-md bg-slate-300 hover:bg-slate-400">
+            <div className="mt-8 mx-auto font-semibold py-1 text-center max-w-20 rounded-md bg-slate-300 hover:bg-slate-400 cursor-pointer">
               <button onClick={calculateMaxSugar}>Hitung</button>
             </div>
           </div>
