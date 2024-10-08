@@ -83,4 +83,10 @@
         background-color: rgba(0, 200, 255, 0.7);
         transition: height 0.2s ease-in-out;
       }
+    .progress-fill{
+      background-color: #ff4cff;
+      height: 100%;
+      width: 0px;
+      transition:  width 0.5s ease-in-out;
+    }
 }

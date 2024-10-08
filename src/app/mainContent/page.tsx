@@ -1,5 +1,6 @@
 "use client";
 
+import Visualization from "@/components/visualisasi/page";
 import { useCalories } from "@/context/useContex";
 import { useRef, useState } from "react";
 
@@ -8,9 +9,10 @@ export default function MainContent() {
   const sugarContentInsideProductRef = useRef<HTMLInputElement>(null);
   const totalVolumeInsideProductRef = useRef<HTMLInputElement>(null);
   const [fillBottle, setFillBottle] = useState([]);
-  const [choosen, setChoosen] = useState("minuman");
   const [miliLiter, setMiliLiter] = useState(0);
   const [text, setText] = useState(false);
+  const [sugarProduk, setSugarProduk] = useState(0);
+  const [volumeProduk, setVolumeProduk] = useState(0);
 
   function calculateMaximal() {
     setText(true);
@@ -20,6 +22,8 @@ export default function MainContent() {
     const totalVolumeInsideProduct = parseFloat(
       totalVolumeInsideProductRef.current?.value || "0"
     );
+    setSugarProduk(sugarContentInsideProduct);
+    setVolumeProduk(totalVolumeInsideProduct);
     const resultTotalContentProduct =
       sugarContentInsideProduct / totalVolumeInsideProduct;
 
@@ -41,9 +45,9 @@ export default function MainContent() {
     setMiliLiter(percentageFillForRemainder);
   }
   return (
-    <div className="bg-red-300 h-screen">
-      <div className="w-11/12 mx-auto h-full">
-        <div className="w-11/12 mx-auto bg-green-300 h-full flex flex-col justify-center px-5">
+    <div className="bg-red-300 h-screen flex justify-center items-center">
+      <div className="w-11/12 pt-10">
+        <div className="w-5/6 mx-auto bg-green-300 h-full flex flex-col justify-center px-5 rounded-lg py-8">
           <div className="text-lg font-semibold">
             <p className="mr-2">
               Your Max Consume Sugar Per Day :{" "}
@@ -55,107 +59,55 @@ export default function MainContent() {
               </span>
             </p>
           </div>
-          <div className="flex gap-10 justify-center my-8">
-            <button
-              onClick={() => setChoosen("minuman")}
-              className="bg-slate-400 rounded-lg w-1/4 font-semibold text-xl py-1"
-            >
-              Minuman
-            </button>
-            <button
-              onClick={() => setChoosen("makanan")}
-              className="bg-slate-300 rounded-lg w-1/4 font-semibold text-xl py-1"
-            >
-              Makanan
-            </button>
-          </div>
-          {choosen === "makanan" ? (
-            <div>
-              <h1 className="text-center text-2xl font-bold">Makanan</h1>
-              <div className="mt-7 flex items-center">
-                <form
-                  action=""
-                  className="basis-2/5 flex flex-col items-center justify-center"
-                >
-                  <div className="relative w-4/5 py-3">
-                    <input
-                      type="number"
-                      id="sugarContent"
-                      required
-                      className="inputField peer"
-                      ref={sugarContentInsideProductRef}
-                    />
-                    <label htmlFor="sugarContent" className="labelText">
-                      Kadar Gula dalam Minuman (gram) :
-                    </label>
-                  </div>
-                  <div className="relative w-4/5 py-3">
-                    <input
-                      type="number"
-                      id="volumeKemasan"
-                      required
-                      className="inputField peer"
-                      ref={totalVolumeInsideProductRef}
-                    />
-                    <label htmlFor="volumeKemasan" className="labelText">
-                      Volume Kemasan (ml) :
-                    </label>
-                  </div>
-                </form>
-              </div>
-            </div>
-          ) : (
-            <div>
-              <h1 className="text-center text-2xl font-bold">Minuman</h1>
-              <div className="mt-7 flex items-center gap-3">
-                <form
-                  action=""
-                  className="basis-2/5 flex flex-col items-center justify-center"
-                >
-                  <div className="relative w-4/5 py-3">
-                    <input
-                      type="number"
-                      id="sugarContent"
-                      required
-                      className="inputField peer"
-                      ref={sugarContentInsideProductRef}
-                    />
-                    <label htmlFor="sugarContent" className="labelText">
-                      Kadar Gula dalam Minuman (gram) :
-                    </label>
-                  </div>
-                  <div className="relative w-4/5 py-3">
-                    <input
-                      type="number"
-                      id="volumeKemasan"
-                      required
-                      className="inputField peer"
-                      ref={totalVolumeInsideProductRef}
-                    />
-                    <label htmlFor="volumeKemasan" className="labelText">
-                      Volume Kemasan (ml) :
-                    </label>
-                  </div>
-                </form>
-                <div className="basis-3/5 mb-5 flex justify-center items-center">
-                  {fillBottle.length > 0 ? (
-                    fillBottle.map((item: any, i: number) => (
-                      <div key={i} className="bottleInside w-1/5">
-                        <div
-                          className="fill"
-                          style={{ height: `${item}%` }}
-                        ></div>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="bottleInside">
-                      <div className="fill" style={{ height: "0%" }}></div>
-                    </div>
-                  )}
+          <div>
+            <div className="mt-7 flex items-center gap-3">
+              <form
+                action=""
+                className="basis-2/5 flex flex-col items-center justify-center"
+              >
+                <div className="relative w-4/5 py-3">
+                  <input
+                    type="number"
+                    id="sugarContent"
+                    required
+                    className="inputField peer"
+                    ref={sugarContentInsideProductRef}
+                  />
+                  <label htmlFor="sugarContent" className="labelText">
+                    Kadar Gula dalam Minuman (g) :
+                  </label>
                 </div>
+                <div className="relative w-4/5 py-3">
+                  <input
+                    type="number"
+                    id="volumeKemasan"
+                    required
+                    className="inputField peer"
+                    ref={totalVolumeInsideProductRef}
+                  />
+                  <label htmlFor="volumeKemasan" className="labelText">
+                    Volume Kemasan (ml) :
+                  </label>
+                </div>
+              </form>
+              <div className="basis-3/5 mb-5 flex justify-center items-center">
+                {fillBottle.length > 0 ? (
+                  fillBottle.map((item: any, i: number) => (
+                    <div key={i} className="bottleInside w-1/5">
+                      <div
+                        className="fill"
+                        style={{ height: `${item}%` }}
+                      ></div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="bottleInside">
+                    <div className="fill" style={{ height: "0%" }}></div>
+                  </div>
+                )}
               </div>
             </div>
-          )}
+          </div>
           <div
             className={`font-medium text-end ${
               text === true ? `visible` : `invisible`
@@ -180,6 +132,11 @@ export default function MainContent() {
               Hitung
             </button>
           </div>
+          <Visualization
+            sugarProduk={sugarProduk}
+            volumeProduk={volumeProduk}
+            yourMaxSugar={yourMaxSugar}
+          />
         </div>
       </div>
     </div>

@@ -143,9 +143,11 @@ export default function DisplayInputUser() {
     if (bodyMassIndex >= 30) {
       // obesitas
       maxSugarCalories = TDEE * 0.05;
+      console.log("obesity");
     } else {
       // normal
       maxSugarCalories = TDEE * 0.1;
+      console.log("normal");
     }
 
     const maxSugarPerGrams = maxSugarCalories / 4; // Karena 1 gram gula = 4 kalori
