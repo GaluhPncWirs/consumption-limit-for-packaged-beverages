@@ -45,10 +45,10 @@ export default function MainContent() {
     setMiliLiter(percentageFillForRemainder);
   }
   return (
-    <div className="bg-red-300 h-screen flex justify-center items-center">
-      <div className="w-11/12 pt-10">
-        <div className="w-5/6 mx-auto bg-green-300 h-full flex flex-col justify-center px-5 rounded-lg py-8">
-          <div className="text-lg font-semibold">
+    <div className="bg-red-300 flex justify-center items-center">
+      <div className="w-11/12 py-10">
+        <div className="w-full mx-auto bg-green-300 h-full flex flex-col justify-center px-5 rounded-lg py-8">
+          <div className="text-lg font-semibold flex justify-around">
             <p className="mr-2">
               Your Max Consume Sugar Per Day :{" "}
               <span>
@@ -58,9 +58,24 @@ export default function MainContent() {
                 Grams
               </span>
             </p>
+            <div className={`${text === true ? `visible` : `invisible`}`}>
+              {fillBottle.length > 1 && miliLiter > 0 ? (
+                <p>
+                  Konsumsi per {fillBottle.length} botol dengan sisa{" "}
+                  {miliLiter.toFixed(2)} ml
+                </p>
+              ) : fillBottle.length > 1 && miliLiter <= 0 ? (
+                <p>Konsumsi per {fillBottle.length} botol</p>
+              ) : (
+                <p>
+                  Minuman ini bisa anda konsumsi {miliLiter.toFixed(2)} ml,
+                  kurang dari satu botol
+                </p>
+              )}
+            </div>
           </div>
           <div>
-            <div className="mt-7 flex items-center gap-3">
+            <div className="mt-20 flex items-center gap-3">
               <form
                 action=""
                 className="basis-2/5 flex flex-col items-center justify-center"
@@ -74,7 +89,7 @@ export default function MainContent() {
                     ref={sugarContentInsideProductRef}
                   />
                   <label htmlFor="sugarContent" className="labelText">
-                    Kadar Gula dalam Minuman (g) :
+                    Kadar Gula dalam Minuman (Grams) :
                   </label>
                 </div>
                 <div className="relative w-4/5 py-3">
@@ -108,35 +123,18 @@ export default function MainContent() {
               </div>
             </div>
           </div>
-          <div
-            className={`font-medium text-end ${
-              text === true ? `visible` : `invisible`
-            }`}
-          >
-            {fillBottle.length > 1 && miliLiter > 0 ? (
-              <p>
-                Konsumsi per: {fillBottle.length} botol dengan sisa{" "}
-                {miliLiter.toFixed(2)} ml
-              </p>
-            ) : fillBottle.length > 1 && miliLiter <= 0 ? (
-              <p>Konsumsi per: {fillBottle.length} botol</p>
-            ) : (
-              <p>
-                Minuman ini bisa anda konsumsi : {miliLiter.toFixed(2)} ml,
-                kurang dari satu botol
-              </p>
-            )}
-          </div>
           <div className="bg-blue-500 py-1 rounded-lg hover:bg-blue-400 text-center mt-5 w-1/4 text-lg font-semibold">
             <button type="button" onClick={calculateMaximal}>
               Hitung
             </button>
           </div>
-          <Visualization
-            sugarProduk={sugarProduk}
-            volumeProduk={volumeProduk}
-            yourMaxSugar={yourMaxSugar}
-          />
+          {fillBottle.length === 1 && (
+            <Visualization
+              sugarProduk={sugarProduk}
+              volumeProduk={volumeProduk}
+              yourMaxSugar={yourMaxSugar}
+            />
+          )}
         </div>
       </div>
     </div>
