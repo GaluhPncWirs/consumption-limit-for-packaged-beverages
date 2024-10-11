@@ -3,7 +3,7 @@ import { addDoc, collection, getDocs, getFirestore, query, where } from "firebas
 
 const firestore = getFirestore(app)
 
-export async function retriveData(collectionName:string) {
+export async function retriveDataIng(collectionName:string) {
     const snapshot = await getDocs(collection(firestore, collectionName))
     const ING = snapshot.docs.map(doc => ({
         id: doc.id,
@@ -30,4 +30,15 @@ export async function addData(dataProduct : {nameProduct:string, sugars:number, 
             return {status: false, message:"terdapat kesalahan"}
         }
     }
+}
+
+
+export async function retriveDataFunFact(collectionName:string){
+    const snapshot = await getDocs(collection(firestore, collectionName))
+    const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data()
+    }))
+
+    return data
 }
