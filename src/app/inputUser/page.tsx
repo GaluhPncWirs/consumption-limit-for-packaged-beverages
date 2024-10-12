@@ -1,97 +1,16 @@
 "use client";
 import ModalBox from "@/components/modalBox/page";
-import { useCalories } from "@/context/useContex";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 export default function DisplayInputUser() {
-  // function calculateCalories() {
-  //     const age = parseInt(document.getElementById("age").value);
-  //     const gender = document.querySelector("input[name=option]:checked").value;
-  //     const weight = parseFloat(document.getElementById("weight").value);
-  //     const height = parseFloat(document.getElementById("height").value);
-  //     const activityLevel = document.getElementById("activityLevel").value;
-  //     const sugarContent = parseFloat(
-  //       document.getElementById("sugarContent").value
-  //     );
-  //     const volumeKemasan = parseFloat(
-  //       document.getElementById("volumeKemasan").value
-  //     );
-  //     const healthStatus = document.getElementById("healthStatus").value;
-  //     const result = document.getElementById("result");
-  //     const perBottle = document.getElementById("perBotol");
-  //     let BMR; // Basal Metabolic Rate
-
-  //     // Hitung BMR berdasarkan jenis kelamin
-  //     if (gender === "male") {
-  //       BMR = 10 * weight + 6.25 * height - 5 * age + 5;
-  //     }
-
-  //     if (gender === "female") {
-  //       BMR = 10 * weight + 6.25 * height - 5 * age - 161;
-  //     }
-
-  //     // Tentukan faktor aktivitas
-  //     let activityFactor;
-  //     switch (activityLevel) {
-  //       case "sedentary":
-  //         activityFactor = 1.2;
-  //         break;
-  //       case "lightlyActive":
-  //         activityFactor = 1.375;
-  //         break;
-  //       case "moderatelyActive":
-  //         activityFactor = 1.55;
-  //         break;
-  //       case "veryActive":
-  //         activityFactor = 1.725;
-  //         break;
-  //       case "extraActive":
-  //         activityFactor = 1.9;
-  //         break;
-  //       default:
-  //         activityFactor = 1.2;
-  //     }
-
-  //     const TDEE = BMR * activityFactor;
-  //     let maxSugarCalories;
-
-  //     // Sesuaikan berdasarkan status kesehatan
-  //     if (healthStatus === "overweight") {
-  //       maxSugarCalories = TDEE * 0.08;
-  //     } else if (healthStatus === "diabetic") {
-  //       maxSugarCalories = TDEE * 0.05;
-  //     } else {
-  //       maxSugarCalories = TDEE * 0.1;
-  //     }
-
-  //     const maxSugarGrams = maxSugarCalories / 4; // Karena 1 gram gula = 4 kalori
-  //     const product = sugarContent / volumeKemasan;
-  //     const maxConsumptionMl = maxSugarGrams / product;
-
-  //     // console.log("Kebutuhan Kalori Harian (TDEE):" + TDEE.toFixed(2));
-  //     result.textContent = `Konsumsi Gula Maksimal (gram): ${maxSugarGrams.toFixed(
-  //       2
-  //     )}`;
-
-  //     if (maxConsumptionMl >= volumeKemasan) {
-  //       perBottle.textContent = `Konsumsi per: ${Math.floor(
-  //         maxConsumptionMl / volumeKemasan
-  //       )} botol`;
-  //     } else {
-  //       perBottle.textContent = `Minuman ini bisa anda konsumsi :  ${maxConsumptionMl.toFixed(
-  //         2
-  //       )} ml, kurang dari satu botol.`;
-  //     }
-  //   }
-
   const male = useRef<HTMLInputElement>(null);
   const female = useRef<HTMLInputElement>(null);
   const ages = useRef<HTMLInputElement>(null);
   const bodyHeight = useRef<HTMLInputElement>(null);
   const bodyWeight = useRef<HTMLInputElement>(null);
   const activityLevel = useRef<HTMLSelectElement>(null);
-  const { setYourMaxSugar } = useCalories();
   const [modalBox, setModalBox] = useState(false);
+  const [yourMaxSugar, setYourMaxSugar] = useState(0);
 
   function calculateMaxSugar() {
     const age = parseInt(ages.current?.value || "0");
@@ -143,14 +62,13 @@ export default function DisplayInputUser() {
     if (bodyMassIndex >= 30) {
       // obesitas
       maxSugarCalories = TDEE * 0.05;
-      console.log("obesity");
     } else {
       // normal
       maxSugarCalories = TDEE * 0.1;
-      console.log("normal");
     }
 
     const maxSugarPerGrams = maxSugarCalories / 4; // Karena 1 gram gula = 4 kalori
+    localStorage.setItem("maxSugars", String(maxSugarPerGrams));
     setYourMaxSugar(maxSugarPerGrams);
     // console.log("Kebutuhan Kalori Harian (TDEE):" + TDEE.toFixed(2));
   }
@@ -264,7 +182,11 @@ export default function DisplayInputUser() {
               <button onClick={calculateMaxSugar}>Hitung</button>
             </div>
           </div>
-          <div>{modalBox && <ModalBox setModalBox={setModalBox} />}</div>
+          <div>
+            {modalBox && (
+              <ModalBox setModalBox={setModalBox} yourMaxSugar={yourMaxSugar} />
+            )}
+          </div>
         </div>
       </div>
     </>

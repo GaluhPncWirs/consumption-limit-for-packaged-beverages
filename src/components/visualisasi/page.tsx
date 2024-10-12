@@ -22,17 +22,17 @@ ChartJS.register(
 export default function Visualization({
   sugarProduk,
   volumeProduk,
-  yourMaxSugar,
+  getYourMaxSugars,
 }: {
   sugarProduk: number;
   volumeProduk: number;
-  yourMaxSugar: number;
+  getYourMaxSugars: number;
 }) {
   const [riskLevel, setRiskLevel] = useState([0, 0]);
   const sugarConsume = (sugarProduk / volumeProduk) * volumeProduk;
 
   useEffect(() => {
-    const sugarRatio = Math.floor(sugarConsume / yourMaxSugar);
+    const sugarRatio = Math.floor(sugarConsume / getYourMaxSugars);
     let calculateRiskObesity = 0;
     let calculateRiskDiabetes = 0;
 
@@ -61,7 +61,7 @@ export default function Visualization({
     }
 
     setRiskLevel([calculateRiskObesity, calculateRiskDiabetes]);
-  }, [sugarConsume, yourMaxSugar]);
+  }, [sugarConsume, getYourMaxSugars]);
 
   const data = {
     labels: ["Obesitas", "Diabetes"],

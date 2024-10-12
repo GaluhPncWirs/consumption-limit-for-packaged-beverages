@@ -1,10 +1,8 @@
 "use client";
-import { useCalories } from "@/context/useContex";
 import { useRouter } from "next/navigation";
 
-export default function ModalBox({ setModalBox }: any) {
+export default function ModalBox({ setModalBox, yourMaxSugar }: any) {
   const { push } = useRouter();
-  const { yourMaxSugar } = useCalories();
   function handleClick() {
     setModalBox(false);
     push("/mainContent");
