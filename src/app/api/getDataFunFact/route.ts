@@ -1,8 +1,8 @@
 import { retriveDataFunFact } from "@/lib/firebase/services";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 
-export async function GET() {
+export async function GET(resuest: NextRequest) {
     const getDataFunFact = await retriveDataFunFact("funFactSugar")
-    return NextResponse.json({status : true, message: "berhasil", data:getDataFunFact })
+    return NextResponse.json({statusbar: 200, message: "berhasil", data:getDataFunFact })
 }

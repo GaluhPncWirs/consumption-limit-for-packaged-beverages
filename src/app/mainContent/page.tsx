@@ -1,6 +1,8 @@
 "use client";
 
 import Visualization from "@/components/visualisasi/page";
+import { getDataFunFact } from "@/getDataFromApi/getFunFact";
+import { getDataProduct } from "@/getDataFromApi/getProduct";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -14,7 +16,24 @@ export default function MainContent() {
   const [sugarProduk, setSugarProduk] = useState(0);
   const [volumeProduk, setVolumeProduk] = useState(0);
   const [funFactSugar, setFunFactSugar] = useState([]);
-  const getYourMaxSugars = Number(localStorage.getItem("maxSugars"));
+  const [product, setProduct] = useState([]);
+  const [getYourMaxSugars, setYourMaxSugars] = useState(0);
+  const [gula, setGula] = useState("");
+  const [volume, setVolume] = useState("");
+
+  useEffect(() => {
+    const maxSugars = localStorage.getItem("maxSugars");
+    if (maxSugars) {
+      setYourMaxSugars(Number(maxSugars));
+    }
+  }, []);
+
+  function valueProduct(event: any) {
+    const eventTarget = event.target.value;
+    const [targetSugar, targetVolume] = eventTarget.split(",");
+    setGula(targetSugar);
+    setVolume(targetVolume);
+  }
 
   function calculateMaximal() {
     setText(true);
@@ -53,18 +72,19 @@ export default function MainContent() {
   }
 
   useEffect(() => {
-    const fetchData = async () => {
-      const get = await fetch("/api/getDataFunFact")
-        .then((res) => res.json())
-        .then((a) => a.data);
-
-      const randomFunFact = get
+    getDataFunFact((data: any) => {
+      const randomFunFact = data
         .map((a: any) => a.funFact)
         .sort(() => Math.random() - 0.5);
 
-      setFunFactSugar(randomFunFact[0]);
-    };
-    fetchData();
+      setFunFactSugar(randomFunFact);
+    });
+  }, []);
+
+  useEffect(() => {
+    getDataProduct((data: any) => {
+      setProduct(data);
+    });
   }, []);
 
   return (
@@ -74,9 +94,11 @@ export default function MainContent() {
           fillBottle.length === 1 ? `h-full` : `h-screen`
         }`}
       >
-        <div className="w-11/12 py-10">
+        <div
+          className={`py-10 ${fillBottle.length >= 1 ? `w-11/12` : `w-1/2`}`}
+        >
           <div className="w-full mx-auto bg-green-300 h-full flex flex-col justify-center px-5 rounded-lg py-8">
-            <div className="text-lg font-semibold flex justify-around">
+            <div className="mx-5 text-lg font-semibold flex justify-between">
               <p>
                 Your Max Consume Sugar Per Day :{" "}
                 <span>
@@ -86,7 +108,7 @@ export default function MainContent() {
                   Grams
                 </span>
               </p>
-              <div className={`${text === true ? `visible` : `invisible`}`}>
+              <div className={`${text === true ? `block` : `hidden`}`}>
                 {fillBottle.length > 1 && miliLiter > 0 ? (
                   <p>
                     Konsumsi per {fillBottle.length} botol dengan sisa{" "}
@@ -103,15 +125,42 @@ export default function MainContent() {
               </div>
             </div>
             <div>
-              <div className="mt-20 flex items-center justify-center gap-3">
+              <div
+                className={`my-10 ${
+                  fillBottle.length >= 1
+                    ? `flex items-center justify-center gap-3`
+                    : `flex-none`
+                }`}
+              >
                 <form className="basis-2/5 flex flex-col items-center justify-center">
+                  <div className="relative w-4/5 py-3">
+                    <label htmlFor="product" className="block mb-2 text-lg">
+                      Pilih Produk
+                    </label>
+                    <select
+                      id="product"
+                      onChange={valueProduct}
+                      className="cursor-pointer bg-slate-300 rounded-md p-2"
+                    >
+                      {product.map((item: any) => (
+                        <option
+                          key={item.id}
+                          value={`${item.sugars},${item.volume}`}
+                        >
+                          {item.nameProduct}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                   <div className="relative w-4/5 py-3">
                     <input
                       type="number"
                       id="sugarContent"
-                      required
-                      className="inputField peer"
+                      className="inputField"
                       ref={sugarContentInsideProductRef}
+                      readOnly
+                      disabled
+                      value={gula}
                     />
                     <label htmlFor="sugarContent" className="labelText">
                       Kadar Gula dalam Minuman (Grams) :
@@ -121,9 +170,11 @@ export default function MainContent() {
                     <input
                       type="number"
                       id="volumeKemasan"
-                      required
-                      className="inputField peer"
+                      className="inputField"
                       ref={totalVolumeInsideProductRef}
+                      readOnly
+                      disabled
+                      value={volume}
                     />
                     <label htmlFor="volumeKemasan" className="labelText">
                       Volume Kemasan (ml) :
@@ -166,7 +217,7 @@ export default function MainContent() {
                   <h1 className="font-semibold text-lg">
                     Fun Fact Tentang Gula
                   </h1>
-                  <div className="font-medium text-sm">{funFactSugar}</div>
+                  <div className="font-medium text-sm">{funFactSugar[0]}</div>
                 </div>
               )}
             </div>
