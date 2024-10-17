@@ -17,14 +17,14 @@ export default function MainContent() {
   const [volumeProduk, setVolumeProduk] = useState(0);
   const [funFactSugar, setFunFactSugar] = useState([]);
   const [product, setProduct] = useState([]);
-  const [getYourMaxSugars, setYourMaxSugars] = useState(0);
+  const [getYourMaxSugars, setGetYourMaxSugars] = useState(0);
   const [gula, setGula] = useState("");
   const [volume, setVolume] = useState("");
 
   useEffect(() => {
     const maxSugars = localStorage.getItem("maxSugars");
     if (maxSugars) {
-      setYourMaxSugars(Number(maxSugars));
+      setGetYourMaxSugars(Number(maxSugars));
     }
   }, []);
 
@@ -112,14 +112,14 @@ export default function MainContent() {
                 {fillBottle.length > 1 && miliLiter > 0 ? (
                   <p>
                     Konsumsi per {fillBottle.length} botol dengan sisa{" "}
-                    {miliLiter.toFixed(2)} ml
+                    {miliLiter} ml
                   </p>
                 ) : fillBottle.length > 1 && miliLiter <= 0 ? (
                   <p>Konsumsi per {fillBottle.length} botol</p>
                 ) : (
                   <p>
-                    Minuman ini bisa anda konsumsi {miliLiter.toFixed(2)} ml,
-                    kurang dari satu botol
+                    Minuman ini bisa anda konsumsi {miliLiter} ml, kurang dari
+                    satu botol
                   </p>
                 )}
               </div>

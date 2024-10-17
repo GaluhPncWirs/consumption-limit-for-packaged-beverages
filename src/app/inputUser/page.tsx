@@ -11,6 +11,11 @@ export default function DisplayInputUser() {
   const activityLevel = useRef<HTMLSelectElement>(null);
   const [modalBox, setModalBox] = useState(false);
   const [yourMaxSugar, setYourMaxSugar] = useState(0);
+  const [mustFilled, setMustFilled] = useState({
+    age: "",
+    height: "",
+    weight: "",
+  });
 
   function calculateMaxSugar() {
     const age = parseInt(ages.current?.value || "0");
@@ -53,7 +58,7 @@ export default function DisplayInputUser() {
     }
 
     const TDEE = BMR! * activityFactor;
-    let maxSugarCalories;
+    let maxCalories;
 
     const convertToMeters = height / 100;
     const heightSquares = Math.pow(convertToMeters, 2);
@@ -61,16 +66,25 @@ export default function DisplayInputUser() {
 
     if (bodyMassIndex >= 30) {
       // obesitas
-      maxSugarCalories = TDEE * 0.05;
+      maxCalories = TDEE * 0.05;
     } else {
       // normal
-      maxSugarCalories = TDEE * 0.1;
+      maxCalories = TDEE * 0.1;
     }
 
-    const maxSugarPerGrams = maxSugarCalories / 4; // Karena 1 gram gula = 4 kalori
+    const maxSugarPerGrams = maxCalories / 4; // Karena 1 gram gula = 4 kalori
     localStorage.setItem("maxSugars", String(maxSugarPerGrams));
     setYourMaxSugar(maxSugarPerGrams);
     // console.log("Kebutuhan Kalori Harian (TDEE):" + TDEE.toFixed(2));
+  }
+
+  function handleFilled(event: any) {
+    const { id, value } = event.target;
+    return setMustFilled({ ...mustFilled, [id]: value });
+  }
+
+  function formIsFilled() {
+    return Object.values(mustFilled).every((str) => str !== "");
   }
 
   return (
@@ -120,6 +134,7 @@ export default function DisplayInputUser() {
                   id="age"
                   className="inputField peer"
                   ref={ages}
+                  onChange={handleFilled}
                 />
                 <label htmlFor="age" className="labelText">
                   Usia (tahun) :
@@ -132,6 +147,7 @@ export default function DisplayInputUser() {
                   id="height"
                   className="inputField peer"
                   ref={bodyHeight}
+                  onChange={handleFilled}
                 />
                 <label htmlFor="height" className="labelText">
                   Tinggi Badan (cm) :
@@ -144,6 +160,7 @@ export default function DisplayInputUser() {
                   id="weight"
                   className="inputField peer"
                   ref={bodyWeight}
+                  onChange={handleFilled}
                 />
                 <label htmlFor="weight" className="labelText">
                   Berat Badan (kg) :
@@ -178,8 +195,14 @@ export default function DisplayInputUser() {
                 </select>
               </div>
             </form>
-            <div className="mt-8 mx-auto font-semibold py-1 text-center max-w-20 rounded-md bg-slate-300 hover:bg-slate-400 cursor-pointer">
-              <button onClick={calculateMaxSugar}>Hitung</button>
+            <div className="mt-8 mx-auto font-semibold py-1 text-center max-w-20 rounded-md bg-slate-300 disabled:cursor-not-allowed hover:bg-slate-400 cursor-pointer">
+              <button
+                onClick={calculateMaxSugar}
+                disabled={!formIsFilled()}
+                className="disabled:cursor-not-allowed"
+              >
+                Hitung
+              </button>
             </div>
           </div>
           <div>
