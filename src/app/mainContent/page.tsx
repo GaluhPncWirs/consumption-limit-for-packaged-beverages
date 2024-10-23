@@ -20,7 +20,7 @@ export default function MainContent() {
   const [getYourMaxSugars, setGetYourMaxSugars] = useState(0);
   const [searchProduk, setSearchProduk] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
-  const [result, setResult] = useState([]);
+  const [result, setResult] = useState<any>([]);
   const [sugar, setSugar] = useState(0);
   const [volume, setVolume] = useState(0);
 
@@ -94,6 +94,7 @@ export default function MainContent() {
       setResult(filterSearchProduct);
     }
   }, [product, searchProduk]);
+
   useEffect(() => {
     if (selectedProduct) {
       setSearchProduk(selectedProduct.nameProduct);
@@ -101,6 +102,12 @@ export default function MainContent() {
       setVolume(selectedProduct.volume);
     }
   }, [selectedProduct]);
+
+  useEffect(() => {
+    if (searchProduk === "") {
+      setSelectedProduct(null);
+    }
+  }, [searchProduk]);
 
   return (
     <div>
@@ -147,32 +154,34 @@ export default function MainContent() {
                     : `flex-none`
                 }`}
               >
-                <form className="basis-2/5 flex flex-col items-center justify-center">
+                <form className="basis-2/5 flex flex-col gap-2 items-center justify-center">
                   <div className="relative w-4/5 py-3">
                     <input
                       type="text"
                       className="inputField peer"
                       value={searchProduk}
+                      id="product"
                       onChange={(e) => setSearchProduk(e.target.value)}
                     />
-                    <label htmlFor="age" className="labelText">
-                      Cari produk
+                    <label htmlFor="product" className="labelText">
+                      Cari Produk
                     </label>
+                    <div className={`${selectedProduct && `hidden`}`}>
+                      {searchProduk !== "" && (
+                        <ul className="p-3 bg-red-200 absolute z-10 w-full text-blue-600 font-semibold max-h-40 overflow-y-auto rounded-b-lg">
+                          {result.map((item: any) => (
+                            <li
+                              key={item.id}
+                              onClick={() => setSelectedProduct(item)}
+                              className="cursor-pointer hover:bg-slate-400"
+                            >
+                              {item.nameProduct}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
                   </div>
-
-                  {searchProduk !== "" && (
-                    <ul className="border p-2 bg-slate-300">
-                      {result.map((item: any) => (
-                        <li
-                          key={item.id}
-                          onClick={() => setSelectedProduct(item)}
-                          className="cursor-pointer hover:bg-slate-400"
-                        >
-                          {item.nameProduct}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
 
                   <div className="relative w-4/5 py-3">
                     <input
