@@ -18,8 +18,11 @@ export default function MainContent() {
   const [funFactSugar, setFunFactSugar] = useState([]);
   const [product, setProduct] = useState([]);
   const [getYourMaxSugars, setGetYourMaxSugars] = useState(0);
-  const [gula, setGula] = useState("");
-  const [volume, setVolume] = useState("");
+  const [searchProduk, setSearchProduk] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [result, setResult] = useState([]);
+  const [sugar, setSugar] = useState(0);
+  const [volume, setVolume] = useState(0);
 
   useEffect(() => {
     const maxSugars = localStorage.getItem("maxSugars");
@@ -27,13 +30,6 @@ export default function MainContent() {
       setGetYourMaxSugars(Number(maxSugars));
     }
   }, []);
-
-  function valueProduct(event: any) {
-    const eventTarget = event.target.value;
-    const [targetSugar, targetVolume] = eventTarget.split(",");
-    setGula(targetSugar);
-    setVolume(targetVolume);
-  }
 
   function calculateMaximal() {
     setText(true);
@@ -45,6 +41,7 @@ export default function MainContent() {
     );
     setSugarProduk(sugarContentInsideProduct);
     setVolumeProduk(totalVolumeInsideProduct);
+
     const resultTotalContentProduct =
       sugarContentInsideProduct / totalVolumeInsideProduct;
 
@@ -86,6 +83,24 @@ export default function MainContent() {
       setProduct(data);
     });
   }, []);
+
+  useEffect(() => {
+    if (product.length > 0) {
+      const filterSearchProduct = product.filter((item: any) => {
+        return item.nameProduct
+          .toLowerCase()
+          .includes(searchProduk.toLowerCase());
+      });
+      setResult(filterSearchProduct);
+    }
+  }, [product, searchProduk]);
+  useEffect(() => {
+    if (selectedProduct) {
+      setSearchProduk(selectedProduct.nameProduct);
+      setSugar(selectedProduct.sugars);
+      setVolume(selectedProduct.volume);
+    }
+  }, [selectedProduct]);
 
   return (
     <div>
@@ -134,24 +149,31 @@ export default function MainContent() {
               >
                 <form className="basis-2/5 flex flex-col items-center justify-center">
                   <div className="relative w-4/5 py-3">
-                    <label htmlFor="product" className="block mb-2 text-lg">
-                      Pilih Produk
+                    <input
+                      type="text"
+                      className="inputField peer"
+                      value={searchProduk}
+                      onChange={(e) => setSearchProduk(e.target.value)}
+                    />
+                    <label htmlFor="age" className="labelText">
+                      Cari produk
                     </label>
-                    <select
-                      id="product"
-                      onChange={valueProduct}
-                      className="cursor-pointer bg-slate-300 rounded-md p-2"
-                    >
-                      {product.map((item: any) => (
-                        <option
+                  </div>
+
+                  {searchProduk !== "" && (
+                    <ul className="border p-2 bg-slate-300">
+                      {result.map((item: any) => (
+                        <li
                           key={item.id}
-                          value={`${item.sugars},${item.volume}`}
+                          onClick={() => setSelectedProduct(item)}
+                          className="cursor-pointer hover:bg-slate-400"
                         >
                           {item.nameProduct}
-                        </option>
+                        </li>
                       ))}
-                    </select>
-                  </div>
+                    </ul>
+                  )}
+
                   <div className="relative w-4/5 py-3">
                     <input
                       type="number"
@@ -160,7 +182,7 @@ export default function MainContent() {
                       ref={sugarContentInsideProductRef}
                       readOnly
                       disabled
-                      value={gula}
+                      value={sugar || ""}
                     />
                     <label htmlFor="sugarContent" className="labelText">
                       Kadar Gula dalam Minuman (Grams) :
@@ -174,7 +196,7 @@ export default function MainContent() {
                       ref={totalVolumeInsideProductRef}
                       readOnly
                       disabled
-                      value={volume}
+                      value={volume || ""}
                     />
                     <label htmlFor="volumeKemasan" className="labelText">
                       Volume Kemasan (ml) :
