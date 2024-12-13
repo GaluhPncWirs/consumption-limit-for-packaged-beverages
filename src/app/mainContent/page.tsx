@@ -168,7 +168,7 @@ export default function MainContent() {
                     </label>
                     <div className={`${selectedProduct && `hidden`}`}>
                       {searchProduk !== "" && (
-                        <ul className="p-3 bg-red-200 absolute z-10 w-full text-blue-600 font-semibold max-h-40 overflow-y-auto rounded-b-lg">
+                        <ul className="p-3 bg-slate-200 absolute z-10 w-full text-blue-600 font-semibold max-h-40 overflow-y-auto rounded-b-lg">
                           {result.map((item: any) => (
                             <li
                               key={item.id}
