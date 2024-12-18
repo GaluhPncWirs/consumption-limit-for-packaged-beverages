@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 export default function AddProduct() {
   async function handleAddProduct(event: any) {
     event.preventDefault();
@@ -39,6 +41,9 @@ export default function AddProduct() {
         </div>
         <button>tambah</button>
       </form>
+      <div>
+        <Link href={"./mainContent"}>Kembali</Link>
+      </div>
     </div>
   );
 }

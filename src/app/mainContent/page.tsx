@@ -3,6 +3,7 @@
 import Visualization from "@/components/visualisasi/page";
 import { getDataFunFact } from "@/getDataFromApi/getFunFact";
 import { getDataProduct } from "@/getDataFromApi/getProduct";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -197,6 +198,22 @@ export default function MainContent() {
                       Kadar Gula dalam Minuman (Grams) :
                     </label>
                   </div>
+
+                  {/* <div className="relative w-4/5 py-3">
+                    <input
+                      type="number"
+                      id="sugarContent"
+                      className="inputField"
+                      ref={sugarContentInsideProductRef}
+                      readOnly
+                      disabled
+                      value={sugar || ""}
+                    />
+                    <label htmlFor="sugarContent" className="labelText">
+                      Jumlah Sajian per Kemasan :
+                    </label>
+                  </div> */}
+
                   <div className="relative w-4/5 py-3">
                     <input
                       type="number"
@@ -225,6 +242,18 @@ export default function MainContent() {
                   </div>
                 )}
               </div>
+            </div>
+            <div className="mx-10 text-end">
+              <h1 className="text-sm">
+                Produk yang di cari tidak ada ?{" "}
+                <Link
+                  href={"./addProduct"}
+                  className="text-blue-600 hover:underline font-semibold"
+                >
+                  klik disini
+                </Link>{" "}
+                untuk menambahkan produk
+              </h1>
             </div>
             <div className="my-5 mx-10 flex justify-between">
               <button
