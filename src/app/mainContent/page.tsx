@@ -194,25 +194,14 @@ export default function MainContent() {
                       disabled
                       value={sugar || ""}
                     />
+                    <span className="text-[0.65rem] text font-semibold">
+                      *Gula Disini Sudah di Totalkan Dengan Takaran Saji Per
+                      Kemasan
+                    </span>
                     <label htmlFor="sugarContent" className="labelText">
                       Kadar Gula dalam Minuman (Grams) :
                     </label>
                   </div>
-
-                  {/* <div className="relative w-4/5 py-3">
-                    <input
-                      type="number"
-                      id="sugarContent"
-                      className="inputField"
-                      ref={sugarContentInsideProductRef}
-                      readOnly
-                      disabled
-                      value={sugar || ""}
-                    />
-                    <label htmlFor="sugarContent" className="labelText">
-                      Jumlah Sajian per Kemasan :
-                    </label>
-                  </div> */}
 
                   <div className="relative w-4/5 py-3">
                     <input
