@@ -16,6 +16,7 @@ export default function DisplayInputUser() {
     height: "",
     weight: "",
   });
+  const [tdee, setTdee] = useState(0);
 
   function calculateMaxSugar() {
     const age = parseInt(ages.current?.value || "0");
@@ -75,9 +76,9 @@ export default function DisplayInputUser() {
     const maxSugarPerGrams = maxCalories / 4; // Karena 1 gram gula = 4 kalori
     localStorage.setItem("maxSugars", String(maxSugarPerGrams));
     setYourMaxSugar(maxSugarPerGrams);
-    // console.log("Kebutuhan Kalori Harian (TDEE):" + TDEE.toFixed(2));
-  }
 
+    setTdee(TDEE);
+  }
   function handleFilled(event: any) {
     const { id, value } = event.target;
     return setMustFilled({ ...mustFilled, [id]: value });
@@ -207,7 +208,11 @@ export default function DisplayInputUser() {
           </div>
           <div>
             {modalBox && (
-              <ModalBox setModalBox={setModalBox} yourMaxSugar={yourMaxSugar} />
+              <ModalBox
+                setModalBox={setModalBox}
+                yourMaxSugar={yourMaxSugar}
+                tdee={tdee}
+              />
             )}
           </div>
         </div>
