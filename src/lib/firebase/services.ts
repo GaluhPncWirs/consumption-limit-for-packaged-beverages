@@ -42,3 +42,24 @@ export async function retriveDataFunFact(collectionName:string){
 
     return data
 }
+
+export async function retriveDataSugarReleatedJournal(collectionName:string){
+    const snapshot = await getDocs(collection(firestore, collectionName))
+    const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data()
+    }))
+
+    return data
+}
+
+
+export async function retriveDataVideoEducations(collectionName:string) {
+    const snapshot = await getDocs(collection(firestore, collectionName))
+    const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data()
+    }))
+
+    return data
+}

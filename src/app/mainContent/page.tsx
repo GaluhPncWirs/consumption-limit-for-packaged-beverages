@@ -188,7 +188,7 @@ export default function MainContent() {
                     <input
                       type="number"
                       id="sugarContent"
-                      className="inputField"
+                      className="inputField disabled:cursor-not-allowed"
                       ref={sugarContentInsideProductRef}
                       readOnly
                       disabled
@@ -207,7 +207,7 @@ export default function MainContent() {
                     <input
                       type="number"
                       id="volumeKemasan"
-                      className="inputField"
+                      className="inputField disabled:cursor-not-allowed"
                       ref={totalVolumeInsideProductRef}
                       readOnly
                       disabled

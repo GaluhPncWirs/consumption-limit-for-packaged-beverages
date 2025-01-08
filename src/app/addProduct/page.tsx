@@ -37,8 +37,11 @@ export default function AddProduct() {
       <div className="bg-slate-300 w-1/2 rounded-xl">
         <form
           onSubmit={(e) => handleAddProduct(e)}
-          className="py-12 px-10 flex flex-col gap-5"
+          className="py-10 px-10 flex flex-col gap-5"
         >
+          <h1 className="text-xl font-semibold text-center mb-3">
+            Penambahan Produk Minuman
+          </h1>
           <div className="relative w-1/2 pt-3 font-medium">
             <input type="text" id="nameProduct" className="inputField peer" />
             <label htmlFor="nameProduct" className="labelText">
@@ -74,8 +77,8 @@ export default function AddProduct() {
               Volume Kemasan Berapa ml
             </label>
           </div>
-          <button className="bg-slate-50 mt-5 rounded-lg text-xl font-semibold hover:bg-blue-400 transition-all">
-            add Product
+          <button className="bg-slate-50 mt-5 py-1 rounded-lg text-lg font-semibold hover:bg-blue-400 transition-all">
+            Tambah Produk
           </button>
         </form>
       </div>
