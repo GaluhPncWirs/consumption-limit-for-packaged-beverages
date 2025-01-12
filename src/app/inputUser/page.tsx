@@ -90,8 +90,8 @@ export default function DisplayInputUser() {
 
   return (
     <>
-      <div className="w-full">
-        <div>
+      <div className="h-screen max-w-2xl mx-auto flex flex-col items-center justify-center">
+        <div className="w-full">
           <div className="bg-blue-300 rounded-lg py-10 px-5 max-w-xl mx-auto shadow-lg">
             {/* <div className="mb-5 text-center text-lg font-semibold">
               <h2>

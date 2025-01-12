@@ -112,15 +112,14 @@ export default function MainContent() {
 
   return (
     <div>
-      <div
-        className={`bg-red-300 flex justify-center items-center ${
-          fillBottle.length === 1 ? `h-full` : `h-screen`
-        }`}
-      >
+      <div className="flex justify-center items-center">
         <div
           className={`py-10 ${fillBottle.length >= 1 ? `w-11/12` : `w-1/2`}`}
         >
-          <div className="w-full mx-auto bg-green-300 h-full flex flex-col justify-center px-5 rounded-lg py-8">
+          <h1 className="text-xl text-center font-semibold mb-5">
+            Menghitung Batas Aman Konsumsi Minuman Kemasan
+          </h1>
+          <div className="w-full mx-auto bg-green-300 h-full flex flex-col justify-center px-5 rounded-lg py-10">
             <div className="mx-5 text-lg font-semibold flex justify-between">
               <p>
                 Your Max Consume Sugar Per Day :{" "}
@@ -134,15 +133,15 @@ export default function MainContent() {
               <div className={`${text === true ? `block` : `hidden`}`}>
                 {fillBottle.length > 1 && miliLiter > 0 ? (
                   <p>
-                    Konsumsi per {fillBottle.length} botol dengan sisa{" "}
+                    Kamu Bisa Konsumsi per {fillBottle.length} botol dengan sisa{" "}
                     {miliLiter} ml
                   </p>
                 ) : fillBottle.length > 1 && miliLiter <= 0 ? (
-                  <p>Konsumsi per {fillBottle.length} botol</p>
+                  <p>Kamu Bisa Konsumsi per {fillBottle.length} botol</p>
                 ) : (
                   <p>
-                    Minuman ini bisa anda konsumsi {miliLiter} ml, kurang dari
-                    satu botol
+                    Minuman ini Hanya Bisa Anda Konsumsi {miliLiter} ml, Kurang
+                    Dari Satu Botol
                   </p>
                 )}
               </div>
@@ -244,7 +243,7 @@ export default function MainContent() {
                 untuk menambahkan produk
               </h1>
             </div>
-            <div className="my-5 mx-10 flex justify-between">
+            <div className="mt-5 mx-10 flex justify-between">
               <button
                 type="button"
                 onClick={calculateMaximal}
@@ -260,15 +259,25 @@ export default function MainContent() {
                 Kembali
               </button>
             </div>
-            <div>
-              {text === true && (
-                <div className="mt-5">
-                  <h1 className="font-semibold text-lg">
-                    Fun Fact Tentang Gula
-                  </h1>
-                  <div className="font-medium text-sm">{funFactSugar[0]}</div>
-                </div>
-              )}
+            <div className="flex mt-5">
+              <div className="basis-1/2">
+                {text === true && (
+                  <div>
+                    <h1 className="font-semibold text-lg">
+                      Fun Fact Tentang Gula
+                    </h1>
+                    <div className="font-medium text-sm">{funFactSugar[0]}</div>
+                  </div>
+                )}
+              </div>
+              <div className="basis-1/2">
+                <h1>buat edukasi</h1>
+                <iframe
+                  src="https://www.youtube.com/embed/tgbNymZ7vqY"
+                  width={550}
+                  height={300}
+                ></iframe>
+              </div>
             </div>
             {fillBottle.length === 1 && (
               <Visualization
