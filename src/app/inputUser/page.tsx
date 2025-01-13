@@ -1,5 +1,6 @@
 "use client";
 import ModalBox from "@/components/modalBox/page";
+import Image from "next/image";
 import { useRef, useState } from "react";
 
 export default function DisplayInputUser() {
@@ -110,7 +111,15 @@ export default function DisplayInputUser() {
                 id="inputGender"
                 className="flex gap-2 items-center font-medium"
               >
-                <span className="text-lg">Gender : </span>
+                <div className="flex gap-3">
+                  <Image
+                    width={30}
+                    height={20}
+                    src={"/images/gender.png"}
+                    alt="gender"
+                  />
+                  <span className="text-lg">Gender : </span>
+                </div>
                 <input
                   type="radio"
                   value="male"
@@ -137,8 +146,17 @@ export default function DisplayInputUser() {
                   ref={ages}
                   onChange={handleFilled}
                 />
-                <label htmlFor="age" className="labelText">
-                  Usia (tahun) :
+                <label
+                  htmlFor="age"
+                  className="labelText flex flex-row-reverse gap-3"
+                >
+                  <span>Usia (tahun) :</span>
+                  <Image
+                    width={30}
+                    height={20}
+                    src={"/images/age.png"}
+                    alt="gender"
+                  />
                 </label>
               </div>
 
@@ -150,8 +168,17 @@ export default function DisplayInputUser() {
                   ref={bodyHeight}
                   onChange={handleFilled}
                 />
-                <label htmlFor="height" className="labelText">
-                  Tinggi Badan (cm) :
+                <label
+                  htmlFor="age"
+                  className="labelText flex flex-row-reverse gap-3"
+                >
+                  <span>Tinggi Badan (cm) :</span>
+                  <Image
+                    width={30}
+                    height={20}
+                    src={"/images/height.png"}
+                    alt="gender"
+                  />
                 </label>
               </div>
 
@@ -163,15 +190,32 @@ export default function DisplayInputUser() {
                   ref={bodyWeight}
                   onChange={handleFilled}
                 />
-                <label htmlFor="weight" className="labelText">
-                  Berat Badan (kg) :
+                <label
+                  htmlFor="age"
+                  className="labelText flex flex-row-reverse gap-3"
+                >
+                  <span>Berat Badan (kg) :</span>
+                  <Image
+                    width={30}
+                    height={20}
+                    src={"/images/weight.png"}
+                    alt="gender"
+                  />
                 </label>
               </div>
 
               <div className="font-medium">
-                <label htmlFor="activityLevel" className="block mb-2 text-lg">
-                  Activity Level
-                </label>
+                <div className="flex gap-3">
+                  <Image
+                    width={30}
+                    height={20}
+                    src={"/images/activity.png"}
+                    alt="gender"
+                  />
+                  <label htmlFor="activityLevel" className="block mb-2 text-lg">
+                    Activity Level
+                  </label>
+                </div>
                 <select
                   id="activityLevel"
                   className="cursor-pointer bg-slate-300 rounded-md p-2 text-sm"

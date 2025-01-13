@@ -9,8 +9,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="bg-orange-300">
-      <body className={quicksand.className}>{children}</body>
+    <html lang="en">
+      <body className={quicksand.className}>
+        <div className="background_template">{children}</div>
+      </body>
     </html>
   );
 }
