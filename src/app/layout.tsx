@@ -1,5 +1,5 @@
 import { Quicksand } from "next/font/google";
-import "./index.css";
+import "./global.css";
 
 const quicksand = Quicksand({ subsets: ["latin"], weight: "500" });
 

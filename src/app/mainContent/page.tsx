@@ -4,7 +4,7 @@ import Visualization from "@/components/visualisasi/layout";
 import { getDataFunFact } from "@/getDataFromApi/getFunFact";
 import { getDataProduct } from "@/getDataFromApi/getProduct";
 import { getVideoEducations } from "@/getDataFromApi/getVideoEdu";
-import Image from "next/image";
+import NavigasiBar from "@/components/navbar/navigasiBar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -164,175 +164,159 @@ export default function MainContent() {
   }, [searchProduk]);
 
   return (
-    <div className="flex justify-center items-center">
-      <div className="absolute top-0 left-0 px-3 bg-green-300 py-1.5 hover:bg-blue-400 rounded-br-lg flex flex-row-reverse justify-center items-center gap-1 cursor-pointer">
-        <button
-          type="button"
-          onClick={backToInput}
-          className="text-xl font-semibold"
-        >
-          Kembali
-        </button>
-        <Image
-          src="/images/arrow_left.png"
-          alt="arrow_left"
-          className="w-1/5"
-          width={200}
-          height={200}
-        />
-      </div>
-      <div className={`py-10 ${fillBottle.length >= 1 ? `w-11/12` : `w-1/2`}`}>
-        <div className="w-full mx-auto bg-green-300 h-full flex flex-col justify-center px-5 rounded-lg py-10 mt-16">
-          <div className="mx-5 text-lg font-semibold flex justify-between">
-            <p>
-              Your Max Consume Sugar Per Day :{" "}
-              <span>
-                {getYourMaxSugars.toLocaleString("id-ID", {
-                  maximumFractionDigits: 0,
-                })}{" "}
-                Grams
-              </span>
-            </p>
-            <div className={`${text === true ? `block` : `hidden`}`}>
-              {fillBottle.length > 1 && miliLiter > 0 ? (
-                <p>
-                  Kamu Bisa Konsumsi per {fillBottle.length} botol dengan sisa{" "}
-                  {miliLiter} ml
-                </p>
-              ) : fillBottle.length > 1 && miliLiter <= 0 ? (
-                <p>Kamu Bisa Konsumsi per {fillBottle.length} botol</p>
-              ) : (
-                <p>
-                  Minuman ini Hanya Bisa Anda Konsumsi {miliLiter} ml, Kurang
-                  Dari Satu Botol
-                </p>
-              )}
-            </div>
+    <div className="pb-10">
+      <NavigasiBar props={backToInput} />
+      <div
+        className={`bg-green-300 flex flex-col justify-center px-5 rounded-lg py-10 mx-auto mt-10 ${
+          fillBottle.length > 0 ? `w-5/6` : `w-1/2`
+        }`}
+      >
+        <div className="mx-5 text-lg font-semibold flex justify-between">
+          <p>
+            Your Max Consume Sugar Per Day :{" "}
+            <span>
+              {getYourMaxSugars.toLocaleString("id-ID", {
+                maximumFractionDigits: 0,
+              })}{" "}
+              Grams
+            </span>
+          </p>
+          <div className={`${text === true ? `block` : `hidden`} max-w-lg`}>
+            {fillBottle.length > 1 && miliLiter > 0 ? (
+              <p>
+                Kamu Bisa Konsumsi per {fillBottle.length} botol dengan sisa{" "}
+                {miliLiter} ml
+              </p>
+            ) : fillBottle.length > 1 && miliLiter <= 0 ? (
+              <p>Kamu Bisa Konsumsi per {fillBottle.length} botol</p>
+            ) : (
+              <p>
+                Minuman ini Hanya Bisa Anda Konsumsi {miliLiter} ml, Kurang Dari
+                Satu Botol
+              </p>
+            )}
           </div>
-          <div>
-            <div
-              className={`my-10 ${
-                fillBottle.length >= 1
-                  ? `flex items-center justify-center gap-3`
-                  : `flex-none`
-              }`}
-            >
-              <form className="basis-2/5 flex flex-col gap-2 items-center justify-center">
-                <div className="relative w-4/5 py-3">
-                  <input
-                    type="text"
-                    className="inputField peer"
-                    value={searchProduk}
-                    id="product"
-                    onChange={handleInputChange}
-                    onKeyDown={handleKeyEvent}
-                  />
-                  <label htmlFor="product" className="labelText">
-                    Cari Produk
-                  </label>
-                  <div className={`${selectedProduct && `hidden`}`}>
-                    {searchProduk !== "" && result.length > 0 && (
-                      <ul
-                        className="p-3 bg-green-200 absolute z-10 w-full text-blue-600 font-semibold max-h-40 overflow-y-auto rounded-b-lg"
-                        ref={listRef}
-                      >
-                        {result.map((item: any, i: number) => (
-                          <li
-                            key={item.id}
-                            onClick={() => handleItemClick(item)}
-                            className={`cursor-pointer hover:bg-green-300 ${
-                              activeIndex === i ? "bg-green-300" : ""
-                            }`}
-                          >
-                            {item.nameProduct}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
+        </div>
+        <div>
+          <div
+            className={`my-10 ${
+              fillBottle.length >= 1
+                ? `flex items-center justify-center gap-3`
+                : `flex-none`
+            }`}
+          >
+            <form className="basis-2/5 flex flex-col gap-2 items-center justify-center">
+              <div className="relative w-4/5 py-3">
+                <input
+                  type="text"
+                  className="inputField peer"
+                  value={searchProduk}
+                  id="product"
+                  onChange={handleInputChange}
+                  onKeyDown={handleKeyEvent}
+                />
+                <label htmlFor="product" className="labelText">
+                  Cari Produk
+                </label>
+                <div className={`${selectedProduct && `hidden`}`}>
+                  {searchProduk !== "" && result.length > 0 && (
+                    <ul
+                      className="p-3 bg-green-200 absolute z-10 w-full text-blue-600 font-semibold max-h-40 overflow-y-auto rounded-b-lg"
+                      ref={listRef}
+                    >
+                      {result.map((item: any, i: number) => (
+                        <li
+                          key={item.id}
+                          onClick={() => handleItemClick(item)}
+                          className={`cursor-pointer hover:bg-green-300 ${
+                            activeIndex === i ? "bg-green-300" : ""
+                          }`}
+                        >
+                          {item.nameProduct}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-                <div className="relative w-4/5 py-3">
-                  <input
-                    type="number"
-                    id="sugarContent"
-                    className="inputField disabled:cursor-not-allowed"
-                    ref={sugarContentInsideProductRef}
-                    readOnly
-                    disabled
-                    value={sugar || ""}
-                  />
-                  <span className="text-[0.65rem] text font-semibold">
-                    *Gula Disini Sudah di Totalkan Dengan Takaran Saji Per
-                    Kemasan
-                  </span>
-                  <label htmlFor="sugarContent" className="labelText">
-                    Kadar Gula dalam Minuman (Grams) :
-                  </label>
-                </div>
-
-                <div className="relative w-4/5 py-3">
-                  <input
-                    type="number"
-                    id="volumeKemasan"
-                    className="inputField disabled:cursor-not-allowed"
-                    ref={totalVolumeInsideProductRef}
-                    readOnly
-                    disabled
-                    value={volume || ""}
-                  />
-                  <label htmlFor="volumeKemasan" className="labelText">
-                    Volume Kemasan (ml) :
-                  </label>
-                </div>
-              </form>
-              {fillBottle.length > 0 && (
-                <div className="basis-3/5 mb-5 flex justify-center items-center">
-                  {fillBottle.map((item: any, i: number) => (
-                    <div key={i} className="bottleInside w-1/5">
-                      <div
-                        className="fill"
-                        style={{ height: `${item}%` }}
-                      ></div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="mx-5">
-            <h1 className="text-sm mx-10 text-end">
-              Produk yang di cari tidak ada ?{" "}
-              <Link
-                href={"./addProduct"}
-                className="text-blue-600 hover:underline font-semibold"
-              >
-                klik disini
-              </Link>{" "}
-              untuk menambahkan produk
-            </h1>
-            <div className="mt-5">
-              <button
-                type="button"
-                onClick={calculateMaximal}
-                className="hover:bg-blue-400 text-lg font-semibold bg-blue-500 rounded-lg py-1 px-6"
-              >
-                Hitung
-              </button>
-            </div>
-            <div className="flex mt-7 px-5 gap-5">
-              <div className="basis-1/2">
-                {text === true && (
-                  <div>
-                    <h1 className="font-semibold text-lg">
-                      Fun Fact Tentang Gula
-                    </h1>
-                    <div className="font-medium text-sm text-justify">
-                      {funFactSugar[0]}
-                    </div>
-                  </div>
-                )}
               </div>
-              {/* <div className="basis-1/2">
+              <div className="relative w-4/5 py-3">
+                <input
+                  type="number"
+                  id="sugarContent"
+                  className="inputField disabled:cursor-not-allowed"
+                  ref={sugarContentInsideProductRef}
+                  readOnly
+                  disabled
+                  value={sugar || ""}
+                />
+                <span className="text-[0.65rem] text font-semibold">
+                  *Gula Disini Sudah di Totalkan Dengan Takaran Saji Per Kemasan
+                </span>
+                <label htmlFor="sugarContent" className="labelText">
+                  Kadar Gula dalam Minuman (Grams) :
+                </label>
+              </div>
+
+              <div className="relative w-4/5 py-3">
+                <input
+                  type="number"
+                  id="volumeKemasan"
+                  className="inputField disabled:cursor-not-allowed"
+                  ref={totalVolumeInsideProductRef}
+                  readOnly
+                  disabled
+                  value={volume || ""}
+                />
+                <label htmlFor="volumeKemasan" className="labelText">
+                  Volume Kemasan (ml) :
+                </label>
+              </div>
+            </form>
+            {fillBottle.length > 0 && (
+              <div className="basis-3/5 mb-5 flex justify-center items-center">
+                {fillBottle.map((item: any, i: number) => (
+                  <div key={i} className="bottleInside w-1/5">
+                    <div className="fill" style={{ height: `${item}%` }}></div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="mx-5">
+          <h1 className="text-sm mx-10 text-end">
+            Produk yang di cari tidak ada ?{" "}
+            <Link
+              href={"./addProduct"}
+              className="text-blue-600 hover:underline font-semibold"
+            >
+              klik disini
+            </Link>{" "}
+            untuk menambahkan produk
+          </h1>
+          <div className="mt-5">
+            <button
+              type="button"
+              onClick={calculateMaximal}
+              className="hover:bg-blue-400 text-lg font-semibold bg-blue-500 rounded-lg py-1 px-6"
+            >
+              Hitung
+            </button>
+          </div>
+          <div className="flex mt-7 px-5 gap-5">
+            <div className="basis-1/2">
+              {text === true && (
+                <div>
+                  <h1 className="font-semibold text-lg">
+                    Fun Fact Tentang Gula
+                  </h1>
+                  <div className="font-medium text-sm text-justify">
+                    {funFactSugar[0]}
+                  </div>
+                </div>
+              )}
+            </div>
+            {/* <div className="basis-1/2">
                 {getVideoEdu.map((data: any) => (
                   <iframe
                     key={data.id}
@@ -344,16 +328,15 @@ export default function MainContent() {
                   />
                 ))}
               </div> */}
-            </div>
           </div>
-          {fillBottle.length === 1 && (
-            <Visualization
-              sugarProduk={sugarProduk}
-              volumeProduk={volumeProduk}
-              getYourMaxSugars={getYourMaxSugars}
-            />
-          )}
         </div>
+        {fillBottle.length === 1 && (
+          <Visualization
+            sugarProduk={sugarProduk}
+            volumeProduk={volumeProduk}
+            getYourMaxSugars={getYourMaxSugars}
+          />
+        )}
       </div>
     </div>
   );

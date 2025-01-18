@@ -32,7 +32,7 @@ export default function AddProduct() {
   }
 
   return (
-    <div className="bg-blue-300 h-screen flex flex-col justify-center items-center">
+    <div className="background_template h-screen flex flex-col justify-center items-center">
       <div className="bg-slate-300 w-1/2 rounded-xl">
         <form
           onSubmit={(e) => handleAddProduct(e)}
