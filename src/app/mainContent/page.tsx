@@ -1,8 +1,10 @@
 "use client";
 
-import Visualization from "@/components/visualisasi/page";
+import Visualization from "@/components/visualisasi/layout";
 import { getDataFunFact } from "@/getDataFromApi/getFunFact";
 import { getDataProduct } from "@/getDataFromApi/getProduct";
+import { getVideoEducations } from "@/getDataFromApi/getVideoEdu";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -24,6 +26,9 @@ export default function MainContent() {
   const [result, setResult] = useState<any>([]);
   const [sugar, setSugar] = useState(0);
   const [volume, setVolume] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const listRef = useRef<HTMLUListElement | null>(null);
+  const [getVideoEdu, setGetVideoEdu] = useState([]);
 
   useEffect(() => {
     const maxSugars = localStorage.getItem("maxSugars");
@@ -86,15 +91,63 @@ export default function MainContent() {
   }, []);
 
   useEffect(() => {
-    if (product.length > 0) {
+    getVideoEducations((data: any) => {
+      setGetVideoEdu(data);
+    });
+  }, []);
+
+  function handleInputChange(e: any) {
+    const query = e.target.value;
+    setSearchProduk(query);
+
+    if (query !== "") {
       const filterSearchProduct = product.filter((item: any) => {
-        return item.nameProduct
-          .toLowerCase()
-          .includes(searchProduk.toLowerCase());
+        return item.nameProduct.toLowerCase().includes(query.toLowerCase());
       });
       setResult(filterSearchProduct);
+      setActiveIndex(-1);
+    } else {
+      setResult([]);
     }
-  }, [product, searchProduk]);
+  }
+
+  function handleKeyEvent(e: any) {
+    if (result.length > 0) {
+      if (e.key === "ArrowDown") {
+        setActiveIndex((prev) => {
+          const newIndex = (prev + 1) % result.length;
+          scrollToActiveItem(newIndex);
+          return newIndex;
+        });
+      } else if (e.key === "ArrowUp") {
+        setActiveIndex((prev) => {
+          const newIndex = (prev - 1 + result.length) % result.length;
+          scrollToActiveItem(newIndex);
+          return newIndex;
+        });
+      } else if (e.key === "Enter" && activeIndex >= 0) {
+        setSelectedProduct(result[activeIndex]);
+      }
+    }
+  }
+
+  function handleItemClick(item: any) {
+    setSelectedProduct(item);
+    setSearchProduk(item.nameProduct);
+    setResult([]);
+  }
+
+  function scrollToActiveItem(i: number) {
+    const list = listRef.current;
+    if (list) {
+      const activeItem = list.children[i] as HTMLElement;
+      if (activeItem) {
+        activeItem.scrollIntoView({
+          block: "nearest",
+        });
+      }
+    }
+  }
 
   useEffect(() => {
     if (selectedProduct) {
@@ -112,8 +165,24 @@ export default function MainContent() {
 
   return (
     <div className="flex justify-center items-center">
+      <div className="absolute top-0 left-0 px-3 bg-green-300 py-1.5 hover:bg-blue-400 rounded-br-lg flex flex-row-reverse justify-center items-center gap-1 cursor-pointer">
+        <button
+          type="button"
+          onClick={backToInput}
+          className="text-xl font-semibold"
+        >
+          Kembali
+        </button>
+        <Image
+          src="/images/arrow_left.png"
+          alt="arrow_left"
+          className="w-1/5"
+          width={200}
+          height={200}
+        />
+      </div>
       <div className={`py-10 ${fillBottle.length >= 1 ? `w-11/12` : `w-1/2`}`}>
-        <div className="w-full mx-auto bg-green-300 h-full flex flex-col justify-center px-5 rounded-lg py-10">
+        <div className="w-full mx-auto bg-green-300 h-full flex flex-col justify-center px-5 rounded-lg py-10 mt-16">
           <div className="mx-5 text-lg font-semibold flex justify-between">
             <p>
               Your Max Consume Sugar Per Day :{" "}
@@ -155,19 +224,25 @@ export default function MainContent() {
                     className="inputField peer"
                     value={searchProduk}
                     id="product"
-                    onChange={(e) => setSearchProduk(e.target.value)}
+                    onChange={handleInputChange}
+                    onKeyDown={handleKeyEvent}
                   />
                   <label htmlFor="product" className="labelText">
                     Cari Produk
                   </label>
                   <div className={`${selectedProduct && `hidden`}`}>
-                    {searchProduk !== "" && (
-                      <ul className="p-3 bg-slate-200 absolute z-10 w-full text-blue-600 font-semibold max-h-40 overflow-y-auto rounded-b-lg">
-                        {result.map((item: any) => (
+                    {searchProduk !== "" && result.length > 0 && (
+                      <ul
+                        className="p-3 bg-green-200 absolute z-10 w-full text-blue-600 font-semibold max-h-40 overflow-y-auto rounded-b-lg"
+                        ref={listRef}
+                      >
+                        {result.map((item: any, i: number) => (
                           <li
                             key={item.id}
-                            onClick={() => setSelectedProduct(item)}
-                            className="cursor-pointer hover:bg-slate-400"
+                            onClick={() => handleItemClick(item)}
+                            className={`cursor-pointer hover:bg-green-300 ${
+                              activeIndex === i ? "bg-green-300" : ""
+                            }`}
                           >
                             {item.nameProduct}
                           </li>
@@ -176,7 +251,6 @@ export default function MainContent() {
                     )}
                   </div>
                 </div>
-
                 <div className="relative w-4/5 py-3">
                   <input
                     type="number"
@@ -225,8 +299,8 @@ export default function MainContent() {
               )}
             </div>
           </div>
-          <div className="mx-10 text-end">
-            <h1 className="text-sm">
+          <div className="mx-5">
+            <h1 className="text-sm mx-10 text-end">
               Produk yang di cari tidak ada ?{" "}
               <Link
                 href={"./addProduct"}
@@ -236,41 +310,40 @@ export default function MainContent() {
               </Link>{" "}
               untuk menambahkan produk
             </h1>
-          </div>
-          <div className="mt-5 mx-10 flex justify-between">
-            <button
-              type="button"
-              onClick={calculateMaximal}
-              className="hover:bg-blue-400 text-lg font-semibold bg-blue-500 rounded-lg py-1 px-7"
-            >
-              Hitung
-            </button>
-            <button
-              type="button"
-              onClick={backToInput}
-              className="hover:bg-blue-400 text-lg font-semibold bg-blue-500 rounded-lg py-1 px-7"
-            >
-              Kembali
-            </button>
-          </div>
-          <div className="flex mt-5">
-            <div className="basis-1/2">
-              {text === true && (
-                <div>
-                  <h1 className="font-semibold text-lg">
-                    Fun Fact Tentang Gula
-                  </h1>
-                  <div className="font-medium text-sm">{funFactSugar[0]}</div>
-                </div>
-              )}
+            <div className="mt-5">
+              <button
+                type="button"
+                onClick={calculateMaximal}
+                className="hover:bg-blue-400 text-lg font-semibold bg-blue-500 rounded-lg py-1 px-6"
+              >
+                Hitung
+              </button>
             </div>
-            <div className="basis-1/2">
-              <h1>buat edukasi</h1>
-              <iframe
-                src="https://www.youtube.com/embed/tgbNymZ7vqY"
-                width={550}
-                height={300}
-              ></iframe>
+            <div className="flex mt-7 px-5 gap-5">
+              <div className="basis-1/2">
+                {text === true && (
+                  <div>
+                    <h1 className="font-semibold text-lg">
+                      Fun Fact Tentang Gula
+                    </h1>
+                    <div className="font-medium text-sm text-justify">
+                      {funFactSugar[0]}
+                    </div>
+                  </div>
+                )}
+              </div>
+              {/* <div className="basis-1/2">
+                {getVideoEdu.map((data: any) => (
+                  <iframe
+                    key={data.id}
+                    title="YouTube Shorts"
+                    src={`https://www.youtube.com/embed/${data.linkVideo}`}
+                    width={500}
+                    height={300}
+                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  />
+                ))}
+              </div> */}
             </div>
           </div>
           {fillBottle.length === 1 && (

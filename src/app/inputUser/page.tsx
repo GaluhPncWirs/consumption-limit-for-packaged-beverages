@@ -1,5 +1,5 @@
 "use client";
-import ModalBox from "@/components/modalBox/page";
+import ModalBox from "@/components/modalBox/modal";
 import Image from "next/image";
 import { useRef, useState } from "react";
 
@@ -109,7 +109,7 @@ export default function DisplayInputUser() {
             >
               <div
                 id="inputGender"
-                className="flex gap-2 items-center font-medium"
+                className="flex gap-2 items-center mb-1 font-medium"
               >
                 <div className="flex gap-3">
                   <Image
@@ -138,7 +138,7 @@ export default function DisplayInputUser() {
                 <label htmlFor="gender">Wanita</label>
               </div>
 
-              <div className="relative w-1/2 py-3 font-medium">
+              <div className="relative w-1/2 pt-5 font-medium">
                 <input
                   type="number"
                   id="age"
@@ -148,19 +148,19 @@ export default function DisplayInputUser() {
                 />
                 <label
                   htmlFor="age"
-                  className="labelText flex flex-row-reverse gap-3"
+                  className="labelText flex flex-row-reverse gap-2"
                 >
-                  <span>Usia (tahun) :</span>
+                  <span>Usia (tahun)</span>
                   <Image
                     width={30}
                     height={20}
                     src={"/images/age.png"}
-                    alt="gender"
+                    alt="age"
                   />
                 </label>
               </div>
 
-              <div className="relative w-1/2 py-3 font-medium">
+              <div className="relative w-1/2 pt-5 font-medium">
                 <input
                   type="number"
                   id="height"
@@ -170,19 +170,19 @@ export default function DisplayInputUser() {
                 />
                 <label
                   htmlFor="age"
-                  className="labelText flex flex-row-reverse gap-3"
+                  className="labelText flex flex-row-reverse gap-2"
                 >
                   <span>Tinggi Badan (cm) :</span>
                   <Image
                     width={30}
                     height={20}
                     src={"/images/height.png"}
-                    alt="gender"
+                    alt="height"
                   />
                 </label>
               </div>
 
-              <div className="relative w-1/2 pt-3 font-medium">
+              <div className="relative w-1/2 pt-5 font-medium">
                 <input
                   type="number"
                   id="weight"
@@ -192,25 +192,25 @@ export default function DisplayInputUser() {
                 />
                 <label
                   htmlFor="age"
-                  className="labelText flex flex-row-reverse gap-3"
+                  className="labelText flex flex-row-reverse gap-2"
                 >
                   <span>Berat Badan (kg) :</span>
                   <Image
                     width={30}
                     height={20}
                     src={"/images/weight.png"}
-                    alt="gender"
+                    alt="weight"
                   />
                 </label>
               </div>
 
               <div className="font-medium">
-                <div className="flex gap-3">
+                <div className="flex gap-2 mb-1">
                   <Image
                     width={30}
                     height={20}
                     src={"/images/activity.png"}
-                    alt="gender"
+                    alt="activity"
                   />
                   <label htmlFor="activityLevel" className="block mb-2 text-lg">
                     Activity Level

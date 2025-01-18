@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 
-export default function ModalBox({ setModalBox, yourMaxSugar, tdee }: any) {
+export default function ModalBox({ setModalBox, yourMaxSugar, tdee }) {
   const { push } = useRouter();
   function handleClick() {
     setModalBox(false);
