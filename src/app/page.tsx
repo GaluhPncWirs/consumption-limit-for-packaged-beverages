@@ -1,6 +1,8 @@
 "use client";
 import ModalBox from "@/components/modalBox/modal";
+import NavigasiBar from "@/components/navbar/navigasiBar";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useRef, useState } from "react";
 
 export default function DisplayInputUser() {
@@ -18,6 +20,7 @@ export default function DisplayInputUser() {
     weight: "",
   });
   const [tdee, setTdee] = useState(0);
+  const path = usePathname();
 
   function calculateMaxSugar() {
     const age = parseInt(ages.current?.value || "0");
@@ -90,15 +93,15 @@ export default function DisplayInputUser() {
   }
 
   return (
-    <div className="h-screen max-w-2xl mx-auto flex flex-col items-center justify-center">
+    <div className="max-w-2xl mx-auto flex flex-col items-center justify-center h-screen">
       <div className="w-full">
-        <div className="bg-blue-300 rounded-lg py-10 px-5 max-w-xl mx-auto shadow-lg">
+        <div className="bg-green-400 rounded-lg py-9 px-5 max-w-xl mx-auto shadow-lg">
           {/* <div className="mb-5 text-center text-lg font-semibold">
-          <h2>
-            silahkan inputkan di bawah ini agar bisa mengetahui berapa
-            kalori anda{" "}
-          </h2>
-        </div> */}
+      <h2>
+        silahkan inputkan di bawah ini agar bisa mengetahui berapa
+        kalori anda{" "}
+      </h2>
+    </div> */}
           <h1 className="text-center mb-8 text-xl font-bold">
             Penghitung Batas Aman Konsumsi Produk Manis Kemasan
           </h1>
