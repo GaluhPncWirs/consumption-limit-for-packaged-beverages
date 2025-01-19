@@ -1,6 +1,7 @@
 "use client";
+import { usePathname } from "next/navigation";
+import ButtonBack from "@/components/buttonBack/btn";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function AddProduct() {
   async function handleAddProduct(event: any) {
@@ -31,9 +32,11 @@ export default function AddProduct() {
     }
   }
 
+  const path = usePathname();
+
   return (
     <div className="background_template h-screen flex flex-col justify-center items-center">
-      <div className="bg-slate-300 w-1/2 rounded-xl">
+      <div className="bg-green-300 w-1/2 rounded-xl">
         <form
           onSubmit={(e) => handleAddProduct(e)}
           className="py-10 px-10 flex flex-col gap-5"
@@ -43,8 +46,17 @@ export default function AddProduct() {
           </h1>
           <div className="relative w-1/2 pt-3 font-medium">
             <input type="text" id="nameProduct" className="inputField peer" />
-            <label htmlFor="nameProduct" className="labelText">
-              Nama Produk
+            <label
+              htmlFor="nameProduct"
+              className="labelText flex items-center"
+            >
+              <Image
+                src={"/images/beverage.png"}
+                alt="beverage"
+                width={30}
+                height={30}
+              />
+              <span>Nama Produk</span>
             </label>
           </div>
           <div className="relative w-1/2 pt-3 font-medium">
@@ -53,8 +65,17 @@ export default function AddProduct() {
               id="kandunganGula"
               className="inputField peer"
             />
-            <label htmlFor="kandunganGula" className="labelText">
-              Kandungan Gula Minuman
+            <label
+              htmlFor="nameProduct"
+              className="labelText flex items-center gap-2"
+            >
+              <Image
+                src={"/images/sugar.png"}
+                alt="beverage"
+                width={20}
+                height={20}
+              />
+              <span>Kandungan Gula Minuman</span>
             </label>
           </div>
           <div className="relative w-1/2 pt-3 font-medium">
@@ -66,33 +87,40 @@ export default function AddProduct() {
               id="takaranSaji"
               className="inputField peer"
             />
-            <label htmlFor="takaranSaji" className="labelText">
-              Takaran Saji Per Kemasan
+            <label
+              htmlFor="nameProduct"
+              className="labelText flex items-center gap-2"
+            >
+              <Image
+                src={"/images/serving.png"}
+                alt="beverage"
+                width={20}
+                height={20}
+              />
+              <span>Takaran Saji Per Kemasan</span>
             </label>
           </div>
           <div className="relative w-1/2 pt-3 font-medium">
             <input type="number" id="volume" className="inputField peer" />
-            <label htmlFor="volume" className="labelText">
-              Volume Kemasan Berapa ml
+            <label
+              htmlFor="nameProduct"
+              className="labelText flex items-center gap-2"
+            >
+              <Image
+                src={"/images/ml.png"}
+                alt="beverage"
+                width={20}
+                height={20}
+              />
+              <span>Volume Kemasan Berapa ml</span>
             </label>
           </div>
-          <button className="bg-slate-50 mt-5 py-1 rounded-lg text-lg font-semibold hover:bg-blue-400 transition-all">
+          <button className="bg-green-500 mt-5 py-1 rounded-lg text-lg font-semibold hover:bg-green-600 transition-all">
             Tambah Produk
           </button>
         </form>
       </div>
-      <div className="absolute top-0 left-0 px-3 bg-slate-100 py-1.5 hover:bg-blue-400 rounded-br-lg flex flex-row-reverse justify-center items-center gap-1 cursor-pointer">
-        <Link href={"./mainContent"} className="text-xl font-semibold">
-          Kembali
-        </Link>
-        <Image
-          src="/images/arrow_left.png"
-          alt="arrow_left"
-          className="w-1/5"
-          width={200}
-          height={200}
-        />
-      </div>
+      <ButtonBack path={path} props={""} />
     </div>
   );
 }

@@ -119,6 +119,7 @@ export default function DisplayInputUser() {
                   height={20}
                   src={"/images/gender.png"}
                   alt="gender"
+                  style={{ height: "auto", width: "auto" }}
                 />
                 <span className="text-lg">Gender : </span>
               </div>
@@ -158,6 +159,7 @@ export default function DisplayInputUser() {
                   height={20}
                   src={"/images/age.png"}
                   alt="age"
+                  style={{ height: "auto", width: "auto" }}
                 />
               </label>
             </div>
@@ -180,6 +182,7 @@ export default function DisplayInputUser() {
                   height={20}
                   src={"/images/height.png"}
                   alt="height"
+                  style={{ height: "auto", width: "auto" }}
                 />
               </label>
             </div>
@@ -202,6 +205,7 @@ export default function DisplayInputUser() {
                   height={20}
                   src={"/images/weight.png"}
                   alt="weight"
+                  style={{ height: "auto", width: "auto" }}
                 />
               </label>
             </div>
@@ -213,6 +217,7 @@ export default function DisplayInputUser() {
                   height={20}
                   src={"/images/activity.png"}
                   alt="activity"
+                  style={{ height: "auto", width: "auto" }}
                 />
                 <label htmlFor="activityLevel" className="block mb-2 text-lg">
                   Activity Level
@@ -220,7 +225,7 @@ export default function DisplayInputUser() {
               </div>
               <select
                 id="activityLevel"
-                className="cursor-pointer bg-slate-300 rounded-md p-2 text-sm"
+                className="cursor-pointer bg-green-300 rounded-md p-2 text-sm"
                 ref={activityLevel}
               >
                 <option value="sedentary">
@@ -241,7 +246,7 @@ export default function DisplayInputUser() {
               </select>
             </div>
           </form>
-          <div className="mt-8 mx-auto font-semibold py-1 text-center max-w-20 rounded-md bg-slate-300 disabled:cursor-not-allowed hover:bg-slate-400 cursor-pointer">
+          <div className="mt-8 mx-auto font-semibold py-1 text-center max-w-20 rounded-md bg-green-500 disabled:cursor-not-allowed hover:bg-green-600 cursor-pointer">
             <button
               onClick={calculateMaxSugar}
               disabled={!formIsFilled()}

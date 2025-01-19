@@ -15,7 +15,7 @@ export default function MainContent() {
   const { push } = useRouter();
   const [fillBottle, setFillBottle] = useState([]);
   const [miliLiter, setMiliLiter] = useState(0);
-  const [text, setText] = useState(false);
+  const [educations, setEducations] = useState(false);
   const [sugarProduk, setSugarProduk] = useState(0);
   const [volumeProduk, setVolumeProduk] = useState(0);
   const [funFactSugar, setFunFactSugar] = useState([]);
@@ -38,7 +38,7 @@ export default function MainContent() {
   }, []);
 
   function calculateMaximal() {
-    setText(true);
+    setEducations(true);
     const sugarContentInsideProduct = parseFloat(
       sugarContentInsideProductRef.current?.value || "0"
     );
@@ -164,10 +164,10 @@ export default function MainContent() {
   }, [searchProduk]);
 
   return (
-    <div className="pb-10">
+    <div className="pt-24 pb-12">
       <NavigasiBar props={backToInput} />
       <div
-        className={`bg-green-300 flex flex-col justify-center px-5 rounded-lg py-10 mx-auto mt-10 ${
+        className={`bg-green-300 flex flex-col justify-center px-5 rounded-lg py-10 mx-auto ${
           fillBottle.length > 0 ? `w-11/12` : `w-1/2`
         }`}
       >
@@ -181,7 +181,9 @@ export default function MainContent() {
               Grams
             </span>
           </p>
-          <div className={`${text === true ? `block` : `hidden`} max-w-lg`}>
+          <div
+            className={`${educations === true ? `block` : `hidden`} max-w-lg`}
+          >
             {fillBottle.length > 1 && miliLiter > 0 ? (
               <p>
                 Kamu Bisa Konsumsi per {fillBottle.length} botol dengan sisa{" "}
@@ -303,31 +305,33 @@ export default function MainContent() {
               Hitung
             </button>
           </div>
-          <div className="flex mt-7 px-5 gap-5">
-            <div className="basis-1/2">
-              {text === true && (
-                <div>
-                  <h1 className="font-semibold text-lg">
-                    Fun Fact Tentang Gula
-                  </h1>
-                  <div className="font-medium text-sm text-justify">
-                    {funFactSugar[0]}
+          <div className="flex mt-7 px-5 gap-10">
+            {educations === true && (
+              <>
+                <div className="basis-1/2">
+                  <div>
+                    <h1 className="font-semibold text-lg">
+                      Fun Fact Tentang Gula
+                    </h1>
+                    <div className="font-medium text-sm text-justify">
+                      {funFactSugar[0]}
+                    </div>
                   </div>
                 </div>
-              )}
-            </div>
-            {/* <div className="basis-1/2">
-                {getVideoEdu.map((data: any) => (
-                  <iframe
-                    key={data.id}
-                    title="YouTube Shorts"
-                    src={`https://www.youtube.com/embed/${data.linkVideo}`}
-                    width={500}
-                    height={300}
-                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  />
-                ))}
-              </div> */}
+                <div className="basis-1/2">
+                  {getVideoEdu.map((data: any) => (
+                    <iframe
+                      key={data.id}
+                      title="YouTube Shorts"
+                      src={`https://www.youtube.com/embed/${data.linkVideo}`}
+                      width={500}
+                      height={300}
+                      allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
         {fillBottle.length === 1 && (
