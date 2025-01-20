@@ -1,12 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import ButtonBack from "../buttonBack/btn";
-import { usePathname } from "next/navigation";
 
-export default function NavigasiBar({ props }) {
-  const path = usePathname();
+export default function NavigasiBar({ props, path }) {
   return (
-    <div className="w-full h-16 bg-green-400 shadow-md shadow-slate-500 fixed top-0">
+    <div className="w-full h-16 bg-green-400 shadow-md shadow-green-500 fixed top-0 z-50">
       <div className="flex h-full">
         <div className="basis-1/5 bg-green-300 rounded-r-lg flex justify-center items-center">
           <Image
@@ -20,10 +18,16 @@ export default function NavigasiBar({ props }) {
         <div className="basis-4/5">
           <ul className="flex justify-around items-center h-full font-semibold text-lg">
             <li>Tentang</li>
-            <li>
-              <Link href={"./addProduct"}>add Produk</Link>
-            </li>
-            <ButtonBack path={path} props={props} />
+            {path === "/mainContent" ? (
+              <>
+                <li>
+                  <Link href={"./addProduct"}>add Produk</Link>
+                </li>
+                <ButtonBack path={path} props={props} />
+              </>
+            ) : (
+              <ButtonBack path={path} props={props} />
+            )}
           </ul>
         </div>
       </div>

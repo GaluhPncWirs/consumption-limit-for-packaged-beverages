@@ -20,7 +20,6 @@ export default function DisplayInputUser() {
     weight: "",
   });
   const [tdee, setTdee] = useState(0);
-  const path = usePathname();
 
   function calculateMaxSugar() {
     const age = parseInt(ages.current?.value || "0");
@@ -211,7 +210,7 @@ export default function DisplayInputUser() {
             </div>
 
             <div className="font-medium">
-              <div className="flex gap-2 mb-1">
+              <div className="flex gap-2 mb-2">
                 <Image
                   width={30}
                   height={20}

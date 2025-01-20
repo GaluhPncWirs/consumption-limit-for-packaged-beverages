@@ -6,7 +6,7 @@ import { getDataProduct } from "@/getDataFromApi/getProduct";
 import { getVideoEducations } from "@/getDataFromApi/getVideoEdu";
 import NavigasiBar from "@/components/navbar/navigasiBar";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 export default function MainContent() {
@@ -29,6 +29,7 @@ export default function MainContent() {
   const [activeIndex, setActiveIndex] = useState(-1);
   const listRef = useRef<HTMLUListElement | null>(null);
   const [getVideoEdu, setGetVideoEdu] = useState([]);
+  const path = usePathname();
 
   useEffect(() => {
     const maxSugars = localStorage.getItem("maxSugars");
@@ -165,7 +166,7 @@ export default function MainContent() {
 
   return (
     <div className="pt-24 pb-12">
-      <NavigasiBar props={backToInput} />
+      <NavigasiBar props={backToInput} path={path} />
       <div
         className={`bg-green-300 flex flex-col justify-center px-5 rounded-lg py-10 mx-auto ${
           fillBottle.length > 0 ? `w-11/12` : `w-1/2`
@@ -251,7 +252,7 @@ export default function MainContent() {
                   disabled
                   value={sugar || ""}
                 />
-                <span className="text-[0.65rem] text font-semibold">
+                <span className="text-[0.65rem] text-red-600 font-semibold">
                   *Gula Disini Sudah di Totalkan Dengan Takaran Saji Per Kemasan
                 </span>
                 <label htmlFor="sugarContent" className="labelText">
@@ -305,7 +306,7 @@ export default function MainContent() {
               Hitung
             </button>
           </div>
-          <div className="flex mt-7 px-5 gap-10">
+          <div className="flex mt-7 px-5 gap-10 items-center">
             {educations === true && (
               <>
                 <div className="basis-1/2">
@@ -327,6 +328,7 @@ export default function MainContent() {
                       width={500}
                       height={300}
                       allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      className="rounded-xl"
                     />
                   ))}
                 </div>
