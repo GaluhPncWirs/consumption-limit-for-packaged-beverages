@@ -96,24 +96,20 @@ export default function Visualization({
   };
 
   return (
-    <div>
+    <div className="mt-6 mx-5 flex flex-col justify-center items-center">
+      {/* <div className="bg-gray-200 w-full h-6 rounded-lg mt-3">
+        <div
+          className="progress-fill rounded-l-lg"
+          style={{ width: `${riskLevel}%` }}
+        ></div>
+      </div> */}
       <div>
-        <div className="mt-6">
-          {/* <div className="bg-gray-200 w-full h-6 rounded-lg mt-3">
-            <div
-              className="progress-fill rounded-l-lg"
-              style={{ width: `${riskLevel}%` }}
-            ></div>
-          </div> */}
-          <div className="w-3/4 mx-auto">
-            <Bar data={data} options={options} />
-          </div>
-          <p className="mt-2 mx-10">
-            Anda berisiko mengalami obesitas dan diabetes jika terus mengonsumsi
-            minuman ini sebanyak {volumeProduk} ml.
-          </p>
-        </div>
+        <Bar data={data} options={options} />
       </div>
+      <p className="mt-3 text-justify max-[640px]:text-sm sm:text-sm">
+        Anda berisiko mengalami obesitas dan diabetes jika terus mengonsumsi
+        minuman ini sebanyak {volumeProduk} ml.
+      </p>
     </div>
   );
 }

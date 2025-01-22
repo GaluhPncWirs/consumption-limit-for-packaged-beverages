@@ -168,13 +168,15 @@ export default function MainContent() {
     <div className="pt-24 pb-12">
       <NavigasiBar props={backToInput} path={path} />
       <div
-        className={`bg-green-300 flex flex-col justify-center px-5 rounded-lg py-10 mx-auto max-[640px]:bg-slate-300 ${
-          fillBottle.length > 0 ? `w-11/12` : `w-1/2 max-[640px]:w-11/12`
+        className={`bg-green-300 flex flex-col justify-center px-5 rounded-lg py-10 mx-auto lg:bg-blue-200 ${
+          fillBottle.length > 0
+            ? `w-11/12`
+            : `w-1/2 max-[640px]:w-11/12 sm:w-11/12 md:w-3/4 lg:w-1/2`
         }`}
       >
-        <div className="mx-5 text-lg font-semibold flex justify-between">
+        <div className="mx-5 text-lg font-semibold max-[640px]:text-sm sm:text-sm md:text-base lg:text-base">
           <p>
-            Your Max Consume Sugar Per Day :{" "}
+            Maksimal Konsumsi Gula Perhari :{" "}
             <span>
               {getYourMaxSugars.toLocaleString("id-ID", {
                 maximumFractionDigits: 0,
@@ -182,34 +184,17 @@ export default function MainContent() {
               Grams
             </span>
           </p>
-          <div
-            className={`${educations === true ? `block` : `hidden`} max-w-lg`}
-          >
-            {fillBottle.length > 1 && miliLiter > 0 ? (
-              <p>
-                Kamu Bisa Konsumsi per {fillBottle.length} botol dengan sisa{" "}
-                {miliLiter} ml
-              </p>
-            ) : fillBottle.length > 1 && miliLiter <= 0 ? (
-              <p>Kamu Bisa Konsumsi per {fillBottle.length} botol</p>
-            ) : (
-              <p>
-                Minuman ini Hanya Bisa Anda Konsumsi {miliLiter} ml, Kurang Dari
-                Satu Botol
-              </p>
-            )}
-          </div>
         </div>
         <div>
           <div
             className={`mt-10 mb-7 ${
               fillBottle.length >= 1
-                ? `flex items-center justify-center gap-3 max-[640px]:flex-col max-[640px]:gap-10`
+                ? `flex items-center justify-center gap-3 max-[640px]:flex-col max-[640px]:gap-10 sm:flex-col sm:gap-10 md:flex-row md:gap-5`
                 : `flex-none`
             }`}
           >
-            <form className="basis-2/5 flex flex-col gap-2 items-center justify-center">
-              <div className="relative w-4/5 py-3">
+            <form className="basis-2/5 flex flex-col gap-2 items-center justify-center md:basis-1/2 lg:basis-2/5">
+              <div className="relative w-4/5 py-3 md:w-11/12 lg:w-4/5">
                 <input
                   type="text"
                   className="inputField peer"
@@ -242,7 +227,7 @@ export default function MainContent() {
                   )}
                 </div>
               </div>
-              <div className="relative w-4/5 py-3">
+              <div className="relative w-4/5 py-3 md:w-11/12 lg:w-4/5">
                 <input
                   type="number"
                   id="sugarContent"
@@ -256,11 +241,11 @@ export default function MainContent() {
                   *Gula Disini Sudah di Totalkan Dengan Takaran Saji Per Kemasan
                 </span>
                 <label htmlFor="sugarContent" className="labelText">
-                  Kadar Gula dalam Minuman (Grams) :
+                  Kadar Gula dalam Minuman (G)
                 </label>
               </div>
 
-              <div className="relative w-4/5 py-3">
+              <div className="relative w-4/5 py-3 md:w-11/12 lg:w-4/5">
                 <input
                   type="number"
                   id="volumeKemasan"
@@ -271,21 +256,40 @@ export default function MainContent() {
                   value={volume || ""}
                 />
                 <label htmlFor="volumeKemasan" className="labelText">
-                  Volume Kemasan (ml) :
+                  Volume Kemasan (ml)
                 </label>
               </div>
             </form>
-            <div className="basis-3/5 mb-5 flex justify-center items-center max-[640px]:w-full">
+            <div className="basis-3/5 gap-8 flex justify-center items-center max-[640px]:flex-col-reverse sm:flex-col-reverse max-[640px]:w-full sm:w-full md:basis-1/2 lg:basis-3/5">
               {fillBottle.map((item: any, i: number) => (
                 <div key={i} className="bottleInside w-1/5 max-[640px]:w-1/6">
                   <div className="fill" style={{ height: `${item}%` }}></div>
                 </div>
               ))}
+              <div
+                className={`${
+                  educations === true ? `block` : `hidden`
+                } max-[640px]:text-sm text-justify mx-5 sm:text-sm font-semibold`}
+              >
+                {fillBottle.length > 1 && miliLiter > 0 ? (
+                  <p>
+                    Kamu Bisa Konsumsi per {fillBottle.length} botol dengan sisa{" "}
+                    {miliLiter} ml
+                  </p>
+                ) : fillBottle.length > 1 && miliLiter <= 0 ? (
+                  <p>Kamu Bisa Konsumsi per {fillBottle.length} botol</p>
+                ) : (
+                  <p>
+                    Minuman ini Hanya Bisa Anda Konsumsi {miliLiter} ml, Kurang
+                    Dari Satu Botol
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </div>
         <div className="mx-5">
-          <h1 className="text-sm mx-10 text-end max-[640px]:mx-0 max-[640px]:text-xs">
+          <h1 className="text-sm mx-10 text-end max-[640px]:mx-0 max-[640px]:text-xs lg:mx-5">
             Produk yang di cari tidak ada ?{" "}
             <Link
               href={"./addProduct"}
@@ -304,7 +308,7 @@ export default function MainContent() {
               Hitung
             </button>
           </div>
-          <div className="flex mt-7 px-5 gap-10 items-center">
+          <div className="flex mt-7 px-3 gap-8 justify-center max-[640px]:flex-col sm:flex-col md:flex-row">
             {educations === true && (
               <>
                 <div className="basis-1/2">
@@ -317,7 +321,7 @@ export default function MainContent() {
                     </div>
                   </div>
                 </div>
-                <div className="basis-1/2">
+                <div className="basis-1/2 w-full">
                   {getVideoEdu.map((data: any) => (
                     <iframe
                       key={data.id}
@@ -326,7 +330,7 @@ export default function MainContent() {
                       width={500}
                       height={300}
                       allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      className="rounded-xl"
+                      className="rounded-xl w-full"
                     />
                   ))}
                 </div>
