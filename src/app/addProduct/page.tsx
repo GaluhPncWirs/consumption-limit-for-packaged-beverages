@@ -37,16 +37,16 @@ export default function AddProduct() {
   return (
     <div>
       <NavigasiBar path={path} props={""} />
-      <div className="background_template h-screen flex flex-col justify-center items-center">
-        <div className="bg-green-300 w-1/2 rounded-xl">
+      <div className="h-screen flex flex-col justify-center items-center">
+        <div className="bg-green-300 w-2/5 rounded-xl mt-16">
           <form
             onSubmit={(e) => handleAddProduct(e)}
-            className="py-10 px-10 flex flex-col gap-5"
+            className="p-14 flex flex-col gap-5"
           >
             <h1 className="text-xl font-semibold text-center mb-3">
               Penambahan Produk Minuman
             </h1>
-            <div className="relative w-1/2 pt-3 font-medium">
+            <div className="relative pt-3 font-medium">
               <input type="text" id="nameProduct" className="inputField peer" />
               <label
                 htmlFor="nameProduct"
@@ -55,13 +55,13 @@ export default function AddProduct() {
                 <Image
                   src={"/images/beverage.png"}
                   alt="beverage"
-                  width={30}
-                  height={30}
+                  width={27}
+                  height={27}
                 />
                 <span>Nama Produk</span>
               </label>
             </div>
-            <div className="relative w-1/2 pt-3 font-medium">
+            <div className="relative pt-3 font-medium">
               <input
                 type="number"
                 id="kandunganGula"
@@ -80,7 +80,7 @@ export default function AddProduct() {
                 <span>Kandungan Gula Minuman</span>
               </label>
             </div>
-            <div className="relative w-1/2 pt-3 font-medium">
+            <div className="relative pt-3 font-medium">
               <input
                 type="number"
                 min={0.01}
@@ -102,7 +102,7 @@ export default function AddProduct() {
                 <span>Takaran Saji Per Kemasan</span>
               </label>
             </div>
-            <div className="relative w-1/2 pt-3 font-medium">
+            <div className="relative pt-3 font-medium">
               <input type="number" id="volume" className="inputField peer" />
               <label
                 htmlFor="nameProduct"

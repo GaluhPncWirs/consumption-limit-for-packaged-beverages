@@ -168,8 +168,8 @@ export default function MainContent() {
     <div className="pt-24 pb-12">
       <NavigasiBar props={backToInput} path={path} />
       <div
-        className={`bg-green-300 flex flex-col justify-center px-5 rounded-lg py-10 mx-auto ${
-          fillBottle.length > 0 ? `w-11/12` : `w-1/2`
+        className={`bg-green-300 flex flex-col justify-center px-5 rounded-lg py-10 mx-auto max-[640px]:bg-slate-300 ${
+          fillBottle.length > 0 ? `w-11/12` : `w-1/2 max-[640px]:w-11/12`
         }`}
       >
         <div className="mx-5 text-lg font-semibold flex justify-between">
@@ -202,9 +202,9 @@ export default function MainContent() {
         </div>
         <div>
           <div
-            className={`my-10 ${
+            className={`mt-10 mb-7 ${
               fillBottle.length >= 1
-                ? `flex items-center justify-center gap-3`
+                ? `flex items-center justify-center gap-3 max-[640px]:flex-col max-[640px]:gap-10`
                 : `flex-none`
             }`}
           >
@@ -275,19 +275,17 @@ export default function MainContent() {
                 </label>
               </div>
             </form>
-            {fillBottle.length > 0 && (
-              <div className="basis-3/5 mb-5 flex justify-center items-center">
-                {fillBottle.map((item: any, i: number) => (
-                  <div key={i} className="bottleInside w-1/5">
-                    <div className="fill" style={{ height: `${item}%` }}></div>
-                  </div>
-                ))}
-              </div>
-            )}
+            <div className="basis-3/5 mb-5 flex justify-center items-center max-[640px]:w-full">
+              {fillBottle.map((item: any, i: number) => (
+                <div key={i} className="bottleInside w-1/5 max-[640px]:w-1/6">
+                  <div className="fill" style={{ height: `${item}%` }}></div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
         <div className="mx-5">
-          <h1 className="text-sm mx-10 text-end">
+          <h1 className="text-sm mx-10 text-end max-[640px]:mx-0 max-[640px]:text-xs">
             Produk yang di cari tidak ada ?{" "}
             <Link
               href={"./addProduct"}
@@ -297,7 +295,7 @@ export default function MainContent() {
             </Link>{" "}
             untuk menambahkan produk
           </h1>
-          <div className="mt-5">
+          <div className="mt-7">
             <button
               type="button"
               onClick={calculateMaximal}
