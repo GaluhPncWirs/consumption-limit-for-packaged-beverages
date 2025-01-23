@@ -104,4 +104,31 @@
         background-repeat: no-repeat;
         background-size: cover;
       }
+
+      /* menu animation */
+
+      .menu span:nth-child(2){
+        transform-origin: 0 0;
+      }
+
+      .menu span:nth-child(4){
+        transform-origin: 0 100%;
+      }
+
+      .menu input:checked ~ span:nth-child(2){
+        background-color: white;
+        transform: rotate(45deg);
+        translate: -1px 2px;
+      }
+
+      .menu input:checked ~ span:nth-child(4){
+        background-color: white;
+        transform: rotate(-45deg);
+        translate: -1px -1px;
+      }
+
+      .menu input:checked ~ span:nth-child(3){
+        transform: scale(0);
+        opacity: 0;
+      }
 }

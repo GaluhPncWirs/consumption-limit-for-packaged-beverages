@@ -78,6 +78,7 @@ export default function Visualization({
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: "top" as const,
@@ -96,17 +97,17 @@ export default function Visualization({
   };
 
   return (
-    <div className="mt-6 mx-5 flex flex-col justify-center items-center">
+    <div className="mt-6 flex flex-col justify-center items-center">
       {/* <div className="bg-gray-200 w-full h-6 rounded-lg mt-3">
         <div
           className="progress-fill rounded-l-lg"
           style={{ width: `${riskLevel}%` }}
         ></div>
       </div> */}
-      <div>
+      <div className="w-11/12 h-64 max-[640px]:w-full sm:w-11/12 lg:w-3/4 xl:w-1/2">
         <Bar data={data} options={options} />
       </div>
-      <p className="mt-3 text-justify max-[640px]:text-sm sm:text-sm">
+      <p className="mt-3 mx-5 text-justify max-[640px]:text-sm sm:text-sm md:text-base">
         Anda berisiko mengalami obesitas dan diabetes jika terus mengonsumsi
         minuman ini sebanyak {volumeProduk} ml.
       </p>

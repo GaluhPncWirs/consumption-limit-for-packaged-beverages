@@ -165,7 +165,7 @@ export default function MainContent() {
   }, [searchProduk]);
 
   return (
-    <div className="pt-24 pb-12">
+    <div className="pt-24 pb-14">
       <NavigasiBar props={backToInput} path={path} />
       <div
         className={`bg-green-300 flex flex-col justify-center px-5 rounded-lg py-10 mx-auto lg:bg-blue-200 ${
@@ -261,15 +261,17 @@ export default function MainContent() {
               </div>
             </form>
             <div className="basis-3/5 gap-8 flex justify-center items-center max-[640px]:flex-col-reverse sm:flex-col-reverse max-[640px]:w-full sm:w-full md:basis-1/2 lg:basis-3/5">
-              {fillBottle.map((item: any, i: number) => (
-                <div key={i} className="bottleInside w-1/5 max-[640px]:w-1/6">
-                  <div className="fill" style={{ height: `${item}%` }}></div>
-                </div>
-              ))}
+              <div className="flex w-full items-center justify-center">
+                {fillBottle.map((item: any, i: number) => (
+                  <div key={i} className="bottleInside w-1/5 max-[640px]:w-1/6">
+                    <div className="fill" style={{ height: `${item}%` }}></div>
+                  </div>
+                ))}
+              </div>
               <div
                 className={`${
                   educations === true ? `block` : `hidden`
-                } max-[640px]:text-sm text-justify mx-5 sm:text-sm font-semibold`}
+                } max-[640px]:text-sm text-justify mx-5 sm:text-sm font-semibold lg:text-base`}
               >
                 {fillBottle.length > 1 && miliLiter > 0 ? (
                   <p>
