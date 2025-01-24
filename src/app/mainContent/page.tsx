@@ -168,10 +168,10 @@ export default function MainContent() {
     <div className="pt-24 pb-14">
       <NavigasiBar props={backToInput} path={path} />
       <div
-        className={`bg-green-300 flex flex-col justify-center px-5 rounded-lg py-10 mx-auto lg:bg-blue-200 ${
+        className={`bg-green-300 flex flex-col justify-center px-5 rounded-lg py-10 mx-auto ${
           fillBottle.length > 0
             ? `w-11/12`
-            : `w-1/2 max-[640px]:w-11/12 sm:w-11/12 md:w-3/4 lg:w-1/2`
+            : `w-1/2 max-[640px]:w-11/12 sm:w-11/12 md:w-3/5 lg:w-1/2`
         }`}
       >
         <div className="mx-5 text-lg font-semibold max-[640px]:text-sm sm:text-sm md:text-base lg:text-base">
