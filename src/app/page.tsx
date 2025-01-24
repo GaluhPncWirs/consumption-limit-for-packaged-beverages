@@ -142,6 +142,8 @@ export default function DisplayInputUser() {
                 <input
                   type="number"
                   id="age"
+                  min={1}
+                  max={100}
                   className="inputField peer"
                   ref={ages}
                   onChange={handleFilled}
@@ -165,6 +167,8 @@ export default function DisplayInputUser() {
                 <input
                   type="number"
                   id="height"
+                  min={20}
+                  max={300}
                   className="inputField peer"
                   ref={bodyHeight}
                   onChange={handleFilled}
@@ -188,6 +192,8 @@ export default function DisplayInputUser() {
                 <input
                   type="number"
                   id="weight"
+                  min={5}
+                  max={150}
                   className="inputField peer"
                   ref={bodyWeight}
                   onChange={handleFilled}

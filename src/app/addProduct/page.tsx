@@ -4,6 +4,7 @@ import Image from "next/image";
 import NavigasiBar from "@/components/navbar/navigasiBar";
 
 export default function AddProduct() {
+  const path = usePathname();
   async function handleAddProduct(event: any) {
     event.preventDefault();
 
@@ -32,13 +33,11 @@ export default function AddProduct() {
     }
   }
 
-  const path = usePathname();
-
   return (
     <div>
       <NavigasiBar path={path} props={""} />
       <div className="h-screen flex flex-col justify-center items-center">
-        <div className="bg-green-300 w-2/5 rounded-xl mt-16">
+        <div className="bg-green-300 w-2/5 rounded-xl mt-16 max-[640px]:w-11/12 sm:w-4/5 md:w-8/12 lg:w-1/2">
           <form
             onSubmit={(e) => handleAddProduct(e)}
             className="p-14 flex flex-col gap-5"

@@ -1,13 +1,12 @@
 "use client";
 
 import Visualization from "@/components/visualisasi/layout";
-import { getDataFunFact } from "@/getDataFromApi/getFunFact";
 import { getDataProduct } from "@/getDataFromApi/getProduct";
-import { getVideoEducations } from "@/getDataFromApi/getVideoEdu";
 import NavigasiBar from "@/components/navbar/navigasiBar";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import Educations from "@/components/educationComp/educations";
 
 export default function MainContent() {
   const sugarContentInsideProductRef = useRef<HTMLInputElement>(null);
@@ -18,7 +17,6 @@ export default function MainContent() {
   const [educations, setEducations] = useState(false);
   const [sugarProduk, setSugarProduk] = useState(0);
   const [volumeProduk, setVolumeProduk] = useState(0);
-  const [funFactSugar, setFunFactSugar] = useState([]);
   const [product, setProduct] = useState([]);
   const [getYourMaxSugars, setGetYourMaxSugars] = useState(0);
   const [searchProduk, setSearchProduk] = useState("");
@@ -28,7 +26,6 @@ export default function MainContent() {
   const [volume, setVolume] = useState(0);
   const [activeIndex, setActiveIndex] = useState(-1);
   const listRef = useRef<HTMLUListElement | null>(null);
-  const [getVideoEdu, setGetVideoEdu] = useState([]);
   const path = usePathname();
 
   useEffect(() => {
@@ -76,24 +73,8 @@ export default function MainContent() {
   }
 
   useEffect(() => {
-    getDataFunFact((data: any) => {
-      const randomFunFact = data
-        .map((a: any) => a.funFact)
-        .sort(() => Math.random() - 0.5);
-
-      setFunFactSugar(randomFunFact);
-    });
-  }, []);
-
-  useEffect(() => {
     getDataProduct((data: any) => {
       setProduct(data);
-    });
-  }, []);
-
-  useEffect(() => {
-    getVideoEducations((data: any) => {
-      setGetVideoEdu(data);
     });
   }, []);
 
@@ -260,6 +241,7 @@ export default function MainContent() {
                 </label>
               </div>
             </form>
+
             <div className="basis-3/5 gap-8 flex justify-center items-center max-[640px]:flex-col-reverse sm:flex-col-reverse max-[640px]:w-full sm:w-full md:basis-1/2 lg:basis-3/5">
               <div className="flex w-full items-center justify-center">
                 {fillBottle.map((item: any, i: number) => (
@@ -290,6 +272,7 @@ export default function MainContent() {
             </div>
           </div>
         </div>
+
         <div className="mx-5">
           <h1 className="text-sm mx-10 text-end max-[640px]:mx-0 max-[640px]:text-xs lg:mx-5">
             Produk yang di cari tidak ada ?{" "}
@@ -310,35 +293,7 @@ export default function MainContent() {
               Hitung
             </button>
           </div>
-          <div className="flex mt-7 px-3 gap-8 justify-center max-[640px]:flex-col sm:flex-col md:flex-row">
-            {educations === true && (
-              <>
-                <div className="basis-1/2">
-                  <div>
-                    <h1 className="font-semibold text-lg">
-                      Fun Fact Tentang Gula
-                    </h1>
-                    <div className="font-medium text-sm text-justify">
-                      {funFactSugar[0]}
-                    </div>
-                  </div>
-                </div>
-                <div className="basis-1/2 w-full">
-                  {getVideoEdu.map((data: any) => (
-                    <iframe
-                      key={data.id}
-                      title="YouTube Shorts"
-                      src={`https://www.youtube.com/embed/${data.linkVideo}`}
-                      width={500}
-                      height={300}
-                      allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      className="rounded-xl w-full"
-                    />
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
+          <Educations educations={educations} />
         </div>
         {fillBottle.length === 1 && (
           <Visualization

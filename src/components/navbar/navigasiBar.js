@@ -22,7 +22,7 @@ export default function NavigasiBar({ props, path }) {
             {path === "/mainContent" ? (
               <>
                 <li>
-                  <Link href={"./addProduct"}>add Produk</Link>
+                  <Link href={"./addProduct"}>Tambah Produk</Link>
                 </li>
                 <ButtonBack path={path} props={props} />
               </>
