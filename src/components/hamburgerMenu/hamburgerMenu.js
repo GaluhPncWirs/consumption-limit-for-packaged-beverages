@@ -1,6 +1,5 @@
-import Link from "next/link";
-import ButtonBack from "../buttonBack/btn";
 import { useState } from "react";
+import PathNavbar from "../navbar/pathNavbar";
 
 export default function HamburgerMenu({ props, path }) {
   const [isCheked, setIsCheked] = useState(false);
@@ -14,23 +13,13 @@ export default function HamburgerMenu({ props, path }) {
           : `max-[640px]:translate-x-full`
       }`}
       >
-        <li>Tentang</li>
-        {path === "/mainContent" ? (
-          <>
-            <li>
-              <Link href={"./addProduct"}>add Produk</Link>
-            </li>
-            <ButtonBack path={path} props={props} />
-          </>
-        ) : (
-          <ButtonBack path={path} props={props} />
-        )}
+        <PathNavbar props={props} path={path} />
       </ul>
       <div className="menu flex flex-col h-5 justify-between">
         <input
           type="checkbox"
           checked={isCheked}
-          onClick={() => setIsCheked(!isCheked)}
+          onChange={() => setIsCheked(!isCheked)}
           className="size-5 absolute z-20 cursor-pointer opacity-0"
         />
         <span className="block w-5 h-1 bg-red-400 rounded-md transition-all"></span>

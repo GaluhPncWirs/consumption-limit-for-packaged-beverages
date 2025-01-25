@@ -1,6 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
-import ButtonBack from "../buttonBack/btn";
+import PathNavbar from "../navbar/pathNavbar";
 import HamburgerMenu from "../hamburgerMenu/hamburgerMenu";
 
 export default function NavigasiBar({ props, path }) {
@@ -18,17 +17,7 @@ export default function NavigasiBar({ props, path }) {
         </div>
         <div className="max-[640px]:basis-1/6 basis-9/12">
           <ul className="flex justify-around items-center h-full font-semibold text-lg max-[640px]:hidden">
-            <li>Tentang</li>
-            {path === "/mainContent" ? (
-              <>
-                <li>
-                  <Link href={"./addProduct"}>Tambah Produk</Link>
-                </li>
-                <ButtonBack path={path} props={props} />
-              </>
-            ) : (
-              <ButtonBack path={path} props={props} />
-            )}
+            <PathNavbar props={props} path={path} />
           </ul>
           <HamburgerMenu props={props} path={path} />
         </div>
