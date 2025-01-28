@@ -27,6 +27,7 @@ export default function MainContent() {
   const [activeIndex, setActiveIndex] = useState(-1);
   const listRef = useRef<HTMLUListElement | null>(null);
   const path = usePathname();
+  const [servingSize, setServingSize] = useState(false);
 
   useEffect(() => {
     const maxSugars = localStorage.getItem("maxSugars");
@@ -218,9 +219,22 @@ export default function MainContent() {
                   disabled
                   value={sugar || ""}
                 />
-                <span className="text-[0.65rem] text-red-600 font-semibold">
-                  *Gula Disini Sudah di Totalkan Dengan Takaran Saji Per Kemasan
-                </span>
+                <div>
+                  <span
+                    className="text-[0.65rem] text-red-600 font-semibold cursor-pointer select-none"
+                    onClick={() => setServingSize((prev) => !prev)}
+                  >
+                    *Gula Disini Sudah di Totalkan Dengan Takaran Saji Per
+                    Kemasan
+                  </span>
+                  {servingSize && (
+                    <div className="text-[0.65rem] font-medium text-justify">
+                      Jadi maksudnya itu adalah jika ada sebuah minuman yang
+                      takaran sajinya itu 3 per kemasan dan kandungan gulanya
+                      10g maka 3 X 10 yaitu total gulanya menjadi 30g gula
+                    </div>
+                  )}
+                </div>
                 <label htmlFor="sugarContent" className="labelText">
                   Kadar Gula dalam Minuman (G)
                 </label>
