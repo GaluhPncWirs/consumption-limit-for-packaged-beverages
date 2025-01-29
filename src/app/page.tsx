@@ -4,6 +4,7 @@ import NavigasiBar from "@/components/navbar/navigasiBar";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useRef, useState } from "react";
+import { useHandleInput } from "./hooks/handle-input";
 
 export default function DisplayInputUser() {
   const male = useRef<HTMLInputElement>(null);
@@ -14,12 +15,15 @@ export default function DisplayInputUser() {
   const activityLevel = useRef<HTMLSelectElement>(null);
   const [modalBox, setModalBox] = useState(false);
   const [yourMaxSugar, setYourMaxSugar] = useState(0);
-  const [mustFilled, setMustFilled] = useState({
+  const [tdee, setTdee] = useState(0);
+
+  const { mustFilled, handleValueInput, isFormFilled } = useHandleInput({
     age: "",
     height: "",
     weight: "",
+    gender: "",
+    activityLevel: "",
   });
-  const [tdee, setTdee] = useState(0);
 
   function calculateMaxSugar() {
     const age = parseInt(ages.current?.value || "0");
@@ -82,14 +86,6 @@ export default function DisplayInputUser() {
 
     setTdee(TDEE);
   }
-  function handleFilled(event: any) {
-    const { id, value } = event.target;
-    return setMustFilled({ ...mustFilled, [id]: value });
-  }
-
-  function formIsFilled() {
-    return Object.values(mustFilled).every((str) => str !== "");
-  }
 
   return (
     <div className="max-w-2xl mx-auto flex flex-col items-center justify-center h-screen">
@@ -107,8 +103,8 @@ export default function DisplayInputUser() {
           <form id="sugarForm" className="max-[640px]:mx-7 mx-10">
             <div className="flex flex-col justify-center gap-4">
               <div
-                id="inputGender"
                 className="flex gap-2 items-center mb-1 font-medium"
+                id="inputGender"
               >
                 <div className="flex gap-3">
                   <Image
@@ -123,17 +119,23 @@ export default function DisplayInputUser() {
                 <input
                   type="radio"
                   value="male"
-                  name="option"
+                  id="gender"
+                  name="gender"
                   ref={male}
                   className="cursor-pointer"
+                  onChange={handleValueInput}
+                  checked={mustFilled.gender === "male"}
                 />
                 <label htmlFor="gender">Pria</label>
                 <input
                   type="radio"
                   value="female"
-                  name="option"
+                  id="gender"
+                  name="gender"
                   ref={female}
                   className="cursor-pointer"
+                  onChange={handleValueInput}
+                  checked={mustFilled.gender === "female"}
                 />
                 <label htmlFor="gender">Wanita</label>
               </div>
@@ -146,7 +148,8 @@ export default function DisplayInputUser() {
                   max={100}
                   className="inputField peer"
                   ref={ages}
-                  onChange={handleFilled}
+                  onChange={handleValueInput}
+                  value={mustFilled.age}
                 />
                 <label
                   htmlFor="age"
@@ -171,7 +174,8 @@ export default function DisplayInputUser() {
                   max={300}
                   className="inputField peer"
                   ref={bodyHeight}
-                  onChange={handleFilled}
+                  onChange={handleValueInput}
+                  value={mustFilled.height}
                 />
                 <label
                   htmlFor="age"
@@ -196,7 +200,8 @@ export default function DisplayInputUser() {
                   max={150}
                   className="inputField peer"
                   ref={bodyWeight}
-                  onChange={handleFilled}
+                  onChange={handleValueInput}
+                  value={mustFilled.weight}
                 />
                 <label
                   htmlFor="age"
@@ -230,6 +235,8 @@ export default function DisplayInputUser() {
                   id="activityLevel"
                   className="cursor-pointer bg-green-400 rounded-md p-2 text-sm max-[640px]:w-full sm:w-full"
                   ref={activityLevel}
+                  value={mustFilled.activityLevel}
+                  onChange={handleValueInput}
                 >
                   <option value="sedentary">
                     Tidak Aktif (Tidak Melakukan Aktifitas Berat)
@@ -254,7 +261,7 @@ export default function DisplayInputUser() {
           <div className="mt-8 mx-auto font-semibold py-1 text-center max-w-20 rounded-md bg-green-500 disabled:cursor-not-allowed hover:bg-green-600 cursor-pointer">
             <button
               onClick={calculateMaxSugar}
-              disabled={!formIsFilled()}
+              disabled={!isFormFilled()}
               className="disabled:cursor-not-allowed"
             >
               Hitung

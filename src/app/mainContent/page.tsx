@@ -7,6 +7,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import Educations from "@/components/educationComp/educations";
+import { useHandleInput } from "../hooks/handle-input";
 
 export default function MainContent() {
   const sugarContentInsideProductRef = useRef<HTMLInputElement>(null);
@@ -28,6 +29,9 @@ export default function MainContent() {
   const listRef = useRef<HTMLUListElement | null>(null);
   const path = usePathname();
   const [servingSize, setServingSize] = useState(false);
+  // const { mustFilled, handleValueInput, isFormFilled } = useHandleInput({
+  //   product: "",
+  // });
 
   useEffect(() => {
     const maxSugars = localStorage.getItem("maxSugars");

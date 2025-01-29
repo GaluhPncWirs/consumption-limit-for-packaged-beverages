@@ -2,9 +2,17 @@
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import NavigasiBar from "@/components/navbar/navigasiBar";
+import { useHandleInput } from "@/app/hooks/handle-input";
 
 export default function AddProduct() {
   const path = usePathname();
+  const { mustFilled, handleValueInput, isFormFilled } = useHandleInput({
+    nameProduct: "",
+    kandunganGula: "",
+    takaranSaji: "",
+    volume: "",
+  });
+
   async function handleAddProduct(event: any) {
     event.preventDefault();
 
@@ -40,13 +48,19 @@ export default function AddProduct() {
         <div className="bg-green-300 w-2/5 rounded-xl mt-16 max-[640px]:w-11/12 sm:w-4/5 md:w-8/12 lg:w-1/2">
           <form
             onSubmit={(e) => handleAddProduct(e)}
-            className="p-14 flex flex-col gap-5"
+            className="p-14 flex flex-col gap-y-5"
           >
             <h1 className="text-xl font-semibold text-center mb-3">
               Penambahan Produk Minuman
             </h1>
             <div className="relative pt-3 font-medium">
-              <input type="text" id="nameProduct" className="inputField peer" />
+              <input
+                type="text"
+                id="nameProduct"
+                className="inputField peer"
+                onChange={handleValueInput}
+                value={mustFilled.nameProduct}
+              />
               <label
                 htmlFor="nameProduct"
                 className="labelText flex items-center -ml-1.5 gap-1"
@@ -65,9 +79,11 @@ export default function AddProduct() {
                 type="number"
                 id="kandunganGula"
                 className="inputField peer"
+                onChange={handleValueInput}
+                value={mustFilled.kandunganGula}
               />
               <label
-                htmlFor="nameProduct"
+                htmlFor="kandunganGula"
                 className="labelText flex items-center gap-2"
               >
                 <Image
@@ -87,9 +103,11 @@ export default function AddProduct() {
                 step="0.01"
                 id="takaranSaji"
                 className="inputField peer"
+                onChange={handleValueInput}
+                value={mustFilled.takaranSaji}
               />
               <label
-                htmlFor="nameProduct"
+                htmlFor="takaranSaji"
                 className="labelText flex items-center gap-2"
               >
                 <Image
@@ -102,9 +120,15 @@ export default function AddProduct() {
               </label>
             </div>
             <div className="relative pt-3 font-medium">
-              <input type="number" id="volume" className="inputField peer" />
+              <input
+                type="number"
+                id="volume"
+                className="inputField peer"
+                onChange={handleValueInput}
+                value={mustFilled.volume}
+              />
               <label
-                htmlFor="nameProduct"
+                htmlFor="volume"
                 className="labelText flex items-center gap-2"
               >
                 <Image
@@ -116,9 +140,15 @@ export default function AddProduct() {
                 <span>Volume Kemasan (ml)</span>
               </label>
             </div>
-            <button className="bg-green-500 mt-5 py-1 rounded-lg text-lg font-semibold hover:bg-green-600 transition-all">
+            <button
+              className="bg-green-500 block mt-5 py-1 rounded-lg text-lg font-semibold hover:bg-green-600 disabled:cursor-not-allowed"
+              disabled={!isFormFilled()}
+            >
               Tambah Produk
             </button>
+            <span className="text-red-500 font-semibold text-sm">
+              *Tolong Untuk Digunakan Secara Bijak
+            </span>
           </form>
         </div>
       </div>
