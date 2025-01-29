@@ -29,9 +29,13 @@ export default function MainContent() {
   const listRef = useRef<HTMLUListElement | null>(null);
   const path = usePathname();
   const [servingSize, setServingSize] = useState(false);
-  // const { mustFilled, handleValueInput, isFormFilled } = useHandleInput({
-  //   product: "",
-  // });
+  const { isFormFilled, setMustFilled } = useHandleInput({
+    product: "",
+  });
+
+  useEffect(() => {
+    setMustFilled((prev: any) => ({ ...prev, product: searchProduk }));
+  }, [searchProduk, setMustFilled]);
 
   useEffect(() => {
     const maxSugars = localStorage.getItem("maxSugars");
@@ -184,8 +188,8 @@ export default function MainContent() {
                 <input
                   type="text"
                   className="inputField peer"
-                  value={searchProduk}
                   id="product"
+                  value={searchProduk}
                   onChange={handleInputChange}
                   onKeyDown={handleKeyEvent}
                 />
@@ -306,7 +310,8 @@ export default function MainContent() {
             <button
               type="button"
               onClick={calculateMaximal}
-              className="hover:bg-blue-400 text-lg font-semibold bg-blue-500 rounded-lg py-1 px-6"
+              className="hover:bg-blue-400 text-lg font-semibold bg-blue-500 rounded-lg py-1 px-6 disabled:cursor-not-allowed"
+              disabled={!isFormFilled()}
             >
               Hitung
             </button>

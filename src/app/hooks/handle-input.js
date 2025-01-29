@@ -16,5 +16,5 @@ export function useHandleInput(initState) {
     return Object.values(mustFilled).every((str) => str !== "");
   }
 
-  return { mustFilled, handleValueInput, isFormFilled };
+  return { mustFilled, handleValueInput, isFormFilled, setMustFilled };
 }

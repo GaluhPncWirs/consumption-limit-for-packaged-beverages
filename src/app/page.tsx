@@ -1,8 +1,6 @@
 "use client";
 import ModalBox from "@/components/modalBox/modal";
-import NavigasiBar from "@/components/navbar/navigasiBar";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import { useRef, useState } from "react";
 import { useHandleInput } from "./hooks/handle-input";
 
@@ -219,13 +217,13 @@ export default function DisplayInputUser() {
               </div>
 
               <div className="font-medium">
-                <div className="flex gap-2 mb-2">
+                <div className="flex gap-x-2 mb-2">
                   <Image
-                    width={30}
+                    width={29}
                     height={20}
+                    className="w-[30px]"
                     src={"/images/activity.png"}
                     alt="activity"
-                    style={{ height: "auto", width: "auto" }}
                   />
                   <label htmlFor="activityLevel" className="block mb-2 text-lg">
                     Activity Level
@@ -238,6 +236,9 @@ export default function DisplayInputUser() {
                   value={mustFilled.activityLevel}
                   onChange={handleValueInput}
                 >
+                  <option value="" disabled hidden>
+                    Pilih Tingkat Aktivitas
+                  </option>
                   <option value="sedentary">
                     Tidak Aktif (Tidak Melakukan Aktifitas Berat)
                   </option>
