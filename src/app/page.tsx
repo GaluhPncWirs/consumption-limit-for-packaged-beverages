@@ -101,10 +101,10 @@ export default function DisplayInputUser() {
           <form id="sugarForm" className="max-[640px]:mx-7 mx-10">
             <div className="flex flex-col justify-center gap-4">
               <div
-                className="flex gap-2 items-center mb-1 font-medium"
+                className="flex gap-2 mb-1 font-medium items-center"
                 id="inputGender"
               >
-                <div className="flex gap-3">
+                <div className="flex gap-3 mr-2">
                   <Image
                     width={30}
                     height={20}
@@ -112,7 +112,7 @@ export default function DisplayInputUser() {
                     alt="gender"
                     style={{ height: "auto", width: "auto" }}
                   />
-                  <span className="text-lg">Gender : </span>
+                  <span className="text-lg">Gender</span>
                 </div>
                 <input
                   type="radio"
@@ -131,7 +131,7 @@ export default function DisplayInputUser() {
                   id="gender"
                   name="gender"
                   ref={female}
-                  className="cursor-pointer"
+                  className="cursor-pointer bg-green-200"
                   onChange={handleValueInput}
                   checked={mustFilled.gender === "female"}
                 />
@@ -179,7 +179,7 @@ export default function DisplayInputUser() {
                   htmlFor="age"
                   className="labelText flex flex-row-reverse gap-2"
                 >
-                  <span>Tinggi Badan (cm) :</span>
+                  <span>Tinggi Badan (cm)</span>
                   <Image
                     width={30}
                     height={20}
@@ -205,7 +205,7 @@ export default function DisplayInputUser() {
                   htmlFor="age"
                   className="labelText flex flex-row-reverse gap-2"
                 >
-                  <span>Berat Badan (kg) :</span>
+                  <span>Berat Badan (kg)</span>
                   <Image
                     width={30}
                     height={20}

@@ -16,7 +16,7 @@ export default function NavigasiBar({ props, path }) {
           />
         </div>
         <div className="max-[640px]:basis-1/6 basis-9/12">
-          <ul className="flex justify-around items-center h-full font-semibold text-lg max-[640px]:hidden">
+          <ul className="flex justify-around items-center h-full font-bold text-xl max-[640px]:hidden">
             <PathNavbar props={props} path={path} />
           </ul>
           <HamburgerMenu props={props} path={path} />

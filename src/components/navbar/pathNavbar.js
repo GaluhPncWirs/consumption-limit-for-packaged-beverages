@@ -5,12 +5,16 @@ export default function PathNavbar({ props, path }) {
   return (
     <>
       <li>
-        <Link href={"./about"}>Tentang</Link>
+        <Link href={"./about"} className="hover:text-red-500">
+          Tentang
+        </Link>
       </li>
-      {path === "/mainContent" || path === "/about" ? (
+      {path === "/mainContent" ? (
         <>
           <li>
-            <Link href={"./addProduct"}>Tambah Produk</Link>
+            <Link href={"./addProduct"} className="hover:text-red-500">
+              Tambah Produk
+            </Link>
           </li>
           <ButtonBack path={path} props={props} />
         </>

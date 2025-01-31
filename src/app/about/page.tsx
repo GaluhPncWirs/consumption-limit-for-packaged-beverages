@@ -8,7 +8,7 @@ export default function AboutProject() {
   return (
     <div>
       <NavigasiBar path={path} props={""} />
-      <div>
+      <div className="h-screen">
         <h1>this is my project</h1>
       </div>
     </div>
