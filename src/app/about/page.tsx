@@ -7,21 +7,27 @@ import { usePathname } from "next/navigation";
 export default function AboutProject() {
   const path = usePathname();
   return (
-    <div className="h-screen">
+    <div className="h-screen max-[640px]:h-full sm:h-full lg:h-screen">
       <NavigasiBar path={path} props={""} />
-      <div className="flex pt-20 pb-5 gap-5 mx-5 h-full">
-        <div className="basis-1/4 bg-green-400 rounded-xl px-5 py-10">
+      <div className="flex pt-20 pb-5 gap-5 mx-5 h-full max-[640px]:flex-col sm:flex-col md:flex-col lg:flex-row">
+        <div className="bg-green-400 rounded-xl px-5 py-10 md:basis-2/6 lg:basis-1/4">
           <div className="flex justify-evenly h-full items-center flex-col gap-5">
-            <Image
-              src={"/images/userProfile.png"}
-              alt="profile"
-              width={50}
-              height={50}
-              className="w-4/6 bg-cover bg-center"
-            />
-            <h1 className="font-bold text-2xl">Galuh Panca Wirasa</h1>
-            <h2 className="font-semibold text-xl">Nim. 2103015175</h2>
-            <div className="flex flex-col justify-center items-center gap-5">
+            <div className="sm:flex sm:justify-center sm:items-center sm:w-11/12 sm:gap-5 max-[640px]:flex max-[640px]:justify-center max-[640px]:items-center max-[640px]:gap-5 max-[640px]:w-full lg:flex-col">
+              <Image
+                src={"/images/userProfile.png"}
+                alt="profile"
+                width={50}
+                height={50}
+                className="w-4/6 bg-cover bg-center max-[640px]:w-2/5 sm:w-2/6 lg:w-1/2"
+              />
+              <div className="text-center">
+                <h1 className="font-bold text-2xl max-[640px]:mb-2 sm:mb-3">
+                  Galuh Panca Wirasa
+                </h1>
+                <h2 className="font-semibold text-xl">Nim. 2103015175</h2>
+              </div>
+            </div>
+            <div className="flex flex-col justify-center items-center gap-5 max-[640px]:max-w-sm">
               <Image
                 src={"/images/logo_uhamka_FTII.png"}
                 alt="logo UHAMKA"
@@ -29,13 +35,13 @@ export default function AboutProject() {
                 height={50}
                 className="w-2/5 bg-cover bg-center"
               />
-              <h3 className="font-semibold text-lg text-center">
+              <h3 className="font-semibold text-lg text-center sm:text-xl">
                 Mahasiswa Teknik Informatika Universitas Prof.Dr. Hamka
               </h3>
             </div>
           </div>
         </div>
-        <div className="basis-9/12 bg-green-300 rounded-xl p-8">
+        <div className="bg-green-300 rounded-xl p-8 md:basis-2/3 lg:basis-9/12">
           <h1 className="text-2xl font-bold text-center mb-5">
             Tentang Project
           </h1>
@@ -50,7 +56,6 @@ export default function AboutProject() {
               </span>
               .
             </p>
-            <br />
             <p className="indent-7">
               Website ini dirancang untuk membantu pengguna dalam menghitung
               batas konsumsi gula harian berdasarkan profil individu mereka.
@@ -63,7 +68,6 @@ export default function AboutProject() {
               dapat mengambil langkah yang lebih bijak dalam memilih minuman
               yang mereka konsumsi.
             </p>
-            <br />
             <p className="indent-7">
               Semoga website ini dapat memberikan manfaat bagi masyarakat yang
               ingin mengontrol asupan gula dengan lebih baik dan menjalani pola
