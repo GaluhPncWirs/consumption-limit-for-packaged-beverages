@@ -80,6 +80,12 @@ export default function DisplayInputUser() {
 
     const maxSugarPerGrams = maxCalories / 4; // Karena 1 gram gula = 4 kalori
     localStorage.setItem("maxSugars", String(maxSugarPerGrams));
+    const nama = localStorage.getItem("maxSugars");
+    if (nama !== null) {
+      console.log("berhasil");
+    } else {
+      console.log("gagal");
+    }
     setYourMaxSugar(maxSugarPerGrams);
 
     setTdee(TDEE);

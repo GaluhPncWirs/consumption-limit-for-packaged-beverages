@@ -4,13 +4,13 @@ import ButtonBack from "../buttonBack/btn";
 export default function PathNavbar({ props, path }) {
   return (
     <>
-      <li>
-        <Link href={"./about"} className="hover:text-red-500">
-          Tentang
-        </Link>
-      </li>
       {path === "/mainContent" ? (
         <>
+          <li>
+            <Link href={"./about"} className="hover:text-red-500">
+              Tentang
+            </Link>
+          </li>
           <li>
             <Link href={"./addProduct"} className="hover:text-red-500">
               Tambah Produk

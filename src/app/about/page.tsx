@@ -7,18 +7,18 @@ import { usePathname } from "next/navigation";
 export default function AboutProject() {
   const path = usePathname();
   return (
-    <div className="h-screen max-[640px]:h-full sm:h-full lg:h-screen">
+    <div className="max-[640px]:h-full sm:h-full lg:h-screen">
       <NavigasiBar path={path} props={""} />
-      <div className="flex pt-20 pb-5 gap-5 mx-5 h-full max-[640px]:flex-col sm:flex-col md:flex-col lg:flex-row">
-        <div className="bg-green-400 rounded-xl px-5 py-10 md:basis-2/6 lg:basis-1/4">
+      <div className="flex pt-20 pb-5 gap-5 mx-5 h-full max-[640px]:flex-col sm:flex-col md:flex-row lg:flex-row">
+        <div className="bg-green-400 rounded-xl px-5 py-10 md:basis-1/3 lg:basis-1/4">
           <div className="flex justify-evenly h-full items-center flex-col gap-5">
-            <div className="sm:flex sm:justify-center sm:items-center sm:w-11/12 sm:gap-5 max-[640px]:flex max-[640px]:justify-center max-[640px]:items-center max-[640px]:gap-5 max-[640px]:w-full lg:flex-col">
+            <div className="sm:flex sm:justify-center sm:items-center sm:w-11/12 sm:gap-5 max-[640px]:flex max-[640px]:justify-center max-[640px]:items-center max-[640px]:gap-5 max-[640px]:w-full md:flex-col">
               <Image
                 src={"/images/userProfile.png"}
                 alt="profile"
                 width={50}
                 height={50}
-                className="w-4/6 bg-cover bg-center max-[640px]:w-2/5 sm:w-2/6 lg:w-1/2"
+                className="w-4/6 bg-cover bg-center max-[640px]:w-2/5 sm:w-2/6 md:w-2/3 lg:w-1/2"
               />
               <div className="text-center">
                 <h1 className="font-bold text-2xl max-[640px]:mb-2 sm:mb-3">
