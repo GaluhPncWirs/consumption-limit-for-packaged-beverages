@@ -78,6 +78,8 @@ export default function MainContent() {
 
   function backToInput() {
     localStorage.removeItem("maxSugars");
+    document.cookie =
+      "formFilledSuccess=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     push("/");
   }
 
@@ -153,6 +155,8 @@ export default function MainContent() {
       setSelectedProduct(null);
     }
   }, [searchProduk]);
+
+  // console.log("referer", document.referrer);
 
   return (
     <div className="pt-24 pb-14">

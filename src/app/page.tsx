@@ -3,6 +3,7 @@ import ModalBox from "@/components/modalBox/modal";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { useHandleInput } from "./hooks/handle-input";
+import { headers } from "next/headers";
 
 export default function DisplayInputUser() {
   const male = useRef<HTMLInputElement>(null);
@@ -80,17 +81,12 @@ export default function DisplayInputUser() {
 
     const maxSugarPerGrams = maxCalories / 4; // Karena 1 gram gula = 4 kalori
     localStorage.setItem("maxSugars", String(maxSugarPerGrams));
-    const nama = localStorage.getItem("maxSugars");
-    if (nama !== null) {
-      console.log("berhasil");
-    } else {
-      console.log("gagal");
-    }
     setYourMaxSugar(maxSugarPerGrams);
+
+    document.cookie = "formFilledSuccess=true; path=/";
 
     setTdee(TDEE);
   }
-
   return (
     <div className="max-w-2xl mx-auto flex flex-col items-center justify-center h-screen">
       <div className="w-full">
