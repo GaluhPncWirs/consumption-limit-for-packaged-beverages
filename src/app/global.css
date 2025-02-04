@@ -77,8 +77,8 @@
 
       @media (max-width: 640px) {
         .bottleInside {
-          width: 100px;
-          height: 100px;
+          width: 150px;
+          height: 150px;
         }
       }
 
@@ -116,13 +116,13 @@
       }
 
       .menu input:checked ~ span:nth-child(2){
-        background-color: white;
+        background-color: red;
         transform: rotate(45deg);
         translate: -1px 2px;
       }
 
       .menu input:checked ~ span:nth-child(4){
-        background-color: white;
+        background-color: red;
         transform: rotate(-45deg);
         translate: -1px -1px;
       }

@@ -156,8 +156,6 @@ export default function MainContent() {
     }
   }, [searchProduk]);
 
-  // console.log("referer", document.referrer);
-
   return (
     <div className="pt-24 pb-14">
       <NavigasiBar props={backToInput} path={path} />
@@ -168,7 +166,7 @@ export default function MainContent() {
             : `w-1/2 max-[640px]:w-11/12 sm:w-11/12 md:w-3/5 lg:w-1/2`
         }`}
       >
-        <div className="mx-5 text-lg font-semibold max-[640px]:text-sm sm:text-sm md:text-base lg:text-base">
+        <div className="mx-5 font-semibold max-[640px]:text-sm sm:text-base md:text-lg">
           <p>
             Maksimal Konsumsi Gula Perhari :{" "}
             <span>
@@ -187,7 +185,10 @@ export default function MainContent() {
                 : `flex-none`
             }`}
           >
-            <form className="basis-2/5 flex flex-col gap-2 items-center justify-center md:basis-1/2 lg:basis-2/5">
+            <form
+              className="basis-2/5 flex flex-col gap-2 items-center justify-center md:basis-1/2 lg:basis-2/5 max-[640px]:w-full sm:w-full"
+              autoComplete="off"
+            >
               <div className="relative w-4/5 py-3 md:w-11/12 lg:w-4/5">
                 <input
                   type="text"
@@ -269,9 +270,12 @@ export default function MainContent() {
             </form>
 
             <div className="basis-3/5 gap-8 flex justify-center items-center max-[640px]:flex-col-reverse sm:flex-col-reverse max-[640px]:w-full sm:w-full md:basis-1/2 lg:basis-3/5">
-              <div className="flex w-full items-center justify-center">
+              <div className="flex w-full items-center justify-center max-[640px]:flex-wrap max-[640px]:gap-y-5 sm:flex-wrap sm:gap-y-5 md:flex-nowrap">
                 {fillBottle.map((item: any, i: number) => (
-                  <div key={i} className="bottleInside w-1/5 max-[640px]:w-1/6">
+                  <div
+                    key={i}
+                    className="bottleInside max-[640px]:w-1/3 sm:w-1/4"
+                  >
                     <div className="fill" style={{ height: `${item}%` }}></div>
                   </div>
                 ))}
@@ -279,15 +283,15 @@ export default function MainContent() {
               <div
                 className={`${
                   educations === true ? `block` : `hidden`
-                } max-[640px]:text-sm text-justify mx-5 sm:text-sm font-semibold lg:text-base`}
+                } max-[640px]:text-sm text-justify mx-5 sm:text-base font-semibold lg:text-lg`}
               >
                 {fillBottle.length > 1 && miliLiter > 0 ? (
                   <p>
-                    Kamu Bisa Konsumsi per {fillBottle.length} botol dengan sisa{" "}
+                    Kamu Bisa Konsumsi Maksimal {fillBottle.length} botol{" "}
                     {miliLiter} ml
                   </p>
                 ) : fillBottle.length > 1 && miliLiter <= 0 ? (
-                  <p>Kamu Bisa Konsumsi per {fillBottle.length} botol</p>
+                  <p>Kamu Bisa Konsumsi {fillBottle.length} botol</p>
                 ) : (
                   <p>
                     Minuman ini Hanya Bisa Anda Konsumsi {miliLiter} ml, Kurang

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 export default function Educations({ educations }) {
   const [funFactSugar, setFunFactSugar] = useState([]);
-  const [getVideoEdu, setGetVideoEdu] = useState([]);
+  const [randVideo, setRandVideo] = useState([]);
 
   useEffect(() => {
     getDataFunFact((data) => {
@@ -18,7 +18,10 @@ export default function Educations({ educations }) {
 
   useEffect(() => {
     getVideoEducations((data) => {
-      setGetVideoEdu(data);
+      const randomVideos = data
+        .map((video) => video.linkVideo)
+        .sort(() => Math.random() - 0.5);
+      setRandVideo(randomVideos);
     });
   }, []);
 
@@ -35,17 +38,15 @@ export default function Educations({ educations }) {
             </div>
           </div>
           <div className="basis-1/2 w-full">
-            {getVideoEdu.map((data) => (
-              <iframe
-                key={data.id}
-                title="YouTube Shorts"
-                src={`https://www.youtube.com/embed/${data.linkVideo}`}
-                width={500}
-                height={300}
-                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                className="rounded-xl w-full"
-              />
-            ))}
+            <iframe
+              title="YouTube Shorts And Facebook Short"
+              src={randVideo[0]}
+              width={500}
+              height={300}
+              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              className="rounded-xl w-full"
+              allowFullScreen={true}
+            />
           </div>
         </>
       )}
