@@ -8,6 +8,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import Educations from "@/components/educationComp/educations";
 import { useHandleInput } from "../hooks/handle-input";
+import { getDataFunFact } from "@/getDataFromApi/getFunFact";
+import { getVideoEducations } from "@/getDataFromApi/getVideoEdu";
 
 export default function MainContent() {
   const sugarContentInsideProductRef = useRef<HTMLInputElement>(null);
@@ -29,12 +31,14 @@ export default function MainContent() {
   const listRef = useRef<HTMLUListElement | null>(null);
   const path = usePathname();
   const [servingSize, setServingSize] = useState(false);
+  const [funFactSugar, setFunFactSugar] = useState([]);
+  const [randomVideo, setRandomVideo] = useState([]);
   const { isFormFilled, setMustFilled } = useHandleInput({
     product: "",
   });
 
   useEffect(() => {
-    setMustFilled((prev: any) => ({ ...prev, product: searchProduk }));
+    setMustFilled((prev: Object) => ({ ...prev, product: searchProduk }));
   }, [searchProduk, setMustFilled]);
 
   useEffect(() => {
@@ -44,8 +48,24 @@ export default function MainContent() {
     }
   }, []);
 
+  useEffect(() => {
+    getDataFunFact((data: any) => {
+      setFunFactSugar(data.map((getFunFact: any) => getFunFact.funFact));
+    });
+  }, []);
+
+  useEffect(() => {
+    getVideoEducations((data: any) => {
+      setRandomVideo(data.map((video: any) => video.linkVideo));
+    });
+  }, []);
+
   function calculateMaximal() {
     setEducations(true);
+    if (funFactSugar.length > 0 && randomVideo.length > 0) {
+      setFunFactSugar((prev) => [...prev.sort(() => Math.random() - 0.5)]);
+      setRandomVideo((prev) => [...prev.sort(() => Math.random() - 0.5)]);
+    }
     const sugarContentInsideProduct = parseFloat(
       sugarContentInsideProductRef.current?.value || "0"
     );
@@ -324,7 +344,11 @@ export default function MainContent() {
               Hitung
             </button>
           </div>
-          <Educations educations={educations} />
+          <Educations
+            educations={educations}
+            funFactSugar={funFactSugar}
+            randomVideo={randomVideo}
+          />
         </div>
         {fillBottle.length === 1 && (
           <Visualization
