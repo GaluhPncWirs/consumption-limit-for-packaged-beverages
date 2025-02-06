@@ -98,12 +98,6 @@ export default function Visualization({
 
   return (
     <div className="mt-6 flex flex-col justify-center items-center">
-      {/* <div className="bg-gray-200 w-full h-6 rounded-lg mt-3">
-        <div
-          className="progress-fill rounded-l-lg"
-          style={{ width: `${riskLevel}%` }}
-        ></div>
-      </div> */}
       <div className="w-11/12 h-64 max-[640px]:w-full sm:w-11/12 lg:w-3/4 xl:w-1/2">
         <Bar data={data} options={options} />
       </div>

@@ -1,7 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Notfound() {
+export default function NotFound() {
   return (
     <div className="bg-white">
       <div className="h-screen flex justify-center items-center flex-col">

@@ -45,7 +45,7 @@ export default function AboutProject() {
           <h1 className="text-2xl font-bold text-center mb-5">
             Tentang Project
           </h1>
-          <div className="text-justify font-medium text-lg">
+          <div className="text-justify font-medium text-lg flex flex-col gap-5">
             <p className="indent-7">
               Saya membuat website ini untuk menyelesaikan studi perkuliahan ini
               dengan judul skripsi yang saya kerjakan yaitu{" "}

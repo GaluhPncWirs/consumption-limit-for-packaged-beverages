@@ -61,39 +61,43 @@ export default function MainContent() {
   }, []);
 
   function calculateMaximal() {
-    setEducations(true);
-    if (funFactSugar.length > 0 && randomVideo.length > 0) {
-      setFunFactSugar((prev) => [...prev.sort(() => Math.random() - 0.5)]);
-      setRandomVideo((prev) => [...prev.sort(() => Math.random() - 0.5)]);
+    if (searchProduk.trim() !== "" && result.length > 0) {
+      setEducations(true);
+      if (funFactSugar.length > 0 && randomVideo.length > 0) {
+        setFunFactSugar((prev) => [...prev.sort(() => Math.random() - 0.5)]);
+        setRandomVideo((prev) => [...prev.sort(() => Math.random() - 0.5)]);
+      }
+      const sugarContentInsideProduct = parseFloat(
+        sugarContentInsideProductRef.current?.value || "0"
+      );
+      const totalVolumeInsideProduct = parseFloat(
+        totalVolumeInsideProductRef.current?.value || "0"
+      );
+      setSugarProduk(sugarContentInsideProduct);
+      setVolumeProduk(totalVolumeInsideProduct);
+
+      const resultTotalContentProduct =
+        sugarContentInsideProduct / totalVolumeInsideProduct;
+
+      const maxConsumptionMl = getYourMaxSugars / resultTotalContentProduct;
+      const numberOfBottles = Math.floor(
+        maxConsumptionMl / totalVolumeInsideProduct
+      );
+
+      const remainder = maxConsumptionMl % totalVolumeInsideProduct;
+      const percentageFillForRemainder = Math.floor(
+        (remainder / totalVolumeInsideProduct) * 100
+      );
+
+      const fillArray: any = Array(numberOfBottles).fill(100);
+      if (percentageFillForRemainder > 0) {
+        fillArray.push(percentageFillForRemainder);
+      }
+      setFillBottle(fillArray);
+      setMiliLiter(percentageFillForRemainder);
+    } else {
+      alert("tidak di perbolehkan");
     }
-    const sugarContentInsideProduct = parseFloat(
-      sugarContentInsideProductRef.current?.value || "0"
-    );
-    const totalVolumeInsideProduct = parseFloat(
-      totalVolumeInsideProductRef.current?.value || "0"
-    );
-    setSugarProduk(sugarContentInsideProduct);
-    setVolumeProduk(totalVolumeInsideProduct);
-
-    const resultTotalContentProduct =
-      sugarContentInsideProduct / totalVolumeInsideProduct;
-
-    const maxConsumptionMl = getYourMaxSugars / resultTotalContentProduct;
-    const numberOfBottles = Math.floor(
-      maxConsumptionMl / totalVolumeInsideProduct
-    );
-
-    const remainder = maxConsumptionMl % totalVolumeInsideProduct;
-    const percentageFillForRemainder = Math.floor(
-      (remainder / totalVolumeInsideProduct) * 100
-    );
-
-    const fillArray: any = Array(numberOfBottles).fill(100);
-    if (percentageFillForRemainder > 0) {
-      fillArray.push(percentageFillForRemainder);
-    }
-    setFillBottle(fillArray);
-    setMiliLiter(percentageFillForRemainder);
   }
 
   function backToInput() {
@@ -110,7 +114,7 @@ export default function MainContent() {
   }, []);
 
   function handleInputChange(e: any) {
-    const query = e.target.value;
+    const query = e.target.value.replace(/[^A-Za-z\s]+$/g, "");
     setSearchProduk(query);
 
     if (query !== "") {
@@ -217,6 +221,8 @@ export default function MainContent() {
                   value={searchProduk}
                   onChange={handleInputChange}
                   onKeyDown={handleKeyEvent}
+                  required
+                  pattern="[A-Za-z\s]+"
                 />
                 <label htmlFor="product" className="labelText">
                   Cari Produk
@@ -314,7 +320,7 @@ export default function MainContent() {
                   <p>Kamu Bisa Konsumsi {fillBottle.length} botol</p>
                 ) : (
                   <p>
-                    Minuman ini Hanya Bisa Anda Konsumsi {miliLiter} ml, Kurang
+                    Minuman ini Hanya Bisa Dikonsumsi {miliLiter} ml, Kurang
                     Dari Satu Botol
                   </p>
                 )}

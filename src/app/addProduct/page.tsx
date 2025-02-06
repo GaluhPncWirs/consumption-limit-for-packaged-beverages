@@ -49,6 +49,7 @@ export default function AddProduct() {
           <form
             onSubmit={(e) => handleAddProduct(e)}
             className="p-14 flex flex-col gap-y-5"
+            autoComplete="off"
           >
             <h1 className="text-xl font-semibold text-center mb-3">
               Penambahan Produk Minuman
