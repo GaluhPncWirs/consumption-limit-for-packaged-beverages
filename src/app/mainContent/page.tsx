@@ -10,6 +10,7 @@ import Educations from "@/components/educationComp/educations";
 import { useHandleInput } from "../hooks/handle-input";
 import { getDataFunFact } from "@/getDataFromApi/getFunFact";
 import { getVideoEducations } from "@/getDataFromApi/getVideoEdu";
+import ModalProductNone from "@/components/modalBox/modalAlert";
 
 export default function MainContent() {
   const sugarContentInsideProductRef = useRef<HTMLInputElement>(null);
@@ -36,6 +37,8 @@ export default function MainContent() {
   const { isFormFilled, setMustFilled } = useHandleInput({
     product: "",
   });
+  const focusInput = useRef<HTMLInputElement>(null);
+  const [modalBox, setModalBox] = useState(false);
 
   useEffect(() => {
     setMustFilled((prev: Object) => ({ ...prev, product: searchProduk }));
@@ -61,7 +64,7 @@ export default function MainContent() {
   }, []);
 
   function calculateMaximal() {
-    if (searchProduk.trim() !== "" && result.length > 0) {
+    if (result.length > 0) {
       setEducations(true);
       if (funFactSugar.length > 0 && randomVideo.length > 0) {
         setFunFactSugar((prev) => [...prev.sort(() => Math.random() - 0.5)]);
@@ -96,7 +99,10 @@ export default function MainContent() {
       setFillBottle(fillArray);
       setMiliLiter(percentageFillForRemainder);
     } else {
-      alert("tidak di perbolehkan");
+      setModalBox(true);
+      if (focusInput.current) {
+        focusInput.current.value = "";
+      }
     }
   }
 
@@ -114,7 +120,7 @@ export default function MainContent() {
   }, []);
 
   function handleInputChange(e: any) {
-    const query = e.target.value.replace(/[^A-Za-z\s]+$/g, "");
+    const query = e.target.value;
     setSearchProduk(query);
 
     if (query !== "") {
@@ -222,7 +228,7 @@ export default function MainContent() {
                   onChange={handleInputChange}
                   onKeyDown={handleKeyEvent}
                   required
-                  pattern="[A-Za-z\s]+"
+                  ref={focusInput}
                 />
                 <label htmlFor="product" className="labelText">
                   Cari Produk
@@ -328,6 +334,14 @@ export default function MainContent() {
             </div>
           </div>
         </div>
+
+        {/* {modalBox && (
+          <ModalProductNone>
+                                <div className="h-1/4 bg-green-400 rounded-b-xl flex justify-center items-center">
+                      <button className="text-xl font-semibold w-full">Oke</button>
+                    </div>
+          </ModalProductNone>
+        )} */}
 
         <div className="mx-5">
           <h1 className="text-sm mx-10 text-end max-[640px]:mx-0 max-[640px]:text-xs lg:mx-5">
