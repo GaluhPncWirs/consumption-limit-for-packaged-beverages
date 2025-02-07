@@ -100,11 +100,14 @@ export default function MainContent() {
       setMiliLiter(percentageFillForRemainder);
     } else {
       setModalBox(true);
-      if (focusInput.current) {
-        focusInput.current.value = "";
-      }
     }
   }
+
+  useEffect(() => {
+    if (focusInput.current) {
+      focusInput.current.value = "";
+    }
+  }, [modalBox]);
 
   function backToInput() {
     localStorage.removeItem("maxSugars");
@@ -335,13 +338,7 @@ export default function MainContent() {
           </div>
         </div>
 
-        {/* {modalBox && (
-          <ModalProductNone>
-                                <div className="h-1/4 bg-green-400 rounded-b-xl flex justify-center items-center">
-                      <button className="text-xl font-semibold w-full">Oke</button>
-                    </div>
-          </ModalProductNone>
-        )} */}
+        {modalBox && <ModalProductNone setModalBox={setModalBox} />}
 
         <div className="mx-5">
           <h1 className="text-sm mx-10 text-end max-[640px]:mx-0 max-[640px]:text-xs lg:mx-5">
