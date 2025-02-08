@@ -21,6 +21,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/btnBack/btnKembali.js", "src/components/visualisasi/layout.tsx", "src/components/modalBox/modal.js", "src/components/educationComp/educations.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/btnBack/btnKembali.js", "src/components/visualisasi/layout.tsx", "src/components/modalBox/modalSucces.js", "src/components/educationComp/educations.js"],
   "exclude": ["node_modules"]
 }

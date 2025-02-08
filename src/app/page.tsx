@@ -1,9 +1,8 @@
 "use client";
-import ModalBox from "@/components/modalBox/modal";
+import ModalBox from "@/components/modalBox/modalSucces";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { useHandleInput } from "./hooks/handle-input";
-import { headers } from "next/headers";
 
 export default function DisplayInputUser() {
   const male = useRef<HTMLInputElement>(null);

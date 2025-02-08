@@ -10,7 +10,7 @@ import Educations from "@/components/educationComp/educations";
 import { useHandleInput } from "../hooks/handle-input";
 import { getDataFunFact } from "@/getDataFromApi/getFunFact";
 import { getVideoEducations } from "@/getDataFromApi/getVideoEdu";
-import ModalProductNone from "@/components/modalBox/modalAlert";
+import ModalProductNone from "@/components/modalBox/modalError";
 
 export default function MainContent() {
   const sugarContentInsideProductRef = useRef<HTMLInputElement>(null);

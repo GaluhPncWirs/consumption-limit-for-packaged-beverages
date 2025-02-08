@@ -3,6 +3,8 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import NavigasiBar from "@/components/navbar/navigasiBar";
 import { useHandleInput } from "@/app/hooks/handle-input";
+import ModalAddProductSuccess from "@/components/modalBox/modalAdd";
+import { useState } from "react";
 
 export default function AddProduct() {
   const path = usePathname();
@@ -12,8 +14,12 @@ export default function AddProduct() {
     takaranSaji: "",
     volume: "",
   });
+  const [modalSucces, setModalSucces] = useState(false);
+  const [modalErr, setModalErr] = useState(false);
+  const [status, setStatus] = useState<boolean>();
 
   async function handleAddProduct(event: any) {
+    setModalSucces(true);
     event.preventDefault();
 
     const gula = event.target.kandunganGula.value;
@@ -34,6 +40,7 @@ export default function AddProduct() {
     });
 
     const resStatus = await res.json();
+    setStatus(resStatus.status);
     if (resStatus.status) {
       console.log(resStatus.message);
     } else {
@@ -142,15 +149,25 @@ export default function AddProduct() {
               </label>
             </div>
             <button
-              className="bg-green-500 block mt-5 py-1 rounded-lg text-lg font-semibold hover:bg-green-600 disabled:cursor-not-allowed"
+              className="bg-green-500 mt-5 rounded-lg hover:bg-green-600 py-1.5 flex text-lg font-semibold disabled:cursor-not-allowed justify-center items-center gap-2"
               disabled={!isFormFilled()}
             >
-              Tambah Produk
+              <Image
+                src={"/images/add-product.png"}
+                alt="add Product"
+                width={30}
+                height={30}
+                className="bg-cover"
+              />
+              <span>Tambah Produk</span>
             </button>
             <span className="text-red-500 font-semibold text-sm">
               *Tolong Untuk Digunakan Secara Bijak
             </span>
           </form>
+          {modalSucces && (
+            <ModalAddProductSuccess setModalSucces={setModalSucces} />
+          )}
         </div>
       </div>
     </div>
