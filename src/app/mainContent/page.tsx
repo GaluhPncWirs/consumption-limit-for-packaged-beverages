@@ -137,30 +137,36 @@ export default function MainContent() {
     }
   }
 
-  function handleKeyEvent(e: any) {
-    if (result.length > 0) {
-      if (e.key === "ArrowDown") {
-        setActiveIndex((prev) => {
-          const newIndex = (prev + 1) % result.length;
-          scrollToActiveItem(newIndex);
-          return newIndex;
-        });
-      } else if (e.key === "ArrowUp") {
-        setActiveIndex((prev) => {
-          const newIndex = (prev - 1 + result.length) % result.length;
-          scrollToActiveItem(newIndex);
-          return newIndex;
-        });
-      } else if (e.key === "Enter" && activeIndex >= 0) {
-        setSelectedProduct(result[activeIndex]);
+  useEffect(() => {
+    function handleKeyEvent(e: any) {
+      if (result.length > 0) {
+        if (e.key === "ArrowDown") {
+          setActiveIndex((prev) => {
+            const newIndex = (prev + 1) % result.length;
+            scrollToActiveItem(newIndex);
+            return newIndex;
+          });
+        } else if (e.key === "ArrowUp") {
+          setActiveIndex((prev) => {
+            const newIndex = (prev - 1 + result.length) % result.length;
+            scrollToActiveItem(newIndex);
+            return newIndex;
+          });
+        } else if (e.key === "Enter" && activeIndex >= 0) {
+          setSelectedProduct(result[activeIndex]);
+        }
       }
     }
-  }
+
+    document.addEventListener("keydown", handleKeyEvent);
+    return () => {
+      document.removeEventListener("keydown", handleKeyEvent);
+    };
+  }, [result, activeIndex]);
 
   function handleItemClick(item: any) {
     setSelectedProduct(item);
     setSearchProduk(item.nameProduct);
-    setResult([]);
   }
 
   function scrollToActiveItem(i: number) {
@@ -229,7 +235,6 @@ export default function MainContent() {
                   id="product"
                   value={searchProduk}
                   onChange={handleInputChange}
-                  onKeyDown={handleKeyEvent}
                   required
                   ref={focusInput}
                 />

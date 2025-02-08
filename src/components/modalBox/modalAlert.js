@@ -1,8 +1,8 @@
 export default function ModalProductNone({ setModalBox }) {
   return (
-    <div className="bg-green-500 w-1/3 rounded-xl absolute top-1/2 left-1/2 h-1/4 z-30 -translate-x-1/2 -translate-y-1/2">
-      <div className="flex justify-center items-center h-3/4 gap-5">
-        <div className="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-300 sm:mx-0 sm:size-10">
+    <div className="bg-green-500 w-1/3 rounded-xl absolute top-1/2 left-1/2 h-1/4 z-30 -translate-x-1/2 -translate-y-1/2 max-[640px]:w-9/12 sm:w-3/5 md:w-1/2 lg:w-2/5">
+      <div className="flex justify-center items-center h-3/4 gap-5 max-[640px]:px-5 sm:px-6 md:px-8 lg:px-10">
+        <div className="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-300">
           <svg
             className="size-6 text-red-600"
             fill="none"
@@ -19,14 +19,14 @@ export default function ModalProductNone({ setModalBox }) {
             />
           </svg>
         </div>
-        <div>
+        <div className="w-full">
           <h1 className="font-bold text-xl">Input Harus Sesuai</h1>
           <p className="font-medium mt-3">
             Tolong Untuk Cari Yang Telah Disediakan
           </p>
         </div>
       </div>
-      <div className="h-1/4 bg-green-400 rounded-b-xl flex justify-center items-center">
+      <div className="h-1/4 bg-green-400 rounded-b-xl flex justify-center items-center hover:bg-green-600">
         <button
           className="text-xl font-semibold w-full"
           onClick={() => setModalBox(false)}
