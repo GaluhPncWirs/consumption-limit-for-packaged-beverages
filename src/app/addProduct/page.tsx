@@ -4,7 +4,7 @@ import Image from "next/image";
 import NavigasiBar from "@/components/navbar/navigasiBar";
 import { useHandleInput } from "@/app/hooks/handle-input";
 import LayoutModalBoxs from "@/components/modalBox/layout";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function AddProduct() {
   const path = usePathname();
@@ -16,8 +16,7 @@ export default function AddProduct() {
   });
   const [modal, setModal] = useState(false);
   const [status, setStatus] = useState(null);
-
-  console.log(status);
+  const inputFieldNone = useRef<HTMLFormElement>(null);
 
   async function handleAddProduct(event: any) {
     setModal(true);
@@ -49,19 +48,26 @@ export default function AddProduct() {
     }
   }
 
+  useEffect(() => {
+    if (inputFieldNone.current) {
+      inputFieldNone.current.reset();
+    }
+  }, [modal]);
+
   return (
     <div>
       <NavigasiBar path={path} props={""} />
       <div className="h-screen flex flex-col justify-center items-center">
         <div className="bg-green-300 w-2/5 rounded-xl mt-16 max-[640px]:w-11/12 sm:w-4/5 md:w-8/12 lg:w-1/2">
+          <h1 className="text-xl font-semibold text-center mb-3">
+            Penambahan Produk Minuman
+          </h1>
           <form
             onSubmit={(e) => handleAddProduct(e)}
             className="p-14 flex flex-col gap-y-5"
             autoComplete="off"
+            ref={inputFieldNone}
           >
-            <h1 className="text-xl font-semibold text-center mb-3">
-              Penambahan Produk Minuman
-            </h1>
             <div className="relative pt-3 font-medium">
               <input
                 type="text"
@@ -167,11 +173,15 @@ export default function AddProduct() {
             </span>
           </form>
           {modal && (
-            <LayoutModalBoxs setModalOnclick={setModal}>
+            <LayoutModalBoxs>
               {status === true ? (
-                <LayoutModalBoxs.ModalAddProductSuccess />
+                <LayoutModalBoxs.ModalAddProductSuccess
+                  setModalOnclick={setModal}
+                />
               ) : status === false ? (
-                <LayoutModalBoxs.ModalAddProductSame />
+                <LayoutModalBoxs.ModalAddProductSame
+                  setModalOnclick={setModal}
+                />
               ) : (
                 <LayoutModalBoxs.LoadingAnimation />
               )}

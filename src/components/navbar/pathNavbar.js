@@ -1,5 +1,5 @@
 import Link from "next/link";
-import ButtonBack from "../buttonBack/btn";
+import ButtonBack from "../button/btnBack";
 
 export default function PathNavbar({ props, path }) {
   return (

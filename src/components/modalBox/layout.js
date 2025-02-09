@@ -1,26 +1,19 @@
 import Image from "next/image";
+import ButtonModalBoxs from "@/components/button/btnModal";
 
-export default function LayoutModalBoxs({ children, setModalOnclick }) {
+export default function LayoutModalBoxs({ children }) {
   return (
     <div className="bg-green-500 w-1/3 rounded-xl absolute top-1/2 left-1/2 h-1/3 z-30 -translate-x-1/2 -translate-y-1/2 max-[640px]:w-9/12 sm:w-3/5 md:w-1/2 lg:w-1/3">
-      <div className="flex justify-center items-center h-3/4 gap-5 max-[640px]:px-5 sm:px-6 md:px-7 lg:px-10">
+      <div className="h-full max-[640px]:px-3 sm:px-4 md:px-5 lg:px-8">
         {children}
-      </div>
-      <div className="h-1/4 bg-green-400 rounded-b-xl flex justify-center items-center hover:bg-green-600">
-        <button
-          className="text-xl font-semibold w-full"
-          onClick={() => setModalOnclick(false)}
-        >
-          Oke
-        </button>
       </div>
     </div>
   );
 }
 
-function ModalAddProductSame() {
+function ModalAddProductSame({ setModalOnclick }) {
   return (
-    <>
+    <div className="h-full flex flex-col gap-3 py-4 justify-center">
       <div className="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-300">
         <svg
           className="size-6 text-red-600"
@@ -42,21 +35,29 @@ function ModalAddProductSame() {
         <h1 className="font-bold text-xl">Produk Yang Ditambahkan Sudah Ada</h1>
         <p className="font-medium mt-3">Silahkan Kembali ke Pencarian Produk</p>
       </div>
-    </>
+      <ButtonModalBoxs setModalOnclick={setModalOnclick} />
+    </div>
   );
 }
 
-function ModalAddProductSuccess() {
+function ModalAddProductSuccess({ setModalOnclick }) {
   return (
-    <>
-      <div className="bg-white rounded-full">
-        <Image src={"/images/check.png"} alt="Success" width={50} height={50} />
+    <div className="h-full flex flex-col gap-3 py-4 justify-center">
+      <div className="rounded-full flex justify-center">
+        <Image
+          src={"/images/check.png"}
+          alt="Success"
+          width={50}
+          height={50}
+          className="bg-white rounded-full"
+        />
       </div>
       <div className="text-center">
         <h1 className="font-bold text-xl">Tambah Produk Berhasil</h1>
         <p className="font-medium mt-3">Silahkan Kembali ke Pencarian Produk</p>
       </div>
-    </>
+      <ButtonModalBoxs setModalOnclick={setModalOnclick} />
+    </div>
   );
 }
 
