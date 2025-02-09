@@ -3,7 +3,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import NavigasiBar from "@/components/navbar/navigasiBar";
 import { useHandleInput } from "@/app/hooks/handle-input";
-import ModalAddProductSuccess from "@/components/modalBox/modalAdd";
+import LayoutModalBoxs from "@/components/modalBox/layout";
 import { useState } from "react";
 
 export default function AddProduct() {
@@ -14,12 +14,13 @@ export default function AddProduct() {
     takaranSaji: "",
     volume: "",
   });
-  const [modalSucces, setModalSucces] = useState(false);
-  const [modalErr, setModalErr] = useState(false);
-  const [status, setStatus] = useState<boolean>();
+  const [modal, setModal] = useState(false);
+  const [status, setStatus] = useState(null);
+
+  console.log(status);
 
   async function handleAddProduct(event: any) {
-    setModalSucces(true);
+    setModal(true);
     event.preventDefault();
 
     const gula = event.target.kandunganGula.value;
@@ -165,8 +166,16 @@ export default function AddProduct() {
               *Tolong Untuk Digunakan Secara Bijak
             </span>
           </form>
-          {modalSucces && (
-            <ModalAddProductSuccess setModalSucces={setModalSucces} />
+          {modal && (
+            <LayoutModalBoxs setModalOnclick={setModal}>
+              {status === true ? (
+                <LayoutModalBoxs.ModalAddProductSuccess />
+              ) : status === false ? (
+                <LayoutModalBoxs.ModalAddProductSame />
+              ) : (
+                <LayoutModalBoxs.LoadingAnimation />
+              )}
+            </LayoutModalBoxs>
           )}
         </div>
       </div>
