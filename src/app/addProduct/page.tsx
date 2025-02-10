@@ -8,15 +8,16 @@ import { useEffect, useRef, useState } from "react";
 
 export default function AddProduct() {
   const path = usePathname();
-  const { mustFilled, handleValueInput, isFormFilled } = useHandleInput({
-    nameProduct: "",
-    kandunganGula: "",
-    takaranSaji: "",
-    volume: "",
-  });
+  const { mustFilled, handleValueInput, isFormFilled, setMustFilled } =
+    useHandleInput({
+      nameProduct: "",
+      kandunganGula: "",
+      takaranSaji: "",
+      volume: "",
+    });
   const [modal, setModal] = useState(false);
   const [status, setStatus] = useState(null);
-  const inputFieldNone = useRef<HTMLFormElement>(null);
+  const inputFieldNone = useRef(null);
 
   async function handleAddProduct(event: any) {
     setModal(true);
@@ -49,25 +50,28 @@ export default function AddProduct() {
   }
 
   useEffect(() => {
-    if (inputFieldNone.current) {
-      inputFieldNone.current.reset();
-    }
-  }, [modal]);
+    setMustFilled({
+      nameProduct: "",
+      kandunganGula: "",
+      takaranSaji: "",
+      volume: "",
+    });
+  }, [modal, setMustFilled]);
 
   return (
     <div>
       <NavigasiBar path={path} props={""} />
       <div className="h-screen flex flex-col justify-center items-center">
         <div className="bg-green-300 w-2/5 rounded-xl mt-16 max-[640px]:w-11/12 sm:w-4/5 md:w-8/12 lg:w-1/2">
-          <h1 className="text-xl font-semibold text-center mb-3">
-            Penambahan Produk Minuman
-          </h1>
           <form
             onSubmit={(e) => handleAddProduct(e)}
-            className="p-14 flex flex-col gap-y-5"
+            className="p-12 flex flex-col gap-y-5"
             autoComplete="off"
             ref={inputFieldNone}
           >
+            <h1 className="text-xl font-semibold text-center mb-3">
+              Penambahan Produk Minuman
+            </h1>
             <div className="relative pt-3 font-medium">
               <input
                 type="text"
