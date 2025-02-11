@@ -33,7 +33,9 @@ function ModalAddProductSame({ setModalOnclick }) {
       </div>
       <div className="text-center">
         <h1 className="font-bold text-xl">Produk Yang Ditambahkan Sudah Ada</h1>
-        <p className="font-medium mt-3">Silahkan Kembali ke Pencarian Produk</p>
+        <p className="font-medium mt-3">
+          Silahkan Input Kembali Produk Yang Berbeda
+        </p>
       </div>
       <ButtonModalBoxs setModalOnclick={setModalOnclick} />
     </div>

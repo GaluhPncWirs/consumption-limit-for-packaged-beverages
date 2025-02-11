@@ -325,16 +325,16 @@ export default function MainContent() {
                   educations === true ? `block` : `hidden`
                 } max-[640px]:text-sm text-justify mx-5 sm:text-base font-semibold lg:text-lg`}
               >
-                {fillBottle.length > 1 && miliLiter > 0 ? (
+                {fillBottle.length > 0 && miliLiter > 0 ? (
                   <p>
                     Kamu Bisa Konsumsi Maksimal {fillBottle.length} botol{" "}
                     {miliLiter} ml
                   </p>
-                ) : fillBottle.length > 1 && miliLiter <= 0 ? (
-                  <p>Kamu Bisa Konsumsi {fillBottle.length} botol</p>
+                ) : fillBottle.length > 0 && miliLiter <= 0 ? (
+                  <p>Kamu Bisa Konsumsi Maksimal {fillBottle.length} botol</p>
                 ) : (
                   <p>
-                    Minuman ini Hanya Bisa Dikonsumsi {miliLiter} ml, Kurang
+                    Minuman ini Maksimal Bisa Dikonsumsi {miliLiter} ml, Kurang
                     Dari Satu Botol
                   </p>
                 )}
@@ -359,7 +359,7 @@ export default function MainContent() {
           <div className="mt-7">
             <button
               type="button"
-              onClick={calculateMaximal}
+              onClick={() => calculateMaximal()}
               className="hover:bg-blue-400 text-lg font-semibold bg-blue-500 rounded-lg py-1 px-6 disabled:cursor-not-allowed"
               disabled={!isFormFilled()}
             >
