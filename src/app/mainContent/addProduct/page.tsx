@@ -24,17 +24,24 @@ export default function AddProduct() {
   async function handleAddProduct(event: any) {
     event.preventDefault();
     if (
-      !event.target.nameProduct.value ||
       !isNaN(event.target.nameProduct.value) ||
       event.target.nameProduct.value.trim() === ""
     ) {
       setModalErr(true);
     } else {
       setModal(true);
+
+      // total gula
       const gula = event.target.kandunganGula.value;
       const takaranSaji = Number(event.target.takaranSaji.value);
-
       const totalSugars = gula * takaranSaji;
+
+      // huruf kapital setiap huruf pertama
+      const nameProductValue = event.target.nameProduct.value;
+      const eachCapitalFirstWord = nameProductValue
+        .split(" ")
+        .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
 
       const res = await fetch("/api/addData", {
         method: "POST",
@@ -42,7 +49,7 @@ export default function AddProduct() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          nameProduct: event.target.nameProduct.value,
+          nameProduct: eachCapitalFirstWord,
           sugars: Math.floor(totalSugars),
           volume: Number(event.target.volume.value),
         }),

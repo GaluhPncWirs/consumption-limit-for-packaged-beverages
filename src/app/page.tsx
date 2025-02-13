@@ -89,7 +89,7 @@ export default function DisplayInputUser() {
   return (
     <div className="max-w-2xl mx-auto flex flex-col items-center justify-center h-screen">
       <div className="w-full">
-        <div className="bg-green-300 rounded-lg py-9 px-5 max-w-xl mx-auto shadow-lg max-[640px]:max-w-md">
+        <div className="bg-[#73EC8B] rounded-lg py-9 px-5 max-w-xl mx-auto shadow-lg max-[640px]:max-w-md">
           {/* <div className="mb-5 text-center text-lg font-semibold">
       <h2>
         silahkan inputkan di bawah ini agar bisa mengetahui berapa
