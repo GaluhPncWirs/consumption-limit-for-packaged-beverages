@@ -6,7 +6,7 @@ export default function ModalBox({ setModalBox, yourMaxSugar, tdee }) {
   const { push } = useRouter();
   function handleClick() {
     setModalBox(false);
-    push("/mainContent");
+    push("/mainContent/calculate");
   }
   return (
     <div>

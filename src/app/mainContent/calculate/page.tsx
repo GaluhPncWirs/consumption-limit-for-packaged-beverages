@@ -7,7 +7,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import Educations from "@/components/educationComp/educations";
-import { useHandleInput } from "../hooks/handle-input";
+import { useHandleInput } from "../../hooks/handle-input";
 import { getDataFunFact } from "@/getDataFromApi/getFunFact";
 import { getVideoEducations } from "@/getDataFromApi/getVideoEdu";
 import ModalProductNone from "@/components/modalBox/modalError";
@@ -83,6 +83,7 @@ export default function MainContent() {
         sugarContentInsideProduct / totalVolumeInsideProduct;
 
       const maxConsumptionMl = getYourMaxSugars / resultTotalContentProduct;
+
       const numberOfBottles = Math.floor(
         maxConsumptionMl / totalVolumeInsideProduct
       );
@@ -349,7 +350,7 @@ export default function MainContent() {
           <h1 className="text-sm mx-10 text-end max-[640px]:mx-0 max-[640px]:text-xs lg:mx-5">
             Produk yang di cari tidak ada ?{" "}
             <Link
-              href={"./addProduct"}
+              href={"/mainContent/addProduct"}
               className="text-blue-600 hover:underline font-semibold"
             >
               klik disini

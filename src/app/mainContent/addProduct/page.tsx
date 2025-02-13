@@ -5,6 +5,7 @@ import NavigasiBar from "@/components/navbar/navigasiBar";
 import { useHandleInput } from "@/app/hooks/handle-input";
 import LayoutModalBoxs from "@/components/modalBox/layout";
 import { useEffect, useRef, useState } from "react";
+import ErrorInput from "@/components/modalBox/err";
 
 export default function AddProduct() {
   const path = usePathname();
@@ -16,36 +17,39 @@ export default function AddProduct() {
       volume: "",
     });
   const [modal, setModal] = useState(false);
+  const [modalErr, setModalErr] = useState(false);
   const [status, setStatus] = useState(null);
   const inputFieldNone = useRef(null);
 
   async function handleAddProduct(event: any) {
-    setModal(true);
     event.preventDefault();
-
-    const gula = event.target.kandunganGula.value;
-    const takaranSaji = event.target.takaranSaji.value;
-
-    const totalSugars = gula * takaranSaji;
-
-    const res = await fetch("/api/addData", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        nameProduct: event.target.nameProduct.value,
-        sugars: Math.floor(totalSugars),
-        volume: Number(event.target.volume.value),
-      }),
-    });
-
-    const resStatus = await res.json();
-    setStatus(resStatus.status);
-    if (resStatus.status) {
-      console.log(resStatus.message);
+    if (
+      !event.target.nameProduct.value ||
+      !isNaN(event.target.nameProduct.value) ||
+      event.target.nameProduct.value.trim() === ""
+    ) {
+      setModalErr(true);
     } else {
-      console.log(resStatus.message);
+      setModal(true);
+      const gula = event.target.kandunganGula.value;
+      const takaranSaji = Number(event.target.takaranSaji.value);
+
+      const totalSugars = gula * takaranSaji;
+
+      const res = await fetch("/api/addData", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nameProduct: event.target.nameProduct.value,
+          sugars: Math.floor(totalSugars),
+          volume: Number(event.target.volume.value),
+        }),
+      });
+
+      const resStatus = await res.json();
+      setStatus(resStatus.status);
     }
   }
 
@@ -56,7 +60,7 @@ export default function AddProduct() {
       takaranSaji: "",
       volume: "",
     });
-  }, [modal, setMustFilled]);
+  }, [modal, setMustFilled, modalErr]);
 
   return (
     <div>
@@ -191,6 +195,8 @@ export default function AddProduct() {
               )}
             </LayoutModalBoxs>
           )}
+
+          {modalErr && <ErrorInput setModal={setModalErr} />}
         </div>
       </div>
     </div>
