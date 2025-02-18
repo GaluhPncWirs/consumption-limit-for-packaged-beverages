@@ -15,7 +15,7 @@
     }
 
     .inputField{
-        @apply w-full border-0 border-b-2 border-[#72BF78] bg-transparent text-lg text-gray-900 placeholder-transparent focus:outline-none focus:border-b-black transition-all mt-3
+        @apply w-full border-0 border-b-2 border-[#0B192C] bg-transparent text-lg text-gray-900 placeholder-transparent focus:outline-none focus:border-b-black transition-all mt-3
     }
 
     .labelText{

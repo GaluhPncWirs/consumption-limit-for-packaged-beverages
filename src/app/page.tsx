@@ -1,8 +1,10 @@
 "use client";
 import ModalBox from "@/components/modalBox/modalSucces";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useHandleInput } from "./hooks/handle-input";
+import ModalProductNone from "@/components/modalBox/modalError";
+import LayoutModalError from "@/components/modalBox/err";
 
 export default function DisplayInputUser() {
   const male = useRef<HTMLInputElement>(null);
@@ -12,6 +14,7 @@ export default function DisplayInputUser() {
   const bodyWeight = useRef<HTMLInputElement>(null);
   const activityLevel = useRef<HTMLSelectElement>(null);
   const [modalBox, setModalBox] = useState(false);
+  const [modalErrorBox, setModalErrorBox] = useState(false);
   const [yourMaxSugar, setYourMaxSugar] = useState(0);
   const [tdee, setTdee] = useState(0);
 
@@ -28,7 +31,6 @@ export default function DisplayInputUser() {
     const weight = parseInt(bodyWeight.current?.value || "0");
     const height = parseInt(bodyHeight.current?.value || "0");
     let BMR; // Basal Metabolic Rate
-    setModalBox(true);
 
     if (male.current?.checked) {
       if (male.current?.value === "male") {
@@ -79,13 +81,22 @@ export default function DisplayInputUser() {
     }
 
     const maxSugarPerGrams = maxCalories / 4; // Karena 1 gram gula = 4 kalori
-    localStorage.setItem("maxSugars", String(maxSugarPerGrams));
     setYourMaxSugar(maxSugarPerGrams);
-
-    document.cookie = "formFilledSuccess=true; path=/";
-
     setTdee(TDEE);
   }
+
+  useEffect(() => {
+    if (yourMaxSugar < 1 && tdee < 1) {
+      setModalErrorBox(true);
+    } else {
+      setModalBox(true);
+      document.cookie = "formFilledSuccess=true; path=/";
+      localStorage.setItem("maxSugars", String(setYourMaxSugar));
+    }
+  }, [yourMaxSugar, tdee]);
+
+  console.log(modalErrorBox);
+
   return (
     <div className="max-w-2xl mx-auto flex flex-col items-center justify-center h-screen">
       <div className="w-full">
@@ -99,10 +110,13 @@ export default function DisplayInputUser() {
           <h1 className="text-center mb-8 text-xl font-bold max-[640px]:text-lg">
             Penghitung Batas Aman Konsumsi Produk Manis Kemasan
           </h1>
-          <form id="sugarForm" className="max-[640px]:mx-7 mx-10">
+          <form
+            id="sugarForm"
+            className="max-[640px]:mx-7 mx-10 text-[#393E46]"
+          >
             <div className="flex flex-col justify-center gap-4">
               <div
-                className="flex gap-2 mb-1 font-medium items-center"
+                className="flex gap-2 mb-1 items-center font-semibold"
                 id="inputGender"
               >
                 <div className="flex gap-3 mr-2">
@@ -139,7 +153,7 @@ export default function DisplayInputUser() {
                 <label htmlFor="gender">Wanita</label>
               </div>
 
-              <div className="relative w-1/2 pt-5 font-medium max-[640px]:w-full sm:w-full">
+              <div className="relative w-1/2 pt-5 max-[640px]:w-full sm:w-full font-semibold">
                 <input
                   type="number"
                   id="age"
@@ -165,7 +179,7 @@ export default function DisplayInputUser() {
                 </label>
               </div>
 
-              <div className="relative w-1/2 pt-5 font-medium max-[640px]:w-full sm:w-full">
+              <div className="relative w-1/2 pt-5 font-semibold max-[640px]:w-full sm:w-full">
                 <input
                   type="number"
                   id="height"
@@ -191,7 +205,7 @@ export default function DisplayInputUser() {
                 </label>
               </div>
 
-              <div className="relative w-1/2 pt-5 font-medium max-[640px]:w-full sm:w-full">
+              <div className="relative w-1/2 pt-5 font-semibold max-[640px]:w-full sm:w-full">
                 <input
                   type="number"
                   id="weight"
@@ -217,7 +231,7 @@ export default function DisplayInputUser() {
                 </label>
               </div>
 
-              <div className="font-medium">
+              <div className="font-semibold">
                 <div className="flex gap-x-2 mb-2">
                   <Image
                     width={29}
@@ -232,7 +246,7 @@ export default function DisplayInputUser() {
                 </div>
                 <select
                   id="activityLevel"
-                  className="cursor-pointer bg-green-400 rounded-md p-2 text-sm max-[640px]:w-full sm:w-full"
+                  className="cursor-pointer bg-[#B6FFA1] rounded-md p-2 text-sm max-[640px]:w-full sm:w-full"
                   ref={activityLevel}
                   value={mustFilled.activityLevel}
                   onChange={handleValueInput}
@@ -260,11 +274,11 @@ export default function DisplayInputUser() {
               </div>
             </div>
           </form>
-          <div className="mt-8 mx-auto font-semibold py-1 text-center max-w-20 rounded-md bg-green-500 disabled:cursor-not-allowed hover:bg-green-600 cursor-pointer">
+          <div className="flex justify-center">
             <button
               onClick={calculateMaxSugar}
               disabled={!isFormFilled()}
-              className="disabled:cursor-not-allowed"
+              className="disabled:cursor-not-allowed mt-8 mx-auto py-1 text-center rounded-md bg-[#16C47F] hover:bg-emerald-500 cursor-pointer font-semibold px-7 text-lg"
             >
               Hitung
             </button>
@@ -277,6 +291,10 @@ export default function DisplayInputUser() {
               yourMaxSugar={yourMaxSugar}
               tdee={tdee}
             />
+          )}
+
+          {modalErrorBox && (
+            <LayoutModalError.ModalErrorCalculate setModal={modalErrorBox} />
           )}
         </div>
       </div>

@@ -34,12 +34,18 @@ export default function ModalBox({ setModalBox, yourMaxSugar, tdee }) {
           </span>{" "}
           kcal
         </p>
-        <div className="bg-green-500 w-full rounded-b-lg flex justify-center py-2 hover:bg-green-600">
+        <div className="bg-green-500 rounded-b-lg flex justify-evenly w-full items-center py-3">
           <button
             onClick={handleClick}
-            className="font-semibold text-xl cursor-pointer w-full"
+            className="font-semibold text-xl cursor-pointer basis-1/3 hover:bg-green-600 rounded-lg"
           >
             Oke
+          </button>
+          <button
+            onClick={() => setModalBox(false)}
+            className="font-semibold text-xl cursor-pointer basis-1/3 hover:bg-green-600 rounded-lg"
+          >
+            Cancel
           </button>
         </div>
       </div>
