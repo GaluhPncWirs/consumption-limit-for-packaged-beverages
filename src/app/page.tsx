@@ -3,8 +3,7 @@ import ModalBox from "@/components/modalBox/modalSucces";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useHandleInput } from "./hooks/handle-input";
-import ModalProductNone from "@/components/modalBox/modalError";
-import LayoutModalError from "@/components/modalBox/err";
+import ModalErrorCalculate from "@/components/modalBox/errorCalculate";
 
 export default function DisplayInputUser() {
   const male = useRef<HTMLInputElement>(null);
@@ -17,14 +16,16 @@ export default function DisplayInputUser() {
   const [modalErrorBox, setModalErrorBox] = useState(false);
   const [yourMaxSugar, setYourMaxSugar] = useState(0);
   const [tdee, setTdee] = useState(0);
+  const [validate, setValidate] = useState(false);
 
-  const { mustFilled, handleValueInput, isFormFilled } = useHandleInput({
-    age: "",
-    height: "",
-    weight: "",
-    gender: "",
-    activityLevel: "",
-  });
+  const { mustFilled, handleValueInput, isFormFilled, setMustFilled } =
+    useHandleInput({
+      age: "",
+      height: "",
+      weight: "",
+      gender: "",
+      activityLevel: "",
+    });
 
   function calculateMaxSugar() {
     const age = parseInt(ages.current?.value || "0");
@@ -86,16 +87,40 @@ export default function DisplayInputUser() {
   }
 
   useEffect(() => {
-    if (yourMaxSugar < 1 && tdee < 1) {
-      setModalErrorBox(true);
+    if (yourMaxSugar !== 0 && tdee !== 0) {
+      if (yourMaxSugar < 100 && tdee < 100) {
+        setModalErrorBox(true);
+      } else {
+        setModalBox(true);
+        setValidate(true);
+      }
     } else {
-      setModalBox(true);
-      document.cookie = "formFilledSuccess=true; path=/";
-      localStorage.setItem("maxSugars", String(setYourMaxSugar));
+      return undefined;
     }
   }, [yourMaxSugar, tdee]);
 
-  console.log(modalErrorBox);
+  useEffect(() => {
+    if (!validate) {
+      document.cookie =
+        "formFilledSuccess=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+      localStorage.removeItem("maxSugars");
+    } else {
+      document.cookie = "formFilledSuccess=true; path=/";
+      localStorage.setItem("maxSugars", String(yourMaxSugar));
+    }
+  }, [validate, yourMaxSugar]);
+
+  useEffect(() => {
+    if (!validate) {
+      setMustFilled({
+        age: "",
+        height: "",
+        weight: "",
+        gender: "",
+        activityLevel: "",
+      });
+    }
+  }, [validate, setMustFilled]);
 
   return (
     <div className="max-w-2xl mx-auto flex flex-col items-center justify-center h-screen">
@@ -276,7 +301,7 @@ export default function DisplayInputUser() {
           </form>
           <div className="flex justify-center">
             <button
-              onClick={calculateMaxSugar}
+              onClick={() => calculateMaxSugar()}
               disabled={!isFormFilled()}
               className="disabled:cursor-not-allowed mt-8 mx-auto py-1 text-center rounded-md bg-[#16C47F] hover:bg-emerald-500 cursor-pointer font-semibold px-7 text-lg"
             >
@@ -285,16 +310,17 @@ export default function DisplayInputUser() {
           </div>
         </div>
         <div>
-          {modalBox && (
+          {modalBox && validate && (
             <ModalBox
               setModalBox={setModalBox}
               yourMaxSugar={yourMaxSugar}
               tdee={tdee}
+              setValidate={setValidate}
             />
           )}
 
           {modalErrorBox && (
-            <LayoutModalError.ModalErrorCalculate setModal={modalErrorBox} />
+            <ModalErrorCalculate setModalError={setModalErrorBox} />
           )}
         </div>
       </div>

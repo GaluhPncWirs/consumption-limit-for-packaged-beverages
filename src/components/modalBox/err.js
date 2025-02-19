@@ -1,4 +1,4 @@
-export default function LayoutModalError({ children }) {
+export default function ModalError({ setModal }) {
   return (
     <div className="bg-green-500 w-1/3 rounded-xl absolute top-1/2 left-1/2 h-1/3 z-30 -translate-x-1/2 -translate-y-1/2 max-[640px]:w-9/12 sm:w-3/5 md:w-1/2 lg:w-1/3">
       <div className="h-full max-[640px]:px-3 sm:px-4 md:px-5 lg:px-8">
@@ -20,55 +20,22 @@ export default function LayoutModalError({ children }) {
               />
             </svg>
           </div>
-          {children}
+          <div className="text-center">
+            <h1 className="font-bold text-xl">Produk Tidak Bisa Ditambahkan</h1>
+            <p className="font-medium mt-3">
+              Input Tidak Boleh Kosong dan Tidak Boleh Hanya Berisi Angka!
+            </p>
+          </div>
+          <div className="bg-green-400 rounded-b-xl h-1/5 flex justify-center items-center hover:bg-green-600">
+            <button
+              className="text-xl font-semibold w-full"
+              onClick={() => setModal(false)}
+            >
+              Oke
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
 }
-
-function ModalErrorInput({ setModal }) {
-  return (
-    <>
-      <div className="text-center">
-        <h1 className="font-bold text-xl">Produk Tidak Bisa Ditambahkan</h1>
-        <p className="font-medium mt-3">
-          Input Tidak Boleh Kosong dan Tidak Boleh Hanya Berisi Angka!
-        </p>
-      </div>
-      <div className="bg-green-400 rounded-b-xl h-1/5 flex justify-center items-center hover:bg-green-600">
-        <button
-          className="text-xl font-semibold w-full"
-          onClick={() => setModal(false)}
-        >
-          Oke
-        </button>
-      </div>
-    </>
-  );
-}
-
-function ModalErrorCalculate({ setModal }) {
-  return (
-    <>
-      <div className="text-center">
-        <h1 className="font-bold text-xl">Perhitungan Error</h1>
-        <p className="font-medium mt-3">
-          Hasilnya Tidak Diperbolehkan Kurang Dari 1
-        </p>
-        <p>Silahkan Input Kembali !</p>
-      </div>
-      <div className="bg-green-400 rounded-b-xl h-1/5 flex justify-center items-center hover:bg-green-600">
-        <button
-          className="text-xl font-semibold w-full"
-          onClick={() => setModal(false)}
-        >
-          Oke
-        </button>
-      </div>
-    </>
-  );
-}
-
-LayoutModalError.ModalErrorInput = ModalErrorInput;
-LayoutModalError.ModalErrorCalculate = ModalErrorCalculate;

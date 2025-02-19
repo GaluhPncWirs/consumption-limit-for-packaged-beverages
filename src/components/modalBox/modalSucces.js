@@ -2,7 +2,12 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-export default function ModalBox({ setModalBox, yourMaxSugar, tdee }) {
+export default function ModalBox({
+  setModalBox,
+  yourMaxSugar,
+  tdee,
+  setValidate,
+}) {
   const { push } = useRouter();
   function handleClick() {
     setModalBox(false);
@@ -42,7 +47,7 @@ export default function ModalBox({ setModalBox, yourMaxSugar, tdee }) {
             Oke
           </button>
           <button
-            onClick={() => setModalBox(false)}
+            onClick={() => setValidate(false)}
             className="font-semibold text-xl cursor-pointer basis-1/3 hover:bg-green-600 rounded-lg"
           >
             Cancel

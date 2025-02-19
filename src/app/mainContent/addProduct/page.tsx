@@ -5,7 +5,7 @@ import NavigasiBar from "@/components/navbar/navigasiBar";
 import { useHandleInput } from "@/app/hooks/handle-input";
 import LayoutModalBoxs from "@/components/modalBox/layout";
 import { useEffect, useRef, useState } from "react";
-import LayoutModalError from "@/components/modalBox/err";
+import ModalError from "@/components/modalBox/err";
 
 export default function AddProduct() {
   const path = usePathname();
@@ -203,9 +203,7 @@ export default function AddProduct() {
             </LayoutModalBoxs>
           )}
 
-          {modalErr && (
-            <LayoutModalError.ModalErrorInput setModal={setModalErr} />
-          )}
+          {modalErr && <ModalError setModal={setModalErr} />}
         </div>
       </div>
     </div>

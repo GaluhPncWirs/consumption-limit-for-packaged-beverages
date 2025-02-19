@@ -196,6 +196,9 @@ export default function MainContent() {
     }
   }, [searchProduk]);
 
+  console.log(fillBottle.length);
+  console.log(miliLiter);
+
   return (
     <div className="pt-24 pb-14">
       <NavigasiBar props={backToInput} path={path} />
@@ -326,12 +329,12 @@ export default function MainContent() {
                   educations === true ? `block` : `hidden`
                 } max-[640px]:text-sm text-justify mx-5 sm:text-base font-semibold lg:text-lg`}
               >
-                {fillBottle.length > 0 && miliLiter > 0 ? (
+                {fillBottle.length > 1 && miliLiter > 0 ? (
                   <p>
                     Kamu Bisa Konsumsi Maksimal {fillBottle.length} botol{" "}
                     {miliLiter} ml
                   </p>
-                ) : fillBottle.length > 0 && miliLiter <= 0 ? (
+                ) : fillBottle.length === 1 && miliLiter <= 0 ? (
                   <p>Kamu Bisa Konsumsi Maksimal {fillBottle.length} botol</p>
                 ) : (
                   <p>
