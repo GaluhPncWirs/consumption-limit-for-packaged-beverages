@@ -17,7 +17,6 @@ export default function MainContent() {
   const totalVolumeInsideProductRef = useRef<HTMLInputElement>(null);
   const { push } = useRouter();
   const [fillBottle, setFillBottle] = useState([]);
-  const [miliLiter, setMiliLiter] = useState(0);
   const [educations, setEducations] = useState(false);
   const [sugarProduk, setSugarProduk] = useState(0);
   const [volumeProduk, setVolumeProduk] = useState(0);
@@ -39,6 +38,7 @@ export default function MainContent() {
   });
   const focusInput = useRef<HTMLInputElement>(null);
   const [modalBox, setModalBox] = useState(false);
+  const [remainingMl, setRemainingMl] = useState(0);
 
   useEffect(() => {
     setMustFilled((prev: Object) => ({ ...prev, product: searchProduk }));
@@ -88,17 +88,21 @@ export default function MainContent() {
         maxConsumptionMl / totalVolumeInsideProduct
       );
 
-      const remainder = maxConsumptionMl % totalVolumeInsideProduct;
-      const percentageFillForRemainder = Math.floor(
-        (remainder / totalVolumeInsideProduct) * 100
+      const remaining = maxConsumptionMl % totalVolumeInsideProduct;
+      const percentageFillForRemaining = Math.round(
+        (remaining / totalVolumeInsideProduct) * 100
       );
 
+      // const remainderMl =
+      //   (percentageFillForRemainder / 100) * totalVolumeInsideProduct;
+      // console.log("remainder ml", remainderMl);
+
       const fillArray: any = Array(numberOfBottles).fill(100);
-      if (percentageFillForRemainder > 0) {
-        fillArray.push(percentageFillForRemainder);
+      if (percentageFillForRemaining > 0) {
+        fillArray.push(percentageFillForRemaining);
       }
       setFillBottle(fillArray);
-      setMiliLiter(percentageFillForRemainder);
+      setRemainingMl(Math.round(remaining));
     } else {
       setModalBox(true);
     }
@@ -138,6 +142,18 @@ export default function MainContent() {
     }
   }
 
+  function scrollToActiveItem(i: number) {
+    const list = listRef.current;
+    if (list) {
+      const activeItem = list.children[i] as HTMLElement;
+      if (activeItem) {
+        activeItem.scrollIntoView({
+          block: "nearest",
+        });
+      }
+    }
+  }
+
   useEffect(() => {
     function handleKeyEvent(e: any) {
       if (result.length > 0) {
@@ -170,18 +186,6 @@ export default function MainContent() {
     setSearchProduk(item.nameProduct);
   }
 
-  function scrollToActiveItem(i: number) {
-    const list = listRef.current;
-    if (list) {
-      const activeItem = list.children[i] as HTMLElement;
-      if (activeItem) {
-        activeItem.scrollIntoView({
-          block: "nearest",
-        });
-      }
-    }
-  }
-
   useEffect(() => {
     if (selectedProduct) {
       setSearchProduk(selectedProduct.nameProduct);
@@ -195,9 +199,6 @@ export default function MainContent() {
       setSelectedProduct(null);
     }
   }, [searchProduk]);
-
-  console.log(fillBottle.length);
-  console.log(miliLiter);
 
   return (
     <div className="pt-24 pb-14">
@@ -329,17 +330,17 @@ export default function MainContent() {
                   educations === true ? `block` : `hidden`
                 } max-[640px]:text-sm text-justify mx-5 sm:text-base font-semibold lg:text-lg`}
               >
-                {fillBottle.length > 1 && miliLiter > 0 ? (
+                {fillBottle.length > 1 && remainingMl > 0 ? (
                   <p>
                     Kamu Bisa Konsumsi Maksimal {fillBottle.length} botol{" "}
-                    {miliLiter} ml
+                    {remainingMl} ml
                   </p>
-                ) : fillBottle.length === 1 && miliLiter <= 0 ? (
+                ) : fillBottle.length === 1 && remainingMl <= 0 ? (
                   <p>Kamu Bisa Konsumsi Maksimal {fillBottle.length} botol</p>
                 ) : (
                   <p>
-                    Minuman ini Maksimal Bisa Dikonsumsi {miliLiter} ml, Kurang
-                    Dari Satu Botol
+                    Minuman ini Maksimal Bisa Dikonsumsi {remainingMl} ml,
+                    Kurang Dari Satu Botol
                   </p>
                 )}
               </div>
