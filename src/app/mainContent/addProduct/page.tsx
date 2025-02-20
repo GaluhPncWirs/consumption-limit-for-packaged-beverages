@@ -73,120 +73,134 @@ export default function AddProduct() {
     <div>
       <NavigasiBar path={path} props={""} />
       <div className="h-screen flex flex-col justify-center items-center">
-        <div className="bg-green-300 w-2/5 rounded-xl mt-16 max-[640px]:w-11/12 sm:w-4/5 md:w-8/12 lg:w-1/2">
-          <form
-            onSubmit={(e) => handleAddProduct(e)}
-            className="p-12 flex flex-col gap-y-5"
-            autoComplete="off"
-            ref={inputFieldNone}
-          >
-            <h1 className="text-xl font-semibold text-center mb-3">
-              Penambahan Produk Minuman
-            </h1>
-            <div className="relative pt-3 font-medium">
-              <input
-                type="text"
-                id="nameProduct"
-                className="inputField peer"
-                onChange={handleValueInput}
-                value={mustFilled.nameProduct}
-              />
-              <label
-                htmlFor="nameProduct"
-                className="labelText flex items-center -ml-1.5 gap-1"
-              >
-                <Image
-                  src={"/images/beverage.png"}
-                  alt="beverage"
-                  width={27}
-                  height={27}
-                />
-                <span>Nama Produk</span>
-              </label>
-            </div>
-            <div className="relative pt-3 font-medium">
-              <input
-                type="number"
-                id="kandunganGula"
-                className="inputField peer"
-                onChange={handleValueInput}
-                value={mustFilled.kandunganGula}
-              />
-              <label
-                htmlFor="kandunganGula"
-                className="labelText flex items-center gap-2"
-              >
-                <Image
-                  src={"/images/sugar.png"}
-                  alt="beverage"
-                  width={20}
-                  height={20}
-                />
-                <span>Kandungan Gula Minuman</span>
-              </label>
-            </div>
-            <div className="relative pt-3 font-medium">
-              <input
-                type="number"
-                min={0.01}
-                max={50}
-                step="0.01"
-                id="takaranSaji"
-                className="inputField peer"
-                onChange={handleValueInput}
-                value={mustFilled.takaranSaji}
-              />
-              <label
-                htmlFor="takaranSaji"
-                className="labelText flex items-center gap-2"
-              >
-                <Image
-                  src={"/images/serving.png"}
-                  alt="beverage"
-                  width={20}
-                  height={20}
-                />
-                <span>Takaran Saji Per Kemasan</span>
-              </label>
-            </div>
-            <div className="relative pt-3 font-medium">
-              <input
-                type="number"
-                id="volume"
-                className="inputField peer"
-                onChange={handleValueInput}
-                value={mustFilled.volume}
-              />
-              <label
-                htmlFor="volume"
-                className="labelText flex items-center gap-2"
-              >
-                <Image
-                  src={"/images/ml.png"}
-                  alt="beverage"
-                  width={20}
-                  height={20}
-                />
-                <span>Volume Kemasan (ml)</span>
-              </label>
-            </div>
-            <button
-              className="bg-green-500 mt-5 rounded-lg hover:bg-green-600 py-1.5 flex text-lg font-semibold disabled:cursor-not-allowed justify-center items-center gap-2"
-              disabled={!isFormFilled()}
+        <div className="bg-green-300 w-2/5 rounded-xl mt-16 max-[640px]:w-11/12 sm:w-10/12 md:w-9/12 lg:w-2/3">
+          <h1 className="text-xl font-semibold text-center mt-7">
+            Penambahan Produk Minuman
+          </h1>
+          <div className="flex p-9 gap-5 items-center">
+            <form
+              onSubmit={(e) => handleAddProduct(e)}
+              className="flex flex-col gap-y-5 basis-3/5"
+              autoComplete="off"
+              ref={inputFieldNone}
             >
-              <Image
-                src={"/images/add-product.png"}
-                alt="add Product"
-                width={30}
-                height={30}
-                className="bg-cover"
-              />
-              <span>Tambah Produk</span>
-            </button>
-            <span className="text-red-500 font-semibold text-sm">
-              *Tolong Untuk Digunakan Secara Bijak
-            </span>
-          </form>
+              <div className="relative pt-3 font-medium">
+                <input
+                  type="text"
+                  id="nameProduct"
+                  className="inputField peer"
+                  onChange={handleValueInput}
+                  value={mustFilled.nameProduct}
+                />
+                <label
+                  htmlFor="nameProduct"
+                  className="labelText flex items-center -ml-1.5 gap-1"
+                >
+                  <Image
+                    src={"/images/beverage.png"}
+                    alt="beverage"
+                    width={27}
+                    height={27}
+                  />
+                  <span>Nama Produk</span>
+                </label>
+              </div>
+              <div className="relative pt-3 font-medium">
+                <input
+                  type="number"
+                  id="kandunganGula"
+                  className="inputField peer"
+                  onChange={handleValueInput}
+                  value={mustFilled.kandunganGula}
+                />
+                <label
+                  htmlFor="kandunganGula"
+                  className="labelText flex items-center gap-2"
+                >
+                  <Image
+                    src={"/images/sugar.png"}
+                    alt="beverage"
+                    width={20}
+                    height={20}
+                  />
+                  <span>Kandungan Gula Minuman</span>
+                </label>
+              </div>
+              <div className="relative pt-3 font-medium">
+                <input
+                  type="number"
+                  min={0.01}
+                  max={50}
+                  step="0.01"
+                  id="takaranSaji"
+                  className="inputField peer"
+                  onChange={handleValueInput}
+                  value={mustFilled.takaranSaji}
+                />
+                <label
+                  htmlFor="takaranSaji"
+                  className="labelText flex items-center gap-2"
+                >
+                  <Image
+                    src={"/images/serving.png"}
+                    alt="beverage"
+                    width={20}
+                    height={20}
+                  />
+                  <span>Takaran Saji Per Kemasan</span>
+                </label>
+              </div>
+              <div className="relative pt-3 font-medium">
+                <input
+                  type="number"
+                  id="volume"
+                  className="inputField peer"
+                  onChange={handleValueInput}
+                  value={mustFilled.volume}
+                />
+                <label
+                  htmlFor="volume"
+                  className="labelText flex items-center gap-2"
+                >
+                  <Image
+                    src={"/images/ml.png"}
+                    alt="beverage"
+                    width={20}
+                    height={20}
+                  />
+                  <span>Volume Kemasan (ml)</span>
+                </label>
+              </div>
+              <button
+                className="bg-green-500 mt-5 rounded-lg hover:bg-green-600 py-1.5 flex text-lg font-semibold disabled:cursor-not-allowed justify-center items-center gap-2"
+                disabled={!isFormFilled()}
+              >
+                <Image
+                  src={"/images/add-product.png"}
+                  alt="add Product"
+                  width={30}
+                  height={30}
+                  className="bg-cover"
+                />
+                <span>Tambah Produk</span>
+              </button>
+              <span className="text-red-500 font-semibold text-sm text-center">
+                *Tolong Untuk Digunakan Secara Bijak
+              </span>
+            </form>
+            <div className="bg-blue-300 basis-2/5 h-5/6 rounded-lg">
+              <h1 className="p-4 text-center">Cek Produk Yang Tersedia</h1>
+              <div className="flex flex-col">
+                <div className="border-2 border-black">Search</div>
+                <ul className="m-5 bg-slate-200 h-60">
+                  <li>list 1</li>
+                  <li>list 2</li>
+                  <li>list 3</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
           {modal && (
             <LayoutModalBoxs>
               {status === true ? (
