@@ -6,6 +6,7 @@ import { useHandleInput } from "@/app/hooks/handle-input";
 import LayoutModalBoxs from "@/components/modalBox/layout";
 import { useEffect, useRef, useState } from "react";
 import ModalError from "@/components/modalBox/err";
+import { getDataProduct } from "@/getDataFromApi/getProduct";
 
 export default function AddProduct() {
   const path = usePathname();
@@ -20,7 +21,11 @@ export default function AddProduct() {
   const [modalErr, setModalErr] = useState(false);
   const [status, setStatus] = useState(null);
   const inputFieldNone = useRef(null);
+  const [findData, setFindData] = useState([]);
+  const [searchProduk, setSearchProduk] = useState<string>("");
+  const [result, setResult] = useState([]);
 
+  // Tambah Data
   async function handleAddProduct(event: any) {
     event.preventDefault();
     if (
@@ -69,18 +74,39 @@ export default function AddProduct() {
     });
   }, [modal, setMustFilled, modalErr]);
 
+  // Cari Data Produk
+  useEffect(() => {
+    getDataProduct((data: any) => {
+      setFindData(data);
+    });
+  }, []);
+
+  function handleInputChange(e: any) {
+    const query = e.target.value;
+    setSearchProduk(query);
+
+    if (query !== "") {
+      const filterSearchProduct = findData.filter((item: any) => {
+        return item.nameProduct.toLowerCase().includes(query.toLowerCase());
+      });
+      setResult(filterSearchProduct);
+    } else {
+      setResult([]);
+    }
+  }
+
   return (
     <div>
       <NavigasiBar path={path} props={""} />
       <div className="h-screen flex flex-col justify-center items-center">
-        <div className="bg-green-300 w-2/5 rounded-xl mt-16 max-[640px]:w-11/12 sm:w-10/12 md:w-9/12 lg:w-2/3">
+        <div className="bg-green-300 w-2/5 rounded-xl mt-16 max-[640px]:w-11/12 sm:w-10/12 md:w-9/12 lg:w-2/3 py-3">
           <h1 className="text-xl font-semibold text-center mt-7">
             Penambahan Produk Minuman
           </h1>
-          <div className="flex p-9 gap-5 items-center">
+          <div className="flex p-5 items-center justify-evenly">
             <form
               onSubmit={(e) => handleAddProduct(e)}
-              className="flex flex-col gap-y-5 basis-3/5"
+              className="flex flex-col gap-y-5 basis-1/2"
               autoComplete="off"
               ref={inputFieldNone}
             >
@@ -189,13 +215,32 @@ export default function AddProduct() {
               </span>
             </form>
             <div className="bg-blue-300 basis-2/5 h-5/6 rounded-lg">
-              <h1 className="p-4 text-center">Cek Produk Yang Tersedia</h1>
+              <h1 className="py-3 text-center font-semibold text-lg">
+                Cek Produk Yang Tersedia
+              </h1>
               <div className="flex flex-col">
-                <div className="border-2 border-black">Search</div>
-                <ul className="m-5 bg-slate-200 h-60">
-                  <li>list 1</li>
-                  <li>list 2</li>
-                  <li>list 3</li>
+                <form action="" className="flex items-center relative">
+                  <label htmlFor="" className="absolute left-1">
+                    {" "}
+                    <Image
+                      src={"/images/search-icon.png"}
+                      alt="Search"
+                      width={60}
+                      height={60}
+                      className="w-1/2"
+                    />
+                  </label>
+                  <input
+                    type="text"
+                    className="basis-full h-10 pl-10 pr-3"
+                    value={searchProduk}
+                    onChange={handleInputChange}
+                  />
+                </form>
+                <ul className="m-3 bg-slate-200 h-60 rounded-lg p-5">
+                  {result.map((item: any) => (
+                    <li key={item.id}>{item.nameProduct}</li>
+                  ))}
                 </ul>
               </div>
             </div>

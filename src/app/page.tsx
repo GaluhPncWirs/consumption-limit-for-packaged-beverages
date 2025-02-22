@@ -88,7 +88,7 @@ export default function DisplayInputUser() {
 
   useEffect(() => {
     if (yourMaxSugar !== 0 && tdee !== 0) {
-      if (yourMaxSugar < 100 && tdee < 100) {
+      if (yourMaxSugar <= 5 && tdee >= 100) {
         setModalErrorBox(true);
       } else {
         setModalBox(true);
@@ -120,7 +120,7 @@ export default function DisplayInputUser() {
         activityLevel: "",
       });
     }
-  }, [validate, setMustFilled]);
+  }, [validate, setMustFilled, modalErrorBox]);
 
   return (
     <div className="max-w-2xl mx-auto flex flex-col items-center justify-center h-screen">

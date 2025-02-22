@@ -121,6 +121,7 @@ export default function MainContent() {
     push("/");
   }
 
+  // Cari Data
   useEffect(() => {
     getDataProduct((data: any) => {
       setProduct(data);
