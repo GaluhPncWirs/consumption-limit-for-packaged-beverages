@@ -87,7 +87,7 @@ export default function AddProduct() {
 
     if (query !== "") {
       const filterSearchProduct = findData.filter((item: any) => {
-        return item.nameProduct.toLowerCase().includes(query.toLowerCase());
+        return item.nameProduct.toLowerCase().startsWith(query.toLowerCase());
       });
       setResult(filterSearchProduct);
     } else {
@@ -214,13 +214,20 @@ export default function AddProduct() {
                 *Tolong Untuk Digunakan Secara Bijak
               </span>
             </form>
-            <div className="bg-blue-300 basis-2/5 h-5/6 rounded-lg">
-              <h1 className="py-3 text-center font-semibold text-lg">
+            <div className="bg-[#54C392] basis-2/5 h-5/6 rounded-lg">
+              <h1 className="py-3 text-center font-semibold text-lg bg-[#15B392] rounded-t-lg">
                 Cek Produk Yang Tersedia
               </h1>
               <div className="flex flex-col">
-                <form action="" className="flex items-center relative">
-                  <label htmlFor="" className="absolute left-1">
+                <form className="relative flex items-center">
+                  <input
+                    type="text"
+                    className="inputField pl-10 pr-5 pb-1 mx-3"
+                    value={searchProduk}
+                    onChange={handleInputChange}
+                    id="search"
+                  />
+                  <label htmlFor="search" className="absolute left-4">
                     {" "}
                     <Image
                       src={"/images/search-icon.png"}
@@ -230,14 +237,8 @@ export default function AddProduct() {
                       className="w-1/2"
                     />
                   </label>
-                  <input
-                    type="text"
-                    className="basis-full h-10 pl-10 pr-3"
-                    value={searchProduk}
-                    onChange={handleInputChange}
-                  />
                 </form>
-                <ul className="m-3 bg-slate-200 h-60 rounded-lg p-5">
+                <ul className="m-3 h-60 px-5 py-2 overflow-auto">
                   {result.map((item: any) => (
                     <li key={item.id}>{item.nameProduct}</li>
                   ))}

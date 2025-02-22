@@ -134,7 +134,7 @@ export default function MainContent() {
 
     if (query !== "") {
       const filterSearchProduct = product.filter((item: any) => {
-        return item.nameProduct.toLowerCase().includes(query.toLowerCase());
+        return item.nameProduct.toLowerCase().startsWith(query.toLowerCase());
       });
       setResult(filterSearchProduct);
       setActiveIndex(-1);
@@ -257,7 +257,7 @@ export default function MainContent() {
                         <li
                           key={item.id}
                           onClick={() => handleItemClick(item)}
-                          className={`cursor-pointer hover:bg-green-300 ${
+                          className={`cursor-pointer hover:bg-green-300 mb-1 ${
                             activeIndex === i ? "bg-green-300" : ""
                           }`}
                         >
