@@ -27,68 +27,78 @@ export default function DisplayInputUser() {
       activityLevel: "",
     });
 
+  // console.log(mustFilled.age.slice(0, 2).length);
+  const maxAge = mustFilled.age.length;
+  const maxHeight = mustFilled.height.length;
+  const maxWeight = mustFilled.weight.length;
+
   function calculateMaxSugar() {
-    const age = parseInt(ages.current?.value || "0");
-    const weight = parseInt(bodyWeight.current?.value || "0");
-    const height = parseInt(bodyHeight.current?.value || "0");
-    let BMR; // Basal Metabolic Rate
-
-    if (male.current?.checked) {
-      if (male.current?.value === "male") {
-        BMR = 10 * weight + 6.25 * height - 5 * age + 5;
-      }
-    }
-
-    if (female.current?.checked) {
-      if (female.current?.value === "female") {
-        BMR = 10 * weight + 6.25 * height - 5 * age - 161;
-      }
-    }
-
-    let activityFactor;
-    switch (activityLevel.current?.value) {
-      case "sedentary":
-        activityFactor = 1.2;
-        break;
-      case "lightlyActive":
-        activityFactor = 1.375;
-        break;
-      case "moderatelyActive":
-        activityFactor = 1.55;
-        break;
-      case "veryActive":
-        activityFactor = 1.725;
-        break;
-      case "extraActive":
-        activityFactor = 1.9;
-        break;
-      default:
-        activityFactor = 1.2;
-    }
-
-    const TDEE = BMR! * activityFactor;
-    let maxCalories;
-
-    const convertToMeters = height / 100;
-    const heightSquares = Math.pow(convertToMeters, 2);
-    let bodyMassIndex = Math.floor(weight / heightSquares);
-
-    if (bodyMassIndex >= 30) {
-      // obesitas
-      maxCalories = TDEE * 0.05;
+    if (maxAge > 2 || maxHeight > 3 || maxWeight > 3) {
+      alert("tidak diperbolahkan");
+      return;
     } else {
-      // normal
-      maxCalories = TDEE * 0.1;
-    }
+      const age = parseInt(ages.current?.value || "0");
+      const weight = parseInt(bodyWeight.current?.value || "0");
+      const height = parseInt(bodyHeight.current?.value || "0");
+      let BMR; // Basal Metabolic Rate
 
-    const maxSugarPerGrams = maxCalories / 4; // Karena 1 gram gula = 4 kalori
-    setYourMaxSugar(maxSugarPerGrams);
-    setTdee(TDEE);
+      if (male.current?.checked) {
+        if (male.current?.value === "male") {
+          BMR = 10 * weight + 6.25 * height - 5 * age + 5;
+        }
+      }
+
+      if (female.current?.checked) {
+        if (female.current?.value === "female") {
+          BMR = 10 * weight + 6.25 * height - 5 * age - 161;
+        }
+      }
+
+      let activityFactor;
+      switch (activityLevel.current?.value) {
+        case "sedentary":
+          activityFactor = 1.2;
+          break;
+        case "lightlyActive":
+          activityFactor = 1.375;
+          break;
+        case "moderatelyActive":
+          activityFactor = 1.55;
+          break;
+        case "veryActive":
+          activityFactor = 1.725;
+          break;
+        case "extraActive":
+          activityFactor = 1.9;
+          break;
+        default:
+          activityFactor = 1.2;
+      }
+
+      const TDEE = BMR! * activityFactor;
+      let maxCalories;
+
+      const convertToMeters = height / 100;
+      const heightSquares = Math.pow(convertToMeters, 2);
+      let bodyMassIndex = Math.floor(weight / heightSquares);
+
+      if (bodyMassIndex >= 30) {
+        // obesitas
+        maxCalories = TDEE * 0.05;
+      } else {
+        // normal
+        maxCalories = TDEE * 0.1;
+      }
+
+      const maxSugarPerGrams = maxCalories / 4; // Karena 1 gram gula = 4 kalori
+      setYourMaxSugar(maxSugarPerGrams);
+      setTdee(TDEE);
+    }
   }
 
   useEffect(() => {
     if (yourMaxSugar !== 0 && tdee !== 0) {
-      if (yourMaxSugar <= 5 && tdee >= 100) {
+      if (yourMaxSugar <= 10 || tdee >= 100) {
         setModalErrorBox(true);
       } else {
         setModalBox(true);
@@ -182,12 +192,13 @@ export default function DisplayInputUser() {
                 <input
                   type="number"
                   id="age"
-                  min={1}
-                  max={100}
+                  min={5}
+                  max={70}
                   className="inputField peer"
                   ref={ages}
                   onChange={handleValueInput}
                   value={mustFilled.age}
+                  maxLength={2}
                 />
                 <label
                   htmlFor="age"
@@ -209,7 +220,7 @@ export default function DisplayInputUser() {
                   type="number"
                   id="height"
                   min={20}
-                  max={300}
+                  max={200}
                   className="inputField peer"
                   ref={bodyHeight}
                   onChange={handleValueInput}
@@ -234,12 +245,13 @@ export default function DisplayInputUser() {
                 <input
                   type="number"
                   id="weight"
-                  min={5}
-                  max={150}
+                  min={10}
+                  max={100}
                   className="inputField peer"
                   ref={bodyWeight}
                   onChange={handleValueInput}
                   value={mustFilled.weight}
+                  maxLength={3}
                 />
                 <label
                   htmlFor="age"
@@ -310,7 +322,7 @@ export default function DisplayInputUser() {
           </div>
         </div>
         <div>
-          {modalBox && validate && (
+          {modalBox === true && validate === true && (
             <ModalBox
               setModalBox={setModalBox}
               yourMaxSugar={yourMaxSugar}
