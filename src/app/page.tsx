@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useHandleInput } from "./hooks/handle-input";
 import CalculateCaloriesError from "@/components/modalBox/layoutHorizontal/modalErrHor/calculateErr";
-import InputValidationError from "@/components/modalBox/layoutHorizontal/modalErrHor/inputValid";
 
 export default function DisplayInputUser() {
   const male = useRef<HTMLInputElement>(null);
@@ -18,7 +17,6 @@ export default function DisplayInputUser() {
   const [yourMaxSugar, setYourMaxSugar] = useState(0);
   const [tdee, setTdee] = useState(0);
   const [validate, setValidate] = useState(false);
-  const [inputValid, setInputValid] = useState(false);
 
   const { mustFilled, handleValueInput, isFormFilled, setMustFilled } =
     useHandleInput({
@@ -35,7 +33,7 @@ export default function DisplayInputUser() {
 
   function calculateMaxSugar() {
     if (maxAge > 2 || maxHeight > 3 || maxWeight > 3) {
-      setInputValid(true);
+      setModalErrorBox(true);
     } else {
       const age = parseInt(ages.current?.value || "0");
       const weight = parseInt(bodyWeight.current?.value || "0");
@@ -334,8 +332,6 @@ export default function DisplayInputUser() {
           {modalErrorBox && (
             <CalculateCaloriesError setModalBoxErr={setModalErrorBox} />
           )}
-
-          {inputValid && <InputValidationError setInputValid={setInputValid} />}
         </div>
       </div>
     </div>

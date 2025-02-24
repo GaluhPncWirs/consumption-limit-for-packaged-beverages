@@ -7,6 +7,7 @@ import LayoutModalBoxs from "@/components/modalBox/layout";
 import { useEffect, useRef, useState } from "react";
 import AddProductError from "@/components/modalBox/layoutVertical/modalErrVer/addError";
 import { getDataProduct } from "@/getDataFromApi/getProduct";
+import ConfirmAddProduct from "@/components/modalBox/layoutVertical/modalConfirm/confirm";
 
 export default function AddProduct() {
   const path = usePathname();
@@ -262,6 +263,8 @@ export default function AddProduct() {
               )}
             </LayoutModalBoxs>
           )}
+
+          <ConfirmAddProduct />
 
           {modalErr && <AddProductError setModalOnclick={setModalErr} />}
         </div>
