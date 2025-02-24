@@ -10,7 +10,7 @@ import Educations from "@/components/educationComp/educations";
 import { useHandleInput } from "../../hooks/handle-input";
 import { getDataFunFact } from "@/getDataFromApi/getFunFact";
 import { getVideoEducations } from "@/getDataFromApi/getVideoEdu";
-import ModalProductNone from "@/components/modalBox/modalError";
+import FindProductError from "@/components/modalBox/layoutHorizontal/modalErrHor/findProdErr";
 
 export default function MainContent() {
   const sugarContentInsideProductRef = useRef<HTMLInputElement>(null);
@@ -134,7 +134,7 @@ export default function MainContent() {
 
     if (query !== "") {
       const filterSearchProduct = product.filter((item: any) => {
-        return item.nameProduct.toLowerCase().startsWith(query.toLowerCase());
+        return item.nameProduct?.toLowerCase().startsWith(query.toLowerCase());
       });
       setResult(filterSearchProduct);
       setActiveIndex(-1);
@@ -349,7 +349,7 @@ export default function MainContent() {
           </div>
         </div>
 
-        {modalBox && <ModalProductNone setModalBox={setModalBox} />}
+        {modalBox && <FindProductError setModalBoxErr={setModalBox} />}
 
         <div className="mx-5">
           <h1 className="text-sm mx-10 text-end max-[640px]:mx-0 max-[640px]:text-xs lg:mx-5">

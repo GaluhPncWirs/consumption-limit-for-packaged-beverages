@@ -5,7 +5,7 @@ import NavigasiBar from "@/components/navbar/navigasiBar";
 import { useHandleInput } from "@/app/hooks/handle-input";
 import LayoutModalBoxs from "@/components/modalBox/layout";
 import { useEffect, useRef, useState } from "react";
-import ModalError from "@/components/modalBox/err";
+import AddProductError from "@/components/modalBox/layoutVertical/modalErrVer/addError";
 import { getDataProduct } from "@/getDataFromApi/getProduct";
 
 export default function AddProduct() {
@@ -87,7 +87,7 @@ export default function AddProduct() {
 
     if (query !== "") {
       const filterSearchProduct = findData.filter((item: any) => {
-        return item.nameProduct.toLowerCase().startsWith(query.toLowerCase());
+        return item.nameProduct?.toLowerCase().startsWith(query.toLowerCase());
       });
       setResult(filterSearchProduct);
     } else {
@@ -263,7 +263,7 @@ export default function AddProduct() {
             </LayoutModalBoxs>
           )}
 
-          {modalErr && <ModalError setModal={setModalErr} />}
+          {modalErr && <AddProductError setModalOnclick={setModalErr} />}
         </div>
       </div>
     </div>
