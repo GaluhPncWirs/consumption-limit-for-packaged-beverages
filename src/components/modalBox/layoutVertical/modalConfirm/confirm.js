@@ -1,27 +1,43 @@
 import IconWarning from "@/components/warningIcon/icon";
 import LayoutModalVertical from "../modalVer";
 
-export default function ConfirmAddProduct() {
+export default function ConfirmAddProduct({ setIsConfirm }) {
   return (
     <LayoutModalVertical>
-      <div className="flex flex-col justify-center items-center h-full gap-y-4">
+      <div className="flex flex-col justify-center items-center h-full gap-y-3">
         <IconWarning />
-        <div>
+        <div className="w-full">
           <h1 className="text-xl text-center font-semibold">
             Apakah Anda Yakin ?
           </h1>
-          <ul className="mt-2">
-            <li>Nama Produk : Adem Sari Sparkling</li>
-            <li>Kandungan Gula Minuman : 35</li>
-            <li>Takaran Saji Per Kemasan : 1</li>
-            <li>Volume Kemasan (ml) : 320</li>
+          <ul className="mt-2 flex flex-col justify-center items-center">
+            <li>
+              Nama Produk :{" "}
+              <span className="font-semibold">Adem Sari Sparkling</span>
+            </li>
+            <li>
+              Kandungan Gula Minuman : <span className="font-semibold">35</span>
+            </li>
+            <li>
+              Takaran Saji Per Kemasan :{" "}
+              <span className="font-semibold">1</span>
+            </li>
+            <li>
+              Volume Kemasan (ml) : <span className="font-semibold">320</span>
+            </li>
           </ul>
         </div>
         <div className="bg-green-400 rounded-b-xl flex justify-around items-center w-full py-1">
-          <button className="hover:bg-green-600 text-lg font-semibold w-1/3 rounded-lg">
+          <button
+            className="hover:bg-green-600 text-lg font-semibold w-1/3 rounded-lg"
+            onClick={() => setIsConfirm(true)}
+          >
             Ya
           </button>
-          <button className="hover:bg-green-600 text-lg font-semibold w-1/3 rounded-lg">
+          <button
+            className="hover:bg-green-600 text-lg font-semibold w-1/3 rounded-lg"
+            onClick={() => setIsConfirm(false)}
+          >
             Tidak
           </button>
         </div>

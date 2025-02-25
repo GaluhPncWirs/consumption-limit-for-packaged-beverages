@@ -18,13 +18,14 @@ export default function AddProduct() {
       takaranSaji: "",
       volume: "",
     });
-  const [modal, setModal] = useState(false);
   const [modalErr, setModalErr] = useState(false);
-  const [status, setStatus] = useState(null);
+  const [isStatus, setIsStatus] = useState<boolean | null>(null);
   const inputFieldNone = useRef(null);
   const [findData, setFindData] = useState([]);
   const [searchProduk, setSearchProduk] = useState<string>("");
   const [result, setResult] = useState([]);
+  const [isConfirm, setIsConfirm] = useState(false);
+  const [modalSuccess, setModalSuccess] = useState(false);
 
   // Tambah Data
   async function handleAddProduct(event: any) {
@@ -34,37 +35,54 @@ export default function AddProduct() {
       event.target.nameProduct.value.trim() === ""
     ) {
       setModalErr(true);
+      return;
     } else {
-      setModal(true);
+      setModalSuccess(true);
+    }
+  }
 
+  useEffect(() => {
+    async function handleConfirmAddProduct() {
       // total gula
-      const gula = event.target.kandunganGula.value;
-      const takaranSaji = Number(event.target.takaranSaji.value);
+      const gula = Number(mustFilled.kandunganGula);
+      const takaranSaji = Number(mustFilled.takaranSaji);
       const totalSugars = gula * takaranSaji;
 
       // huruf kapital setiap huruf pertama
-      const nameProductValue = event.target.nameProduct.value;
+      const nameProductValue = mustFilled.nameProduct;
       const eachCapitalFirstWord = nameProductValue
         .split(" ")
         .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(" ");
 
-      const res = await fetch("/api/addData", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          nameProduct: eachCapitalFirstWord,
-          sugars: Math.floor(totalSugars),
-          volume: Number(event.target.volume.value),
-        }),
-      });
-
-      const resStatus = await res.json();
-      setStatus(resStatus.status);
+      try {
+        const res = await fetch("/api/addData", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nameProduct: eachCapitalFirstWord,
+            sugars: Math.floor(totalSugars),
+            volume: Number(mustFilled.volume),
+          }),
+        });
+        const resStatus = await res.json();
+        console.log("Response dari API:", resStatus);
+        setIsStatus(resStatus.status);
+      } catch (error) {
+        console.error("Gagal mengirim data:", error);
+        setIsStatus(false);
+      }
     }
-  }
+
+    if (isConfirm) {
+      handleConfirmAddProduct();
+    }
+  }, [isConfirm, mustFilled]);
+
+  console.log(isConfirm);
+  console.log(isStatus);
 
   useEffect(() => {
     setMustFilled({
@@ -73,7 +91,7 @@ export default function AddProduct() {
       takaranSaji: "",
       volume: "",
     });
-  }, [modal, setMustFilled, modalErr]);
+  }, [modalSuccess, setMustFilled, modalErr]);
 
   // Cari Data Produk
   useEffect(() => {
@@ -248,23 +266,23 @@ export default function AddProduct() {
             </div>
           </div>
 
-          {modal && (
+          {modalSuccess && <ConfirmAddProduct setIsConfirm={setIsConfirm} />}
+
+          {isConfirm === true && (
             <LayoutModalBoxs>
-              {status === true ? (
+              {isStatus === true ? (
                 <LayoutModalBoxs.ModalAddProductSuccess
-                  setModalOnclick={setModal}
+                  setModalOnclick={setModalSuccess}
                 />
-              ) : status === false ? (
+              ) : isStatus === false ? (
                 <LayoutModalBoxs.ModalAddProductSame
-                  setModalOnclick={setModal}
+                  setModalOnclick={setModalSuccess}
                 />
               ) : (
                 <LayoutModalBoxs.LoadingAnimation />
               )}
             </LayoutModalBoxs>
           )}
-
-          <ConfirmAddProduct />
 
           {modalErr && <AddProductError setModalOnclick={setModalErr} />}
         </div>
