@@ -52,6 +52,7 @@ export default function AddProduct() {
             setIsConfirm={setIsConfirm}
             onConfirm={onConfirm}
             setModalSuccess={setModalSuccess}
+            mustFilled={mustFilled}
           />
         );
       });
@@ -127,8 +128,8 @@ export default function AddProduct() {
     <div>
       <NavigasiBar path={path} props={""} />
       <div className="h-screen flex flex-col justify-center items-center">
-        <div className="bg-green-300 w-2/5 rounded-xl mt-16 max-[640px]:w-11/12 sm:w-10/12 md:w-9/12 lg:w-2/3 py-3">
-          <h1 className="text-xl font-semibold text-center mt-7">
+        <div className="bg-[#73EC8B] inset-0 bg-gradient-to-b from-transparent via-black/5 to-black/5 w-2/5 rounded-xl mt-16 max-[640px]:w-11/12 sm:w-10/12 md:w-9/12 lg:w-2/3 py-3">
+          <h1 className="text-2xl font-semibold text-center mt-5 mb-3">
             Penambahan Produk Minuman
           </h1>
           <div className="flex p-5 items-center justify-evenly">
@@ -238,7 +239,7 @@ export default function AddProduct() {
                 />
                 <span>Tambah Produk</span>
               </button>
-              <span className="text-red-500 font-semibold text-sm text-center">
+              <span className="text-[#F93827] font-semibold text-sm text-center">
                 *Tolong Untuk Digunakan Secara Bijak
               </span>
             </form>

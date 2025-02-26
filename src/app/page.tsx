@@ -133,7 +133,7 @@ export default function DisplayInputUser() {
   return (
     <div className="max-w-2xl mx-auto flex flex-col items-center justify-center h-screen">
       <div className="w-full">
-        <div className="bg-[#73EC8B] rounded-lg py-9 px-5 max-w-xl mx-auto shadow-lg max-[640px]:max-w-md">
+        <div className="bg-[#73EC8B] rounded-lg py-9 px-5 max-w-xl mx-auto shadow-lg max-[640px]:max-w-md inset-0 bg-gradient-to-b from-transparent via-black/5 to-black/5">
           {/* <div className="mb-5 text-center text-lg font-semibold">
       <h2>
         silahkan inputkan di bawah ini agar bisa mengetahui berapa
@@ -281,7 +281,7 @@ export default function DisplayInputUser() {
                 </div>
                 <select
                   id="activityLevel"
-                  className="cursor-pointer bg-[#B6FFA1] rounded-md p-2 text-sm max-[640px]:w-full sm:w-full"
+                  className="cursor-pointer bg-[#54C392] rounded-md p-2 text-sm max-[640px]:w-full sm:w-full"
                   ref={activityLevel}
                   value={mustFilled.activityLevel}
                   onChange={handleValueInput}
@@ -313,7 +313,7 @@ export default function DisplayInputUser() {
             <button
               onClick={() => calculateMaxSugar()}
               disabled={!isFormFilled()}
-              className="disabled:cursor-not-allowed mt-8 mx-auto py-1 text-center rounded-md bg-[#16C47F] hover:bg-emerald-500 cursor-pointer font-semibold px-7 text-lg"
+              className="disabled:cursor-not-allowed mt-8 mx-auto py-1 text-center rounded-md bg-[#15B392] hover:bg-emerald-500 cursor-pointer font-semibold px-7 text-lg"
             >
               Hitung
             </button>

@@ -5,6 +5,7 @@ export default function ConfirmAddProduct({
   setIsConfirm,
   onConfirm,
   setModalSuccess,
+  mustFilled,
 }) {
   const handleConfirm = () => {
     setIsConfirm(true);
@@ -23,17 +24,19 @@ export default function ConfirmAddProduct({
           <ul className="mt-2 flex flex-col justify-center items-center">
             <li>
               Nama Produk :{" "}
-              <span className="font-semibold">Adem Sari Sparkling</span>
+              <span className="font-semibold">{mustFilled.nameProduct}</span>
             </li>
             <li>
-              Kandungan Gula Minuman : <span className="font-semibold">35</span>
+              Kandungan Gula Minuman :{" "}
+              <span className="font-semibold">{mustFilled.kandunganGula}</span>
             </li>
             <li>
               Takaran Saji Per Kemasan :{" "}
-              <span className="font-semibold">1</span>
+              <span className="font-semibold">{mustFilled.takaranSaji}</span>
             </li>
             <li>
-              Volume Kemasan (ml) : <span className="font-semibold">320</span>
+              Volume Kemasan (ml) :{" "}
+              <span className="font-semibold">{mustFilled.volume}</span>
             </li>
           </ul>
         </div>

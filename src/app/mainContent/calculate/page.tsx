@@ -205,7 +205,7 @@ export default function MainContent() {
     <div className="pt-24 pb-14">
       <NavigasiBar props={backToInput} path={path} />
       <div
-        className={`bg-green-300 flex flex-col justify-center px-5 rounded-lg py-10 mx-auto ${
+        className={`bg-[#73EC8B] flex flex-col justify-center px-5 rounded-lg py-10 mx-auto inset-0 bg-gradient-to-b from-transparent via-black/5 to-black/5 ${
           fillBottle.length > 0
             ? `w-11/12`
             : `w-1/2 max-[640px]:w-11/12 sm:w-11/12 md:w-3/5 lg:w-1/2`
@@ -250,15 +250,15 @@ export default function MainContent() {
                 <div className={`${selectedProduct && `hidden`}`}>
                   {searchProduk !== "" && result.length > 0 && (
                     <ul
-                      className="p-3 bg-green-200 absolute z-10 w-full text-blue-600 font-semibold max-h-40 overflow-y-auto rounded-b-lg"
+                      className="p-3 bg-green-300 absolute z-10 w-full text-[#333333] font-medium max-h-40 overflow-y-auto rounded-b-lg"
                       ref={listRef}
                     >
                       {result.map((item: any, i: number) => (
                         <li
                           key={item.id}
                           onClick={() => handleItemClick(item)}
-                          className={`cursor-pointer hover:bg-green-300 mb-1 ${
-                            activeIndex === i ? "bg-green-300" : ""
+                          className={`cursor-pointer hover:bg-green-400 mb-1 ${
+                            activeIndex === i ? "bg-green-400" : ""
                           }`}
                         >
                           {item.nameProduct}
@@ -280,7 +280,7 @@ export default function MainContent() {
                 />
                 <div>
                   <span
-                    className="text-[0.65rem] text-red-600 font-semibold cursor-pointer select-none"
+                    className="text-[0.65rem] text-[#F93827] font-semibold cursor-pointer select-none"
                     onClick={() => setServingSize((prev) => !prev)}
                   >
                     *Gula Disini Sudah di Totalkan Dengan Takaran Saji Per
