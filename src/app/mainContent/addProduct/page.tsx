@@ -26,6 +26,7 @@ export default function AddProduct() {
   const [result, setResult] = useState([]);
   const [isConfirm, setIsConfirm] = useState(false);
   const [modalSuccess, setModalSuccess] = useState(false);
+  const [modalContent, setModalContent] = useState<React.ReactNode>(false);
 
   // Tambah Data
   async function handleAddProduct(event: any) {
@@ -36,62 +37,70 @@ export default function AddProduct() {
     ) {
       setModalErr(true);
       return;
-    } else {
-      setModalSuccess(true);
+    }
+
+    setModalSuccess(true);
+
+    const waitForConfirmation = () => {
+      return new Promise((resolve) => {
+        const onConfirm = () => {
+          resolve(true);
+        };
+
+        setModalContent(
+          <ConfirmAddProduct
+            setIsConfirm={setIsConfirm}
+            onConfirm={onConfirm}
+            setModalSuccess={setModalSuccess}
+          />
+        );
+      });
+    };
+
+    await waitForConfirmation();
+
+    // Lanjutkan dengan logika pengiriman data
+    const gula = Number(event.target.kandunganGula.value);
+    const takaranSaji = Number(event.target.takaranSaji.value);
+    const totalSugars = gula * takaranSaji;
+
+    const nameProductValue = event.target.nameProduct.value;
+    const eachCapitalFirstWord = nameProductValue
+      .split(" ")
+      .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+
+    try {
+      const res = await fetch("/api/addData", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nameProduct: eachCapitalFirstWord,
+          sugars: Math.floor(totalSugars),
+          volume: Number(event.target.volume.value),
+        }),
+      });
+      const resStatus = await res.json();
+      // console.log("Response dari API:", resStatus);
+      setIsStatus(resStatus.status);
+    } catch (error) {
+      // console.error("Gagal mengirim data:", error);
+      setIsStatus(false);
     }
   }
 
   useEffect(() => {
-    async function handleConfirmAddProduct() {
-      // total gula
-      const gula = Number(mustFilled.kandunganGula);
-      const takaranSaji = Number(mustFilled.takaranSaji);
-      const totalSugars = gula * takaranSaji;
-
-      // huruf kapital setiap huruf pertama
-      const nameProductValue = mustFilled.nameProduct;
-      const eachCapitalFirstWord = nameProductValue
-        .split(" ")
-        .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ");
-
-      try {
-        const res = await fetch("/api/addData", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            nameProduct: eachCapitalFirstWord,
-            sugars: Math.floor(totalSugars),
-            volume: Number(mustFilled.volume),
-          }),
-        });
-        const resStatus = await res.json();
-        console.log("Response dari API:", resStatus);
-        setIsStatus(resStatus.status);
-      } catch (error) {
-        console.error("Gagal mengirim data:", error);
-        setIsStatus(false);
-      }
+    if (isStatus !== null) {
+      setMustFilled({
+        nameProduct: "",
+        kandunganGula: "",
+        takaranSaji: "",
+        volume: "",
+      });
     }
-
-    if (isConfirm) {
-      handleConfirmAddProduct();
-    }
-  }, [isConfirm, mustFilled]);
-
-  console.log(isConfirm);
-  console.log(isStatus);
-
-  useEffect(() => {
-    setMustFilled({
-      nameProduct: "",
-      kandunganGula: "",
-      takaranSaji: "",
-      volume: "",
-    });
-  }, [modalSuccess, setMustFilled, modalErr]);
+  }, [isStatus, setMustFilled]);
 
   // Cari Data Produk
   useEffect(() => {
@@ -266,17 +275,17 @@ export default function AddProduct() {
             </div>
           </div>
 
-          {modalSuccess && <ConfirmAddProduct setIsConfirm={setIsConfirm} />}
+          {modalSuccess && modalContent}
 
-          {isConfirm === true && (
+          {isConfirm && (
             <LayoutModalBoxs>
               {isStatus === true ? (
                 <LayoutModalBoxs.ModalAddProductSuccess
-                  setModalOnclick={setModalSuccess}
+                  setModalOnclick={setIsConfirm}
                 />
               ) : isStatus === false ? (
                 <LayoutModalBoxs.ModalAddProductSame
-                  setModalOnclick={setModalSuccess}
+                  setModalOnclick={setIsConfirm}
                 />
               ) : (
                 <LayoutModalBoxs.LoadingAnimation />
