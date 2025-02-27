@@ -10,7 +10,7 @@ export default function AboutProject() {
     <div className="max-[640px]:h-full sm:h-full lg:h-screen">
       <NavigasiBar path={path} props={""} />
       <div className="flex pt-20 pb-5 gap-5 mx-5 h-full max-[640px]:flex-col sm:flex-col md:flex-row lg:flex-row">
-        <div className="bg-green-400 rounded-xl px-5 py-10 md:basis-1/3 lg:basis-1/4">
+        <div className="bg-[#73EC8B] rounded-xl px-5 py-10 md:basis-1/3 lg:basis-1/4 inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10">
           <div className="flex justify-evenly h-full items-center flex-col gap-5">
             <div className="sm:flex sm:justify-center sm:items-center sm:w-11/12 sm:gap-5 max-[640px]:flex max-[640px]:justify-center max-[640px]:items-center max-[640px]:gap-5 max-[640px]:w-full md:flex-col">
               <Image
@@ -41,7 +41,7 @@ export default function AboutProject() {
             </div>
           </div>
         </div>
-        <div className="bg-green-300 rounded-xl p-8 md:basis-2/3 lg:basis-9/12">
+        <div className="bg-[#73EC8B] rounded-xl p-8 md:basis-2/3 lg:basis-9/12 inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10">
           <h1 className="text-2xl font-bold text-center mb-5">
             Tentang Project
           </h1>

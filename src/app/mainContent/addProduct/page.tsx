@@ -127,15 +127,15 @@ export default function AddProduct() {
   return (
     <div>
       <NavigasiBar path={path} props={""} />
-      <div className="h-screen flex flex-col justify-center items-center">
-        <div className="bg-[#73EC8B] inset-0 bg-gradient-to-b from-transparent via-black/5 to-black/5 w-2/5 rounded-xl mt-16 max-[640px]:w-11/12 sm:w-10/12 md:w-9/12 lg:w-2/3 py-3">
+      <div className="flex flex-col justify-center items-center max-[640px]:h-full max-[640px]:py-7 sm:h-full sm:py-7 md:h-screen">
+        <div className="bg-[#73EC8B] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 w-2/5 rounded-xl mt-16 max-[640px]:w-11/12 sm:w-10/12 md:w-4/5 lg:w-2/3 py-3">
           <h1 className="text-2xl font-semibold text-center mt-5 mb-3">
             Penambahan Produk Minuman
           </h1>
-          <div className="flex p-5 items-center justify-evenly">
+          <div className="flex items-center justify-evenly max-[640px]:flex-col-reverse max-[640px]:gap-10 sm:flex-col-reverse sm:gap-10 md:flex-row md:gap-7 md:p-9 lg:p-6 lg:gap-5">
             <form
               onSubmit={(e) => handleAddProduct(e)}
-              className="flex flex-col gap-y-5 basis-1/2"
+              className="flex flex-col gap-y-5 basis-1/2 max-[640px]:w-4/5 sm:w-4/5 md:basis-1/2 lg:basis-1/2"
               autoComplete="off"
               ref={inputFieldNone}
             >
@@ -243,7 +243,7 @@ export default function AddProduct() {
                 *Tolong Untuk Digunakan Secara Bijak
               </span>
             </form>
-            <div className="bg-[#54C392] basis-2/5 h-5/6 rounded-lg">
+            <div className="bg-[#54C392] basis-2/5 h-5/6 rounded-lg max-[640px]:w-4/5 sm:w-3/4 md:basis-1/2 lg:basis-2/5">
               <h1 className="py-3 text-center font-semibold text-lg bg-[#15B392] rounded-t-lg">
                 Cek Produk Yang Tersedia
               </h1>

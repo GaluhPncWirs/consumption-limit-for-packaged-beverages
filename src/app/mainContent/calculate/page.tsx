@@ -205,7 +205,7 @@ export default function MainContent() {
     <div className="pt-24 pb-14">
       <NavigasiBar props={backToInput} path={path} />
       <div
-        className={`bg-[#73EC8B] flex flex-col justify-center px-5 rounded-lg py-10 mx-auto inset-0 bg-gradient-to-b from-transparent via-black/5 to-black/5 ${
+        className={`bg-[#73EC8B] flex flex-col justify-center px-5 rounded-lg py-10 mx-auto inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 ${
           fillBottle.length > 0
             ? `w-11/12`
             : `w-1/2 max-[640px]:w-11/12 sm:w-11/12 md:w-3/5 lg:w-1/2`
