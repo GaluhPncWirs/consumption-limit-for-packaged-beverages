@@ -101,7 +101,7 @@ export default function Visualization({
       <div className="w-11/12 h-64 max-[640px]:w-full sm:w-11/12 lg:w-3/4 xl:w-1/2">
         <Bar data={data} options={options} />
       </div>
-      <p className="mt-3 mx-5 text-justify max-[640px]:text-sm sm:text-sm md:text-base">
+      <p className="mt-3 mx-5 text-justify max-[640px]:text-sm sm:text-sm md:text-lg">
         Anda berisiko mengalami obesitas dan diabetes jika terus mengonsumsi
         minuman ini sebanyak {volumeProduk} ml.
       </p>

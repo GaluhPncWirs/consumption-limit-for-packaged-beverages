@@ -15,7 +15,7 @@ export default function ConfirmAddProduct({
 
   return (
     <LayoutModalVertical>
-      <div className="flex flex-col justify-center items-center h-full gap-y-3">
+      <div className="flex flex-col justify-center items-center h-full gap-y-4 pt-3">
         <IconWarning />
         <div className="w-full">
           <h1 className="text-xl text-center font-semibold">
@@ -40,7 +40,7 @@ export default function ConfirmAddProduct({
             </li>
           </ul>
         </div>
-        <div className="bg-green-400 rounded-b-xl flex justify-around items-center w-full py-1">
+        <div className="bg-green-400 rounded-b-xl flex justify-around items-center w-full h-full">
           <button
             className="hover:bg-green-600 text-lg font-semibold w-1/3 rounded-lg"
             onClick={handleConfirm}
