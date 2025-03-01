@@ -4,8 +4,14 @@ import IconWarning from "../warningIcon/icon";
 
 export default function LayoutModalBoxs({ children }) {
   return (
-    <div className="bg-green-500 shadow-lg shadow-slate-700 w-1/3 rounded-xl absolute top-1/2 left-1/2 h-1/3 z-30 -translate-x-1/2 -translate-y-1/2 max-[640px]:w-9/12 sm:w-3/5 md:w-1/2 lg:w-1/3">
-      <div className="h-full">{children}</div>
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-30">
+      <div
+        className="bg-green-500 w-1/3 rounded-xl max-h-[80vh]
+    absolute top-1/2 left-1/2 z-40 -translate-x-1/2 -translate-y-1/2 
+    max-[640px]:w-9/12 sm:w-3/5 md:w-1/2 lg:w-1/3"
+      >
+        <div className="h-full">{children}</div>
+      </div>
     </div>
   );
 }
@@ -14,7 +20,7 @@ function ModalAddProductSame({ setModalOnclick }) {
   return (
     <div className="h-full flex flex-col gap-5 pt-5 justify-center">
       <IconWarning />
-      <div className="text-center">
+      <div className="text-center max-[640px]:mx-5">
         <h1 className="font-bold text-xl">Produk Yang Ditambahkan Sudah Ada</h1>
         <p className="font-medium mt-3">
           Silahkan Input Kembali Produk Yang Berbeda

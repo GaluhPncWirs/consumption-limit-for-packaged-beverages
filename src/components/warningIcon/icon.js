@@ -1,8 +1,8 @@
 export default function IconWarning() {
   return (
-    <div className="mx-auto flex size-14 shrink-0 items-center justify-center rounded-full bg-red-300">
+    <div className="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-300">
       <svg
-        className="size-10 text-red-600"
+        className="size-9 text-red-600"
         fill="none"
         viewBox="0 0 24 24"
         strokeWidth="1.5"

@@ -135,11 +135,11 @@ export default function DisplayInputUser() {
       <div className="w-full">
         <div className="bg-[#73EC8B] rounded-lg py-9 px-5 max-w-xl mx-auto shadow-lg max-[640px]:max-w-md inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10">
           {/* <div className="mb-5 text-center text-lg font-semibold">
-      <h2>
-        silahkan inputkan di bawah ini agar bisa mengetahui berapa
-        kalori anda{" "}
-      </h2>
-    </div> */}
+  <h2>
+    silahkan inputkan di bawah ini agar bisa mengetahui berapa
+    kalori anda{" "}
+  </h2>
+</div> */}
           <h1 className="text-center mb-8 text-xl font-bold max-[640px]:text-lg">
             Penghitung Batas Aman Konsumsi Produk Manis Kemasan
           </h1>
@@ -320,7 +320,7 @@ export default function DisplayInputUser() {
           </div>
         </div>
         <div>
-          {modalBox === true && validate === true && (
+          {validate === true && (
             <ModalBox
               setModalBox={setModalBox}
               yourMaxSugar={yourMaxSugar}
@@ -334,6 +334,11 @@ export default function DisplayInputUser() {
           )}
         </div>
       </div>
+      {validate === true || modalErrorBox === true ? (
+        <div className="h-screen w-screen absolute inset-0 bg-black/50"></div>
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 }

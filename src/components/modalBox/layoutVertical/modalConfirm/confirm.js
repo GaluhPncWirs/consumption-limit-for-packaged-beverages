@@ -40,7 +40,7 @@ export default function ConfirmAddProduct({
             </li>
           </ul>
         </div>
-        <div className="bg-green-400 rounded-b-xl flex justify-around items-center w-full h-full">
+        <div className="bg-green-400 rounded-b-xl flex justify-around items-center w-full h-full max-[640px]:py-2 sm:py-2 md:py-3">
           <button
             className="hover:bg-green-600 text-lg font-semibold w-1/3 rounded-lg"
             onClick={handleConfirm}

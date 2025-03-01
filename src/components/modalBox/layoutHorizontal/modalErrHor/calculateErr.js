@@ -6,7 +6,7 @@ export default function CalculateCaloriesError({ setModalBoxErr }) {
       modalTitle={"Perhitungan Tidak Valid"}
       description={"Hasilnya Tidak Memenuhi Standar, Silahkan Input Kembali !"}
     >
-      <div className="h-1/4 bg-green-400 rounded-b-xl flex justify-center items-center hover:bg-green-600">
+      <div className="h-1/4 bg-green-500 rounded-b-xl flex justify-center items-center hover:bg-green-600">
         <button
           className="text-xl font-semibold w-full"
           onClick={() => setModalBoxErr(false)}
