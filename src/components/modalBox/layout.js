@@ -54,7 +54,7 @@ function ModalAddProductSuccess({ setModalOnclick }) {
 
 function LoadingAnimation() {
   return (
-    <div className="w-full flex justify-center items-center h-full">
+    <div className="w-full flex justify-center items-center h-full py-20">
       <Image
         src={"/images/loading.png"}
         alt="Loading"

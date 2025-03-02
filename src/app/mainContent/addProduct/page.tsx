@@ -128,7 +128,7 @@ export default function AddProduct() {
     <div>
       <NavigasiBar path={path} props={""} />
       <div className="flex flex-col justify-center items-center max-[640px]:h-full max-[640px]:py-7 sm:h-full sm:py-7 md:h-screen">
-        <div className="bg-[#73EC8B] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 w-2/5 rounded-xl mt-16 max-[640px]:w-11/12 sm:w-10/12 md:w-4/5 lg:w-2/3 py-3">
+        <div className="bg-[#73EC8B] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 w-2/5 rounded-xl mt-16 max-[640px]:w-11/12 sm:w-10/12 md:w-4/5 lg:w-2/3 py-3 shadow-lg shadow-slate-800">
           <h1 className="text-2xl font-semibold text-center mt-5 mb-3 max-[640px]:mb-7 sm:mb-7 md:mb-0">
             Penambahan Produk Minuman
           </h1>

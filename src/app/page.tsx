@@ -334,11 +334,6 @@ export default function DisplayInputUser() {
           )}
         </div>
       </div>
-      {validate === true || modalErrorBox === true ? (
-        <div className="h-screen w-screen absolute inset-0 bg-black/50"></div>
-      ) : (
-        <div></div>
-      )}
     </div>
   );
 }
