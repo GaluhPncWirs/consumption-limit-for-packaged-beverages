@@ -80,7 +80,7 @@ export default function MainContent() {
       setVolumeProduk(totalVolumeInsideProduct);
 
       const resultTotalContentProduct =
-        sugarContentInsideProduct / totalVolumeInsideProduct;
+        sugarContentInsideProduct / totalVolumeInsideProduct; //ubah total gula menjadi per 1 ml
 
       const maxConsumptionMl = getYourMaxSugars / resultTotalContentProduct;
 

@@ -29,36 +29,45 @@ export default function Visualization({
   getYourMaxSugars: number;
 }) {
   const [riskLevel, setRiskLevel] = useState([0, 0]);
-  const sugarConsume = (sugarProduk / volumeProduk) * volumeProduk;
+  const sugarConsume = (sugarProduk / volumeProduk) * sugarProduk;
 
   useEffect(() => {
-    const sugarRatio = Math.floor(sugarConsume / getYourMaxSugars);
+    const sugarRatio = Math.round(sugarConsume / getYourMaxSugars);
     let calculateRiskObesity = 0;
     let calculateRiskDiabetes = 0;
 
     if (sugarRatio <= 1) {
-      calculateRiskObesity = 10;
+      // ≤ 100% batas harian (≤ 1x) → Risiko rendah.
+      calculateRiskObesity = 5;
+      calculateRiskDiabetes = 10;
     } else if (sugarRatio > 1 && sugarRatio <= 1.5) {
-      calculateRiskObesity = 25;
+      // 101% - 150% dari batas harian (1 - 1.5x) → Risiko sedang.
+      calculateRiskObesity = 20;
+      calculateRiskDiabetes = 30;
     } else if (sugarRatio > 1.5 && sugarRatio <= 2) {
-      calculateRiskObesity = 50;
+      // 151% - 200% dari batas harian (1.5 - 2x) → Risiko tinggi.
+      calculateRiskObesity = 45;
+      calculateRiskDiabetes = 55;
     } else if (sugarRatio >= 2) {
-      calculateRiskObesity = 75;
+      // > 200% dari batas harian (>2x) → Risiko sangat tinggi.
+      calculateRiskObesity = 80;
+      calculateRiskDiabetes = 90;
     } else {
       calculateRiskObesity = 0;
-    }
-
-    if (sugarRatio <= 1) {
-      calculateRiskDiabetes = 20;
-    } else if (sugarRatio > 1 && sugarRatio <= 1.5) {
-      calculateRiskDiabetes = 40;
-    } else if (sugarRatio > 1.5 && sugarRatio <= 2) {
-      calculateRiskDiabetes = 60;
-    } else if (sugarRatio >= 2) {
-      calculateRiskDiabetes = 80;
-    } else {
       calculateRiskDiabetes = 0;
     }
+
+    // if (sugarRatio <= 1) {
+    //   calculateRiskDiabetes = 20;
+    // } else if (sugarRatio > 1 && sugarRatio <= 1.5) {
+    //   calculateRiskDiabetes = 40;
+    // } else if (sugarRatio > 1.5 && sugarRatio <= 2) {
+    //   calculateRiskDiabetes = 60;
+    // } else if (sugarRatio >= 2) {
+    //   calculateRiskDiabetes = 80;
+    // } else {
+    //   calculateRiskDiabetes = 0;
+    // }
 
     setRiskLevel([calculateRiskObesity, calculateRiskDiabetes]);
   }, [sugarConsume, getYourMaxSugars]);
@@ -104,6 +113,11 @@ export default function Visualization({
       <p className="mt-3 mx-5 text-justify max-[640px]:text-sm sm:text-sm md:text-lg">
         Anda berisiko mengalami obesitas dan diabetes jika terus mengonsumsi
         minuman ini sebanyak {volumeProduk} ml.
+      </p>
+      <p>
+        Estimasi risiko ini didasarkan pada konsumsi gula harian pengguna dan
+        bukan merupakan diagnosis medis. Untuk informasi lebih lanjut,
+        konsultasikan dengan tenaga medis profesional.
       </p>
     </div>
   );

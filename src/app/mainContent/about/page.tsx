@@ -6,6 +6,85 @@ import { usePathname } from "next/navigation";
 
 export default function AboutProject() {
   const path = usePathname();
+  // function calculateRisk(sugarIntake: number) {
+  //   /*
+  //   sugarIntake: jumlah konsumsi gula dalam gram per hari
+
+  //   Berdasarkan penelitian:
+  //   - Konsumsi 1-2 porsi minuman manis per hari (~35-70g gula) meningkatkan risiko diabetes 26%
+  //   - Peningkatan 1 porsi minuman manis per hari (~35g gula) meningkatkan risiko diabetes 15%
+  //   - Konsumsi tinggi minuman manis berhubungan dengan kenaikan berat badan (obesitas)
+  //   */
+
+  //   let baseRiskDiabetes = 5; // Risiko dasar (%) tanpa konsumsi gula berlebih
+  //   let baseRiskObesity = 5;
+
+  //   // Risiko diabetes: setiap 35g gula = +15%
+  //   let riskDiabetes = baseRiskDiabetes + (sugarIntake / 35) * 15;
+
+  //   // Risiko obesitas: setiap 35g gula = +10%
+  //   let riskObesity = baseRiskObesity + (sugarIntake / 35) * 10;
+
+  //   // Batas maksimum risiko (misalnya, tidak lebih dari 90%)
+  //   riskDiabetes = Math.min(riskDiabetes, 90);
+  //   riskObesity = Math.min(riskObesity, 90);
+
+  //   return {
+  //     diabetesRisk: riskDiabetes.toFixed(2) + "%",
+  //     obesityRisk: riskObesity.toFixed(2) + "%",
+  //   };
+  // }
+
+  // // Contoh penggunaan
+  // console.log(calculateRisk(21)); // Konsumsi 50g gula per hari
+
+  function calculateRisk(sugarContent: number) {
+    /*
+    maxSugarIntake: Maksimal konsumsi gula per hari yang direkomendasikan (gram)
+    sugarContent: Kandungan gula dalam minuman kemasan (gram per 100ml)
+    drinkVolume: Volume minuman kemasan yang dikonsumsi (ml)
+    
+    Berdasarkan penelitian:
+    - Konsumsi 1-2 porsi minuman manis per hari (~35-70g gula) meningkatkan risiko diabetes 26%
+    - Peningkatan 1 porsi minuman manis per hari (~35g gula) meningkatkan risiko diabetes 15%
+    - Konsumsi tinggi minuman manis berhubungan dengan kenaikan berat badan (obesitas)
+    */
+
+    let baseRiskDiabetesNoFactor = 5; // Risiko dasar (%) tanpa konsumsi gula berlebih
+    let baseRiskDiabetesIfThereIsNoLifestyle = [20, 40]; // Risiko dasar (%) tanpa konsumsi gula berlebih
+    let baseRiskObesity = 5;
+
+    // // Hitung total konsumsi gula dari minuman kemasan
+    // let totalSugarIntake = (sugarContent / 100) * drinkVolume;
+
+    let riskDiabetes = baseRiskDiabetesNoFactor;
+    if (sugarContent > 0) {
+      if (sugarContent < 35) {
+        riskDiabetes += (sugarContent / 35) * 26; // Risiko proporsional di bawah 35g
+      } else if (sugarContent <= 70) {
+        riskDiabetes += 26; // Risiko maksimal untuk rentang 35-70g
+      } else {
+        riskDiabetes += 26 + ((sugarContent - 70) / 35) * 15; // Risiko tambahan jika >70g
+      }
+    }
+
+    // Risiko obesitas: setiap 35g gula = +10%
+    let riskObesity = baseRiskObesity + (sugarContent / 35) * 10;
+
+    // Batasi risiko maksimum (misalnya, tidak lebih dari 90%)
+    riskDiabetes = Math.min(riskDiabetes, 90);
+    riskObesity = Math.min(riskObesity, 90);
+
+    return {
+      totalSugarIntake: sugarContent.toFixed(2) + "g",
+      diabetesRisk: riskDiabetes.toFixed(2) + "%",
+      obesityRisk: riskObesity.toFixed(2) + "%",
+    };
+  }
+
+  // Contoh penggunaan
+  console.log(calculateRisk(22)); // Maksimal konsumsi 50g, minuman mengandung 10g/100ml, volume 250ml
+
   return (
     <div className="max-[640px]:h-full sm:h-full lg:h-screen">
       <NavigasiBar path={path} props={""} />

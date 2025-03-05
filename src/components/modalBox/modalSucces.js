@@ -14,7 +14,7 @@ export default function ModalBox({
     push("/mainContent/calculate");
   }
   return (
-    <div>
+    <div className="h-full w-full absolute inset-0 bg-black/50">
       <div className="text-[#333333] w-1/3 bg-green-400 z-40 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg flex flex-col justify-center items-center gap-4 max-[640px]:w-3/5 sm:w-3/5 md:w-2/5 lg:w-1/3 pt-5 shadow-lg shadow-slate-700">
         <Image
           src={"/images/check.png"}
