@@ -386,13 +386,13 @@ export default function MainContent() {
             <Educations funFactSugar={funFactSugar} randomVideo={randomVideo} />
           )}
 
-          {fillBottle.length === 1 && (
+          {/* {fillBottle.length === 1 && (
             <Visualization
               sugarProduk={sugarProduk}
               volumeProduk={volumeProduk}
               getYourMaxSugars={getYourMaxSugars}
             />
-          )}
+          )} */}
         </div>
       </div>
     </div>

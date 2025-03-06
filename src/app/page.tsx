@@ -133,7 +133,7 @@ export default function DisplayInputUser() {
   return (
     <div className="max-w-2xl mx-auto flex flex-col items-center justify-center h-screen">
       <div className="w-full">
-        <div className="bg-[#73EC8B] rounded-lg py-9 px-5 max-w-xl mx-auto shadow-lg max-[640px]:max-w-md inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10">
+        <div className="bg-[#73EC8B] rounded-lg py-9 px-5 max-w-xl mx-auto max-[640px]:max-w-md inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 shadow-lg shadow-slate-800">
           {/* <div className="mb-5 text-center text-lg font-semibold">
   <h2>
     silahkan inputkan di bawah ini agar bisa mengetahui berapa
@@ -141,7 +141,7 @@ export default function DisplayInputUser() {
   </h2>
 </div> */}
           <h1 className="text-center mb-8 text-xl font-bold max-[640px]:text-lg">
-            Penghitung Batas Aman Konsumsi Produk Manis Kemasan
+            Penghitung Kebutuhan Kalori Dan Gula Harian
           </h1>
           <form
             id="sugarForm"

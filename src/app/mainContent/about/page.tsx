@@ -6,37 +6,6 @@ import { usePathname } from "next/navigation";
 
 export default function AboutProject() {
   const path = usePathname();
-  // function calculateRisk(sugarIntake: number) {
-  //   /*
-  //   sugarIntake: jumlah konsumsi gula dalam gram per hari
-
-  //   Berdasarkan penelitian:
-  //   - Konsumsi 1-2 porsi minuman manis per hari (~35-70g gula) meningkatkan risiko diabetes 26%
-  //   - Peningkatan 1 porsi minuman manis per hari (~35g gula) meningkatkan risiko diabetes 15%
-  //   - Konsumsi tinggi minuman manis berhubungan dengan kenaikan berat badan (obesitas)
-  //   */
-
-  //   let baseRiskDiabetes = 5; // Risiko dasar (%) tanpa konsumsi gula berlebih
-  //   let baseRiskObesity = 5;
-
-  //   // Risiko diabetes: setiap 35g gula = +15%
-  //   let riskDiabetes = baseRiskDiabetes + (sugarIntake / 35) * 15;
-
-  //   // Risiko obesitas: setiap 35g gula = +10%
-  //   let riskObesity = baseRiskObesity + (sugarIntake / 35) * 10;
-
-  //   // Batas maksimum risiko (misalnya, tidak lebih dari 90%)
-  //   riskDiabetes = Math.min(riskDiabetes, 90);
-  //   riskObesity = Math.min(riskObesity, 90);
-
-  //   return {
-  //     diabetesRisk: riskDiabetes.toFixed(2) + "%",
-  //     obesityRisk: riskObesity.toFixed(2) + "%",
-  //   };
-  // }
-
-  // // Contoh penggunaan
-  // console.log(calculateRisk(21)); // Konsumsi 50g gula per hari
 
   function calculateRisk(sugarContent: number) {
     /*
@@ -89,7 +58,7 @@ export default function AboutProject() {
     <div className="max-[640px]:h-full sm:h-full lg:h-screen">
       <NavigasiBar path={path} props={""} />
       <div className="flex pt-20 pb-5 gap-5 mx-5 h-full max-[640px]:flex-col sm:flex-col md:flex-row lg:flex-row">
-        <div className="bg-[#73EC8B] rounded-xl px-5 py-10 md:basis-1/3 lg:basis-1/4 inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10">
+        <div className="bg-[#73EC8B] rounded-xl px-5 py-10 md:basis-1/3 lg:basis-1/4 inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 shadow-lg shadow-slate-800">
           <div className="flex justify-evenly h-full items-center flex-col gap-5">
             <div className="sm:flex sm:justify-center sm:items-center sm:w-11/12 sm:gap-5 max-[640px]:flex max-[640px]:justify-center max-[640px]:items-center max-[640px]:gap-5 max-[640px]:w-full md:flex-col">
               <Image
@@ -120,7 +89,7 @@ export default function AboutProject() {
             </div>
           </div>
         </div>
-        <div className="bg-[#73EC8B] rounded-xl p-8 md:basis-2/3 lg:basis-9/12 inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10">
+        <div className="bg-[#73EC8B] rounded-xl p-8 md:basis-2/3 lg:basis-9/12 inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 shadow-lg shadow-slate-800">
           <h1 className="text-2xl font-bold text-center mb-5">
             Tentang Project
           </h1>
