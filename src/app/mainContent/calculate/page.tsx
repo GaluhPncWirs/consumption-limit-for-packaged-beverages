@@ -1,6 +1,6 @@
 "use client";
 
-import Visualization from "@/components/visualisasi/layout";
+// import Visualization from "@/components/visualisasi/layout";
 import { getDataProduct } from "@/getDataFromApi/getProduct";
 import NavigasiBar from "@/components/navbar/navigasiBar";
 import Link from "next/link";
@@ -11,6 +11,7 @@ import { useHandleInput } from "../../hooks/handle-input";
 import { getDataFunFact } from "@/getDataFromApi/getFunFact";
 import { getVideoEducations } from "@/getDataFromApi/getVideoEdu";
 import FindProductError from "@/components/modalBox/layoutHorizontal/modalErrHor/findProdErr";
+import { getDataArtikel } from "@/getDataFromApi/getArtikel";
 
 export default function MainContent() {
   const sugarContentInsideProductRef = useRef<HTMLInputElement>(null);
@@ -39,6 +40,7 @@ export default function MainContent() {
   const focusInput = useRef<HTMLInputElement>(null);
   const [modalBox, setModalBox] = useState(false);
   const [remainingMl, setRemainingMl] = useState(0);
+  const [artikel, setArtikel] = useState([]);
 
   useEffect(() => {
     setMustFilled((prev: Object) => ({ ...prev, product: searchProduk }));
@@ -63,12 +65,19 @@ export default function MainContent() {
     });
   }, []);
 
+  useEffect(() => {
+    getDataArtikel((data: any) => {
+      setArtikel(data);
+    });
+  }, []);
+
   function calculateMaximal() {
     if (result.length > 0) {
       setEducations(true);
       if (funFactSugar.length > 0 && randomVideo.length > 0) {
         setFunFactSugar((prev) => [...prev.sort(() => Math.random() - 0.5)]);
         setRandomVideo((prev) => [...prev.sort(() => Math.random() - 0.5)]);
+        setArtikel((prev) => [...prev.sort(() => Math.random() - 0.5)]);
       }
       const sugarContentInsideProduct = parseFloat(
         sugarContentInsideProductRef.current?.value || "0"
@@ -203,7 +212,7 @@ export default function MainContent() {
 
   return (
     <div>
-      <NavigasiBar props={backToInput} path={path} />
+      <NavigasiBar path={path} props={backToInput} />
       <div
         className={`flex justify-center items-center ${
           fillBottle.length > 0 ? `h-full` : `pt-16 h-screen`
@@ -383,7 +392,11 @@ export default function MainContent() {
           </div>
 
           {educations === true && (
-            <Educations funFactSugar={funFactSugar} randomVideo={randomVideo} />
+            <Educations
+              funFactSugar={funFactSugar}
+              randomVideo={randomVideo}
+              artikel={artikel}
+            />
           )}
 
           {/* {fillBottle.length === 1 && (

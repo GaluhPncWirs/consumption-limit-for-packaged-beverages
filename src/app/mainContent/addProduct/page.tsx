@@ -1,5 +1,5 @@
 "use client";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import NavigasiBar from "@/components/navbar/navigasiBar";
 import { useHandleInput } from "@/app/hooks/handle-input";
@@ -28,12 +28,45 @@ export default function AddProduct() {
   const [modalSuccess, setModalSuccess] = useState(false);
   const [modalContent, setModalContent] = useState<React.ReactNode>(false);
 
+  const maxLengthAlphabethNameProduct = mustFilled.nameProduct.length;
+  const maxLengthNumberKandunganGula = mustFilled.kandunganGula.length;
+  const maxLengthNumberTakaranSajiGula = mustFilled.takaranSaji.length;
+  const maxLengthNumberVolume = mustFilled.volume.length;
+
+  const [errors, setErrors] = useState({
+    isNameTooLong: false,
+    isSugarTooLong: false,
+    isServingSizeTooLong: false,
+    isVolumeTooLong: false,
+  });
+
+  useEffect(() => {
+    setErrors((prev) => ({
+      ...prev,
+      isNameTooLong: maxLengthAlphabethNameProduct >= 50,
+      isSugarTooLong: maxLengthNumberKandunganGula >= 3,
+      isServingSizeTooLong: maxLengthNumberTakaranSajiGula >= 3,
+      isVolumeTooLong: maxLengthNumberVolume >= 4,
+    }));
+  }, [
+    maxLengthAlphabethNameProduct,
+    maxLengthNumberKandunganGula,
+    maxLengthNumberTakaranSajiGula,
+    maxLengthNumberVolume,
+  ]);
+
+  console.log(errors.isServingSizeTooLong);
+
   // Tambah Data
   async function handleAddProduct(event: any) {
     event.preventDefault();
     if (
       !isNaN(event.target.nameProduct.value) ||
-      event.target.nameProduct.value.trim() === ""
+      event.target.nameProduct.value.trim() === "" ||
+      maxLengthAlphabethNameProduct >= 50 ||
+      maxLengthNumberKandunganGula >= 3 ||
+      maxLengthNumberTakaranSajiGula >= 3 ||
+      maxLengthNumberVolume >= 4
     ) {
       setModalErr(true);
       return;

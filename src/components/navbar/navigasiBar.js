@@ -1,6 +1,7 @@
 import Image from "next/image";
 import PathNavbar from "../navbar/pathNavbar";
 import HamburgerMenu from "../hamburgerMenu/hamburgerMenu";
+import { useEffect, useRef } from "react";
 
 export default function NavigasiBar({ props, path }) {
   return (

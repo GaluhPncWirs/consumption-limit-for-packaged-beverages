@@ -2,10 +2,11 @@
 
 import NavigasiBar from "@/components/navbar/navigasiBar";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function AboutProject() {
   const path = usePathname();
+  const { push } = useRouter();
 
   function calculateRisk(sugarContent: number) {
     /*

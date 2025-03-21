@@ -1,34 +1,28 @@
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function ButtonBack({ path, props }) {
+  const { push } = useRouter();
+  function handleBack() {
+    push("/mainContent/calculate");
+  }
   return (
-    <>
-      <div className="px-2 py-1.5 hover:bg-yellow-400 bg-yellow-300 rounded-xl flex flex-row-reverse justify-center items-center gap-1 cursor-pointer">
-        {path === "/mainContent/addProduct" || path === "/mainContent/about" ? (
-          <Link
-            href={"/mainContent/calculate"}
-            className="text-xl font-semibold"
-          >
-            Kembali
-          </Link>
-        ) : (
-          <button
-            className="text-xl font-semibold"
-            type="button"
-            onClick={props}
-          >
-            Kembali
-          </button>
-        )}
-        <Image
-          src="/images/arrow_left.png"
-          alt="arrow_left"
-          className="w-1/5"
-          width={200}
-          height={200}
-        />
-      </div>
-    </>
+    <button
+      className="px-2 py-1.5 hover:bg-yellow-400 bg-yellow-300 rounded-xl flex flex-row-reverse justify-center items-center gap-1 cursor-pointer"
+      onClick={
+        path === "/mainContent/addProduct" || path === "/mainContent/about"
+          ? handleBack
+          : props
+      }
+    >
+      <span>Kembali</span>
+      <Image
+        src="/images/arrow_left.png"
+        alt="arrow_left"
+        className="w-1/5"
+        width={200}
+        height={200}
+      />
+    </button>
   );
 }

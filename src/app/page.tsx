@@ -168,7 +168,7 @@ export default function DisplayInputUser() {
                   id="gender"
                   name="gender"
                   ref={male}
-                  className="cursor-pointer"
+                  className="cursor-pointer bg-green-200"
                   onChange={handleValueInput}
                   checked={mustFilled.gender === "male"}
                 />

@@ -1,4 +1,4 @@
-export default function Educations({ funFactSugar, randomVideo }) {
+export default function Educations({ funFactSugar, randomVideo, artikel }) {
   return (
     <div className="flex mt-7 px-5 gap-8 justify-center items-center max-[640px]:flex-col sm:flex-col md:flex-row">
       <div className="basis-1/2">
@@ -11,17 +11,11 @@ export default function Educations({ funFactSugar, randomVideo }) {
             Berdasarkan Sumber Artikel
           </h1>
           <p className="font-medium text-justify">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt
-            facere iure eum temporibus nobis, corporis id amet alias obcaecati
-            dolorem. Quisquam voluptates veritatis quasi in dolor iusto earum.
-            Pariatur, eligendi!
+            {artikel[0].kalimatEdukasi}
           </p>
-          <blockquote cite="https://example.com/artikel-sumber">
-            Kecerdasan buatan kini mendukung banyak aspek kehidupan manusia.
-          </blockquote>
           <p>
             — Sumber:{" "}
-            <a href="https://example.com/artikel-sumber">Example.com</a>
+            <a href={artikel[0].linkEdukasi}>{artikel[0].sumberReferensi}</a>
           </p>
         </div>
       </div>
