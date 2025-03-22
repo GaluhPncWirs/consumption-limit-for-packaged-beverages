@@ -38,6 +38,10 @@ export default function ConfirmAddProduct({
               Volume Kemasan (ml) :{" "}
               <span className="font-semibold">{mustFilled.volume}</span>
             </li>
+            <li>
+              Tipe Minuman :{" "}
+              <span className="font-semibold">{mustFilled.typeMinuman}</span>
+            </li>
           </ul>
         </div>
         <div className="bg-green-400 rounded-b-xl flex justify-around items-center w-full h-full max-[640px]:py-2 sm:py-2 md:py-3">

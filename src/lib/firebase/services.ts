@@ -1,5 +1,5 @@
 import app from "./init"
-import { addDoc, collection, getDocs, getFirestore, query, where } from "firebase/firestore"
+import { addDoc, collection, getDocs, getFirestore, query, where, writeBatch } from "firebase/firestore"
 
 const firestore = getFirestore(app)
 
@@ -62,4 +62,23 @@ export async function retriveDataVideoEducations(collectionName:string) {
     }))
 
     return data
+}
+
+
+// add field in firebase
+export async function updateAllDocument (name:string) {
+    try{
+        const batch = writeBatch(firestore)
+        const querySnapshot = await getDocs(collection(firestore, name))
+
+        querySnapshot.forEach((doc) => {
+            const docRef = doc.ref
+            batch.update(docRef, {type: "Siap Minum"})
+        })
+
+        await batch.commit()
+        return { success: true, message: "Semua dokumen berhasil diperbarui!" };
+    }catch(error:any){
+        return { success: false, message: error.message };
+    }
 }

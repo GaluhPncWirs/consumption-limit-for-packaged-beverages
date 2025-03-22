@@ -1,5 +1,5 @@
 "use client";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import NavigasiBar from "@/components/navbar/navigasiBar";
 import { useHandleInput } from "@/app/hooks/handle-input";
@@ -17,7 +17,9 @@ export default function AddProduct() {
       kandunganGula: "",
       takaranSaji: "",
       volume: "",
+      typeMinuman: "",
     });
+
   const [modalErr, setModalErr] = useState(false);
   const [isStatus, setIsStatus] = useState<boolean | null>(null);
   const inputFieldNone = useRef(null);
@@ -54,8 +56,6 @@ export default function AddProduct() {
     maxLengthNumberTakaranSajiGula,
     maxLengthNumberVolume,
   ]);
-
-  console.log(errors.isServingSizeTooLong);
 
   // Tambah Data
   async function handleAddProduct(event: any) {
@@ -97,12 +97,13 @@ export default function AddProduct() {
     const gula = Number(event.target.kandunganGula.value);
     const takaranSaji = Number(event.target.takaranSaji.value);
     const totalSugars = gula * takaranSaji;
-
     const nameProductValue = event.target.nameProduct.value;
     const eachCapitalFirstWord = nameProductValue
       .split(" ")
       .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
+
+    const tipeMinuman = event.target.typeMinuman.value;
 
     try {
       const res = await fetch("/api/addData", {
@@ -114,6 +115,7 @@ export default function AddProduct() {
           nameProduct: eachCapitalFirstWord,
           sugars: Math.floor(totalSugars),
           volume: Number(event.target.volume.value),
+          type: tipeMinuman,
         }),
       });
       const resStatus = await res.json();
@@ -161,14 +163,14 @@ export default function AddProduct() {
     <div>
       <NavigasiBar path={path} props={""} />
       <div className="flex flex-col justify-center items-center max-[640px]:h-full max-[640px]:py-7 sm:h-full sm:py-7 md:h-screen">
-        <div className="bg-[#73EC8B] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 w-2/5 rounded-xl mt-16 max-[640px]:w-11/12 sm:w-10/12 md:w-4/5 lg:w-2/3 py-3 shadow-lg shadow-slate-800">
-          <h1 className="text-2xl font-semibold text-center mt-5 mb-3 max-[640px]:mb-7 sm:mb-7 md:mb-0">
+        <div className="bg-[#73EC8B] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 w-2/5 rounded-xl mt-16 max-[640px]:w-11/12 sm:w-10/12 md:w-4/5 lg:w-2/3 shadow-lg shadow-slate-800 py-7">
+          <h1 className="text-2xl font-semibold text-center max-[640px]:mb-7 sm:mb-7 md:mb-6 lg:mb-8">
             Penambahan Produk Minuman
           </h1>
-          <div className="flex items-center justify-evenly max-[640px]:flex-col-reverse max-[640px]:gap-10 sm:flex-col-reverse sm:gap-10 md:flex-row md:gap-7 md:p-9 lg:p-6 lg:gap-5">
+          <div className="flex items-center justify-evenly max-[640px]:flex-col-reverse max-[640px]:gap-y-10 sm:flex-col-reverse sm:gap-y-10 md:flex-row md:gap-x-7 md:px-7 lg:gap-x-7">
             <form
               onSubmit={(e) => handleAddProduct(e)}
-              className="flex flex-col gap-y-5 basis-1/2 max-[640px]:w-4/5 sm:w-4/5 md:basis-1/2 lg:basis-1/2"
+              className="flex flex-col gap-y-4 basis-1/2 max-[640px]:w-4/5 sm:w-4/5 md:basis-1/2 lg:basis-1/2"
               autoComplete="off"
               ref={inputFieldNone}
             >
@@ -259,8 +261,36 @@ export default function AddProduct() {
                   <span>Volume Kemasan (ml)</span>
                 </label>
               </div>
+              <div className="font-medium">
+                <div className="flex gap-x-2 items-center mb-2">
+                  <Image
+                    width={29}
+                    height={20}
+                    className="w-[30px]"
+                    src={"/images/icon_type.png"}
+                    alt="activity"
+                  />
+                  <label htmlFor="typeMinuman" className="block text-lg">
+                    Tipe Minuman
+                  </label>
+                </div>
+                <select
+                  id="typeMinuman"
+                  className="cursor-pointer bg-[#54C392] rounded-md p-2 text-sm max-[640px]:w-full sm:w-full"
+                  value={mustFilled.typeMinuman}
+                  onChange={handleValueInput}
+                >
+                  <option value="" disabled hidden>
+                    Pilih Tipe Minuman
+                  </option>
+                  <option value="Siap Minum">Siap Minum</option>
+                  <option value="Harus Dilarutkan">
+                    Harus Dilarutkan / Minuman Serbuk
+                  </option>
+                </select>
+              </div>
               <button
-                className="bg-green-500 mt-5 rounded-lg hover:bg-green-600 py-1.5 flex text-lg font-semibold disabled:cursor-not-allowed justify-center items-center gap-2"
+                className="bg-green-500 rounded-lg hover:bg-green-600 py-1.5 flex text-lg font-semibold disabled:cursor-not-allowed justify-center items-center gap-2"
                 disabled={!isFormFilled()}
               >
                 <Image
@@ -276,6 +306,8 @@ export default function AddProduct() {
                 *Tolong Untuk Digunakan Secara Bijak
               </span>
             </form>
+
+            {/* check product */}
             <div className="bg-[#54C392] basis-2/5 h-5/6 rounded-lg max-[640px]:w-4/5 sm:w-3/4 md:basis-1/2 lg:basis-2/5">
               <h1 className="py-3 text-center font-semibold text-lg bg-[#15B392] rounded-t-lg">
                 Cek Produk Yang Tersedia
@@ -327,13 +359,10 @@ export default function AddProduct() {
             </LayoutModalBoxs>
           )}
 
-          {modalErr && <AddProductError setModalOnclick={setModalErr} />}
+          {modalErr && (
+            <AddProductError setModalOnclick={setModalErr} errors={errors} />
+          )}
         </div>
-        {/* {modalSuccess === true || isConfirm === true ? (
-          <div className="h-screen w-screen absolute backdrop-blur-sm"></div>
-        ) : (
-          <div></div>
-        )} */}
       </div>
     </div>
   );

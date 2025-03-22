@@ -12,6 +12,7 @@ import { getDataFunFact } from "@/getDataFromApi/getFunFact";
 import { getVideoEducations } from "@/getDataFromApi/getVideoEdu";
 import FindProductError from "@/components/modalBox/layoutHorizontal/modalErrHor/findProdErr";
 import { getDataArtikel } from "@/getDataFromApi/getArtikel";
+import Image from "next/image";
 
 export default function MainContent() {
   const sugarContentInsideProductRef = useRef<HTMLInputElement>(null);
@@ -51,6 +52,13 @@ export default function MainContent() {
     if (maxSugars) {
       setGetYourMaxSugars(Number(maxSugars));
     }
+  }, []);
+
+  // Cari Data
+  useEffect(() => {
+    getDataProduct((data: any) => {
+      setProduct(data);
+    });
   }, []);
 
   useEffect(() => {
@@ -129,13 +137,6 @@ export default function MainContent() {
       "formFilledSuccess=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     push("/");
   }
-
-  // Cari Data
-  useEffect(() => {
-    getDataProduct((data: any) => {
-      setProduct(data);
-    });
-  }, []);
 
   function handleInputChange(e: any) {
     const query = e.target.value;
