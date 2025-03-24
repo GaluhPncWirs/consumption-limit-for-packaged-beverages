@@ -18,7 +18,7 @@ export default function MainContent() {
   const sugarContentInsideProductRef = useRef<HTMLInputElement>(null);
   const totalVolumeInsideProductRef = useRef<HTMLInputElement>(null);
   const { push } = useRouter();
-  const [fillBottle, setFillBottle] = useState([]);
+  const [fillBottle, setFillBottle] = useState<number[]>([]);
   const [educations, setEducations] = useState(false);
   const [sugarProduk, setSugarProduk] = useState(0);
   const [volumeProduk, setVolumeProduk] = useState(0);
@@ -29,6 +29,7 @@ export default function MainContent() {
   const [result, setResult] = useState<any>([]);
   const [sugar, setSugar] = useState(0);
   const [volume, setVolume] = useState(0);
+  const [type, setType] = useState("");
   const [activeIndex, setActiveIndex] = useState(-1);
   const listRef = useRef<HTMLUListElement | null>(null);
   const path = usePathname();
@@ -42,6 +43,7 @@ export default function MainContent() {
   const [modalBox, setModalBox] = useState(false);
   const [remainingMl, setRemainingMl] = useState(0);
   const [artikel, setArtikel] = useState([]);
+  const [typeProduct, setTypeProduct] = useState("");
 
   useEffect(() => {
     setMustFilled((prev: Object) => ({ ...prev, product: searchProduk }));
@@ -105,16 +107,16 @@ export default function MainContent() {
         maxConsumptionMl / totalVolumeInsideProduct
       );
 
+      // const remainderMl =
+      //   (percentageFillForRemainder / 100) * totalVolumeInsideProduct;
+      // console.log("remainder ml", remainderMl);
+
       const remaining = maxConsumptionMl % totalVolumeInsideProduct;
       const percentageFillForRemaining = Math.round(
         (remaining / totalVolumeInsideProduct) * 100
       );
 
-      // const remainderMl =
-      //   (percentageFillForRemainder / 100) * totalVolumeInsideProduct;
-      // console.log("remainder ml", remainderMl);
-
-      const fillArray: any = Array(numberOfBottles).fill(100);
+      const fillArray: number[] = Array(numberOfBottles).fill(100);
       if (percentageFillForRemaining > 0) {
         fillArray.push(percentageFillForRemaining);
       }
@@ -124,6 +126,18 @@ export default function MainContent() {
       setModalBox(true);
     }
   }
+
+  // bagian ini harus ada konfirmasi dulu ke tombol hitung
+  useEffect(() => {
+    if (selectedProduct?.type) {
+      setTypeProduct(selectedProduct?.type);
+    }
+
+    // if (selectedProduct?.type === "Harus Dilarutkan") {
+    //   lastValidType.current = "Harus Dilarutkan";
+    //   setTypeProduct(selectedProduct?.type);
+    // }
+  }, [selectedProduct?.type]);
 
   useEffect(() => {
     if (focusInput.current) {
@@ -202,6 +216,7 @@ export default function MainContent() {
       setSearchProduk(selectedProduct.nameProduct);
       setSugar(selectedProduct.sugars);
       setVolume(selectedProduct.volume);
+      setType(selectedProduct.type);
     }
   }, [selectedProduct]);
 
@@ -210,6 +225,12 @@ export default function MainContent() {
       setSelectedProduct(null);
     }
   }, [searchProduk]);
+
+  const valueType = useRef<HTMLInputElement>(null);
+
+  function testing() {
+    return valueType.current?.value;
+  }
 
   return (
     <div>
@@ -248,6 +269,7 @@ export default function MainContent() {
               <form
                 className="basis-2/5 flex flex-col gap-2 items-center justify-center md:basis-1/2 lg:basis-2/5 max-[640px]:w-full sm:w-full"
                 autoComplete="off"
+                onClick={testing}
               >
                 <div className="relative w-4/5 py-3 md:w-11/12 lg:w-4/5">
                   <input
@@ -283,7 +305,7 @@ export default function MainContent() {
                     )}
                   </div>
                 </div>
-                <div className="relative w-4/5 py-3 md:w-11/12 lg:w-4/5">
+                <div className="relative w-4/5 pt-3 md:w-11/12 lg:w-4/5">
                   <input
                     type="number"
                     id="sugarContent"
@@ -310,7 +332,7 @@ export default function MainContent() {
                     )}
                   </div>
                   <label htmlFor="sugarContent" className="labelText">
-                    Kadar Gula dalam Minuman (G)
+                    Kadar Gula Minuman (G)
                   </label>
                 </div>
 
@@ -325,14 +347,27 @@ export default function MainContent() {
                     value={volume || ""}
                   />
                   <label htmlFor="volumeKemasan" className="labelText">
-                    Volume Kemasan (ml)
+                    Volume Kemasan
+                  </label>
+                </div>
+                <div className="relative w-4/5 pt-3 md:w-11/12 lg:w-4/5">
+                  <input
+                    id="type"
+                    className="inputField disabled:cursor-not-allowed"
+                    readOnly
+                    disabled
+                    value={type || ""}
+                    ref={valueType}
+                  />
+                  <label htmlFor="type" className="labelText">
+                    Tipe Minuman
                   </label>
                 </div>
               </form>
 
               <div className="basis-3/5 gap-8 flex justify-center items-center max-[640px]:flex-col-reverse sm:flex-col-reverse max-[640px]:w-full sm:w-full md:basis-1/2 lg:basis-3/5">
                 <div className="flex w-full items-center justify-center max-[640px]:flex-wrap max-[640px]:gap-y-5 sm:flex-wrap sm:gap-y-5 md:flex-nowrap">
-                  {fillBottle.map((item: any, i: number) => (
+                  {/* {fillBottle.map((item: any, i: number) => (
                     <div
                       key={i}
                       className="bottleInside max-[640px]:w-1/3 sm:w-1/4"
@@ -343,6 +378,34 @@ export default function MainContent() {
                       ></div>
                     </div>
                   ))}
+
+                  <div className="glassCupInside max-[640px]:w-1/3 sm:w-1/4">
+                    <div className="fill"></div>
+                  </div> */}
+
+                  {fillBottle.map((item: any, i: number) =>
+                    typeProduct === "Siap Minum" ? (
+                      <div
+                        key={i}
+                        className="bottleInside max-[640px]:w-1/3 sm:w-1/4"
+                      >
+                        <div
+                          className="fill"
+                          style={{ height: `${item}%` }}
+                        ></div>
+                      </div>
+                    ) : (
+                      <div
+                        className="glassCupInside max-[640px]:w-1/3 sm:w-1/4"
+                        key={i}
+                      >
+                        <div
+                          className="fill"
+                          style={{ height: `${item}%` }}
+                        ></div>
+                      </div>
+                    )
+                  )}
                 </div>
                 <div
                   className={`${
@@ -354,13 +417,13 @@ export default function MainContent() {
                       Kamu Bisa Konsumsi Maksimal {fillBottle.length} botol{" "}
                       {remainingMl} ml
                     </p>
-                  ) : fillBottle.length === 1 && remainingMl <= 0 ? (
-                    <p>Kamu Bisa Konsumsi Maksimal {fillBottle.length} botol</p>
-                  ) : (
+                  ) : fillBottle.length === 1 ? (
                     <p>
                       Minuman ini Maksimal Bisa Dikonsumsi {remainingMl} ml,
                       Kurang Dari Satu Botol
                     </p>
+                  ) : (
+                    <p>Kamu Bisa Konsumsi Maksimal {fillBottle.length} botol</p>
                   )}
                 </div>
               </div>

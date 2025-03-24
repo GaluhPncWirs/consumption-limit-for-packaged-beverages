@@ -58,6 +58,7 @@
       opacity: 1;
     }
 
+    /* untuk botol */
     .bottleInside{
       width: 200px;
       height: 200px;
@@ -80,6 +81,11 @@
         width: 150px;
         height: 150px;
       }
+
+      .glassCupInside {
+        width: 150px;
+        height: 150px;
+      }
     }
 
     .fill{
@@ -88,15 +94,16 @@
       left: 0;
       width: 100%;
       height: 0%;
-      background-color: rgba(0, 200, 255, 0.7);
-      transition: height 0.2s ease-in-out;
+      background-color: rgba(2, 180, 230, 0.7);
+      transition: height 0.3s ease-in-out;
     }
-    .progress-fill{
+
+    /* .progress-fill{
       background-color: #ff4cff;
       height: 100%;
       width: 0px;
       transition:  width 0.5s ease-in-out;
-    }
+    } */
 
     .background_template{
       background-image: url("/images/background-beverage.jpg");
@@ -104,6 +111,26 @@
       background-repeat: no-repeat;
       background-size: cover;
     }
+
+
+    /* untuk gelas */
+    .glassCupInside{
+      width: 200px;
+      height: 200px;
+      position: relative;
+      background-image: url("/images/glass.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      mask-image: url("/images/glass.png");
+      mask-size: contain;
+      mask-repeat: no-repeat;
+      mask-position: center;
+      -webkit-mask-image: url("/images/glass.png");
+      mask-composite: exclude;
+      display: flex;
+    }
+
 
     /* menu animation */
 
