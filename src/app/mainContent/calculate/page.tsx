@@ -44,6 +44,7 @@ export default function MainContent() {
   const [remainingMl, setRemainingMl] = useState(0);
   const [artikel, setArtikel] = useState([]);
   const [typeProduct, setTypeProduct] = useState("");
+  const [fillLess100, setFillLess100] = useState<number>(0);
 
   useEffect(() => {
     setMustFilled((prev: Object) => ({ ...prev, product: searchProduk }));
@@ -122,22 +123,14 @@ export default function MainContent() {
       }
       setFillBottle(fillArray);
       setRemainingMl(Math.round(remaining));
+      setFillLess100(percentageFillForRemaining);
+      setTypeProduct((prev: string) =>
+        prev === "Siap Minum" ? "Harus Dilarutkan" : "Siap Minum"
+      );
     } else {
       setModalBox(true);
     }
   }
-
-  // bagian ini harus ada konfirmasi dulu ke tombol hitung
-  useEffect(() => {
-    if (selectedProduct?.type) {
-      setTypeProduct(selectedProduct?.type);
-    }
-
-    // if (selectedProduct?.type === "Harus Dilarutkan") {
-    //   lastValidType.current = "Harus Dilarutkan";
-    //   setTypeProduct(selectedProduct?.type);
-    // }
-  }, [selectedProduct?.type]);
 
   useEffect(() => {
     if (focusInput.current) {
@@ -226,11 +219,12 @@ export default function MainContent() {
     }
   }, [searchProduk]);
 
-  const valueType = useRef<HTMLInputElement>(null);
-
-  function testing() {
-    return valueType.current?.value;
-  }
+  // bagian ini harus ada konfirmasi dulu ke tombol hitung
+  useEffect(() => {
+    if (!type) {
+      setTypeProduct(type);
+    }
+  }, [type]);
 
   return (
     <div>
@@ -269,7 +263,6 @@ export default function MainContent() {
               <form
                 className="basis-2/5 flex flex-col gap-2 items-center justify-center md:basis-1/2 lg:basis-2/5 max-[640px]:w-full sm:w-full"
                 autoComplete="off"
-                onClick={testing}
               >
                 <div className="relative w-4/5 py-3 md:w-11/12 lg:w-4/5">
                   <input
@@ -357,7 +350,6 @@ export default function MainContent() {
                     readOnly
                     disabled
                     value={type || ""}
-                    ref={valueType}
                   />
                   <label htmlFor="type" className="labelText">
                     Tipe Minuman
@@ -412,18 +404,23 @@ export default function MainContent() {
                     educations === true ? `block` : `hidden`
                   } max-[640px]:text-sm text-justify mx-5 sm:text-base font-semibold lg:text-lg`}
                 >
-                  {fillBottle.length > 1 && remainingMl > 0 ? (
+                  {fillBottle.length > 1 ? (
                     <p>
-                      Kamu Bisa Konsumsi Maksimal {fillBottle.length} botol{" "}
+                      Kamu Bisa Konsumsi Maksimal {fillBottle.length}{" "}
+                      {typeProduct === "Siap Minum" ? "Botol" : "Gelas"}{" "}
                       {remainingMl} ml
                     </p>
-                  ) : fillBottle.length === 1 ? (
+                  ) : fillBottle.length === 1 && fillLess100 < 100 ? (
                     <p>
                       Minuman ini Maksimal Bisa Dikonsumsi {remainingMl} ml,
-                      Kurang Dari Satu Botol
+                      Kurang Dari Satu{" "}
+                      {typeProduct === "Siap Minum" ? "Botol" : "Gelas"}
                     </p>
                   ) : (
-                    <p>Kamu Bisa Konsumsi Maksimal {fillBottle.length} botol</p>
+                    <p>
+                      Kamu Bisa Konsumsi Maksimal {fillBottle.length}{" "}
+                      {typeProduct === "Siap Minum" ? "Botol" : "Gelas"}
+                    </p>
                   )}
                 </div>
               </div>
