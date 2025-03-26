@@ -12,13 +12,13 @@ export default function PathNavbar({ props, path }) {
     if (path === "/mainContent/addProduct") {
       setPathConditions((prev) => ({
         ...prev,
-        path: "/mainContent/addProduct",
+        path: "/mainContent/about",
         textNavbar: "Tentang",
       }));
     } else {
       setPathConditions((prev) => ({
         ...prev,
-        path: "/mainContent/about",
+        path: "/mainContent/addProduct",
         textNavbar: "Tambah Produk",
       }));
     }

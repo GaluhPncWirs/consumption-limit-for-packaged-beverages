@@ -82,6 +82,8 @@ export default function MainContent() {
     });
   }, []);
 
+  console.log(Math.round(1648.75 * 1.55));
+
   function calculateMaximal() {
     if (result.length > 0) {
       setEducations(true);
