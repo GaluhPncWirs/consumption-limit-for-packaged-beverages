@@ -32,7 +32,7 @@ export default function DisplayInputUser() {
   const maxWeight = mustFilled.weight.length;
 
   function calculateMaxSugar() {
-    if (maxAge > 2 || maxHeight > 3 || maxWeight > 3) {
+    if (maxAge > 2 || maxHeight > 3 || maxWeight > 2) {
       setModalErrorBox(true);
     } else {
       const age = parseInt(ages.current?.value || "0");
@@ -133,7 +133,7 @@ export default function DisplayInputUser() {
   return (
     <div className="max-w-2xl mx-auto flex flex-col items-center justify-center h-screen">
       <div className="w-full">
-        <div className="bg-[#73EC8B] rounded-lg py-9 px-5 max-w-xl mx-auto max-[640px]:max-w-md inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 shadow-lg shadow-slate-800">
+        <div className="bg-[#73EC8B] rounded-lg py-7 px-3 max-w-xl mx-auto max-[640px]:max-w-md inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 shadow-lg shadow-slate-800">
           {/* <div className="mb-5 text-center text-lg font-semibold">
   <h2>
     silahkan inputkan di bawah ini agar bisa mengetahui berapa
@@ -313,7 +313,7 @@ export default function DisplayInputUser() {
             <button
               onClick={() => calculateMaxSugar()}
               disabled={!isFormFilled()}
-              className="disabled:cursor-not-allowed mt-8 mx-auto py-1 text-center rounded-md bg-[#15B392] hover:bg-emerald-500 cursor-pointer font-semibold px-7 text-lg"
+              className="disabled:cursor-not-allowed mt-6 mx-auto py-1 text-center rounded-md bg-[#15B392] hover:bg-emerald-500 cursor-pointer font-semibold px-7 text-lg"
             >
               Hitung
             </button>

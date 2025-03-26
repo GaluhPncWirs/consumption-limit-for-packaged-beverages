@@ -82,8 +82,6 @@ export default function MainContent() {
     });
   }, []);
 
-  console.log(Math.round(1648.75 * 1.55));
-
   function calculateMaximal() {
     if (result.length > 0) {
       setEducations(true);
@@ -233,13 +231,13 @@ export default function MainContent() {
       <NavigasiBar path={path} props={backToInput} />
       <div
         className={`flex justify-center items-center ${
-          fillBottle.length > 0 ? `h-full` : `pt-16 h-screen`
+          fillBottle.length > 0 ? `h-full` : `h-screen`
         }`}
       >
         <div
           className={`flex flex-col justify-center px-5 rounded-xl py-10 mx-auto bg-[#73EC8B] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 shadow-lg shadow-slate-800 ${
             fillBottle.length > 0
-              ? `w-11/12 mt-24 mb-8`
+              ? `w-11/12 my-5`
               : `w-1/2 max-[640px]:w-11/12 sm:w-11/12 md:w-3/5 lg:w-1/2`
           }`}
         >
@@ -256,7 +254,7 @@ export default function MainContent() {
           </div>
           <div>
             <div
-              className={`mt-10 mb-7 ${
+              className={`my-8 ${
                 fillBottle.length >= 1
                   ? `flex items-center justify-center gap-3 max-[640px]:flex-col max-[640px]:gap-10 sm:flex-col sm:gap-10 md:flex-row md:gap-5`
                   : `flex-none`
