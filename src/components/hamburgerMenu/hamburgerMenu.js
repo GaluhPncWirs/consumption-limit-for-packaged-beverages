@@ -36,10 +36,8 @@ export default function HamburgerMenu({ props, path }) {
   return (
     <div className="flex h-full items-center justify-center sm:hidden">
       <ul
-        className={`flex w-2/5 justify-between max-[640px]:absolute max-[640px]:flex max-[640px]:top-0 max-[640px]:right-0 max-[640px]:justify-evenly max-[640px]:h-screen max-[640px]:flex-col max-[640px]:items-center max-[640px]:w-1/2 max-[640px]:bg-green-400 max-[640px]:-z-10 max-[640px]:transition-all max-[640px]:duration-300 max-[640px]:text-xl max-[640px] :font-semibold
-      ${
-        isCheked ? `max-[640px]:translate-x-0` : `max-[640px]:translate-x-full`
-      }`}
+        className={`flex justify-evenly absolute top-16 right-0 h-80 flex-col items-center w-1/2 bg-green-400 -z-10 transition-all duration-300 text-xl font-semibold rounded-bl-lg shadow-lg shadow-slate-800
+      ${isCheked ? `translate-x-0` : `translate-x-full`}`}
         ref={clickOutsidePath}
       >
         <PathNavbar props={props} path={path} />

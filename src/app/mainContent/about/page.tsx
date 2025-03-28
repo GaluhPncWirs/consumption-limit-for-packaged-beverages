@@ -57,7 +57,7 @@ export default function AboutProject() {
   return (
     <div>
       <NavigasiBar path={path} props={""} />
-      <div className="max-[640px]:h-full sm:h-full">
+      <div className="max-[640px]:h-full sm:h-full mt-16">
         <div className="flex md:gap-5 lg:gap-x-7 h-full max-[640px]:flex-col sm:flex-col md:flex-row lg:flex-row lg:w-5/6 lg:mx-auto mx-5">
           <div className="bg-[#73EC8B] rounded-xl px-5 md:basis-1/3 lg:basis-[30%] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 shadow-lg shadow-slate-800 my-5">
             <div className="flex items-center flex-col justify-evenly h-full max-[640px]:p-5 sm:py-7">

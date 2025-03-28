@@ -8,7 +8,7 @@ export default function ButtonBack({ path, props }) {
   }
   return (
     <button
-      className="px-1.5 py-0.5 hover:bg-yellow-400 bg-yellow-300 rounded-xl flex flex-row-reverse justify-center items-center gap-1 cursor-pointer"
+      className="px-2 py-1 hover:bg-yellow-400 bg-yellow-300 rounded-xl flex flex-row-reverse justify-center items-center gap-1 cursor-pointer"
       onClick={
         path === "/mainContent/addProduct" || path === "/mainContent/about"
           ? handleBack

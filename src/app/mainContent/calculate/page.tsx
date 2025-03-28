@@ -230,7 +230,7 @@ export default function MainContent() {
     <div>
       <NavigasiBar path={path} props={backToInput} />
       <div
-        className={`flex justify-center items-center ${
+        className={`flex justify-center items-center mt-16 ${
           fillBottle.length > 0 ? `h-full` : `h-screen`
         }`}
       >
