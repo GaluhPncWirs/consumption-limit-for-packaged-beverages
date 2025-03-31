@@ -12,7 +12,6 @@ import { getDataFunFact } from "@/getDataFromApi/getFunFact";
 import { getVideoEducations } from "@/getDataFromApi/getVideoEdu";
 import FindProductError from "@/components/modalBox/layoutHorizontal/modalErrHor/findProdErr";
 import { getDataArtikel } from "@/getDataFromApi/getArtikel";
-import Image from "next/image";
 
 export default function MainContent() {
   const sugarContentInsideProductRef = useRef<HTMLInputElement>(null);
@@ -45,6 +44,7 @@ export default function MainContent() {
   const [artikel, setArtikel] = useState([]);
   const [typeProduct, setTypeProduct] = useState("");
   const [fillLess100, setFillLess100] = useState<number>(0);
+  const [botol, setBotol] = useState(0);
 
   useEffect(() => {
     setMustFilled((prev: Object) => ({ ...prev, product: searchProduk }));
@@ -108,9 +108,24 @@ export default function MainContent() {
         maxConsumptionMl / totalVolumeInsideProduct
       );
 
-      // const remainderMl =
-      //   (percentageFillForRemainder / 100) * totalVolumeInsideProduct;
-      // console.log("remainder ml", remainderMl);
+      let displayBottle = Math.floor(numberOfBottles / 2);
+      if (displayBottle < 1) {
+        displayBottle = 1;
+      }
+      console.log(displayBottle);
+
+      const sugarPerBottle =
+        resultTotalContentProduct * totalVolumeInsideProduct;
+      const totSugarConsume = sugarPerBottle * displayBottle;
+      const remainingSugar = getYourMaxSugars - totSugarConsume;
+
+      if (numberOfBottles >= 1) {
+        console.log(
+          `Jika kamu mengkonsumsi hanya ${displayBottle} botol maka sisa dari gula harian kamu adalah ${remainingSugar.toFixed(
+            2
+          )} gram`
+        );
+      }
 
       const remaining = maxConsumptionMl % totalVolumeInsideProduct;
       const percentageFillForRemaining = Math.round(
@@ -226,11 +241,15 @@ export default function MainContent() {
     }
   }, [type]);
 
+  console.log(typeProduct); //bug tipe ketika di klik terus menerus
+  console.log("fill Less ", fillLess100); //bug tipe ketika di klik terus menerus
+  console.log("remaining ", remainingMl); //bug tipe ketika di klik terus menerus
+
   return (
     <div>
       <NavigasiBar path={path} props={backToInput} />
       <div
-        className={`flex justify-center items-center mt-16 ${
+        className={`flex justify-center items-center mt-14 ${
           fillBottle.length > 0 ? `h-full` : `h-screen`
         }`}
       >
@@ -404,13 +423,20 @@ export default function MainContent() {
                     educations === true ? `block` : `hidden`
                   } max-[640px]:text-sm text-justify mx-5 sm:text-base font-semibold lg:text-lg`}
                 >
-                  {fillBottle.length > 1 ? (
+                  {fillBottle.length > 1 ||
+                  (fillBottle.length > 1 && remainingMl < 0) ? (
                     <p>
                       Kamu Bisa Konsumsi Maksimal {fillBottle.length}{" "}
                       {typeProduct === "Siap Minum" ? "Botol" : "Gelas"}{" "}
                       {remainingMl} ml
                     </p>
-                  ) : fillBottle.length === 1 && fillLess100 < 100 ? (
+                  ) : (fillBottle.length === 1 &&
+                      fillLess100 < 100 &&
+                      fillLess100 !== 0) ||
+                    (fillBottle.length === 1 &&
+                      fillLess100 < 100 &&
+                      remainingMl < 0 &&
+                      fillLess100 !== 0) ? (
                     <p>
                       Minuman ini Maksimal Bisa Dikonsumsi {remainingMl} ml,
                       Kurang Dari Satu{" "}
@@ -424,6 +450,12 @@ export default function MainContent() {
                   )}
                 </div>
               </div>
+            </div>
+            <div className="text-end mb-5">
+              <h1 className="text-sm font-bold">
+                jika kamu mengkonsumsi hanya 1 botol maka sisa dari gula harian
+                kamu adalah .... gram
+              </h1>
             </div>
           </div>
 

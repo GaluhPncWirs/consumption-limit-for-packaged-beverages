@@ -33,14 +33,7 @@ export default function PathNavbar({ props, path }) {
               href={"/mainContent/about"}
               className="hover:text-red-500 flex items-center justify-center gap-2"
             >
-              <Image
-                src={"/images/about.png"}
-                alt="About"
-                height={50}
-                width={50}
-                className="w-1/5"
-              />
-              <span>Tentang</span>
+              Tentang
             </Link>
           </li>
           <li>
@@ -48,14 +41,7 @@ export default function PathNavbar({ props, path }) {
               href={"/mainContent/addProduct"}
               className="hover:text-red-500 flex items-center justify-center gap-2"
             >
-              <Image
-                src={"/images/tambah-produk.png"}
-                alt="Tambah Produk"
-                height={50}
-                width={50}
-                className="w-1/6"
-              />
-              <span>Tambah Produk</span>
+              Tambah Produk
             </Link>
           </li>
           <ButtonBack path={path} props={props} />
@@ -67,29 +53,7 @@ export default function PathNavbar({ props, path }) {
               href={pathConditions.path}
               className="hover:text-red-500 flex items-center justify-center gap-2"
             >
-              {pathConditions.textNavbar === "Tentang" ? (
-                <>
-                  <Image
-                    src={"/images/about.png"}
-                    alt="About"
-                    height={50}
-                    width={50}
-                    className="w-1/5"
-                  />
-                  <span>Tentang</span>
-                </>
-              ) : (
-                <>
-                  <Image
-                    src={"/images/tambah-produk.png"}
-                    alt="Tambah Produk"
-                    height={50}
-                    width={50}
-                    className="w-1/6"
-                  />
-                  <span>Tambah Produk</span>
-                </>
-              )}
+              {pathConditions.textNavbar}
             </Link>
           </li>
           <ButtonBack path={path} props={props} />
