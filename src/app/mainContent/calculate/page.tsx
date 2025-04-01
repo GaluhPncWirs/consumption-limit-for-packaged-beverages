@@ -44,7 +44,6 @@ export default function MainContent() {
   const [artikel, setArtikel] = useState([]);
   const [typeProduct, setTypeProduct] = useState("");
   const [fillLess100, setFillLess100] = useState<number>(0);
-  const [botol, setBotol] = useState(0);
 
   useEffect(() => {
     setMustFilled((prev: Object) => ({ ...prev, product: searchProduk }));
@@ -112,7 +111,6 @@ export default function MainContent() {
       if (displayBottle < 1) {
         displayBottle = 1;
       }
-      console.log(displayBottle);
 
       const sugarPerBottle =
         resultTotalContentProduct * totalVolumeInsideProduct;
@@ -139,13 +137,17 @@ export default function MainContent() {
       setFillBottle(fillArray);
       setRemainingMl(Math.round(remaining));
       setFillLess100(percentageFillForRemaining);
-      setTypeProduct((prev: string) =>
-        prev === "Siap Minum" ? "Harus Dilarutkan" : "Siap Minum"
-      );
+      setTypeProduct((prev: string) => (prev === type ? prev : type));
     } else {
       setModalBox(true);
     }
   }
+
+  useEffect(() => {
+    if (!type) {
+      setTypeProduct(type);
+    }
+  }, [type]);
 
   useEffect(() => {
     if (focusInput.current) {
@@ -234,16 +236,36 @@ export default function MainContent() {
     }
   }, [searchProduk]);
 
-  // bagian ini harus ada konfirmasi dulu ke tombol hitung
-  useEffect(() => {
-    if (!type) {
-      setTypeProduct(type);
+  function getConsumtionMessage() {
+    if (fillBottle.length > 1) {
+      return (
+        <p>
+          Kamu Bisa Konsumsi Maksimal {fillBottle.length}{" "}
+          {typeProduct === "Siap Minum" ? "Botol" : "Gelas"} {remainingMl} ml
+        </p>
+      );
+    } else if (
+      (fillBottle.length === 1 && fillLess100 < 100 && fillLess100 !== 0) ||
+      (fillBottle.length === 1 &&
+        fillLess100 < 100 &&
+        remainingMl < 0 &&
+        fillLess100 !== 0)
+    ) {
+      return (
+        <p>
+          Minuman ini Maksimal Bisa Dikonsumsi {remainingMl} ml, Kurang Dari
+          Satu {typeProduct === "Siap Minum" ? "Botol" : "Gelas"}
+        </p>
+      );
+    } else {
+      return (
+        <p>
+          Kamu Bisa Konsumsi Maksimal {fillBottle.length}{" "}
+          {typeProduct === "Siap Minum" ? "Botol" : "Gelas"}
+        </p>
+      );
     }
-  }, [type]);
-
-  console.log(typeProduct); //bug tipe ketika di klik terus menerus
-  console.log("fill Less ", fillLess100); //bug tipe ketika di klik terus menerus
-  console.log("remaining ", remainingMl); //bug tipe ketika di klik terus menerus
+  }
 
   return (
     <div>
@@ -423,8 +445,7 @@ export default function MainContent() {
                     educations === true ? `block` : `hidden`
                   } max-[640px]:text-sm text-justify mx-5 sm:text-base font-semibold lg:text-lg`}
                 >
-                  {fillBottle.length > 1 ||
-                  (fillBottle.length > 1 && remainingMl < 0) ? (
+                  {/* {fillBottle.length > 1 ? (
                     <p>
                       Kamu Bisa Konsumsi Maksimal {fillBottle.length}{" "}
                       {typeProduct === "Siap Minum" ? "Botol" : "Gelas"}{" "}
@@ -447,7 +468,9 @@ export default function MainContent() {
                       Kamu Bisa Konsumsi Maksimal {fillBottle.length}{" "}
                       {typeProduct === "Siap Minum" ? "Botol" : "Gelas"}
                     </p>
-                  )}
+                  )} */}
+
+                  {getConsumtionMessage()}
                 </div>
               </div>
             </div>
