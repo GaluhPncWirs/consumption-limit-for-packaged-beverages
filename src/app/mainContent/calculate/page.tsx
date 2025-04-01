@@ -103,24 +103,24 @@ export default function MainContent() {
 
       const maxConsumptionMl = getYourMaxSugars / resultTotalContentProduct;
 
-      const numberOfBottles = Math.floor(
+      const numberOfBottles = Math.round(
         maxConsumptionMl / totalVolumeInsideProduct
       );
 
-      let displayBottle = Math.floor(numberOfBottles / 2);
+      let displayBottle = Math.round(numberOfBottles / 2);
       if (displayBottle < 1) {
         displayBottle = 1;
       }
 
-      const sugarPerBottle =
+      const sugarPerBotol =
         resultTotalContentProduct * totalVolumeInsideProduct;
-      const totSugarConsume = sugarPerBottle * displayBottle;
-      const remainingSugar = getYourMaxSugars - totSugarConsume;
+      const totalSugarConsume = sugarPerBotol * displayBottle;
+      const remainingSugar = getYourMaxSugars - totalSugarConsume;
 
       if (numberOfBottles >= 1) {
         console.log(
-          `Jika kamu mengkonsumsi hanya ${displayBottle} botol maka sisa dari gula harian kamu adalah ${remainingSugar.toFixed(
-            2
+          `Jika kamu mengkonsumsi hanya ${displayBottle} botol maka sisa dari gula harian kamu adalah ${Math.round(
+            remainingSugar
           )} gram`
         );
       }
@@ -237,7 +237,7 @@ export default function MainContent() {
   }, [searchProduk]);
 
   function getConsumtionMessage() {
-    if (fillBottle.length > 1) {
+    if (fillBottle.length > 1 && fillLess100 < 100 && remainingMl !== 0) {
       return (
         <p>
           Kamu Bisa Konsumsi Maksimal {fillBottle.length}{" "}
@@ -245,11 +245,9 @@ export default function MainContent() {
         </p>
       );
     } else if (
-      (fillBottle.length === 1 && fillLess100 < 100 && fillLess100 !== 0) ||
-      (fillBottle.length === 1 &&
-        fillLess100 < 100 &&
-        remainingMl < 0 &&
-        fillLess100 !== 0)
+      fillBottle.length === 1 &&
+      fillLess100 < 100 &&
+      fillLess100 !== 0 //(fillBottle.length === 1 && fillLess100 < 100 && remainingMl < 0 && fillLess100 !== 0)
     ) {
       return (
         <p>
@@ -445,7 +443,8 @@ export default function MainContent() {
                     educations === true ? `block` : `hidden`
                   } max-[640px]:text-sm text-justify mx-5 sm:text-base font-semibold lg:text-lg`}
                 >
-                  {/* {fillBottle.length > 1 ? (
+                  {/* {fillBottle.length > 1 ||
+                  (fillBottle.length > 1 && remainingMl < 0) ? (
                     <p>
                       Kamu Bisa Konsumsi Maksimal {fillBottle.length}{" "}
                       {typeProduct === "Siap Minum" ? "Botol" : "Gelas"}{" "}
