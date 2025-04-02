@@ -14,36 +14,39 @@ import FindProductError from "@/components/modalBox/layoutHorizontal/modalErrHor
 import { getDataArtikel } from "@/getDataFromApi/getArtikel";
 
 export default function MainContent() {
-  const sugarContentInsideProductRef = useRef<HTMLInputElement>(null);
+  const sugarInsideProductRef = useRef<HTMLInputElement>(null);
   const totalVolumeInsideProductRef = useRef<HTMLInputElement>(null);
   const { push } = useRouter();
   const [fillBottle, setFillBottle] = useState<number[]>([]);
-  const [educations, setEducations] = useState(false);
-  const [sugarProduk, setSugarProduk] = useState(0);
-  const [volumeProduk, setVolumeProduk] = useState(0);
-  const [product, setProduct] = useState([]);
-  const [getYourMaxSugars, setGetYourMaxSugars] = useState(0);
-  const [searchProduk, setSearchProduk] = useState("");
+  const [educations, setEducations] = useState<boolean>(false);
+  const [totalBotol, setTotalBotol] = useState<number>(0);
+  const [product, setProduct] = useState<Object[]>([]);
+  const [getYourMaxSugars, setGetYourMaxSugars] = useState<number>(0);
+  const [searchProduk, setSearchProduk] = useState<string>("");
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
-  const [result, setResult] = useState<any>([]);
-  const [sugar, setSugar] = useState(0);
-  const [volume, setVolume] = useState(0);
-  const [type, setType] = useState("");
-  const [activeIndex, setActiveIndex] = useState(-1);
+  const [result, setResult] = useState<object[]>([]);
+  const [sugar, setSugar] = useState<number>(0);
+  const [volume, setVolume] = useState<number>(0);
+  const [type, setType] = useState<string>("");
+  const [activeIndex, setActiveIndex] = useState<number>(-1);
   const listRef = useRef<HTMLUListElement | null>(null);
   const path = usePathname();
-  const [servingSize, setServingSize] = useState(false);
+  const [servingSize, setServingSize] = useState<boolean>(false);
   const [funFactSugar, setFunFactSugar] = useState([]);
   const [randomVideo, setRandomVideo] = useState([]);
   const { isFormFilled, setMustFilled } = useHandleInput({
     product: "",
   });
   const focusInput = useRef<HTMLInputElement>(null);
-  const [modalBox, setModalBox] = useState(false);
-  const [remainingMl, setRemainingMl] = useState(0);
+  const [modalBox, setModalBox] = useState<boolean>(false);
+  const [remainingMl, setRemainingMl] = useState<number>(0);
   const [artikel, setArtikel] = useState([]);
-  const [typeProduct, setTypeProduct] = useState("");
+  const [typeProduct, setTypeProduct] = useState<string>("");
   const [fillLess100, setFillLess100] = useState<number>(0);
+  const [messageIfDrinkSomeBottles, setMessageIfDrinkSomeBottles] = useState({
+    botol: 0,
+    sisaGula: 0,
+  });
 
   useEffect(() => {
     setMustFilled((prev: Object) => ({ ...prev, product: searchProduk }));
@@ -89,41 +92,39 @@ export default function MainContent() {
         setRandomVideo((prev) => [...prev.sort(() => Math.random() - 0.5)]);
         setArtikel((prev) => [...prev.sort(() => Math.random() - 0.5)]);
       }
-      const sugarContentInsideProduct = parseFloat(
-        sugarContentInsideProductRef.current?.value || "0"
+      const sugarInsideProduct = parseFloat(
+        sugarInsideProductRef.current?.value || "0"
       );
       const totalVolumeInsideProduct = parseFloat(
         totalVolumeInsideProductRef.current?.value || "0"
       );
-      setSugarProduk(sugarContentInsideProduct);
-      setVolumeProduk(totalVolumeInsideProduct);
 
-      const resultTotalContentProduct =
-        sugarContentInsideProduct / totalVolumeInsideProduct; //ubah total gula menjadi per 1 ml
+      const sugarPerSatuML = sugarInsideProduct / totalVolumeInsideProduct; //ubah total gula menjadi per 1 ml
 
-      const maxConsumptionMl = getYourMaxSugars / resultTotalContentProduct;
+      const maxConsumptionMl = getYourMaxSugars / sugarPerSatuML;
 
-      const numberOfBottles = Math.round(
+      const numberOfBottles = Math.floor(
         maxConsumptionMl / totalVolumeInsideProduct
       );
+
+      setTotalBotol(numberOfBottles);
 
       let displayBottle = Math.round(numberOfBottles / 2);
       if (displayBottle < 1) {
         displayBottle = 1;
       }
 
-      const sugarPerBotol =
-        resultTotalContentProduct * totalVolumeInsideProduct;
+      const sugarPerBotol = sugarPerSatuML * totalVolumeInsideProduct;
       const totalSugarConsume = sugarPerBotol * displayBottle;
       const remainingSugar = getYourMaxSugars - totalSugarConsume;
 
-      if (numberOfBottles >= 1) {
-        console.log(
-          `Jika kamu mengkonsumsi hanya ${displayBottle} botol maka sisa dari gula harian kamu adalah ${Math.round(
-            remainingSugar
-          )} gram`
-        );
-      }
+      setMessageIfDrinkSomeBottles(
+        (prev: { botol: number; sisaGula: number }) => ({
+          ...prev,
+          botol: displayBottle,
+          sisaGula: Math.round(remainingSugar),
+        })
+      );
 
       const remaining = maxConsumptionMl % totalVolumeInsideProduct;
       const percentageFillForRemaining = Math.round(
@@ -269,7 +270,7 @@ export default function MainContent() {
     <div>
       <NavigasiBar path={path} props={backToInput} />
       <div
-        className={`flex justify-center items-center mt-14 ${
+        className={`flex justify-center items-center mt-16 ${
           fillBottle.length > 0 ? `h-full` : `h-screen`
         }`}
       >
@@ -287,7 +288,7 @@ export default function MainContent() {
                 {getYourMaxSugars.toLocaleString("id-ID", {
                   maximumFractionDigits: 0,
                 })}{" "}
-                Grams
+                Gram
               </span>
             </p>
           </div>
@@ -342,7 +343,7 @@ export default function MainContent() {
                     type="number"
                     id="sugarContent"
                     className="inputField disabled:cursor-not-allowed"
-                    ref={sugarContentInsideProductRef}
+                    ref={sugarInsideProductRef}
                     readOnly
                     disabled
                     value={sugar || ""}
@@ -371,15 +372,15 @@ export default function MainContent() {
                 <div className="relative w-4/5 py-3 md:w-11/12 lg:w-4/5">
                   <input
                     type="number"
-                    id="volumeKemasan"
+                    id="isiBeratBersih"
                     className="inputField disabled:cursor-not-allowed"
                     ref={totalVolumeInsideProductRef}
                     readOnly
                     disabled
                     value={volume || ""}
                   />
-                  <label htmlFor="volumeKemasan" className="labelText">
-                    Volume Kemasan
+                  <label htmlFor="isiBeratBersih" className="labelText">
+                    isi Berat Bersih
                   </label>
                 </div>
                 <div className="relative w-4/5 pt-3 md:w-11/12 lg:w-4/5">
@@ -473,12 +474,14 @@ export default function MainContent() {
                 </div>
               </div>
             </div>
-            <div className="text-end mb-5">
-              <h1 className="text-sm font-bold">
-                jika kamu mengkonsumsi hanya 1 botol maka sisa dari gula harian
-                kamu adalah .... gram
-              </h1>
-            </div>
+            {totalBotol >= 1 && (
+              <div className="text-end mb-5">
+                <h1 className="text-sm font-bold">
+                  {`Jika Kamu Mengkonsumsi Hanya ${messageIfDrinkSomeBottles.botol} Botol Maka Sisa Dari Gula
+                  Harian Kamu Adalah ${messageIfDrinkSomeBottles.sisaGula} Gram`}
+                </h1>
+              </div>
+            )}
           </div>
 
           {modalBox && <FindProductError setModalBoxErr={setModalBox} />}

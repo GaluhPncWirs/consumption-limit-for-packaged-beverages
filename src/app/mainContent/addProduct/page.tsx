@@ -258,8 +258,15 @@ export default function AddProduct() {
                     width={20}
                     height={20}
                   />
-                  <span>Volume Kemasan (ml)</span>
+                  <span>Isi Berat Bersih (ml)</span>
                 </label>
+                <span className="text-xs font-semibold cursor-pointer select-none">
+                  {/* *Untuk Tipe Minuman Yang Harus Dilarutkan, Lihat Di bagian
+                  Petunjuk Penyajian, Yang Berisi Informasi Berapa ml Air Yang
+                  Diperlukan. */}
+                  *Untuk tipe minuman yang harus dilarutkan, lihat Petunjuk
+                  Penyajian untuk jumlah air yang diperlukan.
+                </span>
               </div>
               <div className="font-medium">
                 <div className="flex gap-x-2 items-center mb-2">

@@ -4,7 +4,7 @@ import HamburgerMenu from "../hamburgerMenu/hamburgerMenu";
 
 export default function NavigasiBar({ props, path }) {
   return (
-    <div className="w-full h-16 bg-green-400 fixed top-0 z-50">
+    <div className="w-full h-16 bg-green-400 fixed top-0 z-50 shadow-lg shadow-green-900">
       <div className="flex h-full">
         <div className="basis-1/5 bg-green-300 rounded-r-lg flex justify-center items-center max-[640px]:basis-full max-[640px]:justify-start max-[640px]:px-5 sm:basis-1/4">
           <Image
