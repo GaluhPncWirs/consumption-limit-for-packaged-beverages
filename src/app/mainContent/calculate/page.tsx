@@ -294,7 +294,7 @@ export default function MainContent() {
           </div>
           <div>
             <div
-              className={`my-8 ${
+              className={`my-5 ${
                 fillBottle.length >= 1
                   ? `flex items-center justify-center gap-3 max-[640px]:flex-col max-[640px]:gap-10 sm:flex-col sm:gap-10 md:flex-row md:gap-5`
                   : `flex-none`
@@ -365,7 +365,7 @@ export default function MainContent() {
                     )}
                   </div>
                   <label htmlFor="sugarContent" className="labelText">
-                    Kadar Gula Minuman (G)
+                    Kadar Gula Minuman
                   </label>
                 </div>
 
@@ -380,7 +380,7 @@ export default function MainContent() {
                     value={volume || ""}
                   />
                   <label htmlFor="isiBeratBersih" className="labelText">
-                    isi Berat Bersih
+                    isi Bersih
                   </label>
                 </div>
                 <div className="relative w-4/5 pt-3 md:w-11/12 lg:w-4/5">
@@ -395,6 +395,16 @@ export default function MainContent() {
                     Tipe Minuman
                   </label>
                 </div>
+                <h1 className="text-sm mt-4 max-[640px]:mx-0 max-[640px]:text-xs lg:mx-5">
+                  Produk yang di cari tidak ada ?{" "}
+                  <Link
+                    href={"/mainContent/addProduct"}
+                    className="text-blue-600 hover:underline font-semibold"
+                  >
+                    klik disini
+                  </Link>{" "}
+                  untuk menambahkan produk
+                </h1>
               </form>
 
               <div className="basis-3/5 gap-8 flex justify-center items-center max-[640px]:flex-col-reverse sm:flex-col-reverse max-[640px]:w-full sm:w-full md:basis-1/2 lg:basis-3/5">
@@ -442,7 +452,7 @@ export default function MainContent() {
                 <div
                   className={`${
                     educations === true ? `block` : `hidden`
-                  } max-[640px]:text-sm text-justify mx-5 sm:text-base font-semibold lg:text-lg`}
+                  } text-justify mx-5 font-semibold max-[640px]:text-sm sm:text-base lg:text-lg`}
                 >
                   {/* {fillBottle.length > 1 ||
                   (fillBottle.length > 1 && remainingMl < 0) ? (
@@ -475,7 +485,7 @@ export default function MainContent() {
               </div>
             </div>
             {totalBotol >= 1 && (
-              <div className="text-end mb-5">
+              <div className="text-end mx-10 mb-5 max-[640px]:text-sm sm:text-base lg:text-lg">
                 <h1 className="text-sm font-bold">
                   {`Jika Kamu Mengkonsumsi Hanya ${messageIfDrinkSomeBottles.botol} Botol Maka Sisa Dari Gula
                   Harian Kamu Adalah ${messageIfDrinkSomeBottles.sisaGula} Gram`}
@@ -487,26 +497,14 @@ export default function MainContent() {
           {modalBox && <FindProductError setModalBoxErr={setModalBox} />}
 
           <div className="mx-5">
-            <h1 className="text-sm mx-10 text-end max-[640px]:mx-0 max-[640px]:text-xs lg:mx-5">
-              Produk yang di cari tidak ada ?{" "}
-              <Link
-                href={"/mainContent/addProduct"}
-                className="text-blue-600 hover:underline font-semibold"
-              >
-                klik disini
-              </Link>{" "}
-              untuk menambahkan produk
-            </h1>
-            <div className="mt-7">
-              <button
-                type="button"
-                onClick={() => calculateMaximal()}
-                className="hover:bg-blue-400 text-lg font-semibold bg-blue-500 rounded-lg py-1 px-7 disabled:cursor-not-allowed"
-                disabled={!isFormFilled()}
-              >
-                Hitung
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => calculateMaximal()}
+              className="hover:bg-blue-400 text-lg font-semibold bg-blue-500 rounded-lg py-1 px-7 disabled:cursor-not-allowed"
+              disabled={!isFormFilled()}
+            >
+              Hitung
+            </button>
           </div>
 
           {educations === true && (

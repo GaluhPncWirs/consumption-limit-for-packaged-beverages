@@ -258,9 +258,9 @@ export default function AddProduct() {
                     width={20}
                     height={20}
                   />
-                  <span>Isi Berat Bersih (ml)</span>
+                  <span>Isi Bersih (ml)</span>
                 </label>
-                <span className="text-xs font-semibold cursor-pointer select-none">
+                <span className="text-xs font-semibold select-none text-[#F93827]">
                   {/* *Untuk Tipe Minuman Yang Harus Dilarutkan, Lihat Di bagian
                   Petunjuk Penyajian, Yang Berisi Informasi Berapa ml Air Yang
                   Diperlukan. */}
