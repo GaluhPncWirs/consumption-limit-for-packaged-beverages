@@ -281,7 +281,7 @@ export default function MainContent() {
               : `w-1/2 max-[640px]:w-11/12 sm:w-11/12 md:w-3/5 lg:w-1/2`
           }`}
         >
-          <div className="mx-5 font-semibold max-[640px]:text-sm sm:text-base md:text-lg">
+          <div className="mx-5 font-semibold max-[640px]:text-base sm:text-lg">
             <p>
               Maksimal Konsumsi Gula Perhari :{" "}
               <span>
@@ -296,7 +296,7 @@ export default function MainContent() {
             <div
               className={`my-5 ${
                 fillBottle.length >= 1
-                  ? `flex items-center justify-center gap-3 max-[640px]:flex-col max-[640px]:gap-10 sm:flex-col sm:gap-10 md:flex-row md:gap-5`
+                  ? `flex items-center justify-center max-[640px]:flex-col max-[640px]:gap-10 sm:flex-col sm:gap-10 md:flex-row md:gap-x-3 md:mx-3 lg:mx-0`
                   : `flex-none`
               }`}
             >
@@ -365,7 +365,7 @@ export default function MainContent() {
                     )}
                   </div>
                   <label htmlFor="sugarContent" className="labelText">
-                    Kadar Gula Minuman
+                    Kadar Gula Minuman (G)
                   </label>
                 </div>
 
@@ -380,7 +380,7 @@ export default function MainContent() {
                     value={volume || ""}
                   />
                   <label htmlFor="isiBeratBersih" className="labelText">
-                    isi Bersih
+                    isi Bersih (ml)
                   </label>
                 </div>
                 <div className="relative w-4/5 pt-3 md:w-11/12 lg:w-4/5">
@@ -395,7 +395,7 @@ export default function MainContent() {
                     Tipe Minuman
                   </label>
                 </div>
-                <h1 className="text-sm mt-4 max-[640px]:mx-0 max-[640px]:text-xs lg:mx-5">
+                <h1 className="text-sm mt-3 max-[640px]:max-w-xs max-[640px]:text-xs lg:mx-5">
                   Produk yang di cari tidak ada ?{" "}
                   <Link
                     href={"/mainContent/addProduct"}
@@ -452,7 +452,7 @@ export default function MainContent() {
                 <div
                   className={`${
                     educations === true ? `block` : `hidden`
-                  } text-justify mx-5 font-semibold max-[640px]:text-sm sm:text-base lg:text-lg`}
+                  } mx-5 font-semibold max-[640px]:text-base max-[640px]:text-center sm:text-lg sm:text-center md:text-justify md:text-base lg:text-lg`}
                 >
                   {/* {fillBottle.length > 1 ||
                   (fillBottle.length > 1 && remainingMl < 0) ? (
@@ -484,19 +484,8 @@ export default function MainContent() {
                 </div>
               </div>
             </div>
-            {totalBotol >= 1 && (
-              <div className="text-end mx-10 mb-5 max-[640px]:text-sm sm:text-base lg:text-lg">
-                <h1 className="text-sm font-bold">
-                  {`Jika Kamu Mengkonsumsi Hanya ${messageIfDrinkSomeBottles.botol} Botol Maka Sisa Dari Gula
-                  Harian Kamu Adalah ${messageIfDrinkSomeBottles.sisaGula} Gram`}
-                </h1>
-              </div>
-            )}
           </div>
-
-          {modalBox && <FindProductError setModalBoxErr={setModalBox} />}
-
-          <div className="mx-5">
+          <div className="mx-3 flex max-[640px]:flex-col-reverse max-[640px]:gap-y-5 max-[640px]:items-start max-[640px]:justify-normal sm:flex-col-reverse sm:gap-y-5 sm:items-start sm:justify-normal md:flex-row md:justify-between md:items-center">
             <button
               type="button"
               onClick={() => calculateMaximal()}
@@ -505,7 +494,17 @@ export default function MainContent() {
             >
               Hitung
             </button>
+            {totalBotol >= 1 && (
+              <div className="max-[640px]:text-sm max-[640px]:text-center sm:text-base sm:text-center md:flex md:justify-end lg:mr-5">
+                <h1 className="text-sm font-bold md:max-w-sm md:text-justify lg:max-w-lg">
+                  {`Jika Kamu Mengkonsumsi Hanya ${messageIfDrinkSomeBottles.botol} Botol Maka Sisa Dari Gula
+                  Harian Kamu Adalah ${messageIfDrinkSomeBottles.sisaGula} Gram`}
+                </h1>
+              </div>
+            )}
           </div>
+
+          {modalBox && <FindProductError setModalBoxErr={setModalBox} />}
 
           {educations === true && (
             <Educations
