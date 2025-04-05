@@ -66,14 +66,14 @@ export async function retriveDataVideoEducations(collectionName:string) {
 
 
 // add field in firebase
-export async function updateAllDocument (name:string) {
+export async function updateAllDocument (name:string, field:string) {
     try{
         const batch = writeBatch(firestore)
         const querySnapshot = await getDocs(collection(firestore, name))
 
         querySnapshot.forEach((doc) => {
             const docRef = doc.ref
-            batch.update(docRef, {type: "Siap Minum"})
+            batch.update(docRef, {type: field})
         })
 
         await batch.commit()

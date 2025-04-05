@@ -12,6 +12,12 @@ import { getDataFunFact } from "@/getDataFromApi/getFunFact";
 import { getVideoEducations } from "@/getDataFromApi/getVideoEdu";
 import FindProductError from "@/components/modalBox/layoutHorizontal/modalErrHor/findProdErr";
 import { getDataArtikel } from "@/getDataFromApi/getArtikel";
+import {
+  educationsForArtikel,
+  educationsForFunfactSugar,
+  educationsForVideo,
+  productBeverageTypes,
+} from "@/types/dataTypes";
 
 export default function MainContent() {
   const sugarInsideProductRef = useRef<HTMLInputElement>(null);
@@ -20,7 +26,7 @@ export default function MainContent() {
   const [fillBottle, setFillBottle] = useState<number[]>([]);
   const [educations, setEducations] = useState<boolean>(false);
   const [totalBotol, setTotalBotol] = useState<number>(0);
-  const [product, setProduct] = useState<Object[]>([]);
+  const [product, setProduct] = useState<productBeverageTypes[]>([]);
   const [getYourMaxSugars, setGetYourMaxSugars] = useState<number>(0);
   const [searchProduk, setSearchProduk] = useState<string>("");
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
@@ -32,15 +38,15 @@ export default function MainContent() {
   const listRef = useRef<HTMLUListElement | null>(null);
   const path = usePathname();
   const [servingSize, setServingSize] = useState<boolean>(false);
-  const [funFactSugar, setFunFactSugar] = useState([]);
-  const [randomVideo, setRandomVideo] = useState([]);
+  const [funFactSugar, setFunFactSugar] = useState<string[]>([]);
+  const [video, setVideo] = useState<educationsForVideo[]>([]);
   const { isFormFilled, setMustFilled } = useHandleInput({
     product: "",
   });
   const focusInput = useRef<HTMLInputElement>(null);
   const [modalBox, setModalBox] = useState<boolean>(false);
   const [remainingMl, setRemainingMl] = useState<number>(0);
-  const [artikel, setArtikel] = useState([]);
+  const [artikel, setArtikel] = useState<educationsForArtikel[]>([]);
   const [typeProduct, setTypeProduct] = useState<string>("");
   const [fillLess100, setFillLess100] = useState<number>(0);
   const [messageIfDrinkSomeBottles, setMessageIfDrinkSomeBottles] = useState({
@@ -61,35 +67,35 @@ export default function MainContent() {
 
   // Cari Data
   useEffect(() => {
-    getDataProduct((data: any) => {
-      setProduct(data);
+    getDataProduct((dataBeverage: any) => {
+      setProduct(dataBeverage);
     });
   }, []);
 
   useEffect(() => {
-    getDataFunFact((data: any) => {
-      setFunFactSugar(data.map((getFunFact: any) => getFunFact.funFact));
+    getDataFunFact((dataFunfact: educationsForFunfactSugar[]) => {
+      setFunFactSugar(dataFunfact.map((getFunFact: any) => getFunFact.funFact));
     });
   }, []);
 
   useEffect(() => {
-    getVideoEducations((data: any) => {
-      setRandomVideo(data.map((video: any) => video.linkVideo));
+    getDataArtikel((dataArtikel: any) => {
+      setArtikel(dataArtikel);
     });
   }, []);
 
   useEffect(() => {
-    getDataArtikel((data: any) => {
-      setArtikel(data);
+    getVideoEducations((dataVideo: any) => {
+      setVideo(dataVideo);
     });
   }, []);
 
   function calculateMaximal() {
     if (result.length > 0) {
       setEducations(true);
-      if (funFactSugar.length > 0 && randomVideo.length > 0) {
+      if (funFactSugar.length > 0 && video.length > 0) {
         setFunFactSugar((prev) => [...prev.sort(() => Math.random() - 0.5)]);
-        setRandomVideo((prev) => [...prev.sort(() => Math.random() - 0.5)]);
+        setVideo((prev) => [...prev.sort(() => Math.random() - 0.5)]);
         setArtikel((prev) => [...prev.sort(() => Math.random() - 0.5)]);
       }
       const sugarInsideProduct = parseFloat(
@@ -509,7 +515,7 @@ export default function MainContent() {
           {educations === true && (
             <Educations
               funFactSugar={funFactSugar}
-              randomVideo={randomVideo}
+              video={video}
               artikel={artikel}
             />
           )}
