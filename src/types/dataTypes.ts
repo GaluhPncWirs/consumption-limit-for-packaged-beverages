@@ -6,7 +6,7 @@ export interface productBeverageTypes {
 }
 
 export interface educationsForFunfactSugar {
-    funfact: string
+    funFact: string
 }
 
 export interface educationsForArtikel {

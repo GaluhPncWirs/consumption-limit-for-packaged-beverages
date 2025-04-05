@@ -24,13 +24,14 @@ export default function MainContent() {
   const totalVolumeInsideProductRef = useRef<HTMLInputElement>(null);
   const { push } = useRouter();
   const [fillBottle, setFillBottle] = useState<number[]>([]);
-  const [educations, setEducations] = useState<boolean>(false);
+  const [appearContent, setAppearContent] = useState<boolean>(false);
   const [totalBotol, setTotalBotol] = useState<number>(0);
   const [product, setProduct] = useState<productBeverageTypes[]>([]);
   const [getYourMaxSugars, setGetYourMaxSugars] = useState<number>(0);
   const [searchProduk, setSearchProduk] = useState<string>("");
-  const [selectedProduct, setSelectedProduct] = useState<any>(null);
-  const [result, setResult] = useState<object[]>([]);
+  const [selectedProduct, setSelectedProduct] =
+    useState<productBeverageTypes | null>(null);
+  const [result, setResult] = useState<productBeverageTypes[]>([]);
   const [sugar, setSugar] = useState<number>(0);
   const [volume, setVolume] = useState<number>(0);
   const [type, setType] = useState<string>("");
@@ -67,32 +68,36 @@ export default function MainContent() {
 
   // Cari Data
   useEffect(() => {
-    getDataProduct((dataBeverage: any) => {
+    getDataProduct((dataBeverage: productBeverageTypes[]) => {
       setProduct(dataBeverage);
     });
   }, []);
 
   useEffect(() => {
     getDataFunFact((dataFunfact: educationsForFunfactSugar[]) => {
-      setFunFactSugar(dataFunfact.map((getFunFact: any) => getFunFact.funFact));
+      setFunFactSugar(
+        dataFunfact.map(
+          (getFunFact: educationsForFunfactSugar) => getFunFact.funFact
+        )
+      );
     });
   }, []);
 
   useEffect(() => {
-    getDataArtikel((dataArtikel: any) => {
+    getDataArtikel((dataArtikel: educationsForArtikel[]) => {
       setArtikel(dataArtikel);
     });
   }, []);
 
   useEffect(() => {
-    getVideoEducations((dataVideo: any) => {
+    getVideoEducations((dataVideo: educationsForVideo[]) => {
       setVideo(dataVideo);
     });
   }, []);
 
   function calculateMaximal() {
     if (result.length > 0) {
-      setEducations(true);
+      setAppearContent(true);
       if (funFactSugar.length > 0 && video.length > 0) {
         setFunFactSugar((prev) => [...prev.sort(() => Math.random() - 0.5)]);
         setVideo((prev) => [...prev.sort(() => Math.random() - 0.5)]);
@@ -169,14 +174,18 @@ export default function MainContent() {
     push("/");
   }
 
-  function handleInputChange(e: any) {
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const query = e.target.value;
     setSearchProduk(query);
 
     if (query !== "") {
-      const filterSearchProduct = product.filter((item: any) => {
-        return item.nameProduct?.toLowerCase().startsWith(query.toLowerCase());
-      });
+      const filterSearchProduct = product.filter(
+        (item: productBeverageTypes) => {
+          return item.nameProduct
+            ?.toLowerCase()
+            .startsWith(query.toLowerCase());
+        }
+      );
       setResult(filterSearchProduct);
       setActiveIndex(-1);
     } else {
@@ -197,7 +206,7 @@ export default function MainContent() {
   }
 
   useEffect(() => {
-    function handleKeyEvent(e: any) {
+    function handleKeyEvent(e: KeyboardEvent) {
       if (result.length > 0) {
         if (e.key === "ArrowDown") {
           setActiveIndex((prev) => {
@@ -223,10 +232,12 @@ export default function MainContent() {
     };
   }, [result, activeIndex]);
 
-  function handleItemClick(item: any) {
+  function handleItemClick(item: productBeverageTypes) {
     setSelectedProduct(item);
     setSearchProduk(item.nameProduct);
   }
+
+  console.log(selectedProduct);
 
   useEffect(() => {
     if (selectedProduct) {
@@ -457,7 +468,7 @@ export default function MainContent() {
                 </div>
                 <div
                   className={`${
-                    educations === true ? `block` : `hidden`
+                    appearContent === true ? `block` : `hidden`
                   } mx-5 font-semibold max-[640px]:text-base max-[640px]:text-center sm:text-lg sm:text-center md:text-justify md:text-base lg:text-lg`}
                 >
                   {/* {fillBottle.length > 1 ||
@@ -512,7 +523,7 @@ export default function MainContent() {
 
           {modalBox && <FindProductError setModalBoxErr={setModalBox} />}
 
-          {educations === true && (
+          {appearContent === true && (
             <Educations
               funFactSugar={funFactSugar}
               video={video}
