@@ -13,6 +13,7 @@ export default function NavigasiBar({ props, path }) {
             width={100}
             height={100}
             className="w-3/5 bg-cover bg-center max-[640px]:w-1/3 sm:w-5/6 md:w-3/5 lg:w-1/2"
+            loading="lazy"
           />
         </div>
         <div className="max-[640px]:basis-1/6 basis-9/12">

@@ -30,6 +30,7 @@ export default function AddProduct() {
   const [isConfirm, setIsConfirm] = useState<boolean>(false);
   const [modalSuccess, setModalSuccess] = useState<boolean>(false);
   const [modalContent, setModalContent] = useState<React.ReactNode>(false);
+  const [refreshData, setRefreshData] = useState<boolean>(false);
 
   const maxLengthAlphabethNameProduct = mustFilled.nameProduct.length;
   const maxLengthNumberKandunganGula = mustFilled.kandunganGula.length;
@@ -126,6 +127,7 @@ export default function AddProduct() {
       // console.error("Gagal mengirim data:", error);
       setIsStatus(false);
     }
+    setRefreshData((prev) => !prev);
   }
 
   useEffect(() => {
@@ -144,7 +146,8 @@ export default function AddProduct() {
     getDataProduct((data: productBeverageTypes[]) => {
       setFindData(data);
     });
-  }, []);
+  }, [refreshData]);
+  console.log(refreshData);
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const query = e.target.value;

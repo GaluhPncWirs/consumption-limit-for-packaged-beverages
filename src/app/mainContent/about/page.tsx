@@ -68,6 +68,7 @@ export default function AboutProject() {
                   width={50}
                   height={50}
                   className="w-4/6 bg-cover bg-center max-[640px]:w-2/5 sm:w-2/6 md:w-2/3 lg:w-1/2"
+                  loading="lazy"
                 />
                 <div className="text-center">
                   <h1 className="font-bold text-2xl max-[640px]:mb-2 sm:mb-3">
@@ -83,6 +84,7 @@ export default function AboutProject() {
                   width={50}
                   height={50}
                   className="w-2/5 bg-cover bg-center"
+                  loading="lazy"
                 />
                 <h3 className="font-semibold text-lg text-center sm:text-xl">
                   Mahasiswa Teknik Informatika Universitas Prof.Dr. Hamka
