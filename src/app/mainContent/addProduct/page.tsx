@@ -4,10 +4,11 @@ import Image from "next/image";
 import NavigasiBar from "@/components/navbar/navigasiBar";
 import { useHandleInput } from "@/app/hooks/handle-input";
 import LayoutModalBoxs from "@/components/modalBox/layout";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AddProductError from "@/components/modalBox/layoutVertical/modalErrVer/addError";
 import { getDataProduct } from "@/getDataFromApi/getProduct";
 import ConfirmAddProduct from "@/components/modalBox/layoutVertical/modalConfirm/confirm";
+import { productBeverageTypes } from "@/types/dataTypes";
 
 export default function AddProduct() {
   const path = usePathname();
@@ -20,14 +21,14 @@ export default function AddProduct() {
       typeMinuman: "",
     });
 
-  const [modalErr, setModalErr] = useState(false);
+  const [modalErr, setModalErr] = useState<boolean>(false);
   const [isStatus, setIsStatus] = useState<boolean | null>(null);
   const inputFieldNone = useRef(null);
-  const [findData, setFindData] = useState([]);
+  const [findData, setFindData] = useState<productBeverageTypes[]>([]);
   const [searchProduk, setSearchProduk] = useState<string>("");
-  const [result, setResult] = useState([]);
-  const [isConfirm, setIsConfirm] = useState(false);
-  const [modalSuccess, setModalSuccess] = useState(false);
+  const [result, setResult] = useState<productBeverageTypes[]>([]);
+  const [isConfirm, setIsConfirm] = useState<boolean>(false);
+  const [modalSuccess, setModalSuccess] = useState<boolean>(false);
   const [modalContent, setModalContent] = useState<React.ReactNode>(false);
 
   const maxLengthAlphabethNameProduct = mustFilled.nameProduct.length;
@@ -35,7 +36,7 @@ export default function AddProduct() {
   const maxLengthNumberTakaranSajiGula = mustFilled.takaranSaji.length;
   const maxLengthNumberVolume = mustFilled.volume.length;
 
-  const [errors, setErrors] = useState({
+  const [errors, setErrors] = useState<object>({
     isNameTooLong: false,
     isSugarTooLong: false,
     isServingSizeTooLong: false,
@@ -140,19 +141,23 @@ export default function AddProduct() {
 
   // Cari Data Produk
   useEffect(() => {
-    getDataProduct((data: any) => {
+    getDataProduct((data: productBeverageTypes[]) => {
       setFindData(data);
     });
   }, []);
 
-  function handleInputChange(e: any) {
+  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const query = e.target.value;
     setSearchProduk(query);
 
     if (query !== "") {
-      const filterSearchProduct = findData.filter((item: any) => {
-        return item.nameProduct?.toLowerCase().startsWith(query.toLowerCase());
-      });
+      const filterSearchProduct = findData.filter(
+        (item: productBeverageTypes) => {
+          return item.nameProduct
+            ?.toLowerCase()
+            .startsWith(query.toLowerCase());
+        }
+      );
       setResult(filterSearchProduct);
     } else {
       setResult([]);
@@ -163,8 +168,8 @@ export default function AddProduct() {
     <div>
       <NavigasiBar path={path} props={""} />
       <div className="flex flex-col justify-center items-center max-[640px]:h-full sm:h-full md:h-screen mt-16">
-        <div className="bg-[#73EC8B] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 w-2/5 rounded-xl max-[640px]:my-6 sm:my-6 md:my-0 max-[640px]:w-11/12 sm:w-10/12 md:w-4/5 lg:w-2/3 shadow-lg shadow-slate-800 py-6">
-          <h1 className="text-2xl font-semibold text-center max-[640px]:mb-7 sm:mb-7 md:mb-6 lg:mb-8">
+        <div className="bg-[#73EC8B] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 w-2/5 rounded-xl max-[640px]:my-6 sm:my-6 md:my-0 max-[640px]:w-11/12 sm:w-10/12 md:w-4/5 lg:w-2/3 shadow-lg shadow-slate-800 py-5">
+          <h1 className="text-2xl font-semibold text-center max-[640px]:mb-7 sm:mb-7 md:mb-6">
             Penambahan Produk Minuman
           </h1>
           <div className="flex items-center justify-evenly max-[640px]:flex-col-reverse max-[640px]:gap-y-10 sm:flex-col-reverse sm:gap-y-10 md:flex-row md:gap-x-7 md:px-9 lg:px-5">
@@ -174,11 +179,11 @@ export default function AddProduct() {
               autoComplete="off"
               ref={inputFieldNone}
             >
-              <div className="relative pt-3 font-medium">
+              <div className="relative pt-2 font-medium">
                 <input
                   type="text"
                   id="nameProduct"
-                  className="inputField peer"
+                  className="inputField peer pl-1 pt-2"
                   onChange={handleValueInput}
                   value={mustFilled.nameProduct}
                 />
@@ -195,11 +200,11 @@ export default function AddProduct() {
                   <span>Nama Produk</span>
                 </label>
               </div>
-              <div className="relative pt-3 font-medium">
+              <div className="relative pt-2 font-medium">
                 <input
                   type="number"
                   id="kandunganGula"
-                  className="inputField peer"
+                  className="inputField peer pl-1 pt-1"
                   onChange={handleValueInput}
                   value={mustFilled.kandunganGula}
                 />
@@ -216,14 +221,14 @@ export default function AddProduct() {
                   <span>Kandungan Gula Minuman</span>
                 </label>
               </div>
-              <div className="relative pt-3 font-medium">
+              <div className="relative pt-2 font-medium">
                 <input
                   type="number"
                   min={0.01}
                   max={50}
                   step="0.01"
                   id="takaranSaji"
-                  className="inputField peer"
+                  className="inputField peer pl-1 pt-1"
                   onChange={handleValueInput}
                   value={mustFilled.takaranSaji}
                 />
@@ -240,11 +245,11 @@ export default function AddProduct() {
                   <span>Takaran Saji Per Kemasan</span>
                 </label>
               </div>
-              <div className="relative pt-3 font-medium">
+              <div className="relative pt-2 font-medium">
                 <input
                   type="number"
                   id="volume"
-                  className="inputField peer"
+                  className="inputField peer pl-1 pt-1"
                   onChange={handleValueInput}
                   value={mustFilled.volume}
                 />

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import ButtonBack from "../button/btnBack";
 import { useEffect, useState } from "react";
-import Image from "next/image";
 
 export default function PathNavbar({ props, path }) {
   const [pathConditions, setPathConditions] = useState({

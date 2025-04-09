@@ -237,8 +237,6 @@ export default function MainContent() {
     setSearchProduk(item.nameProduct);
   }
 
-  console.log(selectedProduct);
-
   useEffect(() => {
     if (selectedProduct) {
       setSearchProduk(selectedProduct.nameProduct);
@@ -340,7 +338,7 @@ export default function MainContent() {
                         className="p-3 bg-green-300 absolute z-10 w-full text-[#333333] font-medium max-h-40 overflow-y-auto rounded-b-lg"
                         ref={listRef}
                       >
-                        {result.map((item: any, i: number) => (
+                        {result.map((item: productBeverageTypes, i: number) => (
                           <li
                             key={item.id}
                             onClick={() => handleItemClick(item)}
@@ -442,7 +440,7 @@ export default function MainContent() {
                     <div className="fill"></div>
                   </div> */}
 
-                  {fillBottle.map((item: any, i: number) =>
+                  {fillBottle.map((item: number, i: number) =>
                     typeProduct === "Siap Minum" ? (
                       <div
                         key={i}

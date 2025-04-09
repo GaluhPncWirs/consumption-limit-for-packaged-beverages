@@ -118,15 +118,15 @@
       width: 200px;
       height: 200px;
       position: relative;
-      background-image: url("/images/glass.png");
+      background-image: url("/images/glass_new.png");
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
-      mask-image: url("/images/glass.png");
+      mask-image: url("/images/glass_new.png");
       mask-size: contain;
       mask-repeat: no-repeat;
       mask-position: center;
-      -webkit-mask-image: url("/images/glass.png");
+      -webkit-mask-image: url("/images/glass_new.png");
       mask-composite: exclude;
       display: flex;
     }

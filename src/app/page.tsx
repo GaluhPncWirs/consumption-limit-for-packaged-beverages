@@ -12,11 +12,11 @@ export default function DisplayInputUser() {
   const bodyHeight = useRef<HTMLInputElement>(null);
   const bodyWeight = useRef<HTMLInputElement>(null);
   const activityLevel = useRef<HTMLSelectElement>(null);
-  const [modalBox, setModalBox] = useState(false);
-  const [modalErrorBox, setModalErrorBox] = useState(false);
-  const [yourMaxSugar, setYourMaxSugar] = useState(0);
-  const [tdee, setTdee] = useState(0);
-  const [validate, setValidate] = useState(false);
+  const [modalBox, setModalBox] = useState<boolean>(false);
+  const [modalErrorBox, setModalErrorBox] = useState<boolean>(false);
+  const [yourMaxSugar, setYourMaxSugar] = useState<number>(0);
+  const [tdee, setTdee] = useState<number>(0);
+  const [validate, setValidate] = useState<boolean>(false);
 
   const { mustFilled, handleValueInput, isFormFilled, setMustFilled } =
     useHandleInput({
