@@ -32,11 +32,7 @@ export default function AddProduct() {
   const [isConfirm, setIsConfirm] = useState<boolean>(false);
   const [modalSuccess, setModalSuccess] = useState<boolean>(false);
   const [modalContent, setModalContent] = useState<React.ReactNode>(false);
-  const { data, error, isLoading, mutate } = useSWR("/api/getData", fetcher, {
-    revalidateOnFocus: true,
-    revalidateOnReconnect: true,
-    refreshInterval: 20000,
-  });
+  const { data, error, isLoading, mutate } = useSWR("/api/getData", fetcher);
 
   const maxLengthAlphabethNameProduct = mustFilled.nameProduct.length;
   const maxLengthNumberKandunganGula = mustFilled.kandunganGula.length;
@@ -79,7 +75,6 @@ export default function AddProduct() {
       setModalErr(true);
       return;
     }
-
     setModalSuccess(true);
 
     const waitForConfirmation = () => {
@@ -121,10 +116,6 @@ export default function AddProduct() {
     };
 
     try {
-      mutate(async (currentData: any) => {
-        return { data: [...(currentData?.data || []), newProduct] };
-      }, false);
-
       const res = await fetch("/api/addData", {
         method: "POST",
         headers: {
@@ -135,10 +126,11 @@ export default function AddProduct() {
       const resStatus = await res.json();
       // console.log("Response dari API:", resStatus);
       setIsStatus(resStatus.status);
-      mutate();
+      if (resStatus.status) {
+        mutate("/api/getData");
+      }
     } catch (error) {
       // console.error("Gagal mengirim data:", error);
-      mutate();
       setIsStatus(false);
     }
   }
