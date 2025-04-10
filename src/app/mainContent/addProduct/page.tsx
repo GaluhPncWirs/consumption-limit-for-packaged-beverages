@@ -169,12 +169,14 @@ export default function AddProduct() {
     }
   }
 
+  console.log(result);
+
   return (
     <div>
       <NavigasiBar path={path} props={""} />
       <div className="flex flex-col justify-center items-center max-[640px]:h-full sm:h-full md:h-screen mt-16">
         <div className="bg-[#73EC8B] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 w-2/5 rounded-xl max-[640px]:my-6 sm:my-6 md:my-0 max-[640px]:w-11/12 sm:w-10/12 md:w-4/5 lg:w-2/3 shadow-lg shadow-slate-800 py-5">
-          <h1 className="text-2xl font-semibold text-center max-[640px]:mb-7 sm:mb-7 md:mb-6 text-red-800">
+          <h1 className="text-2xl font-semibold text-center max-[640px]:mb-7 sm:mb-7 md:mb-6">
             Penambahan Produk Minuman
           </h1>
           <div className="flex items-center justify-evenly max-[640px]:flex-col-reverse max-[640px]:gap-y-10 sm:flex-col-reverse sm:gap-y-10 md:flex-row md:gap-x-7 md:px-9 lg:px-5">
