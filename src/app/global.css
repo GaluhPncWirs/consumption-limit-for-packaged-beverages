@@ -158,4 +158,9 @@
       transform: scale(0);
       opacity: 0;
     }
+
+    /* scroll bar */
+    .scrollBarDesign{
+      @apply [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-green-600 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-green-400
+    }
 }

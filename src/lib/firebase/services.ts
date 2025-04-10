@@ -65,20 +65,20 @@ export async function retriveDataVideoEducations(collectionName:string) {
 }
 
 
-// add field in firebase
-export async function updateAllDocument (name:string, field:string) {
-    try{
-        const batch = writeBatch(firestore)
-        const querySnapshot = await getDocs(collection(firestore, name))
+// // add field in firebase
+// export async function updateAllDocument (name:string, field:string) {
+//     try{
+//         const batch = writeBatch(firestore)
+//         const querySnapshot = await getDocs(collection(firestore, name))
 
-        querySnapshot.forEach((doc) => {
-            const docRef = doc.ref
-            batch.update(docRef, {type: field})
-        })
+//         querySnapshot.forEach((doc) => {
+//             const docRef = doc.ref
+//             batch.update(docRef, {type: field})
+//         })
 
-        await batch.commit()
-        return { success: true, message: "Semua dokumen berhasil diperbarui!" };
-    }catch(error:any){
-        return { success: false, message: error.message };
-    }
-}
+//         await batch.commit()
+//         return { success: true, message: "Semua dokumen berhasil diperbarui!" };
+//     }catch(error:any){
+//         return { success: false, message: error.message };
+//     }
+// }

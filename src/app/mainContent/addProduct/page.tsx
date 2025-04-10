@@ -32,7 +32,11 @@ export default function AddProduct() {
   const [isConfirm, setIsConfirm] = useState<boolean>(false);
   const [modalSuccess, setModalSuccess] = useState<boolean>(false);
   const [modalContent, setModalContent] = useState<React.ReactNode>(false);
-  const { data, error, isLoading, mutate } = useSWR("/api/getData", fetcher);
+  const { data, error, isLoading, mutate } = useSWR("/api/getData", fetcher, {
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+    refreshInterval: 20000,
+  });
 
   const maxLengthAlphabethNameProduct = mustFilled.nameProduct.length;
   const maxLengthNumberKandunganGula = mustFilled.kandunganGula.length;
@@ -117,6 +121,10 @@ export default function AddProduct() {
     };
 
     try {
+      mutate(async (currentData: any) => {
+        return { data: [...(currentData?.data || []), newProduct] };
+      }, false);
+
       const res = await fetch("/api/addData", {
         method: "POST",
         headers: {
@@ -127,8 +135,10 @@ export default function AddProduct() {
       const resStatus = await res.json();
       // console.log("Response dari API:", resStatus);
       setIsStatus(resStatus.status);
+      mutate();
     } catch (error) {
       // console.error("Gagal mengirim data:", error);
+      mutate();
       setIsStatus(false);
     }
   }
@@ -333,7 +343,7 @@ export default function AddProduct() {
                 <form className="relative flex items-center">
                   <input
                     type="text"
-                    className="inputField pl-10 pr-5 pb-1 mx-3"
+                    className="inputField pl-12 pr-10 pb-1 mx-3"
                     value={searchProduk}
                     onChange={handleInputChange}
                     id="search"
@@ -349,7 +359,7 @@ export default function AddProduct() {
                     />
                   </label>
                 </form>
-                <ul className="m-3 h-60 px-5 py-2 overflow-auto">
+                <ul className="m-3 h-60 px-7 py-2 overflow-auto list-decimal scrollBarDesign">
                   {result.map((item: any) => (
                     <li key={item.id}>{item.nameProduct}</li>
                   ))}
