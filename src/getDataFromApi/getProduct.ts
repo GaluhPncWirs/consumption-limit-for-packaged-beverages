@@ -10,4 +10,6 @@ export async function getDataProduct(callback: any) {
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-}
+
+    }
+    // const {data, error, isLoading} = useSWR("/api/getData", fetcher)

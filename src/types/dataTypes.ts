@@ -1,4 +1,4 @@
-export interface productBeverageTypes {
+export type productBeverageTypes = {
     id: string,
     nameProduct : string,
     sugars: number,
@@ -6,19 +6,19 @@ export interface productBeverageTypes {
     volume: number
 }
 
-export interface educationsForFunfactSugar {
+export type educationsForFunfactSugar = {
     id: string,
     funFact: string
 }
 
-export interface educationsForArtikel {
+export type educationsForArtikel = {
     id: string,
     kalimatEdukasi : string,
     linkEdukasi : string,
     sumberReferensi : string
 }
 
-export interface educationsForVideo {
+export type educationsForVideo = {
     id: string,
     linkVideo: string,
     sumber: string,

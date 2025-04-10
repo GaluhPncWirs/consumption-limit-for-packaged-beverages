@@ -9,6 +9,8 @@ import AddProductError from "@/components/modalBox/layoutVertical/modalErrVer/ad
 import { getDataProduct } from "@/getDataFromApi/getProduct";
 import ConfirmAddProduct from "@/components/modalBox/layoutVertical/modalConfirm/confirm";
 import { productBeverageTypes } from "@/types/dataTypes";
+import useSWR from "swr";
+import { fetcher } from "@/lib/fetcherSWR/fetcher";
 
 export default function AddProduct() {
   const path = usePathname();
@@ -24,13 +26,13 @@ export default function AddProduct() {
   const [modalErr, setModalErr] = useState<boolean>(false);
   const [isStatus, setIsStatus] = useState<boolean | null>(null);
   const inputFieldNone = useRef(null);
-  const [findData, setFindData] = useState<productBeverageTypes[]>([]);
+  // const [findData, setFindData] = useState<productBeverageTypes[]>([]);
   const [searchProduk, setSearchProduk] = useState<string>("");
   const [result, setResult] = useState<productBeverageTypes[]>([]);
   const [isConfirm, setIsConfirm] = useState<boolean>(false);
   const [modalSuccess, setModalSuccess] = useState<boolean>(false);
   const [modalContent, setModalContent] = useState<React.ReactNode>(false);
-  const [refreshData, setRefreshData] = useState<boolean>(false);
+  const { data, error, isLoading, mutate } = useSWR("/api/getData", fetcher);
 
   const maxLengthAlphabethNameProduct = mustFilled.nameProduct.length;
   const maxLengthNumberKandunganGula = mustFilled.kandunganGula.length;
@@ -95,7 +97,7 @@ export default function AddProduct() {
 
     await waitForConfirmation();
 
-    // Lanjutkan dengan logika pengiriman data
+    // logika pengiriman data
     const gula = Number(event.target.kandunganGula.value);
     const takaranSaji = Number(event.target.takaranSaji.value);
     const totalSugars = gula * takaranSaji;
@@ -123,12 +125,20 @@ export default function AddProduct() {
       const resStatus = await res.json();
       // console.log("Response dari API:", resStatus);
       setIsStatus(resStatus.status);
+
+      mutate();
     } catch (error) {
       // console.error("Gagal mengirim data:", error);
       setIsStatus(false);
     }
-    setRefreshData((prev) => !prev);
   }
+
+  // // Cari Data Produk
+  // useEffect(() => {
+  //   getDataProduct((data: productBeverageTypes[]) => {
+  //     setFindData(data);
+  //   });
+  // }, []);
 
   useEffect(() => {
     if (isStatus !== null) {
@@ -141,20 +151,12 @@ export default function AddProduct() {
     }
   }, [isStatus, setMustFilled]);
 
-  // Cari Data Produk
-  useEffect(() => {
-    getDataProduct((data: productBeverageTypes[]) => {
-      setFindData(data);
-    });
-  }, [refreshData]);
-  console.log(refreshData);
-
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const query = e.target.value;
     setSearchProduk(query);
 
     if (query !== "") {
-      const filterSearchProduct = findData.filter(
+      const filterSearchProduct = data?.data.filter(
         (item: productBeverageTypes) => {
           return item.nameProduct
             ?.toLowerCase()
