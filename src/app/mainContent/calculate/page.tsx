@@ -18,6 +18,8 @@ import {
   educationsForVideo,
   productBeverageTypes,
 } from "@/types/dataTypes";
+import useSWR from "swr";
+import { fetcher } from "@/lib/fetcherSWR/fetcher";
 
 export default function MainContent() {
   const sugarInsideProductRef = useRef<HTMLInputElement>(null);
@@ -54,6 +56,8 @@ export default function MainContent() {
     botol: 0,
     sisaGula: 0,
   });
+
+  // const { data, error, isLoading, mutate } = useSWR("/api/getData", fetcher);
 
   useEffect(() => {
     setMustFilled((prev: Object) => ({ ...prev, product: searchProduk }));

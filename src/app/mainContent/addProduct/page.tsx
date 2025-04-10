@@ -109,24 +109,24 @@ export default function AddProduct() {
 
     const tipeMinuman = event.target.typeMinuman.value;
 
+    const newProduct = {
+      nameProduct: eachCapitalFirstWord,
+      sugars: Math.floor(totalSugars),
+      volume: Number(event.target.volume.value),
+      type: tipeMinuman,
+    };
+
     try {
       const res = await fetch("/api/addData", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          nameProduct: eachCapitalFirstWord,
-          sugars: Math.floor(totalSugars),
-          volume: Number(event.target.volume.value),
-          type: tipeMinuman,
-        }),
+        body: JSON.stringify(newProduct),
       });
       const resStatus = await res.json();
       // console.log("Response dari API:", resStatus);
       setIsStatus(resStatus.status);
-
-      mutate();
     } catch (error) {
       // console.error("Gagal mengirim data:", error);
       setIsStatus(false);
@@ -168,8 +168,6 @@ export default function AddProduct() {
       setResult([]);
     }
   }
-
-  console.log(result);
 
   return (
     <div>
