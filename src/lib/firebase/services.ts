@@ -4,12 +4,21 @@ import { addDoc, collection, getDocs, getFirestore, query, where, writeBatch } f
 const firestore = getFirestore(app)
 
 export async function retriveDataIng(collectionName:string) {
+    console.log(`Mengambil data dari koleksi: ${collectionName}`);
     const snapshot = await getDocs(collection(firestore, collectionName))
+    console.log(`Jumlah dokumen: ${snapshot.docs.length}`);
     const ING = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
     }))
     return ING
+    // const q = query(collection(firestore, collectionName), orderBy("nameProduct"));
+    // const snapshot = await getDocs(q);
+    // const ING = snapshot.docs.map(doc => ({
+    //     id: doc.id,
+    //     ...doc.data()
+    // }));
+    // return ING;
 }
 
 export async function addData(dataProduct : {nameProduct:string, sugars:number, volume:number, type:string} ,collectionName:string) {

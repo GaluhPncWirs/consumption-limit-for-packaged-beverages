@@ -127,7 +127,6 @@ export default function AddProduct() {
       });
       const resStatus = await res.json();
       setIsStatus(resStatus.status);
-
       // if (resStatus.status) {
       //   mutate(
       //     (currentData: any[]) => {
@@ -136,6 +135,13 @@ export default function AddProduct() {
       //     { revalidate: false }
       //   );
       // }
+
+      // Refresh data setelah penambahan berhasil
+      if (resStatus.status) {
+        getDataProduct((data: productBeverageTypes[]) => {
+          setFindData(data);
+        });
+      }
     } catch (error) {
       setIsStatus(false);
     }
@@ -143,11 +149,9 @@ export default function AddProduct() {
 
   // Cari Data Produk
   useEffect(() => {
-    if (isStatus === true) {
-      getDataProduct((data: productBeverageTypes[]) => {
-        setFindData(data);
-      });
-    }
+    getDataProduct((data: productBeverageTypes[]) => {
+      setFindData(data);
+    });
   }, [isStatus]);
 
   useEffect(() => {
