@@ -1,7 +1,7 @@
 "use client";
 
 // import Visualization from "@/components/visualisasi/layout";
-import { getDataProduct } from "@/getDataFromApi/getProduct";
+// import { getDataProduct } from "@/getDataFromApi/getProduct";
 import NavigasiBar from "@/components/navbar/navigasiBar";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -18,8 +18,7 @@ import {
   educationsForVideo,
   productBeverageTypes,
 } from "@/types/dataTypes";
-import useSWR from "swr";
-import { fetcher } from "@/lib/fetcherSWR/fetcher";
+import { subscribeToProducts } from "@/lib/firebase/services";
 
 export default function MainContent() {
   const sugarInsideProductRef = useRef<HTMLInputElement>(null);
@@ -71,10 +70,19 @@ export default function MainContent() {
   }, []);
 
   // Cari Data
+  // useEffect(() => {
+  //   getDataProduct((dataBeverage: productBeverageTypes[]) => {
+  //     setProduct(dataBeverage);
+  //   });
+  // }, []);
+
   useEffect(() => {
-    getDataProduct((dataBeverage: productBeverageTypes[]) => {
-      setProduct(dataBeverage);
+    const unsubscribe = subscribeToProducts((data) => {
+      setProduct(data);
     });
+
+    // Cleanup function
+    return () => unsubscribe();
   }, []);
 
   useEffect(() => {

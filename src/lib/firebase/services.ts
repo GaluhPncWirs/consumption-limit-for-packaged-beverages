@@ -1,22 +1,24 @@
 import { productBeverageTypes } from "@/types/dataTypes"
-import { firestore } from "./init";
+import { app } from "./init";
 import { addDoc, collection, getDocs, getFirestore, onSnapshot, query, where, writeBatch } from "firebase/firestore"
 
-// export async function retriveDataIng(collectionName:string) {
-//     const snapshot = await getDocs(collection(firestore, collectionName))
-//     const ING = snapshot.docs.map(doc => ({
-//         id: doc.id,
-//         ...doc.data()
-//     }))
-//     return ING
-//     // const q = query(collection(firestore, collectionName), orderBy("nameProduct"));
-//     // const snapshot = await getDocs(q);
-//     // const ING = snapshot.docs.map(doc => ({
-//     //     id: doc.id,
-//     //     ...doc.data()
-//     // }));
-//     // return ING;
-// }
+const firestore = getFirestore(app)
+
+export async function retriveDataIng(collectionName:string) {
+    const snapshot = await getDocs(collection(firestore, collectionName))
+    const ING = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+    }))
+    return ING
+    // const q = query(collection(firestore, collectionName), orderBy("nameProduct"));
+    // const snapshot = await getDocs(q);
+    // const ING = snapshot.docs.map(doc => ({
+    //     id: doc.id,
+    //     ...doc.data()
+    // }));
+    // return ING;
+}
 
 export function subscribeToProducts(
     callback: (products: productBeverageTypes[]) => void
