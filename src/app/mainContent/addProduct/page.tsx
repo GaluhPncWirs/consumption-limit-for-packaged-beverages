@@ -11,6 +11,7 @@ import ConfirmAddProduct from "@/components/modalBox/layoutVertical/modalConfirm
 import { productBeverageTypes } from "@/types/dataTypes";
 import useSWR from "swr";
 import { fetcher } from "@/lib/fetcherSWR/fetcher";
+import { subscribeToProducts } from "@/lib/firebase/services";
 
 export default function AddProduct() {
   const path = usePathname();
@@ -35,6 +36,7 @@ export default function AddProduct() {
   // const { data, error, isLoading, mutate } = useSWR(
   //   "/api/getData",fetcher
   // );
+  const [prod, setProd] = useState<productBeverageTypes[]>([]);
 
   const maxLengthAlphabethNameProduct = mustFilled.nameProduct.length;
   const maxLengthNumberKandunganGula = mustFilled.kandunganGula.length;
@@ -137,22 +139,31 @@ export default function AddProduct() {
       // }
 
       // Refresh data setelah penambahan berhasil
-      if (resStatus.status) {
-        getDataProduct((data: productBeverageTypes[]) => {
-          setFindData(data);
-        });
-      }
+      // if (resStatus.status) {
+      //   getDataProduct((data: productBeverageTypes[]) => {
+      //     setFindData(data);
+      //   });
+      // }
     } catch (error) {
       setIsStatus(false);
     }
   }
 
-  // Cari Data Produk
   useEffect(() => {
-    getDataProduct((data: productBeverageTypes[]) => {
-      setFindData(data);
+    const unsubscribe = subscribeToProducts((data) => {
+      setProd(data);
     });
-  }, [isStatus]);
+
+    // Cleanup function
+    return () => unsubscribe();
+  }, []);
+
+  // // Cari Data Produk
+  // useEffect(() => {
+  //   getDataProduct((data: productBeverageTypes[]) => {
+  //     setFindData(data);
+  //   });
+  // }, [isStatus]);
 
   useEffect(() => {
     if (isStatus !== null) {
@@ -170,13 +181,9 @@ export default function AddProduct() {
     setSearchProduk(query);
 
     if (query !== "") {
-      const filterSearchProduct = findData.filter(
-        (item: productBeverageTypes) => {
-          return item.nameProduct
-            ?.toLowerCase()
-            .startsWith(query.toLowerCase());
-        }
-      );
+      const filterSearchProduct = prod.filter((item: productBeverageTypes) => {
+        return item.nameProduct?.toLowerCase().startsWith(query.toLowerCase());
+      });
       setResult(filterSearchProduct);
     } else {
       setResult([]);

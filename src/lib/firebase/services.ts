@@ -1,25 +1,38 @@
-import app from "./init"
-import { addDoc, collection, getDocs, getFirestore, query, where, writeBatch } from "firebase/firestore"
+import { productBeverageTypes } from "@/types/dataTypes"
+import { firestore } from "./init";
+import { addDoc, collection, getDocs, getFirestore, onSnapshot, query, where, writeBatch } from "firebase/firestore"
 
-const firestore = getFirestore(app)
+// export async function retriveDataIng(collectionName:string) {
+//     const snapshot = await getDocs(collection(firestore, collectionName))
+//     const ING = snapshot.docs.map(doc => ({
+//         id: doc.id,
+//         ...doc.data()
+//     }))
+//     return ING
+//     // const q = query(collection(firestore, collectionName), orderBy("nameProduct"));
+//     // const snapshot = await getDocs(q);
+//     // const ING = snapshot.docs.map(doc => ({
+//     //     id: doc.id,
+//     //     ...doc.data()
+//     // }));
+//     // return ING;
+// }
 
-export async function retriveDataIng(collectionName:string) {
-    console.log(`Mengambil data dari koleksi: ${collectionName}`);
-    const snapshot = await getDocs(collection(firestore, collectionName))
-    console.log(`Jumlah dokumen: ${snapshot.docs.length}`);
-    const ING = snapshot.docs.map(doc => ({
+export function subscribeToProducts(
+    callback: (products: productBeverageTypes[]) => void
+  ) {
+    const q = query(collection(firestore, "nutritionFact"));
+    
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const products = querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
-    }))
-    return ING
-    // const q = query(collection(firestore, collectionName), orderBy("nameProduct"));
-    // const snapshot = await getDocs(q);
-    // const ING = snapshot.docs.map(doc => ({
-    //     id: doc.id,
-    //     ...doc.data()
-    // }));
-    // return ING;
-}
+      })) as productBeverageTypes[];
+      callback(products);
+    });
+  
+    return unsubscribe; // Untuk cleanup nanti
+  }
 
 export async function addData(dataProduct : {nameProduct:string, sugars:number, volume:number, type:string} ,collectionName:string) {
     const dataQuery = query(collection(firestore, collectionName), where("nameProduct", "==", dataProduct.nameProduct))
