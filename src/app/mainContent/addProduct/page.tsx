@@ -6,7 +6,7 @@ import { useHandleInput } from "@/app/hooks/handle-input";
 import LayoutModalBoxs from "@/components/modalBox/layout";
 import React, { useEffect, useRef, useState } from "react";
 import AddProductError from "@/components/modalBox/layoutVertical/modalErrVer/addError";
-import { getDataProduct } from "@/getDataFromApi/getProduct";
+// import { getDataProduct } from "@/getDataFromApi/getProduct";
 import ConfirmAddProduct from "@/components/modalBox/layoutVertical/modalConfirm/confirm";
 import { productBeverageTypes } from "@/types/dataTypes";
 import useSWR from "swr";
