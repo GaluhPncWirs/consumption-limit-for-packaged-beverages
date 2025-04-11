@@ -26,13 +26,15 @@ export default function AddProduct() {
   const [modalErr, setModalErr] = useState<boolean>(false);
   const [isStatus, setIsStatus] = useState<boolean | null>(null);
   const inputFieldNone = useRef(null);
-  // const [findData, setFindData] = useState<productBeverageTypes[]>([]);
+  const [findData, setFindData] = useState<productBeverageTypes[]>([]);
   const [searchProduk, setSearchProduk] = useState<string>("");
   const [result, setResult] = useState<productBeverageTypes[]>([]);
   const [isConfirm, setIsConfirm] = useState<boolean>(false);
   const [modalSuccess, setModalSuccess] = useState<boolean>(false);
   const [modalContent, setModalContent] = useState<React.ReactNode>(false);
-  const { data, error, isLoading, mutate } = useSWR("/api/getData", fetcher);
+  // const { data, error, isLoading, mutate } = useSWR(
+  //   "/api/getData",fetcher
+  // );
 
   const maxLengthAlphabethNameProduct = mustFilled.nameProduct.length;
   const maxLengthNumberKandunganGula = mustFilled.kandunganGula.length;
@@ -124,23 +126,29 @@ export default function AddProduct() {
         body: JSON.stringify(newProduct),
       });
       const resStatus = await res.json();
-      // console.log("Response dari API:", resStatus);
       setIsStatus(resStatus.status);
-      if (resStatus.status) {
-        mutate("/api/getData");
-      }
+
+      // if (resStatus.status) {
+      //   mutate(
+      //     (currentData: any[]) => {
+      //       return [{ id: resStatus.id, ...newProduct }, ...currentData];
+      //     },
+      //     { revalidate: false }
+      //   );
+      // }
     } catch (error) {
-      // console.error("Gagal mengirim data:", error);
       setIsStatus(false);
     }
   }
 
-  // // Cari Data Produk
-  // useEffect(() => {
-  //   getDataProduct((data: productBeverageTypes[]) => {
-  //     setFindData(data);
-  //   });
-  // }, []);
+  // Cari Data Produk
+  useEffect(() => {
+    if (isStatus === true) {
+      getDataProduct((data: productBeverageTypes[]) => {
+        setFindData(data);
+      });
+    }
+  }, [isStatus]);
 
   useEffect(() => {
     if (isStatus !== null) {
@@ -158,7 +166,7 @@ export default function AddProduct() {
     setSearchProduk(query);
 
     if (query !== "") {
-      const filterSearchProduct = data?.data.filter(
+      const filterSearchProduct = findData.filter(
         (item: productBeverageTypes) => {
           return item.nameProduct
             ?.toLowerCase()

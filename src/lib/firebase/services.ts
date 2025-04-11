@@ -1,5 +1,5 @@
 import app from "./init"
-import { addDoc, collection, getDocs, getFirestore, query, where, writeBatch } from "firebase/firestore"
+import { addDoc, collection, getDocs, getFirestore, onSnapshot, query, where, writeBatch } from "firebase/firestore"
 
 const firestore = getFirestore(app)
 
@@ -12,7 +12,7 @@ export async function retriveDataIng(collectionName:string) {
     return ING
 }
 
-export async function addData(dataProduct : {nameProduct:string, sugars:number, volume:number} ,collectionName:string) {
+export async function addData(dataProduct : {nameProduct:string, sugars:number, volume:number, type:string} ,collectionName:string) {
     const dataQuery = query(collection(firestore, collectionName), where("nameProduct", "==", dataProduct.nameProduct))
     const snapshot = await getDocs(dataQuery)
     const data = snapshot.docs.map((doc) => ({
@@ -24,8 +24,8 @@ export async function addData(dataProduct : {nameProduct:string, sugars:number, 
         return {status:false, message:"data sudah ada"}
     }else{
         try{
-            await addDoc(collection(firestore, collectionName), dataProduct)
-            return {status: true, message:"product berhasil di tambahkan"}
+            const newDocs = await addDoc(collection(firestore, collectionName), dataProduct)
+            return {status: true, message:"product berhasil di tambahkan", id: newDocs.id}
         }catch(error){
             return {status: false, message:"terdapat kesalahan"}
         }

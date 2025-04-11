@@ -7,10 +7,14 @@ export default function ConfirmAddProduct({
   setModalSuccess,
   mustFilled,
 }) {
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     setIsConfirm(true);
     onConfirm();
     setModalSuccess(false);
+
+    // await fetch("http://localhost:3000/api/revalidate?tag=updateData", {
+    //   method: "POST",
+    // });
   };
 
   return (
@@ -47,7 +51,7 @@ export default function ConfirmAddProduct({
         <div className="bg-green-400 rounded-b-xl flex justify-around items-center w-full h-full max-[640px]:py-2 sm:py-2 md:py-3">
           <button
             className="hover:bg-green-600 text-lg font-semibold w-1/3 rounded-lg"
-            onClick={handleConfirm}
+            onClick={() => handleConfirm()}
           >
             Ya
           </button>

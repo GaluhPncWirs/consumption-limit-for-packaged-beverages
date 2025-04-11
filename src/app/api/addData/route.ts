@@ -4,5 +4,5 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
     const req = await request.json()
     const response = await addData(req, "nutritionFact")
-    return NextResponse.json({status: response.status, message:response.message})
+    return NextResponse.json({status: response.status, message:response.message, id:response.id})
 }
