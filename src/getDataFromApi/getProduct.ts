@@ -1,6 +1,6 @@
 export async function getDataProduct(callback: any) {
     try {
-        const responseApi = await fetch("http://localhost:3000/api/getData");
+        const responseApi = await fetch("/api/getData");
         if (!responseApi.ok) {
           throw new Error(`HTTP error! status: ${responseApi.status}`);
         }

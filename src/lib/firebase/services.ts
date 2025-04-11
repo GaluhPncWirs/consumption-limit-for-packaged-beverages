@@ -1,5 +1,5 @@
 import app from "./init"
-import { addDoc, collection, getDocs, getFirestore, onSnapshot, query, where, writeBatch } from "firebase/firestore"
+import { addDoc, collection, getDocs, getFirestore, query, where, writeBatch } from "firebase/firestore"
 
 const firestore = getFirestore(app)
 
