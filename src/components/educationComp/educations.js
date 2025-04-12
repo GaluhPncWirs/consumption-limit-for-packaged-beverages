@@ -1,22 +1,22 @@
 export default function Educations({ funFactSugar, video, artikel }) {
   function getVideoEducations() {
-    if (video[0].sumber === "Youtube") {
+    if (video[0]?.sumber === "Youtube") {
       return (
         <iframe
           title="YouTube Shorts And Facebook Short"
-          src={`https://www.youtube.com/embed/${video[0].linkVideo}`}
+          src={`https://www.youtube.com/embed/${video[0]?.linkVideo}`}
           width={500}
           height={300}
           allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           className="rounded-xl w-full"
         />
       );
-    } else if (video[0].sumber === "Instagram") {
+    } else if (video[0]?.sumber === "Instagram") {
       return (
         <div className="h-[500px] overflow-hidden bg-white">
           <blockquote
             className="instagram-media m-auto"
-            data-instgrm-permalink={video[0].linkVideo}
+            data-instgrm-permalink={video[0]?.linkVideo}
             data-instgrm-version="14"
           ></blockquote>
           <script async src="https://www.instagram.com/embed.js"></script>
@@ -48,11 +48,11 @@ export default function Educations({ funFactSugar, video, artikel }) {
             Berdasarkan Sumber Artikel
           </h1>
           <p className="font-medium text-justify">
-            {artikel[0].kalimatEdukasi}
+            {artikel[0]?.kalimatEdukasi}
           </p>
           <p>
             — Sumber:{" "}
-            <a href={artikel[0].linkEdukasi}>{artikel[0].sumberReferensi}</a>
+            <a href={artikel[0]?.linkEdukasi}>{artikel[0]?.sumberReferensi}</a>
           </p>
         </div>
       </div>

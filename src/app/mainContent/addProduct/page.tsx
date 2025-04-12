@@ -4,13 +4,10 @@ import Image from "next/image";
 import NavigasiBar from "@/components/navbar/navigasiBar";
 import { useHandleInput } from "@/app/hooks/handle-input";
 import LayoutModalBoxs from "@/components/modalBox/layout";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AddProductError from "@/components/modalBox/layoutVertical/modalErrVer/addError";
-// import { getDataProduct } from "@/getDataFromApi/getProduct";
 import ConfirmAddProduct from "@/components/modalBox/layoutVertical/modalConfirm/confirm";
 import { productBeverageTypes } from "@/types/dataTypes";
-import useSWR from "swr";
-import { fetcher } from "@/lib/fetcherSWR/fetcher";
 import { subscribeToProducts } from "@/lib/firebase/services";
 
 export default function AddProduct() {
@@ -33,10 +30,6 @@ export default function AddProduct() {
   const [isConfirm, setIsConfirm] = useState<boolean>(false);
   const [modalSuccess, setModalSuccess] = useState<boolean>(false);
   const [modalContent, setModalContent] = useState<React.ReactNode>(false);
-  // const { data, error, isLoading, mutate } = useSWR(
-  //   "/api/getData",fetcher
-  // );
-  const [prod, setProd] = useState<productBeverageTypes[]>([]);
 
   const maxLengthAlphabethNameProduct = mustFilled.nameProduct.length;
   const maxLengthNumberKandunganGula = mustFilled.kandunganGula.length;
@@ -100,7 +93,7 @@ export default function AddProduct() {
 
     await waitForConfirmation();
 
-    // logika pengiriman data
+    // pengiriman data
     const gula = Number(event.target.kandunganGula.value);
     const takaranSaji = Number(event.target.takaranSaji.value);
     const totalSugars = gula * takaranSaji;
@@ -129,41 +122,18 @@ export default function AddProduct() {
       });
       const resStatus = await res.json();
       setIsStatus(resStatus.status);
-      // if (resStatus.status) {
-      //   mutate(
-      //     (currentData: any[]) => {
-      //       return [{ id: resStatus.id, ...newProduct }, ...currentData];
-      //     },
-      //     { revalidate: false }
-      //   );
-      // }
-
-      // Refresh data setelah penambahan berhasil
-      // if (resStatus.status) {
-      //   getDataProduct((data: productBeverageTypes[]) => {
-      //     setFindData(data);
-      //   });
-      // }
     } catch (error) {
       setIsStatus(false);
     }
   }
 
+  // cari data
   useEffect(() => {
-    const unsubscribe = subscribeToProducts((data) => {
-      setProd(data);
+    const unsubscribeDataProductBeverage = subscribeToProducts((data) => {
+      setFindData(data);
     });
-
-    // Cleanup function
-    return () => unsubscribe();
+    return () => unsubscribeDataProductBeverage();
   }, []);
-
-  // // Cari Data Produk
-  // useEffect(() => {
-  //   getDataProduct((data: productBeverageTypes[]) => {
-  //     setFindData(data);
-  //   });
-  // }, [isStatus]);
 
   useEffect(() => {
     if (isStatus !== null) {
@@ -181,9 +151,13 @@ export default function AddProduct() {
     setSearchProduk(query);
 
     if (query !== "") {
-      const filterSearchProduct = prod.filter((item: productBeverageTypes) => {
-        return item.nameProduct?.toLowerCase().startsWith(query.toLowerCase());
-      });
+      const filterSearchProduct = findData.filter(
+        (item: productBeverageTypes) => {
+          return item.nameProduct
+            ?.toLowerCase()
+            .startsWith(query.toLowerCase());
+        }
+      );
       setResult(filterSearchProduct);
     } else {
       setResult([]);

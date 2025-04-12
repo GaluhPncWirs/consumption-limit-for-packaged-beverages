@@ -1,24 +1,24 @@
 "use client";
 
-// import Visualization from "@/components/visualisasi/layout";
-// import { getDataProduct } from "@/getDataFromApi/getProduct";
 import NavigasiBar from "@/components/navbar/navigasiBar";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import Educations from "@/components/educationComp/educations";
 import { useHandleInput } from "../../hooks/handle-input";
-import { getDataFunFact } from "@/getDataFromApi/getFunFact";
-import { getVideoEducations } from "@/getDataFromApi/getVideoEdu";
 import FindProductError from "@/components/modalBox/layoutHorizontal/modalErrHor/findProdErr";
-import { getDataArtikel } from "@/getDataFromApi/getArtikel";
 import {
   educationsForArtikel,
   educationsForFunfactSugar,
   educationsForVideo,
   productBeverageTypes,
 } from "@/types/dataTypes";
-import { subscribeToProducts } from "@/lib/firebase/services";
+import {
+  subscribeToFunFactSugars,
+  subscribeToProducts,
+  subscribeToReleatedArtikel,
+  subscribeToVideoEducation,
+} from "@/lib/firebase/services";
 
 export default function MainContent() {
   const sugarInsideProductRef = useRef<HTMLInputElement>(null);
@@ -56,8 +56,6 @@ export default function MainContent() {
     sisaGula: 0,
   });
 
-  // const { data, error, isLoading, mutate } = useSWR("/api/getData", fetcher);
-
   useEffect(() => {
     setMustFilled((prev: Object) => ({ ...prev, product: searchProduk }));
   }, [searchProduk, setMustFilled]);
@@ -69,52 +67,14 @@ export default function MainContent() {
     }
   }, []);
 
-  // Cari Data
-  // useEffect(() => {
-  //   getDataProduct((dataBeverage: productBeverageTypes[]) => {
-  //     setProduct(dataBeverage);
-  //   });
-  // }, []);
-
-  useEffect(() => {
-    const unsubscribe = subscribeToProducts((data) => {
-      setProduct(data);
-    });
-
-    // Cleanup function
-    return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    getDataFunFact((dataFunfact: educationsForFunfactSugar[]) => {
-      setFunFactSugar(
-        dataFunfact.map(
-          (getFunFact: educationsForFunfactSugar) => getFunFact.funFact
-        )
-      );
-    });
-  }, []);
-
-  useEffect(() => {
-    getDataArtikel((dataArtikel: educationsForArtikel[]) => {
-      setArtikel(dataArtikel);
-    });
-  }, []);
-
-  useEffect(() => {
-    getVideoEducations((dataVideo: educationsForVideo[]) => {
-      setVideo(dataVideo);
-    });
-  }, []);
-
   function calculateMaximal() {
     if (result.length > 0) {
-      setAppearContent(true);
       if (funFactSugar.length > 0 && video.length > 0) {
         setFunFactSugar((prev) => [...prev.sort(() => Math.random() - 0.5)]);
         setVideo((prev) => [...prev.sort(() => Math.random() - 0.5)]);
         setArtikel((prev) => [...prev.sort(() => Math.random() - 0.5)]);
       }
+      setAppearContent(true);
       const sugarInsideProduct = parseFloat(
         sugarInsideProductRef.current?.value || "0"
       );
@@ -166,6 +126,104 @@ export default function MainContent() {
       setModalBox(true);
     }
   }
+
+  useEffect(() => {
+    const unsubscribeDataProductBeverage = subscribeToProducts(
+      (dataProduct) => {
+        setProduct(dataProduct);
+      }
+    );
+
+    return () => unsubscribeDataProductBeverage();
+  }, []);
+
+  // ambil data produk minuman
+  useEffect(() => {
+    if (appearContent) {
+      const unsubscribeDataFunFactSugar = subscribeToFunFactSugars(
+        (dataFunfact) => {
+          setFunFactSugar(
+            dataFunfact.map(
+              (getFunFact: educationsForFunfactSugar) => getFunFact.funFact
+            )
+          );
+        }
+      );
+
+      const unsubscribeDataArtikel = subscribeToReleatedArtikel(
+        (dataArtikel) => {
+          setArtikel(dataArtikel);
+        }
+      );
+
+      const unsubscribeDataVideoEducation = subscribeToVideoEducation(
+        (dataVideo) => {
+          setVideo(dataVideo);
+        }
+      );
+
+      return () => {
+        unsubscribeDataFunFactSugar(),
+          unsubscribeDataArtikel(),
+          unsubscribeDataVideoEducation();
+      };
+    }
+  }, [appearContent]);
+
+  // // ambil data funfact tentang gula
+  // useEffect(() => {
+  //   const unsubscribeDataFunFactSugar = subscribeToFunFactSugars(
+  //     (dataFunfact) => {
+  //       setFunFactSugar(
+  //         dataFunfact.map(
+  //           (getFunFact: educationsForFunfactSugar) => getFunFact.funFact
+  //         )
+  //       );
+  //     }
+  //   );
+
+  //   return () => unsubscribeDataFunFactSugar();
+  // }, []);
+
+  // // useEffect(() => {
+  // //   getDataFunFact((dataFunfact: educationsForFunfactSugar[]) => {
+  // //     setFunFactSugar(
+  // //       dataFunfact.map(
+  // //         (getFunFact: educationsForFunfactSugar) => getFunFact.funFact
+  // //       )
+  // //     );
+  // //   });
+  // // }, []);
+
+  // // ambil data artikel
+  // useEffect(() => {
+  //   const unsubscribeDataArtikel = subscribeToReleatedArtikel((dataArtikel) => {
+  //     setArtikel(dataArtikel)
+  //   })
+
+  //   return () => unsubscribeDataArtikel()
+  // },[])
+
+  // // useEffect(() => {
+  // //   getDataArtikel((dataArtikel: educationsForArtikel[]) => {
+  // //     setArtikel(dataArtikel);
+  // //   });
+  // // }, []);
+
+  // // ambil data video edukasi
+  // useEffect(() => {
+  //   const unsubscribeDataVideoEducation = subscribeToVideoEducation((dataVideo) => {
+  //     setVideo(dataVideo)
+  //   })
+
+  //   return () => unsubscribeDataVideoEducation()
+  // },[])
+
+  // // useEffect(() => {
+  // //   getVideoEducations((dataVideo: educationsForVideo[]) => {
+  // //     setVideo(dataVideo);
+  // //   });
+  // // }, []);
 
   useEffect(() => {
     if (!type) {
@@ -436,22 +494,6 @@ export default function MainContent() {
 
               <div className="basis-3/5 gap-8 flex justify-center items-center max-[640px]:flex-col-reverse sm:flex-col-reverse max-[640px]:w-full sm:w-full md:basis-1/2 lg:basis-3/5">
                 <div className="flex w-full items-center justify-center max-[640px]:flex-wrap max-[640px]:gap-y-5 sm:flex-wrap sm:gap-y-5 md:flex-nowrap">
-                  {/* {fillBottle.map((item: any, i: number) => (
-                    <div
-                      key={i}
-                      className="bottleInside max-[640px]:w-1/3 sm:w-1/4"
-                    >
-                      <div
-                        className="fill"
-                        style={{ height: `${item}%` }}
-                      ></div>
-                    </div>
-                  ))}
-
-                  <div className="glassCupInside max-[640px]:w-1/3 sm:w-1/4">
-                    <div className="fill"></div>
-                  </div> */}
-
                   {fillBottle.map((item: number, i: number) =>
                     typeProduct === "Siap Minum" ? (
                       <div
@@ -481,32 +523,6 @@ export default function MainContent() {
                     appearContent === true ? `block` : `hidden`
                   } mx-5 font-semibold max-[640px]:text-base max-[640px]:text-center sm:text-lg sm:text-center md:text-justify md:text-base lg:text-lg`}
                 >
-                  {/* {fillBottle.length > 1 ||
-                  (fillBottle.length > 1 && remainingMl < 0) ? (
-                    <p>
-                      Kamu Bisa Konsumsi Maksimal {fillBottle.length}{" "}
-                      {typeProduct === "Siap Minum" ? "Botol" : "Gelas"}{" "}
-                      {remainingMl} ml
-                    </p>
-                  ) : (fillBottle.length === 1 &&
-                      fillLess100 < 100 &&
-                      fillLess100 !== 0) ||
-                    (fillBottle.length === 1 &&
-                      fillLess100 < 100 &&
-                      remainingMl < 0 &&
-                      fillLess100 !== 0) ? (
-                    <p>
-                      Minuman ini Maksimal Bisa Dikonsumsi {remainingMl} ml,
-                      Kurang Dari Satu{" "}
-                      {typeProduct === "Siap Minum" ? "Botol" : "Gelas"}
-                    </p>
-                  ) : (
-                    <p>
-                      Kamu Bisa Konsumsi Maksimal {fillBottle.length}{" "}
-                      {typeProduct === "Siap Minum" ? "Botol" : "Gelas"}
-                    </p>
-                  )} */}
-
                   {getConsumtionMessage()}
                 </div>
               </div>
@@ -540,14 +556,6 @@ export default function MainContent() {
               artikel={artikel}
             />
           )}
-
-          {/* {fillBottle.length === 1 && (
-            <Visualization
-              sugarProduk={sugarProduk}
-              volumeProduk={volumeProduk}
-              getYourMaxSugars={getYourMaxSugars}
-            />
-          )} */}
         </div>
       </div>
     </div>

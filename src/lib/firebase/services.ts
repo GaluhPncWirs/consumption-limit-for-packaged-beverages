@@ -1,24 +1,8 @@
-import { productBeverageTypes } from "@/types/dataTypes"
+import { educationsForArtikel, educationsForFunfactSugar, educationsForVideo, productBeverageTypes } from "@/types/dataTypes"
 import { app } from "./init";
-import { addDoc, collection, getDocs, getFirestore, onSnapshot, query, where, writeBatch } from "firebase/firestore"
+import { addDoc, collection, getDocs, getFirestore, onSnapshot, query, where} from "firebase/firestore"
 
 const firestore = getFirestore(app)
-
-export async function retriveDataIng(collectionName:string) {
-    const snapshot = await getDocs(collection(firestore, collectionName))
-    const ING = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-    }))
-    return ING
-    // const q = query(collection(firestore, collectionName), orderBy("nameProduct"));
-    // const snapshot = await getDocs(q);
-    // const ING = snapshot.docs.map(doc => ({
-    //     id: doc.id,
-    //     ...doc.data()
-    // }));
-    // return ING;
-}
 
 export function subscribeToProducts(
     callback: (products: productBeverageTypes[]) => void
@@ -26,14 +10,14 @@ export function subscribeToProducts(
     const q = query(collection(firestore, "nutritionFact"));
     
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const products = querySnapshot.docs.map(doc => ({
+      const dataProductsBeverage = querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       })) as productBeverageTypes[];
-      callback(products);
+      callback(dataProductsBeverage);
     });
   
-    return unsubscribe; // Untuk cleanup nanti
+    return unsubscribe;
   }
 
 export async function addData(dataProduct : {nameProduct:string, sugars:number, volume:number, type:string} ,collectionName:string) {
@@ -56,53 +40,46 @@ export async function addData(dataProduct : {nameProduct:string, sugars:number, 
     }
 }
 
+export function subscribeToFunFactSugars(callback: (funFactSugarEducation: educationsForFunfactSugar[]) => void){
+    const q = query(collection(firestore, "funFactSugar"))
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const dataFunfactSugar = querySnapshot.docs.map((doc) => ({
+            id: doc.id, 
+            ...doc.data()
+        })) as educationsForFunfactSugar[]
+        callback(dataFunfactSugar)
+    })
 
-export async function retriveDataFunFact(collectionName:string){
-    const snapshot = await getDocs(collection(firestore, collectionName))
-    const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data()
-    }))
-
-    return data
-}
-
-export async function retriveDataSugarReleatedJournal(collectionName:string){
-    const snapshot = await getDocs(collection(firestore, collectionName))
-    const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data()
-    }))
-
-    return data
+    return unsubscribe
 }
 
 
-export async function retriveDataVideoEducations(collectionName:string) {
-    const snapshot = await getDocs(collection(firestore, collectionName))
-    const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data()
-    }))
+export function subscribeToReleatedArtikel(callback: (sugarRelatedJournalsEducation: educationsForArtikel[]) => void){
+    const q = query(collection(firestore, "sugarRelatedJournals"))
 
-    return data
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const dataReleatedArtikel = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data()
+        })) as educationsForArtikel[]
+
+        callback(dataReleatedArtikel)
+    })
+
+    return unsubscribe
 }
 
 
-// // add field in firebase
-// export async function updateAllDocument (name:string, field:string) {
-//     try{
-//         const batch = writeBatch(firestore)
-//         const querySnapshot = await getDocs(collection(firestore, name))
+export function subscribeToVideoEducation(callback: (videoEducationsEducation: educationsForVideo[]) => void){
+    const q = query(collection(firestore, "videoEducations"))
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const dataVideoEducation = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data()
+        })) as educationsForVideo[]
 
-//         querySnapshot.forEach((doc) => {
-//             const docRef = doc.ref
-//             batch.update(docRef, {type: field})
-//         })
+        callback(dataVideoEducation)
+    })
 
-//         await batch.commit()
-//         return { success: true, message: "Semua dokumen berhasil diperbarui!" };
-//     }catch(error:any){
-//         return { success: false, message: error.message };
-//     }
-// }
+    return unsubscribe
+}
