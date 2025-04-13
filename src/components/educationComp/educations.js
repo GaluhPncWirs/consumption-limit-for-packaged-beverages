@@ -37,7 +37,7 @@ export default function Educations({ funFactSugar, video, artikel }) {
   }
 
   return (
-    <div className="flex mt-7 px-5 gap-8 justify-center items-center max-[640px]:flex-col sm:flex-col md:flex-row">
+    <div className="flex mt-7 px-5 gap-8 justify-center items-center max-[640px]:flex-col sm:flex-col md:flex-row max-[640px]:gap-y-5">
       <div className="basis-1/2">
         <div className="mb-4">
           <h1 className="font-semibold text-lg mb-2">Fun Fact Gula</h1>

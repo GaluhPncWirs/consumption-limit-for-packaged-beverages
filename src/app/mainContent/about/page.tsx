@@ -60,7 +60,7 @@ export default function AboutProject() {
       <div className="max-[640px]:h-full sm:h-full mt-16">
         <div className="flex md:gap-5 lg:gap-x-7 h-full max-[640px]:flex-col sm:flex-col md:flex-row lg:flex-row lg:w-5/6 lg:mx-auto mx-5">
           <div className="bg-[#73EC8B] rounded-xl px-5 md:basis-1/3 lg:basis-[30%] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 shadow-lg shadow-slate-800 my-5">
-            <div className="flex items-center flex-col justify-evenly h-full max-[640px]:p-5 sm:py-7">
+            <div className="flex items-center flex-col justify-evenly h-full max-[640px]:p-5 sm:py-7 max-[640px]:gap-y-5">
               <div className="sm:flex sm:justify-center sm:items-center sm:w-11/12 sm:gap-5 max-[640px]:flex max-[640px]:justify-center max-[640px]:items-center max-[640px]:gap-5 max-[640px]:w-full md:flex-col">
                 <Image
                   src={"/images/userProfile.png"}
@@ -92,12 +92,12 @@ export default function AboutProject() {
               </div>
             </div>
           </div>
-          <div className="bg-[#73EC8B] rounded-xl p-8 md:basis-2/3 lg:basis-[70%] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 shadow-lg shadow-slate-800 my-5">
+          <div className="bg-[#73EC8B] rounded-xl p-8 md:basis-2/3 lg:basis-[70%] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 shadow-lg shadow-slate-800 my-5 max-[640px]:p-6">
             <h1 className="text-2xl font-bold text-center mb-5">
               Tentang Project
             </h1>
             <div className="text-justify font-medium text-lg flex flex-col gap-2">
-              <p className="indent-7">
+              <p className="indent-7 max-[640px]:indent-0">
                 Saya membuat website ini untuk menyelesaikan studi perkuliahan
                 ini dengan judul skripsi yang saya kerjakan yaitu{" "}
                 <span className="font-semibold">
@@ -107,7 +107,7 @@ export default function AboutProject() {
                 </span>
                 .
               </p>
-              <p className="indent-7">
+              <p className="indent-7 max-[640px]:indent-0">
                 Website ini dirancang untuk membantu pengguna dalam menghitung
                 batas konsumsi gula harian berdasarkan profil individu mereka.
                 Melalui sistem ini, pengguna dapat mengetahui nilai kalori dan
@@ -119,7 +119,7 @@ export default function AboutProject() {
                 dan dapat mengambil langkah yang lebih bijak dalam memilih
                 minuman yang mereka konsumsi.
               </p>
-              <p className="indent-7">
+              <p className="indent-7 max-[640px]:indent-0">
                 Semoga website ini dapat memberikan manfaat bagi masyarakat yang
                 ingin mengontrol asupan gula dengan lebih baik dan menjalani
                 pola hidup yang lebih sehat.
