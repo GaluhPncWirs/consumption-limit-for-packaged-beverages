@@ -102,7 +102,6 @@ export default function AddProduct() {
       .split(" ")
       .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
-
     const tipeMinuman = event.target.typeMinuman.value;
 
     const newProduct = {

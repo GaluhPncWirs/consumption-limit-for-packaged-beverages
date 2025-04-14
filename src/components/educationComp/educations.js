@@ -50,9 +50,15 @@ export default function Educations({ funFactSugar, video, artikel }) {
           <p className="font-medium text-justify">
             {artikel[0]?.kalimatEdukasi}
           </p>
-          <p>
-            — Sumber:{" "}
-            <a href={artikel[0]?.linkEdukasi}>{artikel[0]?.sumberReferensi}</a>
+          <p className="mt-1">
+            — Baca Selengkapnya di{" "}
+            <a
+              href={artikel[0]?.linkEdukasi}
+              target="_blank"
+              className="text-blue-600 hover:underline font-semibold"
+            >
+              {artikel[0]?.sumberReferensi}
+            </a>
           </p>
         </div>
       </div>

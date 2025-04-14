@@ -480,7 +480,7 @@ export default function MainContent() {
                     Tipe Minuman
                   </label>
                 </div>
-                <h1 className="text-sm mt-3 max-[640px]:max-w-xs max-[640px]:text-xs lg:mx-5">
+                <h1 className="text-sm mt-2 max-[640px]:mx-3 max-[640px]:text-xs lg:mx-4 text-center">
                   Produk yang di cari tidak ada ?{" "}
                   <Link
                     href={"/mainContent/addProduct"}
@@ -507,7 +507,7 @@ export default function MainContent() {
                       </div>
                     ) : (
                       <div
-                        className="glassCupInside max-[640px]:w-1/3 sm:w-1/4"
+                        className="glassCupInside max-[640px]:w-1/5 sm:w-1/5 md:w-1/4 max-[640px]:ml-5 sm:ml-5 lg:ml-0"
                         key={i}
                       >
                         <div
