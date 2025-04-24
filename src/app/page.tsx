@@ -40,21 +40,29 @@ export default function DisplayInputUser() {
       const height = parseInt(bodyHeight.current?.value || "0");
       let BMR; // Basal Metabolic Rate
 
+      // jika radio button laki-laki terpilih
       if (male.current?.checked) {
+        // jika isi radio button berupa "male"
         if (male.current?.value === "male") {
+          // maka rumusnya ini
           BMR = 10 * weight + 6.25 * height - 5 * age + 5;
         }
       }
-
+      // jika radio button perempuan terpilih
       if (female.current?.checked) {
+        // jika isi radio button berupa "female"
         if (female.current?.value === "female") {
+          // maka rumusnya ini
           BMR = 10 * weight + 6.25 * height - 5 * age - 161;
         }
       }
-
+      // variabel kosong untuk menampung nilai
       let activityFactor;
+      // cek nilai dari tingkat aktifitas
       switch (activityLevel.current?.value) {
+        // jika tingkat aktifitas "sedentary"
         case "sedentary":
+          // maka "activityFactor = 1.2" akan mengisi nilai
           activityFactor = 1.2;
           break;
         case "lightlyActive":
@@ -73,24 +81,43 @@ export default function DisplayInputUser() {
           activityFactor = 1.2;
       }
 
+      // // cek nilai dari tingkat aktifitas
+      // // jika tingkat aktifitas "sedentary"
+      // if (activityLevel.current?.value === "sedentary") {
+      //   // maka "activityFactor = 1.2" akan mengisi nilai
+      //   activityFactor = 1.2;
+      // } else if (activityLevel.current?.value === "lightlyActive") {
+      //   activityFactor = 1.375;
+      // } else if (activityLevel.current?.value === "moderatelyActive") {
+      //   activityFactor = 1.55;
+      // } else if (activityLevel.current?.value === "veryActive") {
+      //   activityFactor = 1.725;
+      // } else if (activityLevel.current?.value === "extraActive") {
+      //   activityFactor = 1.9;
+      // } else {
+      //   activityFactor = 1.2;
+      // }
+
+      // lalu variabel TDEE menyimpan jumlah kalori perhari
       const TDEE = BMR! * activityFactor;
-      let maxCalories;
-
-      const convertToMeters = height / 100;
-      const heightSquares = Math.pow(convertToMeters, 2);
-      let bodyMassIndex = Math.floor(weight / heightSquares);
-
-      if (bodyMassIndex >= 30) {
-        // obesitas
-        maxCalories = TDEE * 0.05;
-      } else {
-        // normal
-        maxCalories = TDEE * 0.1;
-      }
-
-      const maxSugarPerGrams = maxCalories / 4; // Karena 1 gram gula = 4 kalori
+      // untuk menghitung jumlah gula perhari
+      const kalori = TDEE * 0.1; // berdasarkan pedoman WHO 10%
+      const maxSugarPerGrams = kalori / 4; // hasil kalori dibagi 4 karena 1 g gula = 4 kalori
       setYourMaxSugar(maxSugarPerGrams);
       setTdee(TDEE);
+      // let maxCalories;
+
+      // const convertToMeters = height / 100;
+      // const heightSquares = Math.pow(convertToMeters, 2);
+      // let bodyMassIndex = Math.floor(weight / heightSquares);
+
+      // if (bodyMassIndex >= 30) {
+      //   // obesitas
+      //   maxCalories = TDEE * 0.05;
+      // } else {
+      //   // normal
+      //   maxCalories = TDEE * 0.1;
+      // }
     }
   }
 

@@ -28,7 +28,8 @@ export default function MainContent() {
   const [appearContent, setAppearContent] = useState<boolean>(false);
   const [totalBotol, setTotalBotol] = useState<number>(0);
   const [product, setProduct] = useState<productBeverageTypes[]>([]);
-  const [getYourMaxSugars, setGetYourMaxSugars] = useState<number>(0);
+  const [maksimalGulaHarianPengguna, setMaksimalGulaHarianPengguna] =
+    useState<number>(0);
   const [searchProduk, setSearchProduk] = useState<string>("");
   const [selectedProduct, setSelectedProduct] =
     useState<productBeverageTypes | null>(null);
@@ -63,7 +64,7 @@ export default function MainContent() {
   useEffect(() => {
     const maxSugars = localStorage.getItem("maxSugars");
     if (maxSugars) {
-      setGetYourMaxSugars(Number(maxSugars));
+      setMaksimalGulaHarianPengguna(Number(maxSugars));
     }
   }, []);
 
@@ -75,20 +76,18 @@ export default function MainContent() {
         setArtikel((prev) => [...prev.sort(() => Math.random() - 0.5)]);
       }
       setAppearContent(true);
-      const sugarInsideProduct = parseFloat(
+      const kandunganGulaDidalamProduk = parseFloat(
         sugarInsideProductRef.current?.value || "0"
       );
-      const totalVolumeInsideProduct = parseFloat(
+      const totalIsiMinuman = parseFloat(
         totalVolumeInsideProductRef.current?.value || "0"
       );
+      const gulaPerSatuML = kandunganGulaDidalamProduk / totalIsiMinuman; //ubah total gula menjadi per 1 ml
 
-      const sugarPerSatuML = sugarInsideProduct / totalVolumeInsideProduct; //ubah total gula menjadi per 1 ml
-
-      const maxConsumptionMl = getYourMaxSugars / sugarPerSatuML;
-
-      const numberOfBottles = Math.floor(
-        maxConsumptionMl / totalVolumeInsideProduct
-      );
+      // menghitung jumalah botol yang datap dikonsumsi
+      const maxKonsumsiPerMl = maksimalGulaHarianPengguna / gulaPerSatuML;
+      // hasilnya dibulatkan kebawah
+      const numberOfBottles = Math.floor(maxKonsumsiPerMl / totalIsiMinuman);
 
       setTotalBotol(numberOfBottles);
 
@@ -97,9 +96,10 @@ export default function MainContent() {
         displayBottle = 1;
       }
 
-      const sugarPerBotol = sugarPerSatuML * totalVolumeInsideProduct;
+      // untuk sisa gula
+      const sugarPerBotol = gulaPerSatuML * totalIsiMinuman;
       const totalSugarConsume = sugarPerBotol * displayBottle;
-      const remainingSugar = getYourMaxSugars - totalSugarConsume;
+      const remainingSugar = maksimalGulaHarianPengguna - totalSugarConsume;
 
       setMessageIfDrinkSomeBottles(
         (prev: { botol: number; sisaGula: number }) => ({
@@ -109,12 +109,15 @@ export default function MainContent() {
         })
       );
 
-      const remaining = maxConsumptionMl % totalVolumeInsideProduct;
+      // menghitung sisa konsumsi
+      const remaining = maxKonsumsiPerMl % totalIsiMinuman;
+      // sisa tersebut dikonversi ke dalam persen
       const percentageFillForRemaining = Math.round(
-        (remaining / totalVolumeInsideProduct) * 100
+        (remaining / totalIsiMinuman) * 100
       );
-
+      // jumlah botol diubah menjadi array yang diisi 100 disetiap botol yang ada
       const fillArray: number[] = Array(numberOfBottles).fill(100);
+      // jika terdapat sisa maka array "jumlahBotol" diisi oleh variabel ini "berapaPersenYangTersedia"
       if (percentageFillForRemaining > 0) {
         fillArray.push(percentageFillForRemaining);
       }
@@ -337,8 +340,8 @@ export default function MainContent() {
     ) {
       return (
         <p>
-          Minuman ini Maksimal Bisa Dikonsumsi {remainingMl} ml, Kurang Dari
-          Satu {typeProduct === "Siap Minum" ? "Botol" : "Gelas"}
+          Minuman ini Maksimal Bisa Dikonsumsi {remainingMl} ml, hanya 1{" "}
+          {typeProduct === "Siap Minum" ? "Botol" : "Gelas"}
         </p>
       );
     } else {
@@ -366,17 +369,15 @@ export default function MainContent() {
               : `max-[640px]:w-11/12 sm:w-11/12 md:w-3/5 lg:w-1/2`
           }`}
         >
-          <div className="mx-5 font-semibold max-[640px]:text-base sm:text-lg">
-            <p>
-              Maksimal Konsumsi Gula Perhari :{" "}
-              <span>
-                {getYourMaxSugars.toLocaleString("id-ID", {
-                  maximumFractionDigits: 0,
-                })}{" "}
-                Gram
-              </span>
-            </p>
-          </div>
+          <p className="mx-5 font-semibold max-[640px]:text-base sm:text-lg">
+            Maksimal Konsumsi Gula Perhari :{" "}
+            <span>
+              {maksimalGulaHarianPengguna.toLocaleString("id-ID", {
+                maximumFractionDigits: 0,
+              })}{" "}
+              Gram
+            </span>
+          </p>
           <div>
             <div
               className={`my-5 ${
@@ -521,9 +522,14 @@ export default function MainContent() {
                 <div
                   className={`${
                     appearContent === true ? `block` : `hidden`
-                  } mx-5 font-semibold max-[640px]:text-base max-[640px]:text-center sm:text-lg sm:text-center md:text-justify md:text-base lg:text-lg`}
+                  } mx-5 font-semibold max-[640px]:text-base max-[640px]:text-center sm:text-lg sm:text-center md:text-center md:text-base lg:text-lg lg:max-w-lg`}
                 >
                   {getConsumtionMessage()}
+                  <h2 className="sm:text-xs max-[640px]:text-xs text-[#F93827] mt-1">
+                    *Disclaimer Ini hanya berlaku jika kamu belum ada asupan
+                    gula sama sekali hari ini. Kalau sudah ada, sebaiknya
+                    jumlahnya dikurangi
+                  </h2>
                 </div>
               </div>
             </div>
