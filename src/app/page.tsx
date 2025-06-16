@@ -160,12 +160,6 @@ export default function DisplayInputUser() {
   return (
     <div className="max-w-2xl mx-auto flex flex-col items-center justify-center h-screen">
       <div className="bg-[#73EC8B] rounded-lg py-7 px-3 max-w-xl mx-auto max-[640px]:max-w-sm inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 shadow-lg shadow-slate-800 max-[640px]:py-5">
-        {/* <div className="mb-5 text-center text-lg font-semibold">
-  <h2>
-    silahkan inputkan di bawah ini agar bisa mengetahui berapa
-    kalori anda{" "}
-  </h2>
-</div> */}
         <h1 className="text-center mb-8 text-xl font-bold max-[640px]:text-lg max-[640px]:mb-5">
           Penghitung Kebutuhan Kalori Dan Gula Harian
         </h1>
@@ -183,7 +177,6 @@ export default function DisplayInputUser() {
                 height={20}
                 src={"/images/gender.png"}
                 alt="gender"
-                style={{ height: "auto", width: "auto" }}
               />
               <span className="text-lg">Gender</span>
             </div>
@@ -228,13 +221,7 @@ export default function DisplayInputUser() {
               className="labelText flex flex-row-reverse gap-2"
             >
               <span>Usia (tahun)</span>
-              <Image
-                width={30}
-                height={20}
-                src={"/images/age.png"}
-                alt="age"
-                style={{ height: "auto", width: "auto" }}
-              />
+              <Image width={30} height={20} src={"/images/age.png"} alt="age" />
             </label>
           </div>
 
@@ -259,7 +246,6 @@ export default function DisplayInputUser() {
                 height={20}
                 src={"/images/height.png"}
                 alt="height"
-                style={{ height: "auto", width: "auto" }}
               />
             </label>
           </div>
@@ -286,7 +272,6 @@ export default function DisplayInputUser() {
                 height={20}
                 src={"/images/weight.png"}
                 alt="weight"
-                style={{ height: "auto", width: "auto" }}
               />
             </label>
           </div>
