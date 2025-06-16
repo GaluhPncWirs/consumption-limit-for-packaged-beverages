@@ -1,8 +1,8 @@
 "use client";
-import ModalBox from "@/components/modalBox/modalSucces";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { useHandleInput } from "./hooks/handle-input";
+import Image from "next/image";
+import ModalBox from "@/components/modalBox/modalSucces";
 import IconWarning from "@/components/warningIcon/icon";
 
 export default function DisplayInputUser() {
@@ -81,23 +81,6 @@ export default function DisplayInputUser() {
           activityFactor = 1.2;
       }
 
-      // // cek nilai dari tingkat aktifitas
-      // // jika tingkat aktifitas "sedentary"
-      // if (activityLevel.current?.value === "sedentary") {
-      //   // maka "activityFactor = 1.2" akan mengisi nilai
-      //   activityFactor = 1.2;
-      // } else if (activityLevel.current?.value === "lightlyActive") {
-      //   activityFactor = 1.375;
-      // } else if (activityLevel.current?.value === "moderatelyActive") {
-      //   activityFactor = 1.55;
-      // } else if (activityLevel.current?.value === "veryActive") {
-      //   activityFactor = 1.725;
-      // } else if (activityLevel.current?.value === "extraActive") {
-      //   activityFactor = 1.9;
-      // } else {
-      //   activityFactor = 1.2;
-      // }
-
       // lalu variabel TDEE menyimpan jumlah kalori perhari
       const TDEE = BMR! * activityFactor;
       // untuk menghitung jumlah gula perhari
@@ -156,7 +139,6 @@ export default function DisplayInputUser() {
       });
     }
   }, [validate, setMustFilled, modalErrorBox]);
-
   return (
     <div className="max-w-2xl mx-auto flex flex-col items-center justify-center h-screen">
       <div className="bg-[#73EC8B] rounded-lg py-7 px-3 max-w-xl mx-auto max-[640px]:max-w-sm inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 shadow-lg shadow-slate-800 max-[640px]:py-5">
@@ -326,42 +308,42 @@ export default function DisplayInputUser() {
             Hitung
           </button>
         </div>
-      </div>
-      <div>
-        {validate === true && (
-          <ModalBox
-            setModalBox={setModalBox}
-            yourMaxSugar={yourMaxSugar}
-            tdee={tdee}
-            setValidate={setValidate}
-          />
-        )}
+        <div>
+          {validate === true && (
+            <ModalBox
+              setModalBox={setModalBox}
+              yourMaxSugar={yourMaxSugar}
+              tdee={tdee}
+              setValidate={setValidate}
+            />
+          )}
 
-        {modalErrorBox && (
-          <div className="h-full w-full absolute inset-0 bg-black/50">
-            <div className="bg-[#4ADE80] w-1/3 rounded-xl absolute top-1/2 left-1/2 h-1/3 z-40 -translate-x-1/2 -translate-y-1/2 max-[640px]:w-4/5 sm:w-3/5 md:w-1/2 lg:w-2/5 shadow-lg shadow-slate-700">
-              <div className="flex justify-center items-center h-3/4 gap-x-8 max-[640px]:gap-x-5 max-[640px]:px-5 sm:px-6 md:px-8 lg:px-10 max-[640px]:h-5/6">
-                <IconWarning />
-                <div className="w-full">
-                  <h1 className="font-bold text-xl max-[640px]:text-lg">
-                    Perhitungan Tidak Valid
-                  </h1>
-                  <p className="font-medium mt-3 max-[640px]:mt-2">
-                    Hasilnya Tidak Memenuhi Standar, Silahkan Input Kembali !
-                  </p>
+          {modalErrorBox && (
+            <div className="h-full w-full absolute inset-0 bg-black/50">
+              <div className="bg-[#4ADE80] w-1/3 rounded-xl absolute top-1/2 left-1/2 h-1/3 z-40 -translate-x-1/2 -translate-y-1/2 max-[640px]:w-4/5 sm:w-3/5 md:w-1/2 lg:w-2/5 shadow-lg shadow-slate-700">
+                <div className="flex justify-center items-center h-3/4 gap-x-8 max-[640px]:gap-x-5 max-[640px]:px-5 sm:px-6 md:px-8 lg:px-10 max-[640px]:h-5/6">
+                  <IconWarning />
+                  <div className="w-full">
+                    <h1 className="font-bold text-xl max-[640px]:text-lg">
+                      Perhitungan Tidak Valid
+                    </h1>
+                    <p className="font-medium mt-3 max-[640px]:mt-2">
+                      Hasilnya Tidak Memenuhi Standar, Silahkan Input Kembali !
+                    </p>
+                  </div>
+                </div>
+                <div className="h-1/4 bg-[#22C55E] rounded-b-xl flex justify-center items-center hover:bg-green-600 max-[640px]:h-1/5">
+                  <button
+                    className="text-xl font-semibold w-full h-full max-[640px]:text-lg"
+                    onClick={() => setModalErrorBox(false)}
+                  >
+                    Oke
+                  </button>
                 </div>
               </div>
-              <div className="h-1/4 bg-[#22C55E] rounded-b-xl flex justify-center items-center hover:bg-green-600 max-[640px]:h-1/5">
-                <button
-                  className="text-xl font-semibold w-full h-full max-[640px]:text-lg"
-                  onClick={() => setModalErrorBox(false)}
-                >
-                  Oke
-                </button>
-              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
