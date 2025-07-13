@@ -337,9 +337,8 @@ export default function AddProduct() {
                     <Image
                       src={"/images/search-icon.png"}
                       alt="Search"
-                      width={60}
-                      height={60}
-                      className="w-1/2"
+                      width={30}
+                      height={30}
                     />
                   </label>
                 </form>
