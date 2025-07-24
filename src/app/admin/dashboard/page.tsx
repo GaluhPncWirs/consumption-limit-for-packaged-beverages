@@ -8,7 +8,11 @@ import { useEffect, useRef, useState } from "react";
 import AddProductError from "@/components/modalBox/layoutVertical/modalErrVer/addError";
 import ConfirmAddProduct from "@/components/modalBox/layoutVertical/modalConfirm/confirm";
 import { productBeverageTypes } from "@/types/dataTypes";
-import { subscribeToProducts } from "@/lib/firebase/services";
+import {
+  pendingDeleteData,
+  subscribeToPendingProducts,
+  subscribeToProducts,
+} from "@/lib/firebase/services";
 import {
   Dialog,
   DialogClose,
@@ -32,6 +36,7 @@ export default function AdminPage() {
     });
 
   const [modalErr, setModalErr] = useState<boolean>(false);
+  const [product, setProduct] = useState<any>([]);
   const [isStatus, setIsStatus] = useState<boolean | null>(null);
   const inputFieldNone = useRef(null);
   // const [findData, setFindData] = useState<productBeverageTypes[]>([]);
@@ -133,6 +138,36 @@ export default function AdminPage() {
       setIsStatus(false);
     }
   }
+
+  useEffect(() => {
+    const unsubscribeDataProductBeverage = subscribeToPendingProducts(
+      (dataProduct) => {
+        setProduct(dataProduct);
+      }
+    );
+
+    return () => unsubscribeDataProductBeverage();
+  }, []);
+
+  async function deleteProd(productName: string) {
+    return await pendingDeleteData(productName);
+  }
+
+  // async function handleProduct(){
+  //   try {
+  //     const res = await fetch("/api/products/submitUser", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(newProduct),
+  //     });
+  //     const resStatus = await res.json();
+  //     setIsStatus(resStatus.status);
+  //   } catch (error) {
+  //     setIsStatus(false);
+  //   }
+  // }
 
   // // cari data
   // useEffect(() => {
@@ -328,48 +363,48 @@ export default function AdminPage() {
             {/* {result.map((item: any) => (
               <li key={item.id}>{item.nameProduct}</li>
             ))} */}
-            <li className="flex justify-between items-center">
-              <h1>test 1</h1>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <button className="px-4 py-1 bg-green-500 hover:bg-green-600 rounded-md text-slate-800 font-semibold">
-                    Detail
-                  </button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Detail Data Minuman</DialogTitle>
-                  </DialogHeader>
-                  <ul>
-                    <li>
-                      Nama Produk : <span>tes 123</span>
-                    </li>
-                    <li>
-                      Kandungan Gula Minuman : <span>21 gram</span>
-                    </li>
-                    <li>
-                      Takaran Saji Per Kemasan : <span>1</span>
-                    </li>
-                    <li>
-                      Isi Bersih (ml) : <span>350 ml</span>
-                    </li>
-                    <li>
-                      Tipe Minuman : <span>siap diminum</span>
-                    </li>
-                  </ul>
-                  <DialogFooter>
-                    <DialogClose asChild>
-                      <button className="px-4 py-1 bg-red-400 hover:bg-red-500 rounded-md text-slate-800 font-semibold">
-                        Cancel
-                      </button>
-                    </DialogClose>
-                    <button className="px-4 py-1 bg-green-300 hover:bg-green-400 rounded-md text-slate-800 font-semibold">
-                      Accept
+            {product.map((item: any) => (
+              <li className="flex justify-between items-center" key={item.id}>
+                <h1>{item.nameProduct}</h1>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <button className="px-4 py-1 bg-green-500 hover:bg-green-600 rounded-md text-slate-800 font-semibold">
+                      Detail
                     </button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-            </li>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Detail Data Minuman</DialogTitle>
+                    </DialogHeader>
+                    <ul>
+                      <li>
+                        Nama Produk : <span>{item.nameProduct}</span>
+                      </li>
+                      <li>
+                        Kandungan Gula Minuman : <span>{item.sugars} gram</span>
+                      </li>
+                      <li>
+                        Isi Bersih (ml) : <span>{item.volume} ml</span>
+                      </li>
+                      <li>
+                        Tipe Minuman : <span>{item.type}</span>
+                      </li>
+                    </ul>
+                    <DialogFooter>
+                      <button className="px-4 py-1 bg-green-300 hover:bg-green-400 rounded-md text-slate-800 font-semibold">
+                        Accept
+                      </button>
+                      <button
+                        className="px-4 py-1 bg-red-400 hover:bg-red-500 rounded-md text-slate-800 font-semibold"
+                        onClick={() => deleteProd(item.nameProduct)}
+                      >
+                        Delete
+                      </button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
