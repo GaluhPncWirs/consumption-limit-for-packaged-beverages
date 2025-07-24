@@ -443,10 +443,10 @@ export default function MainContent() {
                       Kemasan
                     </span>
                     {servingSize && (
-                      <div className="text-[0.65rem] font-medium text-justify">
-                        Jadi maksudnya itu adalah jika ada sebuah minuman yang
-                        takaran sajinya itu 3 per kemasan dan kandungan gulanya
-                        10g maka 3 X 10 yaitu total gulanya menjadi 30g gula
+                      <div className="text-xs font-medium text-justify">
+                        Jadi maksudnya adalah jika minuman yang takaran sajinya
+                        itu 3 per kemasan dan kandungan gulanya 10g maka 3 X 10
+                        yaitu total gulanya menjadi 30g gula
                       </div>
                     )}
                   </div>
@@ -527,8 +527,8 @@ export default function MainContent() {
                   {getConsumtionMessage()}
                   <h2 className="sm:text-xs max-[640px]:text-xs text-[#F93827] mt-1">
                     *Disclaimer Ini hanya berlaku jika kamu belum ada asupan
-                    gula sama sekali hari ini. Kalau sudah ada, sebaiknya
-                    jumlahnya dikurangi
+                    gula sama sekali di hari ini. Kalau sudah ada, sebaiknya
+                    jumlahnya dikurangi.
                   </h2>
                 </div>
               </div>
