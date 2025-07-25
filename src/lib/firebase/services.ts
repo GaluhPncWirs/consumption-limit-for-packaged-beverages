@@ -37,6 +37,22 @@ export function subscribeToProducts(
     return unsubscribe;
   }
 
+export function subscribeToLoginAdmin(
+    callback: (adminLogin: productBeverageTypes[]) => void
+  ) {
+    const q = query(collection(firestore, "admin"));
+    
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const dataProductsBeverage = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as productBeverageTypes[];
+      callback(dataProductsBeverage);
+    });
+  
+    return unsubscribe;
+  }
+
 export async function addData(dataProduct : {nameProduct:string, sugars:number, volume:number, type:string} ,collectionName:string) {
     const dataQuery = query(collection(firestore, collectionName), where("nameProduct", "==", dataProduct.nameProduct))
     const snapshot = await getDocs(dataQuery)
@@ -73,21 +89,6 @@ export async function pendingDeleteData(nameProduct:string) {
     }catch{
     return { status: false, message: "Terjadi kesalahan saat menghapus data" };
     }
-    // const data = snapshot.docs.map((doc) => ({
-    //     id:doc.id,
-    //     ...doc.data()
-    // }))
-
-    // if(data.length > 0){
-    //     return {status:false, message:"data sudah ada"}
-    // }else{
-    //     try{
-    //         const newDocs = await addDoc(collection(firestore, collectionName), dataProduct)
-    //         return {status: true, message:"product berhasil di tambahkan", id: newDocs.id}
-    //     }catch(error){
-    //         return {status: false, message:"terdapat kesalahan"}
-    //     }
-    // }
 }
 
 export function subscribeToFunFactSugars(callback: (funFactSugarEducation: educationsForFunfactSugar[]) => void){

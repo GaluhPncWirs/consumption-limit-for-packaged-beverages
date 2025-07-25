@@ -1,4 +1,3 @@
-import { database } from "@/lib/firebase/firebaseAdmin"
 import { addData } from "@/lib/firebase/services"
 import { NextRequest, NextResponse } from "next/server"
 

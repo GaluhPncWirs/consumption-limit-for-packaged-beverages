@@ -1,17 +1,41 @@
 "use client";
+import { subscribeToLoginAdmin } from "@/lib/firebase/services";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast, Toaster } from "sonner";
 
 export default function LoginPageAdmin() {
   const { push } = useRouter();
+  const [loginAdmin, setLoginAdmin] = useState<any>([]);
+
+  useEffect(() => {
+    const unsubscribeDataProductBeverage = subscribeToLoginAdmin(
+      (dataAdmin) => {
+        setLoginAdmin(dataAdmin);
+      }
+    );
+    return () => unsubscribeDataProductBeverage();
+  }, []);
 
   function handleLogin(e: any) {
     e.preventDefault();
     const valueEmail = e.currentTarget.email.value;
     const valuePassword = e.currentTarget.password.value;
-    push("/admin/dashboard");
+
+    if (
+      loginAdmin[0].email === valueEmail &&
+      loginAdmin[0].password === valuePassword
+    ) {
+      push("/admin/dashboard");
+    } else {
+      toast("Gagal Login ❎", {
+        description: `Mungkin Dari Salah Satu Yang Kamu Inputkan Salah`,
+      });
+    }
   }
   return (
     <div className="h-screen flex justify-center items-center flex-col">
+      <Toaster />
       <div className="bg-[#73EC8B] w-2/5 py-10 rounded-xl inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 shadow-lg shadow-slate-700">
         <h1 className="text-3xl font-bold text-center mb-5 text-green-800">
           Login Admin

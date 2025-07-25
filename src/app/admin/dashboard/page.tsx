@@ -7,22 +7,20 @@ import LayoutModalBoxs from "@/components/modalBox/layout";
 import { useEffect, useRef, useState } from "react";
 import AddProductError from "@/components/modalBox/layoutVertical/modalErrVer/addError";
 import ConfirmAddProduct from "@/components/modalBox/layoutVertical/modalConfirm/confirm";
-import { productBeverageTypes } from "@/types/dataTypes";
 import {
   pendingDeleteData,
   subscribeToPendingProducts,
-  subscribeToProducts,
 } from "@/lib/firebase/services";
 import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { toast, Toaster } from "sonner";
 
 export default function AdminPage() {
   const path = usePathname();
@@ -39,11 +37,9 @@ export default function AdminPage() {
   const [product, setProduct] = useState<any>([]);
   const [isStatus, setIsStatus] = useState<boolean | null>(null);
   const inputFieldNone = useRef(null);
-  // const [findData, setFindData] = useState<productBeverageTypes[]>([]);
   const [isConfirm, setIsConfirm] = useState<boolean>(false);
   const [modalSuccess, setModalSuccess] = useState<boolean>(false);
   const [modalContent, setModalContent] = useState<React.ReactNode>(false);
-
   const maxLengthAlphabethNameProduct = mustFilled.nameProduct.length;
   const maxLengthNumberKandunganGula = mustFilled.kandunganGula.length;
   const maxLengthNumberTakaranSajiGula = mustFilled.takaranSaji.length;
@@ -150,32 +146,11 @@ export default function AdminPage() {
   }, []);
 
   async function deleteProd(productName: string) {
+    toast("Berhasil ✅", {
+      description: `Data Produk ${productName} Telah Di Hapus`,
+    });
     return await pendingDeleteData(productName);
   }
-
-  // async function handleProduct(){
-  //   try {
-  //     const res = await fetch("/api/products/submitUser", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(newProduct),
-  //     });
-  //     const resStatus = await res.json();
-  //     setIsStatus(resStatus.status);
-  //   } catch (error) {
-  //     setIsStatus(false);
-  //   }
-  // }
-
-  // // cari data
-  // useEffect(() => {
-  //   const unsubscribeDataProductBeverage = subscribeToProducts((data) => {
-  //     setFindData(data);
-  //   });
-  //   return () => unsubscribeDataProductBeverage();
-  // }, []);
 
   useEffect(() => {
     if (isStatus !== null) {
@@ -188,8 +163,40 @@ export default function AdminPage() {
     }
   }, [isStatus, setMustFilled]);
 
+  async function acceptData(idProd: any, name: string) {
+    const choosenProduct = product.find(
+      (idProduct: any) => idProduct.id === idProd
+    );
+
+    if (!choosenProduct) {
+      setIsStatus(false);
+      return;
+    }
+    try {
+      const res = await fetch("/api/addData", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(choosenProduct),
+      });
+      const resStatus = await res.json();
+      setIsStatus(resStatus.status);
+
+      if (resStatus.status) {
+        await pendingDeleteData(name);
+        toast("Berhasil ✅", {
+          description: `Data Produk ${name} Telah Ditambahkan`,
+        });
+      }
+    } catch (error) {
+      setIsStatus(false);
+    }
+  }
+
   return (
     <div className="flex justify-center items-center max-[640px]:h-full sm:h-full lg:h-screen max-[640px]:flex-col sm:flex-col md:flex-row md:gap-x-10">
+      <Toaster />
       <div className="bg-[#73EC8B] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 rounded-xl max-[640px]:my-6 sm:my-6 md:my-5 max-[640px]:w-11/12 sm:w-10/12 md:w-2/3 lg:w-[45%] shadow-lg shadow-slate-800 lg:pb-8 lg:pt-6">
         <h1 className="text-2xl font-semibold text-center max-[640px]:mb-5 sm:mb-7 md:mb-6 max-[640px]:text-xl">
           Penambahan Produk Minuman
@@ -331,28 +338,6 @@ export default function AdminPage() {
             </button>
           </form>
         </div>
-
-        {modalSuccess && modalContent}
-
-        {isConfirm && (
-          <LayoutModalBoxs>
-            {isStatus === true ? (
-              <LayoutModalBoxs.ModalAddProductSuccess
-                setModalOnclick={setIsConfirm}
-              />
-            ) : isStatus === false ? (
-              <LayoutModalBoxs.ModalAddProductSame
-                setModalOnclick={setIsConfirm}
-              />
-            ) : (
-              <LayoutModalBoxs.LoadingAnimation />
-            )}
-          </LayoutModalBoxs>
-        )}
-
-        {modalErr && (
-          <AddProductError setModalOnclick={setModalErr} errors={errors} />
-        )}
       </div>
       <div className="bg-[#73EC8B] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 rounded-xl max-[640px]:my-6 sm:my-6 md:my-5 max-[640px]:w-11/12 sm:w-10/12 md:w-1/3 lg:w-1/3 shadow-lg shadow-slate-800 pb-6">
         <h1 className="p-3 text-center font-semibold text-lg bg-[#15B392] rounded-t-lg">
@@ -360,9 +345,6 @@ export default function AdminPage() {
         </h1>
         <div className="flex flex-col">
           <ul className="m-3 h-80 px-7 py-2 overflow-auto scrollBarDesign">
-            {/* {result.map((item: any) => (
-              <li key={item.id}>{item.nameProduct}</li>
-            ))} */}
             {product.map((item: any) => (
               <li className="flex justify-between items-center" key={item.id}>
                 <h1>{item.nameProduct}</h1>
@@ -391,15 +373,22 @@ export default function AdminPage() {
                       </li>
                     </ul>
                     <DialogFooter>
-                      <button className="px-4 py-1 bg-green-300 hover:bg-green-400 rounded-md text-slate-800 font-semibold">
-                        Accept
-                      </button>
-                      <button
-                        className="px-4 py-1 bg-red-400 hover:bg-red-500 rounded-md text-slate-800 font-semibold"
-                        onClick={() => deleteProd(item.nameProduct)}
-                      >
-                        Delete
-                      </button>
+                      <DialogClose asChild>
+                        <button
+                          className="px-4 py-1 bg-green-300 hover:bg-green-400 rounded-md text-slate-800 font-semibold"
+                          onClick={() => acceptData(item.id, item.nameProduct)}
+                        >
+                          Accept
+                        </button>
+                      </DialogClose>
+                      <DialogClose asChild>
+                        <button
+                          className="px-4 py-1 bg-red-400 hover:bg-red-500 rounded-md text-slate-800 font-semibold"
+                          onClick={() => deleteProd(item.nameProduct)}
+                        >
+                          Delete
+                        </button>
+                      </DialogClose>
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
@@ -408,6 +397,28 @@ export default function AdminPage() {
           </ul>
         </div>
       </div>
+
+      {modalSuccess && modalContent}
+
+      {isConfirm && (
+        <LayoutModalBoxs>
+          {isStatus === true ? (
+            <LayoutModalBoxs.ModalAddProductSuccess
+              setModalOnclick={setIsConfirm}
+            />
+          ) : isStatus === false ? (
+            <LayoutModalBoxs.ModalAddProductSame
+              setModalOnclick={setIsConfirm}
+            />
+          ) : (
+            <LayoutModalBoxs.LoadingAnimation />
+          )}
+        </LayoutModalBoxs>
+      )}
+
+      {modalErr && (
+        <AddProductError setModalOnclick={setModalErr} errors={errors} />
+      )}
     </div>
   );
 }
