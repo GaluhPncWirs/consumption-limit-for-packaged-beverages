@@ -32,7 +32,17 @@ export default function DisplayInputUser() {
   const maxWeight = mustFilled.weight.length;
 
   function calculateMaxSugar() {
-    if (maxAge > 2 || maxHeight > 3 || maxWeight > 2) {
+    if (
+      maxAge > 2 ||
+      maxHeight > 3 ||
+      maxWeight > 2 ||
+      mustFilled.age >= 60 ||
+      mustFilled.age <= 10 ||
+      mustFilled.height >= 200 ||
+      mustFilled.height <= 50 ||
+      mustFilled.weight >= 80 ||
+      mustFilled.weight <= 10
+    ) {
       setModalErrorBox(true);
     } else {
       const age = parseInt(ages.current?.value || "0");
@@ -139,6 +149,7 @@ export default function DisplayInputUser() {
       });
     }
   }, [validate, setMustFilled, modalErrorBox]);
+
   return (
     <div className="max-w-2xl mx-auto flex flex-col items-center justify-center h-screen">
       <div className="bg-[#73EC8B] rounded-lg py-7 px-3 max-w-xl mx-auto max-[640px]:max-w-sm inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 shadow-lg shadow-slate-800 max-[640px]:py-5">

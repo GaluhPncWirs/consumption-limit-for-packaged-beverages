@@ -27,12 +27,23 @@ export default function LoginPageAdmin() {
       loginAdmin[0].password === valuePassword
     ) {
       push("/admin/dashboard");
+      document.cookie = "isLogin=true;";
     } else {
       toast("Gagal Login ❎", {
         description: `Mungkin Dari Salah Satu Yang Kamu Inputkan Salah`,
       });
     }
   }
+
+  // if (!validate) {
+  //     document.cookie =
+  //       "formFilledSuccess=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+  //     localStorage.removeItem("maxSugars");
+  //   } else {
+  //     document.cookie = "formFilledSuccess=true; path=/";
+  //     localStorage.setItem("maxSugars", String(yourMaxSugar));
+  //   }
+
   return (
     <div className="h-screen flex justify-center items-center flex-col">
       <Toaster />

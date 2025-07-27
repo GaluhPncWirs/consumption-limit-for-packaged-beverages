@@ -1,5 +1,5 @@
 "use client";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import NavigasiBar from "@/components/navbar/navigasiBar";
 import { useHandleInput } from "@/app/hooks/handle-input";
@@ -23,7 +23,7 @@ import {
 import { toast, Toaster } from "sonner";
 
 export default function AdminPage() {
-  const path = usePathname();
+  const { push } = useRouter();
   const { mustFilled, handleValueInput, isFormFilled, setMustFilled } =
     useHandleInput({
       nameProduct: "",
@@ -194,6 +194,11 @@ export default function AdminPage() {
     }
   }
 
+  function handleLogout() {
+    document.cookie = "isLogin=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+    push("/admin/login");
+  }
+
   return (
     <div className="flex justify-center items-center max-[640px]:h-full sm:h-full lg:h-screen max-[640px]:flex-col sm:flex-col md:flex-row md:gap-x-10">
       <Toaster />
@@ -339,7 +344,7 @@ export default function AdminPage() {
           </form>
         </div>
       </div>
-      <div className="bg-[#73EC8B] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 rounded-xl max-[640px]:my-6 sm:my-6 md:my-5 max-[640px]:w-11/12 sm:w-10/12 md:w-1/3 lg:w-1/3 shadow-lg shadow-slate-800 pb-6">
+      <div className="bg-[#73EC8B] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 rounded-xl max-[640px]:my-6 sm:my-6 md:my-5 max-[640px]:w-11/12 sm:w-10/12 md:w-1/3 lg:w-1/3 shadow-lg shadow-slate-800 pb-3">
         <h1 className="p-3 text-center font-semibold text-lg bg-[#15B392] rounded-t-lg">
           Validasi & Setujui Produk Minuman yang Diajukan Pengguna
         </h1>
@@ -396,6 +401,14 @@ export default function AdminPage() {
             ))}
           </ul>
         </div>
+      </div>
+      <div className="absolute top-0 right-0 w-1/6 bg-green-400 rounded-bl-lg flex justify-center items-center py-1">
+        <button
+          className="px-10 bg-red-400 py-1 rounded-lg my-2 font-semibold hover:bg-red-500 text-lg"
+          onClick={handleLogout}
+        >
+          Keluar
+        </button>
       </div>
 
       {modalSuccess && modalContent}
