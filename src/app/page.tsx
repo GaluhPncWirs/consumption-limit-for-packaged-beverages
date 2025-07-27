@@ -106,7 +106,7 @@ export default function DisplayInputUser() {
 
   useEffect(() => {
     if (yourMaxSugar !== 0 && tdee !== 0) {
-      if (yourMaxSugar < 5) {
+      if (yourMaxSugar < 10 || yourMaxSugar > 50) {
         setModalErrorBox(true);
       } else {
         setModalBox(true);
@@ -190,8 +190,8 @@ export default function DisplayInputUser() {
             <input
               type="number"
               id="age"
-              min={5}
-              max={70}
+              min={10}
+              max={60}
               className="inputField peer"
               ref={ages}
               onChange={handleValueInput}
@@ -211,7 +211,7 @@ export default function DisplayInputUser() {
             <input
               type="number"
               id="height"
-              min={20}
+              min={50}
               max={200}
               className="inputField peer"
               ref={bodyHeight}
@@ -237,7 +237,7 @@ export default function DisplayInputUser() {
               type="number"
               id="weight"
               min={10}
-              max={100}
+              max={80}
               className="inputField peer"
               ref={bodyWeight}
               onChange={handleValueInput}
