@@ -200,9 +200,9 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="flex justify-center items-center max-[640px]:h-full sm:h-full lg:h-screen max-[640px]:flex-col sm:flex-col md:flex-row md:gap-x-10">
+    <div className="flex justify-center items-center max-[640px]:h-full sm:h-full lg:h-screen max-[640px]:flex-col sm:flex-col md:flex-row md:gap-x-5 lg:gap-x-10">
       <Toaster />
-      <div className="bg-[#73EC8B] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 rounded-xl max-[640px]:my-6 sm:my-6 md:my-5 max-[640px]:w-11/12 sm:w-10/12 md:w-2/3 lg:w-[45%] shadow-lg shadow-slate-800 lg:pb-8 lg:pt-6">
+      <div className="bg-[#73EC8B] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 rounded-xl max-[640px]:my-6 sm:my-6 md:my-5 max-[640px]:w-11/12 sm:w-10/12 md:w-1/2 lg:w-[45%] shadow-lg shadow-slate-800 lg:pb-8 lg:pt-6 max-[640px]:mt-20 max-[640px]:py-7 sm:mt-20 sm:py-7 md:mt-16">
         <h1 className="text-2xl font-semibold text-center max-[640px]:mb-5 sm:mb-7 md:mb-6 max-[640px]:text-xl">
           Penambahan Produk Minuman
         </h1>
@@ -344,7 +344,7 @@ export default function AdminPage() {
           </form>
         </div>
       </div>
-      <div className="bg-[#73EC8B] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 rounded-xl max-[640px]:my-6 sm:my-6 md:my-5 max-[640px]:w-11/12 sm:w-10/12 md:w-1/3 lg:w-1/3 shadow-lg shadow-slate-800 pb-3">
+      <div className="bg-[#73EC8B] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 rounded-xl max-[640px]:my-6 sm:my-6 md:my-5 max-[640px]:w-11/12 sm:w-10/12 md:w-2/5 lg:w-1/3 shadow-lg shadow-slate-800 pb-3">
         <h1 className="p-3 text-center font-semibold text-lg bg-[#15B392] rounded-t-lg">
           Validasi & Setujui Produk Minuman yang Diajukan Pengguna
         </h1>
@@ -359,7 +359,7 @@ export default function AdminPage() {
                       Detail
                     </button>
                   </DialogTrigger>
-                  <DialogContent>
+                  <DialogContent className="max-[640px]:w-11/12 max-[640px]:rounded-lg">
                     <DialogHeader>
                       <DialogTitle>Detail Data Minuman</DialogTitle>
                     </DialogHeader>
@@ -380,7 +380,7 @@ export default function AdminPage() {
                     <DialogFooter>
                       <DialogClose asChild>
                         <button
-                          className="px-4 py-1 bg-green-300 hover:bg-green-400 rounded-md text-slate-800 font-semibold"
+                          className="px-4 py-1 bg-green-300 hover:bg-green-400 rounded-md text-slate-800 font-semibold max-[640px]:mt-3"
                           onClick={() => acceptData(item.id, item.nameProduct)}
                         >
                           Accept
@@ -402,9 +402,9 @@ export default function AdminPage() {
           </ul>
         </div>
       </div>
-      <div className="absolute top-0 right-0 w-1/6 bg-green-400 rounded-bl-lg flex justify-center items-center py-1">
+      <div className="absolute top-0 right-0 bg-green-400 rounded-bl-lg flex justify-center items-center py-1 max-[640px]:w-1/4 sm:w-1/4 md:w-1/5 lg:w-1/6">
         <button
-          className="px-10 bg-red-400 py-1 rounded-lg my-2 font-semibold hover:bg-red-500 text-lg"
+          className="px-10 bg-red-400 py-1 rounded-lg my-2 font-semibold hover:bg-red-500 text-lg max-[640px]:px-5 sm:px-7 lg:px-10"
           onClick={handleLogout}
         >
           Keluar
