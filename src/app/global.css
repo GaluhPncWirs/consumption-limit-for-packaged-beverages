@@ -3,166 +3,172 @@
 @tailwind utilities;
 
 @layer components{
-    /* Chrome, Safari, Edge, Opera */
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-    /* Firefox */
-    input[type=number] {
-        -moz-appearance: textfield;
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+  }
+  /* Firefox */
+  input[type=number] {
+      -moz-appearance: textfield;
+  }
+
+  .inputField{
+    @apply w-full border-0 border-b-2 border-[#0B192C] bg-transparent text-lg text-gray-900 placeholder-transparent focus:outline-none focus:border-b-[#54C392] transition-all mt-3
+  }
+
+  .labelText{
+    @apply absolute top-0 left-0 text-lg transition-all 
+    peer-placeholder-shown:top-6 peer-placeholder-shown:text-lg peer-placeholder-shown:cursor-text 
+    peer-focus:top-0 peer-focus:text-base peer-focus:text-black peer-focus:font-bold;
+  }
+
+  #inputGender input[type="radio"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    position: relative;
+    width: 25px;
+    height: 25px;
+    background-color: #54C392;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+  }
+
+  #inputGender input[type="radio"]::before {
+    position: absolute;
+    top: -7px;
+    left: -5px;
+    width: 25px;
+    height: 25px;
+    font-size: 25px;
+    content: "";
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  #inputGender input[type="radio"]:nth-of-type(1)::before {
+    content: "👦🏻";
+  }
+
+  #inputGender input[type="radio"]:nth-of-type(2)::before {
+    content: "👧🏻";
+  }
+
+  #inputGender input[type="radio"]:checked {
+    background-color: transparent;
+  }
+
+  #inputGender input[type="radio"]:checked::before {
+    opacity: 1;
+  }
+
+  /* untuk botol */
+  .bottleInside{
+    width: 200px;
+    height: 200px;
+    position: relative;
+    background-image: url("/images/plastic-bottle-water.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    mask-image: url("/images/plastic-bottle-water.png");
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-image: url("/images/plastic-bottle-water.png");
+    mask-composite: exclude;
+    display: flex;
+  }
+
+  @media (max-width: 640px) {
+    .bottleInside {
+      width: 150px;
+      height: 150px;
     }
 
-    .inputField{
-        @apply w-full border-0 border-b-2 border-[#0B192C] bg-transparent text-lg text-gray-900 placeholder-transparent focus:outline-none focus:border-b-black transition-all mt-3
+    .glassCupInside {
+      width: 150px;
+      height: 150px;
     }
+  }
 
-    .labelText{
-        @apply absolute top-0 left-0 text-lg transition-all peer-placeholder-shown:top-6 peer-placeholder-shown:text-lg peer-placeholder-shown:cursor-text peer-focus:top-0 peer-focus:text-sm peer-focus:text-black peer-focus:font-bold
-    }
+  .fill{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0%;
+    background-color: #02b4e6b3;
+    transition: height 0.3s ease-in-out;
+  }
 
-    #inputGender input[type="radio"] {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        position: relative;
-        width: 20px;
-        height: 20px;
-        color: coral;
-        background-color: #fff;
-        border-radius: 50%;
-        transition: background-color 0.3s ease;
-      }
-    #inputGender input[type="radio"]::before {
-      position: absolute;
-      top: -4px;
-      left: -4px;
-      width: 20px;
-      height: 20px;
-      font-size: 20px;
-      content: "";
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    #inputGender input[type="radio"]:nth-of-type(1)::before {
-      content: "👦🏻";
-    }
-    #inputGender input[type="radio"]:nth-of-type(2)::before {
-      content: "👧🏻";
-    }
-    #inputGender input[type="radio"]:checked {
-      background-color: transparent;
-    }
-    #inputGender input[type="radio"]:checked::before {
-      opacity: 1;
-    }
+  /* .progress-fill{
+    background-color: #ff4cff;
+    height: 100%;
+    width: 0px;
+    transition:  width 0.5s ease-in-out;
+  } */
 
-    /* untuk botol */
-    .bottleInside{
-      width: 200px;
-      height: 200px;
-      position: relative;
-      background-image: url("/images/plastic-bottle-water.png");
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      mask-image: url("/images/plastic-bottle-water.png");
-      mask-size: contain;
-      mask-repeat: no-repeat;
-      mask-position: center;
-      -webkit-mask-image: url("/images/plastic-bottle-water.png");
-      mask-composite: exclude;
-      display: flex;
-    }
-
-    @media (max-width: 640px) {
-      .bottleInside {
-        width: 150px;
-        height: 150px;
-      }
-
-      .glassCupInside {
-        width: 150px;
-        height: 150px;
-      }
-    }
-
-    .fill{
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 0%;
-      background-color: #02b4e6b3;
-      transition: height 0.3s ease-in-out;
-    }
-
-    /* .progress-fill{
-      background-color: #ff4cff;
-      height: 100%;
-      width: 0px;
-      transition:  width 0.5s ease-in-out;
-    } */
-
-    .background_template{
-      background-image: url("/images/background-beverage.jpg");
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
+  .background_template{
+    background-image: url("/images/background-beverage.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
 
 
-    /* untuk gelas */
-    .glassCupInside{
-      width: 200px;
-      height: 200px;
-      position: relative;
-      background-image: url("/images/glass_new.png");
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      mask-image: url("/images/glass_new.png");
-      mask-size: contain;
-      mask-repeat: no-repeat;
-      mask-position: center;
-      -webkit-mask-image: url("/images/glass_new.png");
-      mask-composite: exclude;
-      display: flex;
-    }
+  /* untuk gelas */
+  .glassCupInside{
+    width: 200px;
+    height: 200px;
+    position: relative;
+    background-image: url("/images/glass_new.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    mask-image: url("/images/glass_new.png");
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-image: url("/images/glass_new.png");
+    mask-composite: exclude;
+    display: flex;
+  }
 
 
-    /* menu animation */
+  /* menu animation */
 
-    .menu span:nth-child(2){
-      transform-origin: 0 0;
-    }
+  .menu span:nth-child(2){
+    transform-origin: 0 0;
+  }
 
-    .menu span:nth-child(4){
-      transform-origin: 0 100%;
-    }
+  .menu span:nth-child(4){
+    transform-origin: 0 100%;
+  }
 
-    .menu input:checked ~ span:nth-child(2){
-      background-color: red;
-      transform: rotate(45deg);
-      translate: -1px 2px;
-    }
+  .menu input:checked ~ span:nth-child(2){
+    background-color: red;
+    transform: rotate(45deg);
+    translate: -1px 2px;
+  }
 
-    .menu input:checked ~ span:nth-child(4){
-      background-color: red;
-      transform: rotate(-45deg);
-      translate: -1px -1px;
-    }
+  .menu input:checked ~ span:nth-child(4){
+    background-color: red;
+    transform: rotate(-45deg);
+    translate: -1px -1px;
+  }
 
-    .menu input:checked ~ span:nth-child(3){
-      transform: scale(0);
-      opacity: 0;
-    }
+  .menu input:checked ~ span:nth-child(3){
+    transform: scale(0);
+    opacity: 0;
+  }
 
-    /* scroll bar */
-    .scrollBarDesign{
-      @apply [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-green-600 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-green-400
-    }
+  /* scroll bar */
+  .scrollBarDesign{
+    @apply [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-green-600 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-green-400
+  }
 }
 
 
@@ -170,24 +176,24 @@
 @layer base {
   :root {
         --background: 0 0% 100%;
-        --foreground: 0 0% 3.9%;
+        --foreground: 20 14.3% 4.1%;
         --card: 0 0% 100%;
-        --card-foreground: 0 0% 3.9%;
+        --card-foreground: 20 14.3% 4.1%;
         --popover: 0 0% 100%;
-        --popover-foreground: 0 0% 3.9%;
-        --primary: 0 0% 9%;
-        --primary-foreground: 0 0% 98%;
-        --secondary: 0 0% 96.1%;
-        --secondary-foreground: 0 0% 9%;
-        --muted: 0 0% 96.1%;
-        --muted-foreground: 0 0% 45.1%;
-        --accent: 0 0% 96.1%;
-        --accent-foreground: 0 0% 9%;
+        --popover-foreground: 20 14.3% 4.1%;
+        --primary: 24 9.8% 10%;
+        --primary-foreground: 60 9.1% 97.8%;
+        --secondary: 60 4.8% 95.9%;
+        --secondary-foreground: 24 9.8% 10%;
+        --muted: 60 4.8% 95.9%;
+        --muted-foreground: 25 5.3% 44.7%;
+        --accent: 60 4.8% 95.9%;
+        --accent-foreground: 24 9.8% 10%;
         --destructive: 0 84.2% 60.2%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 0 0% 89.8%;
-        --input: 0 0% 89.8%;
-        --ring: 0 0% 3.9%;
+        --destructive-foreground: 60 9.1% 97.8%;
+        --border: 20 5.9% 90%;
+        --input: 20 5.9% 90%;
+        --ring: 20 14.3% 4.1%;
         --chart-1: 12 76% 61%;
         --chart-2: 173 58% 39%;
         --chart-3: 197 37% 24%;
@@ -196,25 +202,25 @@
         --radius: 0.5rem;
     }
   .dark {
-        --background: 0 0% 3.9%;
-        --foreground: 0 0% 98%;
-        --card: 0 0% 3.9%;
-        --card-foreground: 0 0% 98%;
-        --popover: 0 0% 3.9%;
-        --popover-foreground: 0 0% 98%;
-        --primary: 0 0% 98%;
-        --primary-foreground: 0 0% 9%;
-        --secondary: 0 0% 14.9%;
-        --secondary-foreground: 0 0% 98%;
-        --muted: 0 0% 14.9%;
-        --muted-foreground: 0 0% 63.9%;
-        --accent: 0 0% 14.9%;
-        --accent-foreground: 0 0% 98%;
+        --background: 20 14.3% 4.1%;
+        --foreground: 60 9.1% 97.8%;
+        --card: 20 14.3% 4.1%;
+        --card-foreground: 60 9.1% 97.8%;
+        --popover: 20 14.3% 4.1%;
+        --popover-foreground: 60 9.1% 97.8%;
+        --primary: 60 9.1% 97.8%;
+        --primary-foreground: 24 9.8% 10%;
+        --secondary: 12 6.5% 15.1%;
+        --secondary-foreground: 60 9.1% 97.8%;
+        --muted: 12 6.5% 15.1%;
+        --muted-foreground: 24 5.4% 63.9%;
+        --accent: 12 6.5% 15.1%;
+        --accent-foreground: 60 9.1% 97.8%;
         --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 0 0% 14.9%;
-        --input: 0 0% 14.9%;
-        --ring: 0 0% 83.1%;
+        --destructive-foreground: 60 9.1% 97.8%;
+        --border: 12 6.5% 15.1%;
+        --input: 12 6.5% 15.1%;
+        --ring: 24 5.7% 82.9%;
         --chart-1: 220 70% 50%;
         --chart-2: 160 60% 45%;
         --chart-3: 30 80% 55%;

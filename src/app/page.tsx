@@ -4,6 +4,7 @@ import { useHandleInput } from "./hooks/handle-input";
 import Image from "next/image";
 import ModalBox from "@/components/modalBox/modalSucces";
 import IconWarning from "@/components/warningIcon/icon";
+import ComponentInput from "@/components/input/content";
 
 export default function DisplayInputUser() {
   const male = useRef<HTMLInputElement>(null);
@@ -151,174 +152,154 @@ export default function DisplayInputUser() {
   }, [validate, setMustFilled, modalErrorBox]);
 
   return (
-    <div className="max-w-2xl mx-auto flex flex-col items-center justify-center h-screen">
-      <div className="bg-[#73EC8B] rounded-lg py-7 px-3 max-w-xl mx-auto max-[640px]:max-w-sm inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 shadow-lg shadow-slate-800 max-[640px]:py-5">
-        <h1 className="text-center mb-8 text-xl font-bold max-[640px]:text-lg max-[640px]:mb-5">
-          Penghitung Kebutuhan Kalori Dan Gula Harian
+    <div className="flex items-center justify-center h-screen">
+      <div className="bg-[#f9fff9] rounded-lg py-7 px-3 mx-auto shadow-lg shadow-slate-700">
+        <h1 className="text-center mb-7 text-2xl font-bold tracking-wide max-[640px]:text-xl">
+          Penghitung Kalori & Gula Harian
         </h1>
-        <form
-          id="sugarForm"
-          className="max-[640px]:mx-4 mx-10 text-[#393E46] flex flex-col justify-center gap-y-5 max-[640px]:gap-y-3"
-        >
-          <div
-            className="flex gap-2 mb-1 items-center font-semibold"
-            id="inputGender"
-          >
-            <div className="flex gap-3 mr-2">
-              <Image
-                width={30}
-                height={20}
-                src={"/images/gender.png"}
-                alt="gender"
-              />
-              <span className="text-lg">Gender</span>
+        <form id="sugarForm" className="mx-10">
+          <div className="flex flex-col justify-center gap-y-5">
+            <div
+              className="flex gap-5 items-center font-semibold"
+              id="inputGender"
+            >
+              <div className="flex gap-x-4 items-center">
+                <Image
+                  width={200}
+                  height={200}
+                  src="/images/pageCalculateCalories/gender.png"
+                  alt="gender"
+                  className="size-8"
+                />
+                <span className="text-lg">Gender</span>
+                <input
+                  type="radio"
+                  value="male"
+                  id="gender"
+                  name="gender"
+                  ref={male}
+                  className="cursor-pointer bg-green-200"
+                  onChange={handleValueInput}
+                  checked={mustFilled.gender === "male"}
+                />
+                <label htmlFor="gender">Pria</label>
+
+                <input
+                  type="radio"
+                  value="female"
+                  id="gender"
+                  name="gender"
+                  ref={female}
+                  className="cursor-pointer bg-green-200"
+                  onChange={handleValueInput}
+                  checked={mustFilled.gender === "female"}
+                />
+                <label htmlFor="gender">Wanita</label>
+              </div>
             </div>
-            <input
-              type="radio"
-              value="male"
-              id="gender"
-              name="gender"
-              ref={male}
-              className="cursor-pointer bg-green-200"
-              onChange={handleValueInput}
-              checked={mustFilled.gender === "male"}
-            />
-            <label htmlFor="gender">Pria</label>
-            <input
-              type="radio"
-              value="female"
-              id="gender"
-              name="gender"
-              ref={female}
-              className="cursor-pointer bg-green-200"
-              onChange={handleValueInput}
-              checked={mustFilled.gender === "female"}
-            />
-            <label htmlFor="gender">Wanita</label>
-          </div>
 
-          <div className="relative w-1/2 pt-5 max-[640px]:w-full sm:w-full font-semibold">
-            <input
-              type="number"
-              id="age"
-              min={10}
-              max={60}
-              className="inputField peer"
-              ref={ages}
-              onChange={handleValueInput}
-              value={mustFilled.age}
-              maxLength={2}
-            />
-            <label
-              htmlFor="age"
-              className="labelText flex flex-row-reverse gap-2"
+            <ComponentInput
+              titleInput="Usia (tahun)"
+              srcImg="/images/pageCalculateCalories/age.png"
+              altImg="age"
             >
-              <span>Usia (tahun)</span>
-              <Image width={30} height={20} src={"/images/age.png"} alt="age" />
-            </label>
-          </div>
+              <input
+                type="number"
+                id="age"
+                min={10}
+                max={60}
+                className="inputField peer"
+                ref={ages}
+                onChange={handleValueInput}
+                value={mustFilled.age}
+                maxLength={2}
+              />
+            </ComponentInput>
 
-          <div className="relative w-1/2 pt-5 font-semibold max-[640px]:w-full sm:w-full">
-            <input
-              type="number"
-              id="height"
-              min={50}
-              max={200}
-              className="inputField peer"
-              ref={bodyHeight}
-              onChange={handleValueInput}
-              value={mustFilled.height}
-            />
-            <label
-              htmlFor="age"
-              className="labelText flex flex-row-reverse gap-2"
+            <ComponentInput
+              titleInput="Tinggi Badan (cm)"
+              srcImg="/images/pageCalculateCalories/height.png"
+              altImg="height"
             >
-              <span>Tinggi Badan (cm)</span>
-              <Image
-                width={30}
-                height={20}
-                src={"/images/height.png"}
-                alt="height"
+              <input
+                type="number"
+                id="height"
+                min={50}
+                max={200}
+                className="inputField peer"
+                ref={bodyHeight}
+                onChange={handleValueInput}
+                value={mustFilled.height}
               />
-            </label>
-          </div>
+            </ComponentInput>
 
-          <div className="relative w-1/2 pt-5 font-semibold max-[640px]:w-full sm:w-full">
-            <input
-              type="number"
-              id="weight"
-              min={10}
-              max={80}
-              className="inputField peer"
-              ref={bodyWeight}
-              onChange={handleValueInput}
-              value={mustFilled.weight}
-              maxLength={3}
-            />
-            <label
-              htmlFor="age"
-              className="labelText flex flex-row-reverse gap-2"
+            <ComponentInput
+              titleInput="Berat Badan (kg)"
+              srcImg="/images/pageCalculateCalories/weight.png"
+              altImg="weight"
             >
-              <span>Berat Badan (kg)</span>
-              <Image
-                width={30}
-                height={20}
-                src={"/images/weight.png"}
-                alt="weight"
+              <input
+                type="number"
+                id="height"
+                min={50}
+                max={200}
+                className="inputField peer"
+                ref={bodyHeight}
+                onChange={handleValueInput}
+                value={mustFilled.height}
               />
-            </label>
-          </div>
+            </ComponentInput>
 
-          <div className="font-semibold">
-            <div className="flex gap-x-2 mb-2">
-              <Image
-                width={29}
-                height={20}
-                className="w-[30px]"
-                src={"/images/activity.png"}
-                alt="activity"
-              />
-              <label htmlFor="activityLevel" className="block mb-2 text-lg">
-                Activity Level
-              </label>
+            <div className="font-semibold">
+              <div className="flex gap-x-3 mb-2">
+                <Image
+                  width={200}
+                  height={200}
+                  src="/images/pageCalculateCalories/activity.png"
+                  alt="activity"
+                  className="size-8"
+                />
+                <label htmlFor="activityLevel" className="block mb-2 text-lg">
+                  Activity Level
+                </label>
+              </div>
+              <select
+                id="activityLevel"
+                className="cursor-pointer bg-[#54C392] rounded-md p-2 text-sm max-[640px]:w-full sm:w-full"
+                ref={activityLevel}
+                value={mustFilled.activityLevel}
+                onChange={handleValueInput}
+              >
+                <option value="" disabled hidden>
+                  Pilih Tingkat Aktivitas
+                </option>
+                <option value="sedentary">
+                  Tidak Aktif (Tidak Melakukan Aktifitas Berat)
+                </option>
+                <option value="lightlyActive">
+                  Aktif (olahraga ringan 1-3 hari per minggu)
+                </option>
+                <option value="moderatelyActive">
+                  Cukup Aktif (olahraga sedang 3-5 hari per minggu)
+                </option>
+                <option value="veryActive">
+                  Sangat Aktif (olahraga keras 6-7 hari per minggu)
+                </option>
+                <option value="extraActive">
+                  Extra Aktif (olahraga yang sangat keras atau pekerjaan fisik)
+                </option>
+              </select>
             </div>
-            <select
-              id="activityLevel"
-              className="cursor-pointer bg-[#54C392] rounded-md p-2 text-sm max-[640px]:w-full sm:w-full"
-              ref={activityLevel}
-              value={mustFilled.activityLevel}
-              onChange={handleValueInput}
-            >
-              <option value="" disabled hidden>
-                Pilih Tingkat Aktivitas
-              </option>
-              <option value="sedentary">
-                Tidak Aktif (Tidak Melakukan Aktifitas Berat)
-              </option>
-              <option value="lightlyActive">
-                Aktif (olahraga ringan 1-3 hari per minggu)
-              </option>
-              <option value="moderatelyActive">
-                Cukup Aktif (olahraga sedang 3-5 hari per minggu)
-              </option>
-              <option value="veryActive">
-                Sangat Aktif (olahraga keras 6-7 hari per minggu)
-              </option>
-              <option value="extraActive">
-                Extra Aktif (olahraga yang sangat keras atau pekerjaan fisik)
-              </option>
-            </select>
           </div>
-        </form>
-        <div className="flex justify-center">
+
           <button
-            onClick={() => calculateMaxSugar()}
+            onClick={calculateMaxSugar}
             disabled={!isFormFilled()}
-            className="disabled:cursor-not-allowed mt-6 mx-auto py-1 text-center rounded-md bg-[#15B392] hover:bg-emerald-500 cursor-pointer font-semibold px-7 text-lg max-[640px]:mt-4"
+            className="disabled:cursor-not-allowed text-white mt-7 mx-auto py-1 text-center rounded-md bg-[#2e8b57] hover:bg-[#27744a] cursor-pointer font-semibold tracking-wide px-7 text-lg max-[640px]:mt-4"
           >
             Hitung
           </button>
-        </div>
+        </form>
         <div>
           {validate === true && (
             <ModalBox
