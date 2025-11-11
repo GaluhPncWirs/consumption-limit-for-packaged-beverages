@@ -1,6 +1,7 @@
 import { Quicksand } from "next/font/google";
 import "./global.css";
 import { Metadata } from "next";
+import { Toaster } from "@/components/ui/sonner";
 
 const quicksand = Quicksand({ subsets: ["latin"], weight: "500" });
 
@@ -25,7 +26,10 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body className={quicksand.className}>
-        <div className="background_template">{children}</div>
+        <div className="background_template">
+          {children}
+          <Toaster richColors />
+        </div>
       </body>
     </html>
   );
