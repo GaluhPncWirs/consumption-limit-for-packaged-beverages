@@ -1,163 +1,233 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { ReactEventHandler, useEffect, useRef, useState } from "react";
 import { useHandleInput } from "./hooks/handle-input";
 import Image from "next/image";
 import ModalBox from "@/components/modalBox/modalSucces";
 import IconWarning from "@/components/warningIcon/icon";
 import ComponentInput from "@/components/input/content";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function DisplayInputUser() {
-  const male = useRef<HTMLInputElement>(null);
-  const female = useRef<HTMLInputElement>(null);
-  const ages = useRef<HTMLInputElement>(null);
-  const bodyHeight = useRef<HTMLInputElement>(null);
-  const bodyWeight = useRef<HTMLInputElement>(null);
-  const activityLevel = useRef<HTMLSelectElement>(null);
+  const [selectedValueActivityLevel, setSelectedValueActivityLevel] =
+    useState<string>("");
   const [modalBox, setModalBox] = useState<boolean>(false);
   const [modalErrorBox, setModalErrorBox] = useState<boolean>(false);
   const [yourMaxSugar, setYourMaxSugar] = useState<number>(0);
-  const [tdee, setTdee] = useState<number>(0);
+  const [TDEE, setTDEE] = useState<number>(0);
   const [validate, setValidate] = useState<boolean>(false);
 
   const { mustFilled, handleValueInput, isFormFilled, setMustFilled } =
     useHandleInput({
+      gender: "",
       age: "",
       height: "",
       weight: "",
-      gender: "",
       activityLevel: "",
     });
 
-  const maxAge = mustFilled.age.length;
-  const maxHeight = mustFilled.height.length;
-  const maxWeight = mustFilled.weight.length;
+  function handleCalculateCalories(event: any) {
+    event.preventDefault();
 
-  function calculateMaxSugar() {
+    const gender = mustFilled.gender;
+    const age = Number(mustFilled.age);
+    const heightBody = Number(mustFilled.height);
+    const weightBody = Number(mustFilled.weight);
+
+    const maxLengthAge = mustFilled.age.length;
+    const maxLengthHeight = mustFilled.height.length;
+    const maxLengthWeight = mustFilled.weight.length;
+
     if (
-      maxAge > 2 ||
-      maxHeight > 3 ||
-      maxWeight > 2 ||
-      mustFilled.age >= 60 ||
-      mustFilled.age <= 10 ||
-      mustFilled.height >= 200 ||
-      mustFilled.height <= 50 ||
-      mustFilled.weight >= 80 ||
-      mustFilled.weight <= 10
+      maxLengthAge > 2 ||
+      maxLengthHeight > 3 ||
+      maxLengthWeight > 2 ||
+      age >= 60 ||
+      age <= 10 ||
+      heightBody >= 200 ||
+      heightBody <= 50 ||
+      weightBody >= 80 ||
+      weightBody <= 10
     ) {
-      setModalErrorBox(true);
+      console.log("perhitungan gagal");
     } else {
-      const age = parseInt(ages.current?.value || "0");
-      const weight = parseInt(bodyWeight.current?.value || "0");
-      const height = parseInt(bodyHeight.current?.value || "0");
-      let BMR; // Basal Metabolic Rate
+      let basalMetabolicRate: number | null = null;
 
-      // jika radio button laki-laki terpilih
-      if (male.current?.checked) {
-        // jika isi radio button berupa "male"
-        if (male.current?.value === "male") {
-          // maka rumusnya ini
-          BMR = 10 * weight + 6.25 * height - 5 * age + 5;
-        }
+      if (gender === "male") {
+        basalMetabolicRate = 10 * weightBody + 6.25 * heightBody - 5 * age + 5;
       }
-      // jika radio button perempuan terpilih
-      if (female.current?.checked) {
-        // jika isi radio button berupa "female"
-        if (female.current?.value === "female") {
-          // maka rumusnya ini
-          BMR = 10 * weight + 6.25 * height - 5 * age - 161;
-        }
+
+      if (gender === "female") {
+        basalMetabolicRate =
+          10 * weightBody + 6.25 * heightBody - 5 * age + 161;
       }
-      // variabel kosong untuk menampung nilai
-      let activityFactor;
-      // cek nilai dari tingkat aktifitas
-      switch (activityLevel.current?.value) {
-        // jika tingkat aktifitas "sedentary"
+
+      let choosenActivityLevel: number | null = null;
+
+      switch (selectedValueActivityLevel) {
         case "sedentary":
-          // maka "activityFactor = 1.2" akan mengisi nilai
-          activityFactor = 1.2;
+          choosenActivityLevel = 1.2;
           break;
         case "lightlyActive":
-          activityFactor = 1.375;
+          choosenActivityLevel = 1.375;
           break;
         case "moderatelyActive":
-          activityFactor = 1.55;
+          choosenActivityLevel = 1.55;
           break;
         case "veryActive":
-          activityFactor = 1.725;
+          choosenActivityLevel = 1.725;
           break;
         case "extraActive":
-          activityFactor = 1.9;
+          choosenActivityLevel = 1.9;
           break;
         default:
-          activityFactor = 1.2;
+          choosenActivityLevel = 1.2;
       }
 
-      // lalu variabel TDEE menyimpan jumlah kalori perhari
-      const TDEE = BMR! * activityFactor;
-      // untuk menghitung jumlah gula perhari
-      const kalori = TDEE * 0.1; // berdasarkan pedoman WHO 10%
-      const maxSugarPerGrams = kalori / 4; // hasil kalori dibagi 4 karena 1 g gula = 4 kalori
-      setYourMaxSugar(maxSugarPerGrams);
-      setTdee(TDEE);
-      // let maxCalories;
-
-      // const convertToMeters = height / 100;
-      // const heightSquares = Math.pow(convertToMeters, 2);
-      // let bodyMassIndex = Math.floor(weight / heightSquares);
-
-      // if (bodyMassIndex >= 30) {
-      //   // obesitas
-      //   maxCalories = TDEE * 0.05;
-      // } else {
-      //   // normal
-      //   maxCalories = TDEE * 0.1;
-      // }
+      const totalDailyEnergyExpenditure =
+        basalMetabolicRate! * choosenActivityLevel;
+      const resultTotalCalorie = totalDailyEnergyExpenditure * 0.1;
+      const resultTotalMaxSugar = resultTotalCalorie / 4;
+      // setTDEE(totalDailyEnergyExpenditure);
+      // setYourMaxSugar(resultTotalMaxSugar);
+      console.log(resultTotalMaxSugar);
     }
   }
 
-  useEffect(() => {
-    if (yourMaxSugar !== 0 && tdee !== 0) {
-      if (yourMaxSugar < 10 || yourMaxSugar > 50) {
-        setModalErrorBox(true);
-      } else {
-        setModalBox(true);
-        setValidate(true);
-      }
-    } else {
-      return undefined;
-    }
-  }, [yourMaxSugar, tdee]);
+  // function calculateMaxSugar() {
+  //   if (
+  //     maxAge > 2 ||
+  //     maxHeight > 3 ||
+  //     maxWeight > 2 ||
+  //     mustFilled.age >= 60 ||
+  //     mustFilled.age <= 10 ||
+  //     mustFilled.height >= 200 ||
+  //     mustFilled.height <= 50 ||
+  //     mustFilled.weight >= 80 ||
+  //     mustFilled.weight <= 10
+  //   ) {
+  //     setModalErrorBox(true);
+  //   } else {
+  //     const age = parseInt(ages.current?.value || "0");
+  //     const weight = parseInt(bodyWeight.current?.value || "0");
+  //     const height = parseInt(bodyHeight.current?.value || "0");
+  //     let BMR; // Basal Metabolic Rate
 
-  useEffect(() => {
-    if (!validate) {
-      document.cookie =
-        "formFilledSuccess=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
-      localStorage.removeItem("maxSugars");
-    } else {
-      document.cookie = "formFilledSuccess=true; path=/";
-      localStorage.setItem("maxSugars", String(yourMaxSugar));
-    }
-  }, [validate, yourMaxSugar]);
+  //     // jika radio button laki-laki terpilih
+  //     if (male.current?.checked) {
+  //       // jika isi radio button berupa "male"
+  //       if (male.current?.value === "male") {
+  //         // maka rumusnya ini
+  //         BMR = 10 * weight + 6.25 * height - 5 * age + 5;
+  //       }
+  //     }
+  //     // jika radio button perempuan terpilih
+  //     if (female.current?.checked) {
+  //       // jika isi radio button berupa "female"
+  //       if (female.current?.value === "female") {
+  //         // maka rumusnya ini
+  //         BMR = 10 * weight + 6.25 * height - 5 * age - 161;
+  //       }
+  //     }
 
-  useEffect(() => {
-    if (!validate) {
-      setMustFilled({
-        age: "",
-        height: "",
-        weight: "",
-        gender: "",
-        activityLevel: "",
-      });
-    }
-  }, [validate, setMustFilled, modalErrorBox]);
+  //     // variabel kosong untuk menampung nilai
+  //     let activityFactor;
+  //     // cek nilai dari tingkat aktifitas
+  //     switch (activityLevel.current?.value) {
+  //       // jika tingkat aktifitas "sedentary"
+  //       case "sedentary":
+  //         // maka "activityFactor = 1.2" akan mengisi nilai
+  //         activityFactor = 1.2;
+  //         break;
+  //       case "lightlyActive":
+  //         activityFactor = 1.375;
+  //         break;
+  //       case "moderatelyActive":
+  //         activityFactor = 1.55;
+  //         break;
+  //       case "veryActive":
+  //         activityFactor = 1.725;
+  //         break;
+  //       case "extraActive":
+  //         activityFactor = 1.9;
+  //         break;
+  //       default:
+  //         activityFactor = 1.2;
+  //     }
+
+  //     // lalu variabel TDEE menyimpan jumlah kalori perhari
+  //     const TDEE = BMR! * activityFactor;
+  //     // untuk menghitung jumlah gula perhari
+  //     const kalori = TDEE * 0.1; // berdasarkan pedoman WHO 10%
+  //     const maxSugarPerGrams = kalori / 4; // hasil kalori dibagi 4 karena 1 g gula = 4 kalori
+  //     setYourMaxSugar(maxSugarPerGrams);
+  //     setTdee(TDEE);
+  //     // let maxCalories;
+
+  //     // const convertToMeters = height / 100;
+  //     // const heightSquares = Math.pow(convertToMeters, 2);
+  //     // let bodyMassIndex = Math.floor(weight / heightSquares);
+
+  //     // if (bodyMassIndex >= 30) {
+  //     //   // obesitas
+  //     //   maxCalories = TDEE * 0.05;
+  //     // } else {
+  //     //   // normal
+  //     //   maxCalories = TDEE * 0.1;
+  //     // }
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   if (yourMaxSugar !== 0 && tdee !== 0) {
+  //     if (yourMaxSugar < 10 || yourMaxSugar > 50) {
+  //       setModalErrorBox(true);
+  //     } else {
+  //       setModalBox(true);
+  //       setValidate(true);
+  //     }
+  //   } else {
+  //     return undefined;
+  //   }
+  // }, [yourMaxSugar, tdee]);
+
+  // useEffect(() => {
+  //   if (!validate) {
+  //     document.cookie =
+  //       "formFilledSuccess=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+  //     localStorage.removeItem("maxSugars");
+  //   } else {
+  //     document.cookie = "formFilledSuccess=true; path=/";
+  //     localStorage.setItem("maxSugars", String(yourMaxSugar));
+  //   }
+  // }, [validate, yourMaxSugar]);
+
+  // useEffect(() => {
+  //   if (!validate) {
+  //     setMustFilled({
+  //       age: "",
+  //       height: "",
+  //       weight: "",
+  //       gender: "",
+  //       activityLevel: "",
+  //     });
+  //   }
+  // }, [validate, setMustFilled, modalErrorBox]);
 
   return (
     <div className="flex items-center justify-center h-screen">
-      <div className="bg-[#f9fff9] rounded-lg py-7 px-3 mx-auto shadow-lg shadow-slate-700">
+      <div className="bg-[#f9fff9] rounded-lg py-7 shadow-lg shadow-slate-700 sm:w-[30rem] lg:w-[35rem]">
         <h1 className="text-center mb-7 text-2xl font-bold tracking-wide max-[640px]:text-xl">
           Penghitung Kalori & Gula Harian
         </h1>
-        <form id="sugarForm" className="mx-10">
+        <form className="mx-12" onSubmit={(e) => handleCalculateCalories(e)}>
           <div className="flex flex-col justify-center gap-y-5">
             <div
               className="flex gap-5 items-center font-semibold"
@@ -176,9 +246,7 @@ export default function DisplayInputUser() {
                   type="radio"
                   value="male"
                   id="gender"
-                  name="gender"
-                  ref={male}
-                  className="cursor-pointer bg-green-200"
+                  className="cursor-pointer"
                   onChange={handleValueInput}
                   checked={mustFilled.gender === "male"}
                 />
@@ -188,9 +256,7 @@ export default function DisplayInputUser() {
                   type="radio"
                   value="female"
                   id="gender"
-                  name="gender"
-                  ref={female}
-                  className="cursor-pointer bg-green-200"
+                  className="cursor-pointer"
                   onChange={handleValueInput}
                   checked={mustFilled.gender === "female"}
                 />
@@ -202,6 +268,7 @@ export default function DisplayInputUser() {
               titleInput="Usia (tahun)"
               srcImg="/images/pageCalculateCalories/age.png"
               altImg="age"
+              htmlFor="age"
             >
               <input
                 type="number"
@@ -209,7 +276,6 @@ export default function DisplayInputUser() {
                 min={10}
                 max={60}
                 className="inputField peer"
-                ref={ages}
                 onChange={handleValueInput}
                 value={mustFilled.age}
                 maxLength={2}
@@ -220,6 +286,7 @@ export default function DisplayInputUser() {
               titleInput="Tinggi Badan (cm)"
               srcImg="/images/pageCalculateCalories/height.png"
               altImg="height"
+              htmlFor="height"
             >
               <input
                 type="number"
@@ -227,7 +294,6 @@ export default function DisplayInputUser() {
                 min={50}
                 max={200}
                 className="inputField peer"
-                ref={bodyHeight}
                 onChange={handleValueInput}
                 value={mustFilled.height}
               />
@@ -237,20 +303,74 @@ export default function DisplayInputUser() {
               titleInput="Berat Badan (kg)"
               srcImg="/images/pageCalculateCalories/weight.png"
               altImg="weight"
+              htmlFor="weight"
             >
               <input
                 type="number"
-                id="height"
+                id="weight"
                 min={50}
                 max={200}
                 className="inputField peer"
-                ref={bodyHeight}
                 onChange={handleValueInput}
-                value={mustFilled.height}
+                value={mustFilled.weight}
               />
             </ComponentInput>
 
-            <div className="font-semibold">
+            <div>
+              <div className="flex gap-x-4 mb-3 items-center">
+                <Image
+                  width={200}
+                  height={200}
+                  src="/images/pageCalculateCalories/activity.png"
+                  alt="activity"
+                  className="size-8"
+                />
+                <label
+                  htmlFor="activityLevel"
+                  className="inline-block text-lg font-semibold"
+                >
+                  Activity Level
+                </label>
+              </div>
+              <Select
+                value={mustFilled.activityLevel}
+                onValueChange={(value) => {
+                  setSelectedValueActivityLevel(value);
+                  handleValueInput({
+                    target: {
+                      id: "activityLevel",
+                      value: value,
+                    },
+                  });
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Pilih Tingkat Aktivitas" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Tingkat Aktivitas</SelectLabel>
+                    <SelectItem value="sedentary">
+                      Tidak Aktif (Tidak Melakukan Aktifitas Berat)
+                    </SelectItem>
+                    <SelectItem value="lightlyActive">
+                      Aktif (olahraga ringan 1-3 hari per minggu)
+                    </SelectItem>
+                    <SelectItem value="moderatelyActive">
+                      Cukup Aktif (olahraga sedang 3-5 hari per minggu)
+                    </SelectItem>
+                    <SelectItem value="veryActive">
+                      Sangat Aktif (olahraga keras 6-7 hari per minggu)
+                    </SelectItem>
+                    <SelectItem value="extraActive">
+                      Extra Aktif (olahraga sangat keras / pekerjaan fisik)
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* <div className="font-semibold">
               <div className="flex gap-x-3 mb-2">
                 <Image
                   width={200}
@@ -289,23 +409,25 @@ export default function DisplayInputUser() {
                   Extra Aktif (olahraga yang sangat keras atau pekerjaan fisik)
                 </option>
               </select>
-            </div>
+            </div> */}
           </div>
 
           <button
-            onClick={calculateMaxSugar}
+            // onClick={calculateMaxSugar}
+            type="submit"
             disabled={!isFormFilled()}
-            className="disabled:cursor-not-allowed text-white mt-7 mx-auto py-1 text-center rounded-md bg-[#2e8b57] hover:bg-[#27744a] cursor-pointer font-semibold tracking-wide px-7 text-lg max-[640px]:mt-4"
+            className="disabled:cursor-not-allowed mt-5 mx-auto py-1 text-center rounded-md bg-[#54C392] hover:bg-green-500 cursor-pointer font-semibold tracking-wide px-7 text-lg"
           >
             Hitung
           </button>
         </form>
+
         <div>
           {validate === true && (
             <ModalBox
               setModalBox={setModalBox}
               yourMaxSugar={yourMaxSugar}
-              tdee={tdee}
+              tdee={TDEE}
               setValidate={setValidate}
             />
           )}
