@@ -73,7 +73,6 @@ export default function DisplayInputUser() {
       });
     } else {
       setErrorCalculation(false);
-      setIsValidCalculation(true);
 
       let basalMetabolicRate: number | null = null;
 
@@ -119,7 +118,6 @@ export default function DisplayInputUser() {
             "Hasilnya Tidak Memenuhi Standar, Silahkan Input Kembali !",
         });
         setIsValidCalculation(false);
-        setErrorCalculation(true);
       }
 
       setTDEE(totalDailyEnergyExpenditure);
@@ -128,10 +126,21 @@ export default function DisplayInputUser() {
   }
 
   useEffect(() => {
-    if (isValidCalculation) {
-      document.cookie = "formFilledSuccess=true; path=/";
-      localStorage.setItem("maxSugars", String(yourMaxSugar));
+    if (!isValidCalculation || !yourMaxSugar) return;
+    async function isCalculateSuccess() {
+      const req = await fetch("/api/setCookies", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ validCaculations: isValidCalculation }),
+      });
+
+      const response = await req.json();
+      if (response.status) {
+        console.log(response.message);
+        localStorage.setItem("maxSugarUser", String(yourMaxSugar));
+      }
     }
+    isCalculateSuccess();
   }, [isValidCalculation, yourMaxSugar]);
 
   return (
@@ -283,7 +292,7 @@ export default function DisplayInputUser() {
               <button
                 type="submit"
                 disabled={!isFormFilled()}
-                className="disabled:cursor-not-allowed mt-5 mx-auto py-1 text-center rounded-md bg-[#54C392] hover:bg-green-500 cursor-pointer font-semibold tracking-wide px-7 text-lg"
+                className="disabled:cursor-not-allowed mt-5 py-1 text-center rounded-md bg-[#54C392] hover:bg-green-500 cursor-pointer font-semibold tracking-wide px-7 text-lg"
               >
                 Hitung
               </button>
@@ -327,7 +336,10 @@ export default function DisplayInputUser() {
                     <Button variant="outline">Batal</Button>
                   </DialogClose>
                   <Button
-                    onClick={() => push("/mainContent/calculate")}
+                    onClick={() => {
+                      push("/mainContent/calculate");
+                      // setIsValidCalculation(true);
+                    }}
                     className="bg-[#54C392] hover:bg-green-500 text-black"
                   >
                     Oke

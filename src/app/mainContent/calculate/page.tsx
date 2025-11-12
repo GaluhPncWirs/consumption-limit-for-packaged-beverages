@@ -19,6 +19,7 @@ import {
   subscribeToVideoEducation,
 } from "@/lib/firebase/services";
 import IconWarning from "@/components/warningIcon/icon";
+import MainContentLayout from "@/layout/mainContent";
 
 export default function MainContent() {
   const sugarInsideProductRef = useRef<HTMLInputElement>(null);
@@ -62,7 +63,7 @@ export default function MainContent() {
   }, [searchProduk, setMustFilled]);
 
   useEffect(() => {
-    const maxSugars = localStorage.getItem("maxSugars");
+    const maxSugars = localStorage.getItem("maxSugarUser");
     if (maxSugars) {
       setMaksimalGulaHarianPengguna(Number(maxSugars));
     }
@@ -355,20 +356,9 @@ export default function MainContent() {
   }
 
   return (
-    <div>
-      <NavigasiBar path={path} props={backToInput} />
-      <div
-        className={`flex justify-center items-center mt-16 ${
-          fillBottle.length > 0 ? `h-full` : `h-screen`
-        }`}
-      >
-        <div
-          className={`flex flex-col justify-center px-5 rounded-xl py-10 mx-auto bg-[#73EC8B] max-[640px]:px-2 max-[640px]:py-7 ${
-            fillBottle.length > 0
-              ? `w-11/12 my-5`
-              : `max-[640px]:w-11/12 sm:w-11/12 md:w-3/5 lg:w-1/2`
-          }`}
-        >
+    <MainContentLayout>
+      <div className="mt-10">
+        <div className="flex flex-col justify-center px-5 rounded-xl py-10 mx-auto bg-[#f9fff9] max-[640px]:px-2 max-[640px]:py-7">
           <p className="mx-5 font-semibold max-[640px]:text-base sm:text-lg">
             Maksimal Konsumsi Gula Perhari :{" "}
             <span>
@@ -538,7 +528,7 @@ export default function MainContent() {
             <button
               type="button"
               onClick={() => calculateMaximal()}
-              className="hover:bg-blue-400 text-lg font-semibold bg-blue-500 rounded-lg py-1 px-7 disabled:cursor-not-allowed"
+              className="disabled:cursor-not-allowed mt-5 py-1.5 text-center rounded-md bg-[#54C392] hover:bg-green-500 cursor-pointer font-semibold tracking-wide px-7 text-lg"
               disabled={!isFormFilled()}
             >
               Hitung
@@ -584,6 +574,10 @@ export default function MainContent() {
           </div>
         </div>
       )}
-    </div>
+    </MainContentLayout>
+    // <div>
+    //   <NavigasiBar path={path} props={backToInput} />
+
+    // </div>
   );
 }
