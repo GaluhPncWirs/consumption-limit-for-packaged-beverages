@@ -330,7 +330,7 @@ export default function MainContent() {
     if (fillBottle.length > 1 && fillLess100 < 100 && remainingMl !== 0) {
       return (
         <p>
-          Kamu Bisa Konsumsi Maksimal {fillBottle.length}{" "}
+          Bisa Konsumsi Maksimal {fillBottle.length}{" "}
           {typeProduct === "Siap Minum" ? "Botol" : "Gelas"} {remainingMl} ml
         </p>
       );
@@ -341,14 +341,14 @@ export default function MainContent() {
     ) {
       return (
         <p>
-          Minuman ini Maksimal Bisa Dikonsumsi {remainingMl} ml, hanya 1{" "}
+          Maksimal Bisa Dikonsumsi {remainingMl} ml, hanya 1{" "}
           {typeProduct === "Siap Minum" ? "Botol" : "Gelas"}
         </p>
       );
     } else {
       return (
         <p>
-          Kamu Bisa Konsumsi Maksimal {fillBottle.length}{" "}
+          Bisa Konsumsi Maksimal {fillBottle.length}{" "}
           {typeProduct === "Siap Minum" ? "Botol" : "Gelas"}
         </p>
       );
@@ -357,199 +357,199 @@ export default function MainContent() {
 
   return (
     <MainContentLayout>
-      <div className="mt-10">
-        <div className="flex flex-col justify-center px-5 rounded-xl py-10 mx-auto bg-[#f9fff9] max-[640px]:px-2 max-[640px]:py-7">
-          <p className="mx-5 font-semibold max-[640px]:text-base sm:text-lg">
-            Maksimal Konsumsi Gula Perhari :{" "}
-            <span>
-              {maksimalGulaHarianPengguna.toLocaleString("id-ID", {
-                maximumFractionDigits: 0,
-              })}{" "}
-              Gram
-            </span>
-          </p>
-          <div>
-            <div
-              className={`my-5 ${
-                fillBottle.length >= 1
-                  ? `flex items-center justify-center max-[640px]:flex-col max-[640px]:gap-y-7 sm:flex-col sm:gap-10 md:flex-row md:gap-x-3 md:mx-3 lg:mx-0`
-                  : `flex-none`
-              }`}
-            >
-              <form
-                className="basis-2/5 flex flex-col gap-2 items-center justify-center md:basis-1/2 lg:basis-2/5 max-[640px]:w-full sm:w-full"
-                autoComplete="off"
-              >
-                <div className="relative w-4/5 py-3 md:w-11/12 lg:w-4/5">
-                  <input
-                    type="text"
-                    className="inputField peer"
-                    id="product"
-                    value={searchProduk}
-                    onChange={handleInputChange}
-                    required
-                    ref={focusInput}
-                  />
-                  <label htmlFor="product" className="labelText">
-                    Cari Produk
-                  </label>
-                  <div className={`${selectedProduct && `hidden`}`}>
-                    {searchProduk !== "" && result.length > 0 && (
-                      <ul
-                        className="p-3 bg-green-300 absolute z-10 w-full text-[#333333] font-medium max-h-40 overflow-y-auto rounded-b-lg"
-                        ref={listRef}
-                      >
-                        {result.map((item: productBeverageTypes, i: number) => (
-                          <li
-                            key={item.id}
-                            onClick={() => handleItemClick(item)}
-                            className={`cursor-pointer hover:bg-green-400 mb-1 ${
-                              activeIndex === i ? "bg-green-400" : ""
-                            }`}
-                          >
-                            {item.nameProduct}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                </div>
-                <div className="relative w-4/5 pt-3 md:w-11/12 lg:w-4/5">
-                  <input
-                    type="number"
-                    id="sugarContent"
-                    className="inputField disabled:cursor-not-allowed"
-                    ref={sugarInsideProductRef}
-                    readOnly
-                    disabled
-                    value={sugar || ""}
-                  />
-                  <div>
-                    <span
-                      className="text-[0.65rem] text-[#F93827] font-semibold cursor-pointer select-none"
-                      onClick={() => setServingSize((prev) => !prev)}
-                    >
-                      *Gula Disini Sudah di Totalkan Dengan Takaran Saji Per
-                      Kemasan
-                    </span>
-                    {servingSize && (
-                      <div className="text-xs font-medium text-justify">
-                        Jadi maksudnya adalah jika minuman yang takaran sajinya
-                        itu 3 per kemasan dan kandungan gulanya 10g maka 3 X 10
-                        yaitu total gulanya menjadi 30g gula
-                      </div>
-                    )}
-                  </div>
-                  <label htmlFor="sugarContent" className="labelText">
-                    Kadar Gula Minuman (G)
-                  </label>
-                </div>
-
-                <div className="relative w-4/5 py-3 md:w-11/12 lg:w-4/5">
-                  <input
-                    type="number"
-                    id="isiBeratBersih"
-                    className="inputField disabled:cursor-not-allowed"
-                    ref={totalVolumeInsideProductRef}
-                    readOnly
-                    disabled
-                    value={volume || ""}
-                  />
-                  <label htmlFor="isiBeratBersih" className="labelText">
-                    isi Bersih (ml)
-                  </label>
-                </div>
-                <div className="relative w-4/5 pt-3 md:w-11/12 lg:w-4/5">
-                  <input
-                    id="type"
-                    className="inputField disabled:cursor-not-allowed"
-                    readOnly
-                    disabled
-                    value={type || ""}
-                  />
-                  <label htmlFor="type" className="labelText">
-                    Tipe Minuman
-                  </label>
-                </div>
-                <h1 className="text-sm mt-2 max-[640px]:mx-3 max-[640px]:text-xs lg:mx-4 text-center">
-                  Produk yang di cari tidak ada ?{" "}
-                  <Link
-                    href={"/mainContent/addProduct"}
-                    className="text-blue-600 hover:underline font-semibold"
+      <div className="fixed top-0 right-0 bg-green-400 p-3 rounded-bl-md shadow-md shadow-slate-700 z-50">
+        <h1 className="px-5 font-semibold text-lg tracking-wide">
+          Maksimal Konsumsi Gula Perhari{" "}
+          <span>
+            {maksimalGulaHarianPengguna.toLocaleString("id-ID", {
+              maximumFractionDigits: 0,
+            })}{" "}
+            Gram
+          </span>
+        </h1>
+      </div>
+      <div className="flex flex-col justify-center p-7 rounded-lg bg-[#f9fff9] mt-20 mb-12">
+        <h1 className="text-2xl font-semibold tracking-wide mx-5">
+          Hitung Konsumsi Minuman
+        </h1>
+        <div
+          className={`my-8 ${
+            fillBottle.length >= 1
+              ? `flex items-center justify-center flex-col max-[640px]:gap-y-7 sm:gap-10 md:flex-row md:gap-x-3`
+              : `flex-col`
+          }`}
+        >
+          <form
+            className="flex flex-col gap-y-5 items-center justify-center basis-1/2"
+            autoComplete="off"
+          >
+            <div className="relative pt-4 w-11/12">
+              <input
+                type="text"
+                className="inputField peer"
+                id="product"
+                value={searchProduk}
+                onChange={handleInputChange}
+                required
+                ref={focusInput}
+              />
+              <label htmlFor="product" className="labelText tracking-wide">
+                Cari Produk
+              </label>
+              <div className={`${selectedProduct && `hidden`}`}>
+                {searchProduk !== "" && result.length > 0 && (
+                  <ul
+                    className="p-3 bg-green-300 absolute z-10 w-full text-[#333333] font-medium max-h-40 overflow-y-auto rounded-b-lg"
+                    ref={listRef}
                   >
-                    klik disini
-                  </Link>{" "}
-                  untuk menambahkan produk
-                </h1>
-              </form>
-
-              <div className="basis-3/5 gap-8 flex justify-center items-center max-[640px]:flex-col-reverse sm:flex-col-reverse max-[640px]:w-full sm:w-full md:basis-1/2 lg:basis-3/5">
-                <div className="flex w-full items-center justify-center max-[640px]:flex-wrap max-[640px]:gap-y-5 sm:flex-wrap sm:gap-y-5 md:flex-nowrap">
-                  {fillBottle.map((item: number, i: number) =>
-                    typeProduct === "Siap Minum" ? (
-                      <div
-                        key={i}
-                        className="bottleInside max-[640px]:w-1/3 sm:w-1/4"
+                    {result.map((item: productBeverageTypes, i: number) => (
+                      <li
+                        key={item.id}
+                        onClick={() => handleItemClick(item)}
+                        className={`cursor-pointer hover:bg-green-400 mb-1 ${
+                          activeIndex === i ? "bg-green-400" : ""
+                        }`}
                       >
-                        <div
-                          className="fill"
-                          style={{ height: `${item}%` }}
-                        ></div>
-                      </div>
-                    ) : (
-                      <div
-                        className="glassCupInside max-[640px]:w-1/5 sm:w-1/5 md:w-1/4 max-[640px]:ml-5 sm:ml-5 lg:ml-0"
-                        key={i}
-                      >
-                        <div
-                          className="fill"
-                          style={{ height: `${item}%` }}
-                        ></div>
-                      </div>
-                    )
-                  )}
-                </div>
-                <div
-                  className={`${
-                    appearContent === true ? `block` : `hidden`
-                  } mx-5 font-semibold max-[640px]:text-base max-[640px]:text-center sm:text-lg sm:text-center md:text-center md:text-base lg:text-lg lg:max-w-lg`}
-                >
-                  {getConsumtionMessage()}
-                  <h2 className="sm:text-xs max-[640px]:text-xs text-[#F93827] mt-1">
-                    *Disclaimer Ini hanya berlaku jika kamu belum ada asupan
-                    gula sama sekali di hari ini. Kalau sudah ada, sebaiknya
-                    jumlahnya dikurangi.
-                  </h2>
-                </div>
+                        {item.nameProduct}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
-          </div>
-          <div className="mx-3 flex max-[640px]:flex-col-reverse max-[640px]:gap-y-5 max-[640px]:items-start max-[640px]:justify-normal sm:flex-col-reverse sm:gap-y-5 sm:items-start sm:justify-normal md:flex-row md:justify-between md:items-center">
-            <button
-              type="button"
-              onClick={() => calculateMaximal()}
-              className="disabled:cursor-not-allowed mt-5 py-1.5 text-center rounded-md bg-[#54C392] hover:bg-green-500 cursor-pointer font-semibold tracking-wide px-7 text-lg"
-              disabled={!isFormFilled()}
-            >
-              Hitung
-            </button>
-            {totalBotol >= 1 && (
-              <div className="max-[640px]:text-sm max-[640px]:text-center sm:text-base sm:text-center md:flex md:justify-end lg:mr-5">
-                <h1 className="text-sm font-bold md:max-w-sm md:text-justify lg:max-w-lg">
-                  {`Jika Kamu Mengkonsumsi Hanya ${messageIfDrinkSomeBottles.botol} Botol Maka Sisa Dari Gula
-                  Harian Kamu Adalah ${messageIfDrinkSomeBottles.sisaGula} Gram`}
+
+            <div className="relative pt-4 w-11/12">
+              <input
+                type="number"
+                id="sugarContent"
+                className="inputField"
+                ref={sugarInsideProductRef}
+                readOnly
+                disabled
+                value={sugar || ""}
+              />
+              <div className="text-xs mt-1.5">
+                <h1
+                  className="tracking-wide text-[#F93827] font-semibold cursor-pointer mb-1"
+                  onClick={() => setServingSize((prev) => !prev)}
+                >
+                  * Gula Disini Sudah di Totalkan Dengan Takaran Saji Per
+                  Kemasan
                 </h1>
+                {servingSize && (
+                  <p className="text-justify ">
+                    Jadi maksudnya adalah jika minuman yang takaran sajinya itu
+                    3 per kemasan dan kandungan gulanya 10g maka 3 X 10 yaitu
+                    total gulanya menjadi 30g gula
+                  </p>
+                )}
               </div>
+              <label htmlFor="sugarContent" className="labelText tracking-wide">
+                Kadar Gula Minuman (G)
+              </label>
+            </div>
+
+            <div className="relative pt-4 w-11/12">
+              <input
+                type="number"
+                id="isiBeratBersih"
+                className="inputField"
+                ref={totalVolumeInsideProductRef}
+                readOnly
+                disabled
+                value={volume || ""}
+              />
+              <label
+                htmlFor="isiBeratBersih"
+                className="labelText tracking-wide"
+              >
+                Isi Bersih (ml)
+              </label>
+            </div>
+
+            <div className="relative pt-4 w-11/12">
+              <input
+                id="type"
+                className="inputField"
+                readOnly
+                disabled
+                value={type || ""}
+              />
+              <label htmlFor="type" className="labelText tracking-wide">
+                Tipe Minuman
+              </label>
+            </div>
+
+            <h1 className="text-sm max-[640px]:mx-3 w-11/12">
+              Produk yang di cari tidak ada?{" "}
+              <Link
+                href={"/mainContent/addProduct"}
+                className="text-blue-600 hover:underline font-semibold"
+              >
+                klik disini
+              </Link>{" "}
+              untuk menambahkan produk
+            </h1>
+          </form>
+
+          <div className="basis-1/2 gap-8 flex justify-center items-center max-[640px]:flex-col sm:flex-col max-[640px]:w-full sm:w-full md:basis-1/2 lg:basis-3/5">
+            <div
+              className={`${
+                appearContent === true ? `block` : `hidden`
+              } mx-5 font-semibold text-lg tracking-wide`}
+            >
+              {getConsumtionMessage()}
+              <h2 className="text-xs text-[#F93827] mt-0.5 text-justify">
+                *Disclaimer Ini hanya berlaku jika kamu belum ada asupan gula
+                sama sekali di hari ini. Jika sudah ada, sebaiknya jumlahnya
+                dikurangi dari yang ditampilkan.
+              </h2>
+            </div>
+            <div className="flex w-full items-center justify-center max-[640px]:flex-wrap max-[640px]:gap-y-5 sm:flex-wrap sm:gap-y-5 md:flex-nowrap">
+              {fillBottle.map((item: number, i: number) =>
+                typeProduct === "Siap Minum" ? (
+                  <div
+                    key={i}
+                    className="bottleInside max-[640px]:w-1/3 sm:w-1/4"
+                  >
+                    <div className="fill" style={{ height: `${item}%` }}></div>
+                  </div>
+                ) : (
+                  <div
+                    className="glassCupInside max-[640px]:w-1/5 sm:w-1/5 md:w-1/4 max-[640px]:ml-5 sm:ml-5 lg:ml-0"
+                    key={i}
+                  >
+                    <div className="fill" style={{ height: `${item}%` }}></div>
+                  </div>
+                )
+              )}
+            </div>
+            {totalBotol >= 1 && (
+              <h1 className="text-sm tracking-wide font-semibold text-justify max-w-sm">
+                {`Jika Kamu Mengkonsumsi Hanya ${messageIfDrinkSomeBottles.botol} Botol Maka Sisa Dari Gula
+                  Harian Kamu Adalah ${messageIfDrinkSomeBottles.sisaGula} Gram`}
+              </h1>
             )}
           </div>
-          {appearContent === true && (
-            <Educations
-              funFactSugar={funFactSugar}
-              video={video}
-              artikel={artikel}
-            />
-          )}
         </div>
+
+        <div className="mx-3">
+          <button
+            type="button"
+            onClick={() => calculateMaximal()}
+            className="disabled:cursor-not-allowed py-1.5 text-center rounded-md bg-[#54C392] hover:bg-green-500 cursor-pointer font-semibold tracking-wider px-7 text-lg"
+            disabled={!isFormFilled()}
+          >
+            Hitung
+          </button>
+        </div>
+        {appearContent === true && (
+          <Educations
+            funFactSugar={funFactSugar}
+            video={video}
+            artikel={artikel}
+          />
+        )}
       </div>
       {modalBox && (
         <div className="h-full absolute inset-0 bg-black/50 sm:mt-16 max-[640px]:mt-16">

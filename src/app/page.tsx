@@ -137,10 +137,12 @@ export default function DisplayInputUser() {
       const response = await req.json();
       if (response.status) {
         console.log(response.message);
+        push("/mainContent/calculate");
         localStorage.setItem("maxSugarUser", String(yourMaxSugar));
       }
     }
     isCalculateSuccess();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isValidCalculation, yourMaxSugar]);
 
   return (
@@ -336,10 +338,7 @@ export default function DisplayInputUser() {
                     <Button variant="outline">Batal</Button>
                   </DialogClose>
                   <Button
-                    onClick={() => {
-                      push("/mainContent/calculate");
-                      // setIsValidCalculation(true);
-                    }}
+                    onClick={() => setIsValidCalculation(true)}
                     className="bg-[#54C392] hover:bg-green-500 text-black"
                   >
                     Oke
