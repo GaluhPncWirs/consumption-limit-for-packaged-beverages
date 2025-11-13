@@ -20,6 +20,14 @@ import {
 } from "@/lib/firebase/services";
 import IconWarning from "@/components/warningIcon/icon";
 import MainContentLayout from "@/layout/mainContent";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 
 export default function MainContent() {
   const sugarInsideProductRef = useRef<HTMLInputElement>(null);
@@ -39,7 +47,7 @@ export default function MainContent() {
   const [volume, setVolume] = useState<number>(0);
   const [type, setType] = useState<string>("");
   const [activeIndex, setActiveIndex] = useState<number>(-1);
-  const listRef = useRef<HTMLUListElement | null>(null);
+  const listRef = useRef<any>(null);
   const path = usePathname();
   const [servingSize, setServingSize] = useState<boolean>(false);
   const [funFactSugar, setFunFactSugar] = useState<string[]>([]);
@@ -57,6 +65,7 @@ export default function MainContent() {
     botol: 0,
     sisaGula: 0,
   });
+  const [isOpenSearchProduct, setIsOpenSearchProduct] = useState<boolean>(true);
 
   useEffect(() => {
     setMustFilled((prev: Object) => ({ ...prev, product: searchProduk }));
@@ -296,6 +305,9 @@ export default function MainContent() {
           });
         } else if (e.key === "Enter" && activeIndex >= 0) {
           setSelectedProduct(result[activeIndex]);
+          setIsOpenSearchProduct(false);
+        } else {
+          setIsOpenSearchProduct(true);
         }
       }
     }
@@ -309,6 +321,7 @@ export default function MainContent() {
   function handleItemClick(item: productBeverageTypes) {
     setSelectedProduct(item);
     setSearchProduk(item.nameProduct);
+    setIsOpenSearchProduct(false);
   }
 
   useEffect(() => {
@@ -384,7 +397,48 @@ export default function MainContent() {
             autoComplete="off"
           >
             <div className="relative pt-4 w-11/12">
-              <input
+              <Command>
+                <input
+                  type="text"
+                  className="inputField peer"
+                  id="product"
+                  value={searchProduk}
+                  onChange={handleInputChange}
+                  required
+                  ref={focusInput}
+                />
+                <label htmlFor="product" className="labelText tracking-wide">
+                  Cari Produk
+                </label>
+                {isOpenSearchProduct && (
+                  <div>
+                    {searchProduk !== "" && result.length > 0 && (
+                      <CommandList
+                        className="p-3 bg-slate-200 absolute z-10 w-full text-[#333333] font-medium max-h-40 overflow-y-auto rounded-b-lg"
+                        ref={listRef}
+                      >
+                        <CommandEmpty>Produk Tidak Ditemukan.</CommandEmpty>
+                        <CommandGroup heading="Pilih Produk">
+                          {result.map(
+                            (item: productBeverageTypes, i: number) => (
+                              <CommandItem
+                                key={item.id}
+                                onClick={() => handleItemClick(item)}
+                                className={`cursor-pointer mb-1 ${
+                                  activeIndex === i ? "bg-slate-300" : ""
+                                }`}
+                              >
+                                {item.nameProduct}
+                              </CommandItem>
+                            )
+                          )}
+                        </CommandGroup>
+                      </CommandList>
+                    )}
+                  </div>
+                )}
+              </Command>
+              {/* <input
                 type="text"
                 className="inputField peer"
                 id="product"
@@ -399,7 +453,7 @@ export default function MainContent() {
               <div className={`${selectedProduct && `hidden`}`}>
                 {searchProduk !== "" && result.length > 0 && (
                   <ul
-                    className="p-3 bg-green-300 absolute z-10 w-full text-[#333333] font-medium max-h-40 overflow-y-auto rounded-b-lg"
+                    className="p-3 bg-[#f9fff9] absolute z-10 w-full text-[#333333] font-medium max-h-40 overflow-y-auto rounded-b-lg"
                     ref={listRef}
                   >
                     {result.map((item: productBeverageTypes, i: number) => (
@@ -415,7 +469,7 @@ export default function MainContent() {
                     ))}
                   </ul>
                 )}
-              </div>
+              </div> */}
             </div>
 
             <div className="relative pt-4 w-11/12">
