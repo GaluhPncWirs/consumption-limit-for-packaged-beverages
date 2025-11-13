@@ -1,8 +1,6 @@
 "use client";
-
-import NavigasiBar from "@/components/navbar/navigasiBar";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import Educations from "@/components/educationComp/educations";
 import { useHandleInput } from "../../hooks/handle-input";
@@ -24,15 +22,12 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
 
 export default function MainContent() {
-  const sugarInsideProductRef = useRef<HTMLInputElement>(null);
-  const totalVolumeInsideProductRef = useRef<HTMLInputElement>(null);
-  const { push } = useRouter();
+  const pathname = usePathname();
   const [fillBottle, setFillBottle] = useState<number[]>([]);
   const [appearContent, setAppearContent] = useState<boolean>(false);
   const [totalBotol, setTotalBotol] = useState<number>(0);
@@ -47,8 +42,6 @@ export default function MainContent() {
   const [volume, setVolume] = useState<number>(0);
   const [type, setType] = useState<string>("");
   const [activeIndex, setActiveIndex] = useState<number>(-1);
-  const listRef = useRef<any>(null);
-  const path = usePathname();
   const [servingSize, setServingSize] = useState<boolean>(false);
   const [funFactSugar, setFunFactSugar] = useState<string[]>([]);
   const [video, setVideo] = useState<educationsForVideo[]>([]);
@@ -78,7 +71,9 @@ export default function MainContent() {
     }
   }, []);
 
-  function calculateMaximal() {
+  function handleCalculateProductBeverage(event: any) {
+    event.preventDefault();
+
     if (result.length > 0) {
       if (funFactSugar.length > 0 && video.length > 0) {
         setFunFactSugar((prev) => [...prev.sort(() => Math.random() - 0.5)]);
@@ -87,11 +82,9 @@ export default function MainContent() {
       }
       setAppearContent(true);
       const kandunganGulaDidalamProduk = parseFloat(
-        sugarInsideProductRef.current?.value || "0"
+        event.target.sugarContent.value
       );
-      const totalIsiMinuman = parseFloat(
-        totalVolumeInsideProductRef.current?.value || "0"
-      );
+      const totalIsiMinuman = parseFloat(event.target.isiBeratBersih.value);
       const gulaPerSatuML = kandunganGulaDidalamProduk / totalIsiMinuman; //ubah total gula menjadi per 1 ml
 
       // menghitung jumalah botol yang datap dikonsumsi
@@ -146,7 +139,6 @@ export default function MainContent() {
         setProduct(dataProduct);
       }
     );
-
     return () => unsubscribeDataProductBeverage();
   }, []);
 
@@ -183,61 +175,6 @@ export default function MainContent() {
     }
   }, [appearContent]);
 
-  // // ambil data funfact tentang gula
-  // useEffect(() => {
-  //   const unsubscribeDataFunFactSugar = subscribeToFunFactSugars(
-  //     (dataFunfact) => {
-  //       setFunFactSugar(
-  //         dataFunfact.map(
-  //           (getFunFact: educationsForFunfactSugar) => getFunFact.funFact
-  //         )
-  //       );
-  //     }
-  //   );
-
-  //   return () => unsubscribeDataFunFactSugar();
-  // }, []);
-
-  // // useEffect(() => {
-  // //   getDataFunFact((dataFunfact: educationsForFunfactSugar[]) => {
-  // //     setFunFactSugar(
-  // //       dataFunfact.map(
-  // //         (getFunFact: educationsForFunfactSugar) => getFunFact.funFact
-  // //       )
-  // //     );
-  // //   });
-  // // }, []);
-
-  // // ambil data artikel
-  // useEffect(() => {
-  //   const unsubscribeDataArtikel = subscribeToReleatedArtikel((dataArtikel) => {
-  //     setArtikel(dataArtikel)
-  //   })
-
-  //   return () => unsubscribeDataArtikel()
-  // },[])
-
-  // // useEffect(() => {
-  // //   getDataArtikel((dataArtikel: educationsForArtikel[]) => {
-  // //     setArtikel(dataArtikel);
-  // //   });
-  // // }, []);
-
-  // // ambil data video edukasi
-  // useEffect(() => {
-  //   const unsubscribeDataVideoEducation = subscribeToVideoEducation((dataVideo) => {
-  //     setVideo(dataVideo)
-  //   })
-
-  //   return () => unsubscribeDataVideoEducation()
-  // },[])
-
-  // // useEffect(() => {
-  // //   getVideoEducations((dataVideo: educationsForVideo[]) => {
-  // //     setVideo(dataVideo);
-  // //   });
-  // // }, []);
-
   useEffect(() => {
     if (!type) {
       setTypeProduct(type);
@@ -249,13 +186,6 @@ export default function MainContent() {
       focusInput.current.value = "";
     }
   }, [modalBox]);
-
-  function backToInput() {
-    localStorage.removeItem("maxSugars");
-    document.cookie =
-      "formFilledSuccess=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    push("/");
-  }
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     const query = e.target.value;
@@ -276,31 +206,17 @@ export default function MainContent() {
     }
   }
 
-  function scrollToActiveItem(i: number) {
-    const list = listRef.current;
-    if (list) {
-      const activeItem = list.children[i] as HTMLElement;
-      if (activeItem) {
-        activeItem.scrollIntoView({
-          block: "nearest",
-        });
-      }
-    }
-  }
-
   useEffect(() => {
     function handleKeyEvent(e: KeyboardEvent) {
       if (result.length > 0) {
         if (e.key === "ArrowDown") {
           setActiveIndex((prev) => {
             const newIndex = (prev + 1) % result.length;
-            scrollToActiveItem(newIndex);
             return newIndex;
           });
         } else if (e.key === "ArrowUp") {
           setActiveIndex((prev) => {
             const newIndex = (prev - 1 + result.length) % result.length;
-            scrollToActiveItem(newIndex);
             return newIndex;
           });
         } else if (e.key === "Enter" && activeIndex >= 0) {
@@ -369,7 +285,7 @@ export default function MainContent() {
   }
 
   return (
-    <MainContentLayout>
+    <MainContentLayout path={pathname}>
       <div className="fixed top-0 right-0 bg-green-400 p-3 rounded-bl-md shadow-md shadow-slate-700 z-50">
         <h1 className="px-5 font-semibold text-lg tracking-wide">
           Maksimal Konsumsi Gula Perhari{" "}
@@ -382,171 +298,146 @@ export default function MainContent() {
         </h1>
       </div>
       <div className="flex flex-col justify-center p-7 rounded-lg bg-[#f9fff9] mt-20 mb-12">
-        <h1 className="text-2xl font-semibold tracking-wide mx-5">
+        <h1 className="text-2xl font-semibold tracking-wide mx-3">
           Hitung Konsumsi Minuman
         </h1>
         <div
-          className={`my-8 ${
+          className={`mt-8 ${
             fillBottle.length >= 1
               ? `flex items-center justify-center flex-col max-[640px]:gap-y-7 sm:gap-10 md:flex-row md:gap-x-3`
               : `flex-col`
           }`}
         >
           <form
-            className="flex flex-col gap-y-5 items-center justify-center basis-1/2"
+            className="basis-2/5"
             autoComplete="off"
+            onSubmit={(e) => handleCalculateProductBeverage(e)}
           >
-            <div className="relative pt-4 w-11/12">
-              <Command>
-                <input
-                  type="text"
-                  className="inputField peer"
-                  id="product"
-                  value={searchProduk}
-                  onChange={handleInputChange}
-                  required
-                  ref={focusInput}
-                />
-                <label htmlFor="product" className="labelText tracking-wide">
-                  Cari Produk
-                </label>
-                {isOpenSearchProduct && (
-                  <div>
-                    {searchProduk !== "" && result.length > 0 && (
-                      <CommandList
-                        className="p-3 bg-slate-200 absolute z-10 w-full text-[#333333] font-medium max-h-40 overflow-y-auto rounded-b-lg"
-                        ref={listRef}
-                      >
-                        <CommandEmpty>Produk Tidak Ditemukan.</CommandEmpty>
-                        <CommandGroup heading="Pilih Produk">
-                          {result.map(
-                            (item: productBeverageTypes, i: number) => (
-                              <CommandItem
-                                key={item.id}
-                                onClick={() => handleItemClick(item)}
-                                className={`cursor-pointer mb-1 ${
-                                  activeIndex === i ? "bg-slate-300" : ""
-                                }`}
-                              >
-                                {item.nameProduct}
-                              </CommandItem>
-                            )
-                          )}
-                        </CommandGroup>
-                      </CommandList>
-                    )}
-                  </div>
-                )}
-              </Command>
-              {/* <input
-                type="text"
-                className="inputField peer"
-                id="product"
-                value={searchProduk}
-                onChange={handleInputChange}
-                required
-                ref={focusInput}
-              />
-              <label htmlFor="product" className="labelText tracking-wide">
-                Cari Produk
-              </label>
-              <div className={`${selectedProduct && `hidden`}`}>
-                {searchProduk !== "" && result.length > 0 && (
-                  <ul
-                    className="p-3 bg-[#f9fff9] absolute z-10 w-full text-[#333333] font-medium max-h-40 overflow-y-auto rounded-b-lg"
-                    ref={listRef}
-                  >
-                    {result.map((item: productBeverageTypes, i: number) => (
-                      <li
-                        key={item.id}
-                        onClick={() => handleItemClick(item)}
-                        className={`cursor-pointer hover:bg-green-400 mb-1 ${
-                          activeIndex === i ? "bg-green-400" : ""
-                        }`}
-                      >
-                        {item.nameProduct}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div> */}
-            </div>
-
-            <div className="relative pt-4 w-11/12">
-              <input
-                type="number"
-                id="sugarContent"
-                className="inputField"
-                ref={sugarInsideProductRef}
-                readOnly
-                disabled
-                value={sugar || ""}
-              />
-              <div className="text-xs mt-1.5">
-                <h1
-                  className="tracking-wide text-[#F93827] font-semibold cursor-pointer mb-1"
-                  onClick={() => setServingSize((prev) => !prev)}
-                >
-                  * Gula Disini Sudah di Totalkan Dengan Takaran Saji Per
-                  Kemasan
-                </h1>
-                {servingSize && (
-                  <p className="text-justify ">
-                    Jadi maksudnya adalah jika minuman yang takaran sajinya itu
-                    3 per kemasan dan kandungan gulanya 10g maka 3 X 10 yaitu
-                    total gulanya menjadi 30g gula
-                  </p>
-                )}
+            <div className="flex flex-col gap-y-5 items-center justify-center">
+              <div className="relative pt-4 w-11/12">
+                <Command>
+                  <input
+                    type="text"
+                    className="inputField peer"
+                    id="product"
+                    value={searchProduk}
+                    onChange={handleInputChange}
+                    required
+                    ref={focusInput}
+                  />
+                  <label htmlFor="product" className="labelText tracking-wide">
+                    Cari Produk
+                  </label>
+                  {isOpenSearchProduct && (
+                    <div>
+                      {searchProduk !== "" && result.length > 0 && (
+                        <CommandList className="p-3 bg-slate-200 absolute z-10 w-full text-[#333333] font-medium max-h-40 overflow-y-auto rounded-b-lg">
+                          <CommandEmpty>Produk Tidak Ditemukan.</CommandEmpty>
+                          <CommandGroup heading="Pilih Produk">
+                            {result.map(
+                              (item: productBeverageTypes, i: number) => (
+                                <CommandItem
+                                  key={item.id}
+                                  onSelect={() => handleItemClick(item)}
+                                  className="cursor-pointer mb-1"
+                                >
+                                  {item.nameProduct}
+                                </CommandItem>
+                              )
+                            )}
+                          </CommandGroup>
+                        </CommandList>
+                      )}
+                    </div>
+                  )}
+                </Command>
               </div>
-              <label htmlFor="sugarContent" className="labelText tracking-wide">
-                Kadar Gula Minuman (G)
-              </label>
+
+              <div className="relative pt-4 w-11/12">
+                <input
+                  type="number"
+                  id="sugarContent"
+                  className="inputField"
+                  readOnly
+                  disabled
+                  value={sugar || ""}
+                />
+                <div className="text-xs mt-1.5">
+                  <h1
+                    className="tracking-wide text-[#F93827] font-semibold cursor-pointer mb-1"
+                    onClick={() => setServingSize((prev) => !prev)}
+                  >
+                    * Gula Disini Sudah di Totalkan Dengan Takaran Saji Per
+                    Kemasan
+                  </h1>
+                  {servingSize && (
+                    <p className="text-justify ">
+                      Jika minuman yang takaran sajinya itu 3 per kemasan dan
+                      kandungan gulanya 10g maka 3 X 10 yaitu total gulanya
+                      menjadi 30g gula
+                    </p>
+                  )}
+                </div>
+                <label
+                  htmlFor="sugarContent"
+                  className="labelText tracking-wide"
+                >
+                  Kadar Gula Minuman (G)
+                </label>
+              </div>
+
+              <div className="relative pt-4 w-11/12">
+                <input
+                  type="number"
+                  id="isiBeratBersih"
+                  className="inputField"
+                  readOnly
+                  disabled
+                  value={volume || ""}
+                />
+                <label
+                  htmlFor="isiBeratBersih"
+                  className="labelText tracking-wide"
+                >
+                  Isi Bersih (ml)
+                </label>
+              </div>
+
+              <div className="relative pt-4 w-11/12">
+                <input
+                  id="type"
+                  className="inputField"
+                  readOnly
+                  disabled
+                  value={type || ""}
+                />
+                <label htmlFor="type" className="labelText tracking-wide">
+                  Tipe Minuman
+                </label>
+              </div>
+
+              <h1 className="text-sm w-11/12">
+                Produk yang di cari tidak ada?{" "}
+                <Link
+                  href={"/mainContent/addProduct"}
+                  className="text-blue-600 hover:underline font-semibold"
+                >
+                  klik disini
+                </Link>{" "}
+                untuk menambahkan produk
+              </h1>
             </div>
 
-            <div className="relative pt-4 w-11/12">
-              <input
-                type="number"
-                id="isiBeratBersih"
-                className="inputField"
-                ref={totalVolumeInsideProductRef}
-                readOnly
-                disabled
-                value={volume || ""}
-              />
-              <label
-                htmlFor="isiBeratBersih"
-                className="labelText tracking-wide"
-              >
-                Isi Bersih (ml)
-              </label>
-            </div>
-
-            <div className="relative pt-4 w-11/12">
-              <input
-                id="type"
-                className="inputField"
-                readOnly
-                disabled
-                value={type || ""}
-              />
-              <label htmlFor="type" className="labelText tracking-wide">
-                Tipe Minuman
-              </label>
-            </div>
-
-            <h1 className="text-sm max-[640px]:mx-3 w-11/12">
-              Produk yang di cari tidak ada?{" "}
-              <Link
-                href={"/mainContent/addProduct"}
-                className="text-blue-600 hover:underline font-semibold"
-              >
-                klik disini
-              </Link>{" "}
-              untuk menambahkan produk
-            </h1>
+            <button
+              type="submit"
+              className="disabled:cursor-not-allowed py-1.5 text-center rounded-md bg-[#54C392] hover:bg-green-500 cursor-pointer font-semibold tracking-wider px-7 text-lg mx-3 w-32 mt-7"
+              disabled={!isFormFilled()}
+            >
+              Hitung
+            </button>
           </form>
 
-          <div className="basis-1/2 gap-8 flex justify-center items-center max-[640px]:flex-col sm:flex-col max-[640px]:w-full sm:w-full md:basis-1/2 lg:basis-3/5">
+          <div className="gap-6 flex justify-center items-center flex-col md:basis-1/2 lg:basis-3/4">
             <div
               className={`${
                 appearContent === true ? `block` : `hidden`
@@ -559,20 +450,14 @@ export default function MainContent() {
                 dikurangi dari yang ditampilkan.
               </h2>
             </div>
-            <div className="flex w-full items-center justify-center max-[640px]:flex-wrap max-[640px]:gap-y-5 sm:flex-wrap sm:gap-y-5 md:flex-nowrap">
+            <div className="flex items-center justify-center flex-wrap gap-y-7">
               {fillBottle.map((item: number, i: number) =>
                 typeProduct === "Siap Minum" ? (
-                  <div
-                    key={i}
-                    className="bottleInside max-[640px]:w-1/3 sm:w-1/4"
-                  >
+                  <div key={i} className="bottleInside w-32">
                     <div className="fill" style={{ height: `${item}%` }}></div>
                   </div>
                 ) : (
-                  <div
-                    className="glassCupInside max-[640px]:w-1/5 sm:w-1/5 md:w-1/4 max-[640px]:ml-5 sm:ml-5 lg:ml-0"
-                    key={i}
-                  >
+                  <div key={i} className="glassCupInside w-32">
                     <div className="fill" style={{ height: `${item}%` }}></div>
                   </div>
                 )
@@ -587,16 +472,6 @@ export default function MainContent() {
           </div>
         </div>
 
-        <div className="mx-3">
-          <button
-            type="button"
-            onClick={() => calculateMaximal()}
-            className="disabled:cursor-not-allowed py-1.5 text-center rounded-md bg-[#54C392] hover:bg-green-500 cursor-pointer font-semibold tracking-wider px-7 text-lg"
-            disabled={!isFormFilled()}
-          >
-            Hitung
-          </button>
-        </div>
         {appearContent === true && (
           <Educations
             funFactSugar={funFactSugar}
@@ -629,9 +504,5 @@ export default function MainContent() {
         </div>
       )}
     </MainContentLayout>
-    // <div>
-    //   <NavigasiBar path={path} props={backToInput} />
-
-    // </div>
   );
 }

@@ -1,18 +1,21 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-export default function ButtonBack({ path, props }) {
+export default function ButtonBack({ path }) {
   const { push } = useRouter();
-  function handleBack() {
-    push("/mainContent/calculate");
+  function backToInput() {
+    localStorage.removeItem("maxSugars");
+    document.cookie =
+      "formFilledSuccess=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    push("/");
   }
   return (
     <button
       className="px-2 py-1 hover:bg-yellow-400 bg-yellow-300 rounded-xl flex flex-row-reverse justify-center items-center gap-1 cursor-pointer"
       onClick={
         path === "/mainContent/addProduct" || path === "/mainContent/about"
-          ? handleBack
-          : props
+          ? () => push("/mainContent/calculate")
+          : backToInput
       }
     >
       <span>Kembali</span>
