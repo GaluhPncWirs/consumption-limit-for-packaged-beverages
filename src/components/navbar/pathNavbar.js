@@ -26,13 +26,13 @@ export default function PathNavbar({ path }) {
   }, [path]);
   return (
     <div>
-      <div className="flex flex-col items-center mt-10">
+      <div className="flex flex-col items-center mt-10 mx-5">
         <Image
           src="/images/global/logo.png"
           alt="logo"
           width={300}
           height={300}
-          className="w-60 bg-[#f9fff9] rounded-lg p-3 shadow-lg shadow-slate-600 max-[640px]:w-48"
+          className="bg-[#f9fff9] rounded-lg p-3 shadow-lg shadow-slate-600 max-[640px]:w-48 sm:w-56"
         />
         <div className="mt-10 flex flex-col text-2xl font-semibold gap-y-10">
           {path === "/mainContent/calculate" ? (

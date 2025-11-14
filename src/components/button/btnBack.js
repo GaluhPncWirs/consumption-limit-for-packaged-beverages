@@ -11,7 +11,7 @@ export default function ButtonBack({ path }) {
   }
   return (
     <button
-      className="py-2 hover:bg-yellow-400 bg-yellow-300 rounded-xl flex flex-row-reverse justify-center items-center gap-x-2 cursor-pointer"
+      className="py-2 px-5 hover:bg-yellow-400 bg-yellow-300 rounded-xl flex flex-row-reverse justify-center items-center gap-x-2 cursor-pointer"
       onClick={
         path === "/mainContent/addProduct" || path === "/mainContent/about"
           ? () => push("/mainContent/calculate")

@@ -5,7 +5,7 @@ export default function MainContentLayout({ children, path }) {
   return (
     <div className="flex">
       <div className="md:w-1/4">
-        <div className="bg-green-400 h-screen shadow-lg shadow-slate-700 fixed w-1/4 hidden md:block">
+        <div className="bg-green-400 h-screen shadow-lg shadow-slate-700 fixed hidden md:w-1/4 md:block">
           <PathNavbar path={path} />
         </div>
         <HamburgerMenu path={path} />
