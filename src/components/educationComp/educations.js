@@ -27,7 +27,7 @@ export default function Educations({ funFactSugar, video, artikel }) {
           </p>
         </div>
       </div>
-      <div className="w-10/12 flex justify-center items-center">
+      <div className="w-full md:w-10/12 flex justify-center items-center">
         {video[0]?.sumber === "Youtube" ? (
           <iframe
             title="YouTube Shorts And Facebook Short"

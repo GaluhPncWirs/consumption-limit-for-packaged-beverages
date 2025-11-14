@@ -286,8 +286,8 @@ export default function MainContent() {
 
   return (
     <MainContentLayout path={pathname}>
-      <div className="fixed top-0 right-0 bg-green-400 p-3 rounded-bl-md shadow-md shadow-slate-700 z-50">
-        <h1 className="px-5 font-semibold text-lg tracking-wide">
+      <div className="fixed top-0 right-0 bg-green-400 p-3 rounded-bl-md shadow-md shadow-slate-700 z-20">
+        <h1 className="font-semibold text-lg tracking-wide px-2">
           Maksimal Konsumsi Gula Perhari{" "}
           <span>
             {maksimalGulaHarianPengguna.toLocaleString("id-ID", {
@@ -297,8 +297,8 @@ export default function MainContent() {
           </span>
         </h1>
       </div>
-      <div className="flex flex-col justify-center p-7 rounded-lg bg-[#f9fff9] mt-20 mb-12">
-        <h1 className="text-2xl font-semibold tracking-wide mx-3">
+      <div className="flex flex-col justify-center p-5 rounded-lg bg-[#f9fff9] mt-20 mb-12 shadow-lg shadow-slate-700">
+        <h1 className="text-2xl font-semibold tracking-wide mx-2">
           Hitung Konsumsi Minuman
         </h1>
         <div
@@ -430,7 +430,7 @@ export default function MainContent() {
 
             <button
               type="submit"
-              className="disabled:cursor-not-allowed py-1.5 text-center rounded-md bg-[#54C392] hover:bg-green-500 cursor-pointer font-semibold tracking-wider px-7 text-lg mx-3 w-32 mt-7"
+              className="disabled:cursor-not-allowed py-1.5 text-center rounded-md bg-[#54C392] hover:bg-green-500 cursor-pointer font-semibold tracking-wider px-7 text-lg mx-2 w-32 mt-7"
               disabled={!isFormFilled()}
             >
               Hitung
@@ -441,7 +441,7 @@ export default function MainContent() {
             <div
               className={`${
                 appearContent === true ? `block` : `hidden`
-              } mx-5 font-semibold text-lg tracking-wide`}
+              } font-semibold text-lg tracking-wide mx-3`}
             >
               {getConsumtionMessage()}
               <h2 className="text-xs text-[#F93827] mt-0.5 text-justify">
@@ -450,7 +450,7 @@ export default function MainContent() {
                 dikurangi dari yang ditampilkan.
               </h2>
             </div>
-            <div className="flex items-center justify-center flex-wrap gap-y-7">
+            <div className="flex items-center justify-center flex-wrap gap-y-5">
               {fillBottle.map((item: number, i: number) =>
                 typeProduct === "Siap Minum" ? (
                   <div key={i} className="bottleInside w-32">

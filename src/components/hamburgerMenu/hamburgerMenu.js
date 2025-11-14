@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import PathNavbar from "../navbar/pathNavbar";
 
-export default function HamburgerMenu({ props, path }) {
+export default function HamburgerMenu({ path }) {
   const [isCheked, setIsCheked] = useState(false);
   const [trueOrFalse, setTrueOrFalse] = useState(false);
   const clickOutsidePath = useRef(null);
@@ -34,15 +34,8 @@ export default function HamburgerMenu({ props, path }) {
   }, [trueOrFalse]);
 
   return (
-    <div className="flex h-full items-center justify-center sm:hidden">
-      <ul
-        className={`flex justify-evenly absolute top-16 right-0 h-80 flex-col items-center w-1/2 bg-green-400 -z-10 transition-all duration-300 text-xl font-semibold rounded-bl-lg shadow-lg shadow-slate-800
-      ${isCheked ? `translate-x-0` : `translate-x-full`}`}
-        ref={clickOutsidePath}
-      >
-        <PathNavbar props={props} path={path} />
-      </ul>
-      <div className="menu flex flex-col h-5 justify-between">
+    <div className="md:hidden">
+      <div className="menu flex flex-col items-center h-5 justify-between top-4 left-5 fixed z-50">
         <input
           type="checkbox"
           checked={isCheked}
@@ -50,12 +43,19 @@ export default function HamburgerMenu({ props, path }) {
             setIsCheked((prev) => !prev);
             setTrueOrFalse(false);
           }}
-          className="size-5 absolute z-20 cursor-pointer opacity-0"
+          className="size-6 absolute z-20 cursor-pointer opacity-0"
           ref={clickOutsideHamburgerMenu}
         />
-        <span className="block w-5 h-1 bg-black rounded-md transition-all"></span>
-        <span className="block w-5 h-1 bg-black rounded-md transition-all"></span>
-        <span className="block w-5 h-1 bg-black rounded-md transition-all"></span>
+        <span className="block w-6 h-1 bg-black rounded-md transition-all"></span>
+        <span className="block w-6 h-1 bg-black rounded-md transition-all"></span>
+        <span className="block w-6 h-1 bg-black rounded-md transition-all"></span>
+      </div>
+      <div
+        className={`flex justify-evenly flex-col bg-green-400 transition-all duration-300 text-xl font-semibold rounded-bl-lg shadow-lg shadow-slate-800 p-6 pb-10 z-30 fixed
+      ${isCheked ? `translate-x-0` : `-translate-x-full`}`}
+        ref={clickOutsidePath}
+      >
+        <PathNavbar path={path} />
       </div>
     </div>
   );

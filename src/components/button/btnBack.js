@@ -11,7 +11,7 @@ export default function ButtonBack({ path }) {
   }
   return (
     <button
-      className="px-2 py-1 hover:bg-yellow-400 bg-yellow-300 rounded-xl flex flex-row-reverse justify-center items-center gap-1 cursor-pointer"
+      className="py-2 hover:bg-yellow-400 bg-yellow-300 rounded-xl flex flex-row-reverse justify-center items-center gap-x-2 cursor-pointer"
       onClick={
         path === "/mainContent/addProduct" || path === "/mainContent/about"
           ? () => push("/mainContent/calculate")
@@ -22,7 +22,7 @@ export default function ButtonBack({ path }) {
       <Image
         src="/images/arrow_left.png"
         alt="arrow_left"
-        className="w-1/5"
+        className="size-9"
         width={200}
         height={200}
       />
