@@ -2,10 +2,7 @@
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { useHandleInput } from "@/app/hooks/handle-input";
-import LayoutModalBoxs from "@/components/modalBox/layout";
-import { useEffect, useRef, useState } from "react";
-import AddProductError from "@/components/modalBox/layoutVertical/modalErrVer/addError";
-import ConfirmAddProduct from "@/components/modalBox/layoutVertical/modalConfirm/confirm";
+import { useEffect, useState } from "react";
 import { productBeverageTypes } from "@/types/dataTypes";
 import { subscribeToProducts } from "@/lib/firebase/services";
 import MainContentLayout from "@/layout/mainContent";
@@ -60,7 +57,6 @@ export default function AddProduct() {
     });
 
   const [isStatus, setIsStatus] = useState<boolean | null>(null);
-  const inputFieldNone = useRef(null);
   const [findData, setFindData] = useState<productBeverageTypes[]>([]);
   const [searchProduk, setSearchProduk] = useState<string>("");
   const [result, setResult] = useState<productBeverageTypes[]>([]);
@@ -83,10 +79,10 @@ export default function AddProduct() {
   useEffect(() => {
     setErrors((prev: any) => ({
       ...prev,
-      isNameTooLong: maxLengthAlphabethNameProduct >= 50,
-      isSugarTooLong: maxLengthNumberKandunganGula >= 3,
-      isServingSizeTooLong: maxLengthNumberTakaranSajiGula >= 3,
-      isVolumeTooLong: maxLengthNumberVolume >= 4,
+      isNameTooLong: maxLengthAlphabethNameProduct >= 50 ? true : false,
+      isSugarTooLong: maxLengthNumberKandunganGula >= 3 ? true : false,
+      isServingSizeTooLong: maxLengthNumberTakaranSajiGula >= 3 ? true : false,
+      isVolumeTooLong: maxLengthNumberVolume >= 4 ? true : false,
     }));
   }, [
     maxLengthAlphabethNameProduct,
@@ -96,11 +92,10 @@ export default function AddProduct() {
   ]);
 
   // Tambah Data
-  async function handleAddProduct(event: any) {
-    event.preventDefault();
+  async function handleAddProduct() {
     if (
-      !isNaN(event.target.nameProduct.value) ||
-      event.target.nameProduct.value.trim() === "" ||
+      !isNaN(mustFilled.nameProduct) ||
+      mustFilled.nameProduct.trim() === "" ||
       maxLengthAlphabethNameProduct >= 50 ||
       maxLengthNumberKandunganGula >= 3 ||
       maxLengthNumberTakaranSajiGula >= 3 ||
@@ -118,7 +113,7 @@ export default function AddProduct() {
             ? `Takaran saji tidak boleh lebih dari 2 digit`
             : errors.isVolumeTooLong
             ? `Input Volume tidak boleh lebih dari 3 digit`
-            : ` Input Nama Produk Tidak Boleh Kosong dan Tidak Boleh Hanya
+            : `Input Nama Produk Tidak Boleh Kosong dan Tidak Boleh Hanya
                 Berisi Angka!`
         }
         `,
@@ -126,11 +121,13 @@ export default function AddProduct() {
       return;
     }
 
+    setIsConfirm(true);
+
     // pengiriman data
-    const gula = Number(event.target.kandunganGula.value);
-    const takaranSaji = Number(event.target.takaranSaji.value);
+    const nameProductValue = mustFilled.nameProduct;
+    const gula = Number(mustFilled.kandunganGula);
+    const takaranSaji = Number(mustFilled.takaranSaji);
     const totalSugars = gula * takaranSaji;
-    const nameProductValue = event.target.nameProduct.value;
     const eachCapitalFirstWord = nameProductValue
       .split(" ")
       .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -139,7 +136,7 @@ export default function AddProduct() {
     const newProduct = {
       nameProduct: eachCapitalFirstWord,
       sugars: Math.floor(totalSugars),
-      volume: Number(event.target.volume.value),
+      volume: Number(mustFilled.volume),
       type: valueTypeMinuman,
     };
 
@@ -152,8 +149,23 @@ export default function AddProduct() {
         body: JSON.stringify(newProduct),
       });
       const resStatus = await res.json();
-      setIsStatus(resStatus.status);
-    } catch (error) {
+      if (resStatus.status) {
+        setIsStatus(resStatus.status);
+        setIsConfirm(false);
+        toast("✅ Berhasil Tambah Produk", {
+          description:
+            "Data produk telah berhasil di tambahkan, Silahkan kembali ke halaman sebelumnya",
+        });
+        console.log(resStatus.message);
+      } else {
+        setIsStatus(resStatus.status);
+        setIsConfirm(false);
+        toast("❌ Gagal Tambah Produk", {
+          description:
+            "Data produk sudah ada, Silahkan input kembali produk yang berbeda",
+        });
+      }
+    } catch {
       setIsStatus(false);
     }
   }
@@ -167,7 +179,7 @@ export default function AddProduct() {
   }, []);
 
   useEffect(() => {
-    if (isStatus !== null) {
+    if (isStatus !== null || isStatus === true) {
       setMustFilled({
         nameProduct: "",
         kandunganGula: "",
@@ -203,10 +215,8 @@ export default function AddProduct() {
         </h1>
         <div className="flex items-center justify-evenly mt-7 flex-col-reverse gap-7 lg:flex-row lg:px-5">
           <form
-            onSubmit={(e) => handleAddProduct(e)}
             className="flex flex-col gap-y-4 w-11/12 lg:w-1/2"
             autoComplete="off"
-            ref={inputFieldNone}
           >
             <ComponentInput
               titleInput="Nama Produk"
@@ -288,7 +298,7 @@ export default function AddProduct() {
                 </label>
               </div>
               <Select
-                value={mustFilled.typeMinuman}
+                value={mustFilled.typeMinuman ?? ""}
                 onValueChange={(value) => {
                   setValueTypeMinuman(value);
                   handleValueInput({
@@ -336,16 +346,16 @@ export default function AddProduct() {
                     <h1 className="tracking-wide text-start">
                       Apakah Data Produk ini Sudah Benar ?
                     </h1>
-                    <div className="flex items-center gap-x-5">
+                    <div className="flex items-center gap-x-6">
                       <Image
                         src="/images/global/warning.png"
                         alt="check"
                         width={200}
                         height={200}
-                        className="bg-white size-14"
+                        className="size-14"
                       />
                       <DialogDescription>
-                        <span className="mt-2 flex flex-col items-start">
+                        <span className="mt-2 flex flex-col items-start gap-y-0.5">
                           <span>
                             Nama Produk :{" "}
                             <span className="font-semibold">
@@ -384,12 +394,14 @@ export default function AddProduct() {
                     <DialogClose asChild>
                       <Button variant="outline">Batal</Button>
                     </DialogClose>
-                    <Button
-                      onClick={() => setIsConfirm(true)}
-                      className="bg-[#54C392] hover:bg-green-500 text-black"
-                    >
-                      Oke
-                    </Button>
+                    <DialogClose asChild>
+                      <Button
+                        onClick={handleAddProduct}
+                        className="bg-[#54C392] hover:bg-green-500 text-black"
+                      >
+                        Oke
+                      </Button>
+                    </DialogClose>
                   </DialogFooter>
                 </DialogContent>
               )}
@@ -432,67 +444,22 @@ export default function AddProduct() {
           </div>
         </div>
 
-        <AlertDialog open={isConfirm}>
-          <AlertDialogContent>
-            {isStatus === true ? (
-              <>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Waktu Telah Habis</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Ujian telah mencapai batas waktu yang telah ditentukan.
-                    Jawaban Anda akan disimpan secara otomatis.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogAction className="cursor-pointer">
-                    Oke
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </>
-            ) : isStatus === false ? (
-              <>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Waktu Telah Habis</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Ujian telah mencapai batas waktu yang telah ditentukan.
-                    Jawaban Anda akan disimpan secara otomatis.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogAction className="cursor-pointer">
-                    Oke
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </>
-            ) : (
-              <div className="w-full flex justify-center items-center h-full py-20">
-                <Image
-                  src="/images/global/loading.png"
-                  alt="Loading"
-                  width={200}
-                  height={200}
-                  className="rounded-full animate-[spin_1s_linear_infinite]"
-                />
+        {isConfirm && (
+          <div className="fixed inset-0 z-50 bg-black/50">
+            <div className="flex justify-center items-center flex-col h-full gap-y-2">
+              <div className="text-2xl font-semibold tracking-wider text-slate-200">
+                Loading...
               </div>
-            )}
-          </AlertDialogContent>
-        </AlertDialog>
-
-        {/* {isConfirm && (
-          <LayoutModalBoxs>
-            {isStatus === true ? (
-              <LayoutModalBoxs.ModalAddProductSuccess
-                setModalOnclick={setIsConfirm}
+              <Image
+                src="/images/global/loading.png"
+                alt="Loading"
+                width={200}
+                height={200}
+                className="animate-[spin_1s_linear_infinite] size-20"
               />
-            ) : isStatus === false ? (
-              <LayoutModalBoxs.ModalAddProductSame
-                setModalOnclick={setIsConfirm}
-              />
-            ) : (
-              <LayoutModalBoxs.LoadingAnimation />
-            )}
-          </LayoutModalBoxs>
-        )} */}
+            </div>
+          </div>
+        )}
       </div>
     </MainContentLayout>
   );
