@@ -23,10 +23,30 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export default function AddProduct() {
   const pathname = usePathname();
@@ -39,23 +59,21 @@ export default function AddProduct() {
       typeMinuman: "",
     });
 
-  const [modalErr, setModalErr] = useState<boolean>(false);
   const [isStatus, setIsStatus] = useState<boolean | null>(null);
   const inputFieldNone = useRef(null);
   const [findData, setFindData] = useState<productBeverageTypes[]>([]);
   const [searchProduk, setSearchProduk] = useState<string>("");
   const [result, setResult] = useState<productBeverageTypes[]>([]);
   const [isConfirm, setIsConfirm] = useState<boolean>(false);
-  const [modalSuccess, setModalSuccess] = useState<boolean>(false);
-  const [modalContent, setModalContent] = useState<React.ReactNode>(false);
-  const [isOpenSearchProduct, setIsOpenSearchProduct] = useState<boolean>(true);
+  const [valueTypeMinuman, setValueTypeMinuman] = useState<string>("");
+  const [errorInputProduct, setErrorInputProduct] = useState<boolean>(false);
 
   const maxLengthAlphabethNameProduct = mustFilled.nameProduct.length;
   const maxLengthNumberKandunganGula = mustFilled.kandunganGula.length;
   const maxLengthNumberTakaranSajiGula = mustFilled.takaranSaji.length;
   const maxLengthNumberVolume = mustFilled.volume.length;
 
-  const [errors, setErrors] = useState<object>({
+  const [errors, setErrors] = useState<any>({
     isNameTooLong: false,
     isSugarTooLong: false,
     isServingSizeTooLong: false,
@@ -63,7 +81,7 @@ export default function AddProduct() {
   });
 
   useEffect(() => {
-    setErrors((prev) => ({
+    setErrors((prev: any) => ({
       ...prev,
       isNameTooLong: maxLengthAlphabethNameProduct >= 50,
       isSugarTooLong: maxLengthNumberKandunganGula >= 3,
@@ -88,29 +106,25 @@ export default function AddProduct() {
       maxLengthNumberTakaranSajiGula >= 3 ||
       maxLengthNumberVolume >= 4
     ) {
-      setModalErr(true);
+      setErrorInputProduct(true);
+      toast("❌ Produk yang ditambahkan tidak valid", {
+        description: `
+        ${
+          errors.isNameTooLong
+            ? `Input Nama produk tidak boleh lebih dari 50 karakter`
+            : errors.isSugarTooLong
+            ? `Input Kandungan gula tidak boleh lebih dari 2 digit`
+            : errors.isServingSizeTooLong
+            ? `Takaran saji tidak boleh lebih dari 2 digit`
+            : errors.isVolumeTooLong
+            ? `Input Volume tidak boleh lebih dari 3 digit`
+            : ` Input Nama Produk Tidak Boleh Kosong dan Tidak Boleh Hanya
+                Berisi Angka!`
+        }
+        `,
+      });
       return;
     }
-    setModalSuccess(true);
-
-    const waitForConfirmation = () => {
-      return new Promise((resolve) => {
-        const onConfirm = () => {
-          resolve(true);
-        };
-
-        setModalContent(
-          <ConfirmAddProduct
-            setIsConfirm={setIsConfirm}
-            onConfirm={onConfirm}
-            setModalSuccess={setModalSuccess}
-            mustFilled={mustFilled}
-          />
-        );
-      });
-    };
-
-    await waitForConfirmation();
 
     // pengiriman data
     const gula = Number(event.target.kandunganGula.value);
@@ -121,13 +135,12 @@ export default function AddProduct() {
       .split(" ")
       .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
-    const tipeMinuman = event.target.typeMinuman.value;
 
     const newProduct = {
       nameProduct: eachCapitalFirstWord,
       sugars: Math.floor(totalSugars),
       volume: Number(event.target.volume.value),
-      type: tipeMinuman,
+      type: valueTypeMinuman,
     };
 
     try {
@@ -188,10 +201,10 @@ export default function AddProduct() {
         <h1 className="text-2xl font-semibold text-center">
           Penambah Produk Minuman
         </h1>
-        <div className="flex items-center justify-evenly mt-7 flex-col-reverse gap-7 md:flex-row md:px-9 lg:px-5">
+        <div className="flex items-center justify-evenly mt-7 flex-col-reverse gap-7 lg:flex-row lg:px-5">
           <form
             onSubmit={(e) => handleAddProduct(e)}
-            className="flex flex-col gap-y-4 basis-1/2 max-[640px]:w-5/6 sm:w-4/5 md:basis-1/2 lg:basis-1/2"
+            className="flex flex-col gap-y-4 w-11/12 lg:w-1/2"
             autoComplete="off"
             ref={inputFieldNone}
           >
@@ -204,14 +217,14 @@ export default function AddProduct() {
               <input
                 type="text"
                 id="nameProduct"
-                className="inputField peer pl-1 pt-2"
+                className="inputField peer"
                 onChange={handleValueInput}
                 value={mustFilled.nameProduct}
               />
             </ComponentInput>
 
             <ComponentInput
-              titleInput="Kandungan Gula"
+              titleInput="Kandungan Gula (g)"
               srcImg="/images/pageAddProduct/sugar.png"
               altImg="sugar"
               htmlFor="kandunganGula"
@@ -219,7 +232,7 @@ export default function AddProduct() {
               <input
                 type="number"
                 id="kandunganGula"
-                className="inputField peer pl-1 pt-1"
+                className="inputField peer"
                 onChange={handleValueInput}
                 value={mustFilled.kandunganGula}
               />
@@ -237,14 +250,14 @@ export default function AddProduct() {
                 max={50}
                 step="0.01"
                 id="takaranSaji"
-                className="inputField peer pl-1 pt-1"
+                className="inputField peer"
                 onChange={handleValueInput}
                 value={mustFilled.takaranSaji}
               />
             </ComponentInput>
 
             <ComponentInput
-              titleInput="Takaran Saji Perkemasan"
+              titleInput="Isi Bersih Produk (ml)"
               srcImg="/images/pageAddProduct/ml.png"
               altImg="volume"
               htmlFor="volume"
@@ -252,7 +265,7 @@ export default function AddProduct() {
               <input
                 type="number"
                 id="volume"
-                className="inputField peer pl-1 pt-1"
+                className="inputField peer"
                 onChange={handleValueInput}
                 value={mustFilled.volume}
               />
@@ -263,7 +276,7 @@ export default function AddProduct() {
                 <Image
                   width={200}
                   height={200}
-                  src="/images/pageAddProduct/icon_type.png"
+                  src="/images/pageAddProduct/typeBeverage.png"
                   alt="type"
                   className="size-8"
                 />
@@ -275,16 +288,16 @@ export default function AddProduct() {
                 </label>
               </div>
               <Select
-                value={mustFilled.activityLevel}
-                // onValueChange={(value) => {
-                //   setSelectedValueActivityLevel(value);
-                //   handleValueInput({
-                //     target: {
-                //       id: "activityLevel",
-                //       value: value,
-                //     },
-                //   });
-                // }}
+                value={mustFilled.typeMinuman}
+                onValueChange={(value) => {
+                  setValueTypeMinuman(value);
+                  handleValueInput({
+                    target: {
+                      id: "typeMinuman",
+                      value: value,
+                    },
+                  });
+                }}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Pilih Tipe Minuman" />
@@ -300,54 +313,94 @@ export default function AddProduct() {
               </Select>
             </div>
 
-            {/* <div className="font-medium">
-              <div className="flex gap-x-2 items-center mb-2">
-                <Image
-                  width={29}
-                  height={20}
-                  className="w-[30px]"
-                  src="/images/pageAddProduct/icon_type.png"
-                  alt="activity"
-                />
-                <label htmlFor="typeMinuman" className="block text-lg">
-                  Tipe Minuman
-                </label>
-              </div>
-              <select
-                id="typeMinuman"
-                className="cursor-pointer bg-[#54C392] rounded-md p-2 text-sm max-[640px]:w-full sm:w-full"
-                value={mustFilled.typeMinuman}
-                onChange={handleValueInput}
-              >
-                <option value="" disabled hidden>
-                  Pilih Tipe Minuman
-                </option>
-                <option value="Siap Minum">Siap Minum</option>
-                <option value="Harus Dilarutkan">
-                  Harus Dilarutkan / Minuman Serbuk
-                </option>
-              </select>
-            </div> */}
-            <button
-              className="bg-green-400 rounded-lg hover:bg-green-500 py-1.5 flex text-lg font-semibold disabled:cursor-not-allowed justify-center items-center gap-2"
-              disabled={!isFormFilled()}
-            >
-              <Image
-                src="/images/pageAddProduct/add-product.png"
-                alt="add Product"
-                width={200}
-                height={200}
-                className="size-8"
-              />
-              <span>Tambah Produk</span>
-            </button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <button
+                  className="bg-green-400 rounded-lg hover:bg-green-500 py-1.5 flex text-lg font-semibold disabled:cursor-not-allowed justify-center items-center gap-2"
+                  disabled={!isFormFilled()}
+                >
+                  <Image
+                    src="/images/pageAddProduct/add-product.png"
+                    alt="add Product"
+                    width={200}
+                    height={200}
+                    className="size-8"
+                  />
+                  <span>Tambah Produk</span>
+                </button>
+              </DialogTrigger>
+              {!errorInputProduct && (
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Konfirmasi</DialogTitle>
+                    <h1 className="tracking-wide text-start">
+                      Apakah Data Produk ini Sudah Benar ?
+                    </h1>
+                    <div className="flex items-center gap-x-5">
+                      <Image
+                        src="/images/global/warning.png"
+                        alt="check"
+                        width={200}
+                        height={200}
+                        className="bg-white size-14"
+                      />
+                      <DialogDescription>
+                        <span className="mt-2 flex flex-col items-start">
+                          <span>
+                            Nama Produk :{" "}
+                            <span className="font-semibold">
+                              {mustFilled.nameProduct}
+                            </span>
+                          </span>
+                          <span>
+                            Kandungan Gula (g) :{" "}
+                            <span className="font-semibold">
+                              {mustFilled.kandunganGula}
+                            </span>
+                          </span>
+                          <span>
+                            Takaran Saji Perkemasan :{" "}
+                            <span className="font-semibold">
+                              {mustFilled.takaranSaji}
+                            </span>
+                          </span>
+                          <span>
+                            Isi Bersih Produk (ml) :{" "}
+                            <span className="font-semibold">
+                              {mustFilled.volume}
+                            </span>
+                          </span>
+                          <span>
+                            Tipe Minuman :{" "}
+                            <span className="font-semibold">
+                              {mustFilled.typeMinuman}
+                            </span>
+                          </span>
+                        </span>
+                      </DialogDescription>
+                    </div>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button variant="outline">Batal</Button>
+                    </DialogClose>
+                    <Button
+                      onClick={() => setIsConfirm(true)}
+                      className="bg-[#54C392] hover:bg-green-500 text-black"
+                    >
+                      Oke
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              )}
+            </Dialog>
             <span className="text-[#F93827] font-semibold text-sm text-center">
               *Tolong Untuk Digunakan Secara Bijak
             </span>
           </form>
 
           {/* check product */}
-          <div className="bg-slate-100 rounded-lg w-11/12 md:w-1/2 h-96">
+          <div className="bg-slate-100 rounded-lg w-11/12 lg:w-1/2 h-96 shadow-lg shadow-slate-700">
             <h1 className="py-3 text-center font-semibold text-lg rounded-t-lg bg-green-400">
               Cek Produk Yang Tersedia
             </h1>
@@ -358,32 +411,74 @@ export default function AddProduct() {
                   onChangeCapture={handleInputChange}
                   value={searchProduk}
                 />
-                {isOpenSearchProduct && (
-                  <CommandList className="p-3 bg-slate-200 z-10 text-[#333333] font-medium min-h-72">
-                    {result.length > 0 ? (
-                      <CommandGroup heading="Cek Produk">
-                        {result.map((item: productBeverageTypes) => (
-                          <CommandItem
-                            key={item.id}
-                            className="cursor-pointer mb-1"
-                          >
-                            {item.nameProduct}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    ) : (
-                      <CommandEmpty>Produk Minuman Belum Ada.</CommandEmpty>
-                    )}
-                  </CommandList>
-                )}
+                <CommandList className="p-3 bg-slate-200 z-10 text-[#333333] font-medium min-h-72">
+                  {result.length > 0 ? (
+                    <CommandGroup heading="Cek Produk">
+                      {result.map((item: productBeverageTypes) => (
+                        <CommandItem
+                          key={item.id}
+                          className="cursor-pointer mb-1"
+                        >
+                          {item.nameProduct}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  ) : (
+                    <CommandEmpty>Produk Minuman Belum Ada.</CommandEmpty>
+                  )}
+                </CommandList>
               </Command>
             </div>
           </div>
         </div>
 
-        {modalSuccess && modalContent}
+        <AlertDialog open={isConfirm}>
+          <AlertDialogContent>
+            {isStatus === true ? (
+              <>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Waktu Telah Habis</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Ujian telah mencapai batas waktu yang telah ditentukan.
+                    Jawaban Anda akan disimpan secara otomatis.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogAction className="cursor-pointer">
+                    Oke
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </>
+            ) : isStatus === false ? (
+              <>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Waktu Telah Habis</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Ujian telah mencapai batas waktu yang telah ditentukan.
+                    Jawaban Anda akan disimpan secara otomatis.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogAction className="cursor-pointer">
+                    Oke
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </>
+            ) : (
+              <div className="w-full flex justify-center items-center h-full py-20">
+                <Image
+                  src="/images/global/loading.png"
+                  alt="Loading"
+                  width={200}
+                  height={200}
+                  className="rounded-full animate-[spin_1s_linear_infinite]"
+                />
+              </div>
+            )}
+          </AlertDialogContent>
+        </AlertDialog>
 
-        {isConfirm && (
+        {/* {isConfirm && (
           <LayoutModalBoxs>
             {isStatus === true ? (
               <LayoutModalBoxs.ModalAddProductSuccess
@@ -397,11 +492,7 @@ export default function AddProduct() {
               <LayoutModalBoxs.LoadingAnimation />
             )}
           </LayoutModalBoxs>
-        )}
-
-        {modalErr && (
-          <AddProductError setModalOnclick={setModalErr} errors={errors} />
-        )}
+        )} */}
       </div>
     </MainContentLayout>
   );

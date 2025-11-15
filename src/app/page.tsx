@@ -305,7 +305,7 @@ export default function DisplayInputUser() {
                   <DialogTitle>Maksimal Konsumsi Gula</DialogTitle>
                   <div className="flex items-center gap-x-4">
                     <Image
-                      src="/images/check.png"
+                      src="/images/global/check.png"
                       alt="check"
                       width={200}
                       height={200}
