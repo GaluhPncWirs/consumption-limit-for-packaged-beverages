@@ -2,7 +2,7 @@
 import { subscribeToLoginAdmin } from "@/lib/firebase/services";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 
 export default function LoginPageAdmin() {
   const { push } = useRouter();
@@ -36,40 +36,33 @@ export default function LoginPageAdmin() {
   }
 
   return (
-    <div className="h-screen flex justify-center items-center flex-col">
-      <Toaster />
-      <div className="bg-[#73EC8B] w-2/5 py-10 rounded-xl inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 shadow-lg shadow-slate-700">
-        <h1 className="text-3xl font-bold text-center mb-5 text-green-800">
+    <div className="h-screen flex justify-center items-center">
+      <div className="bg-[#f9fff9] rounded-lg py-7 shadow-lg shadow-slate-700 max-[640px]:w-11/12 sm:w-[30rem]">
+        <h1 className="text-center mb-7 text-3xl font-bold tracking-wide">
           Login Admin
         </h1>
         <form
           className="flex justify-center flex-col w-3/4 gap-3 mx-auto"
           onSubmit={(e) => handleLogin(e)}
         >
-          <label
-            htmlFor="email"
-            className="text-xl font-semibold text-green-800"
-          >
+          <label htmlFor="email" className="text-xl font-semibold">
             Email
           </label>
           <input
             type="email"
             id="email"
-            className="w-full rounded-md p-3 bg-green-200"
+            className="w-full rounded-md p-3 bg-slate-100"
           />
-          <label
-            htmlFor="password"
-            className="text-xl font-semibold text-green-800"
-          >
+          <label htmlFor="password" className="text-xl font-semibold">
             Password
           </label>
           <input
             type="password"
             id="password"
-            className="w-full rounded-md p-3 bg-green-200"
+            className="w-full rounded-md p-3 bg-slate-100"
           />
           <button
-            className="bg-green-400 rounded-md w-full py-1.5 mt-3 hover:bg-green-500 disabled:cursor-not-allowed cursor-pointer shadow-md shadow-slate-700 font-semibold"
+            className="bg-green-400 rounded-md w-full py-2 mt-3 hover:bg-green-500 disabled:cursor-not-allowed cursor-pointer text-xl shadow-md shadow-slate-700 font-semibold"
             type="submit"
           >
             Login

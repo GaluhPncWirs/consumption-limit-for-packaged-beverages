@@ -1,5 +1,5 @@
 import HamburgerMenu from "@/components/hamburgerMenu/hamburgerMenu";
-import PathNavbar from "@/components/navbar/pathNavbar";
+import PathNavbar from "@/components/sidebar/pathNavbar";
 
 export default function MainContentLayout({ children, path }) {
   return (

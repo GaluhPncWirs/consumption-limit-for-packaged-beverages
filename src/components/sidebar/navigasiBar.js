@@ -1,5 +1,5 @@
 import Image from "next/image";
-import PathNavbar from "../navbar/pathNavbar";
+import PathNavbar from "./pathNavbar";
 import HamburgerMenu from "../hamburgerMenu/hamburgerMenu";
 
 export default function NavigasiBar({ props, path }) {

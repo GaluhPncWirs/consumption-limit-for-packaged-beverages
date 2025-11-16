@@ -133,7 +133,7 @@ export default function AddProduct() {
     };
 
     try {
-      const res = await fetch("/api/products/submitUser", {
+      const res = await fetch("/api/addData", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

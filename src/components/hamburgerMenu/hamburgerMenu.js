@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import PathNavbar from "../navbar/pathNavbar";
+import PathNavbar from "../sidebar/pathNavbar";
 
 export default function HamburgerMenu({ path }) {
   const [isCheked, setIsCheked] = useState(false);
