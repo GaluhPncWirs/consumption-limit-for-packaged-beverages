@@ -20,7 +20,7 @@ export default function ButtonBack({ path }) {
     >
       <span>Kembali</span>
       <Image
-        src="/images/arrow_left.png"
+        src="/images/global/arrow_left.png"
         alt="arrow_left"
         className="size-9"
         width={200}

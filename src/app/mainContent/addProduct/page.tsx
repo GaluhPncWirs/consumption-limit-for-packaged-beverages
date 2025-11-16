@@ -35,15 +35,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import LoadingCompenent from "@/components/loading/content";
 
 export default function AddProduct() {
   const pathname = usePathname();
@@ -444,22 +436,7 @@ export default function AddProduct() {
           </div>
         </div>
 
-        {isConfirm && (
-          <div className="fixed inset-0 z-50 bg-black/50">
-            <div className="flex justify-center items-center flex-col h-full gap-y-2">
-              <div className="text-2xl font-semibold tracking-wider text-slate-200">
-                Loading...
-              </div>
-              <Image
-                src="/images/global/loading.png"
-                alt="Loading"
-                width={200}
-                height={200}
-                className="animate-[spin_1s_linear_infinite] size-20"
-              />
-            </div>
-          </div>
-        )}
+        {isConfirm && <LoadingCompenent />}
       </div>
     </MainContentLayout>
   );

@@ -51,7 +51,7 @@ export default function HamburgerMenu({ path }) {
         <span className="block w-6 h-1 bg-black rounded-md transition-all"></span>
       </div>
       <div
-        className={`flex justify-evenly flex-col bg-green-400 transition-all duration-300 text-xl font-semibold rounded-br-lg shadow-lg shadow-slate-800 p-6 pb-10 z-30 fixed
+        className={`flex justify-evenly flex-col bg-green-400 transition-all duration-300 text-xl font-semibold rounded-br-lg shadow-lg shadow-slate-800 p-5 pb-10 z-30 fixed h-screen
       ${isCheked ? `translate-x-0` : `-translate-x-full`}`}
         ref={clickOutsidePath}
       >

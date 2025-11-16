@@ -1,133 +1,76 @@
 "use client";
-
-import NavigasiBar from "@/components/navbar/navigasiBar";
+import MainContentLayout from "@/layout/mainContent";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 export default function AboutProject() {
-  const path = usePathname();
-
-  // function calculateRisk(sugarContent: number) {
-  //   /*
-  //   maxSugarIntake: Maksimal konsumsi gula per hari yang direkomendasikan (gram)
-  //   sugarContent: Kandungan gula dalam minuman kemasan (gram per 100ml)
-  //   drinkVolume: Volume minuman kemasan yang dikonsumsi (ml)
-
-  //   Berdasarkan penelitian:
-  //   - Konsumsi 1-2 porsi minuman manis per hari (~35-70g gula) meningkatkan risiko diabetes 26%
-  //   - Peningkatan 1 porsi minuman manis per hari (~35g gula) meningkatkan risiko diabetes 15%
-  //   - Konsumsi tinggi minuman manis berhubungan dengan kenaikan berat badan (obesitas)
-  //   */
-
-  //   let baseRiskDiabetesNoFactor = 5; // Risiko dasar (%) tanpa konsumsi gula berlebih
-  //   let baseRiskDiabetesIfThereIsNoLifestyle = [20, 40]; // Risiko dasar (%) tanpa konsumsi gula berlebih
-  //   let baseRiskObesity = 5;
-
-  //   // // Hitung total konsumsi gula dari minuman kemasan
-  //   // let totalSugarIntake = (sugarContent / 100) * drinkVolume;
-
-  //   let riskDiabetes = baseRiskDiabetesNoFactor;
-  //   if (sugarContent > 0) {
-  //     if (sugarContent < 35) {
-  //       riskDiabetes += (sugarContent / 35) * 26; // Risiko proporsional di bawah 35g
-  //     } else if (sugarContent <= 70) {
-  //       riskDiabetes += 26; // Risiko maksimal untuk rentang 35-70g
-  //     } else {
-  //       riskDiabetes += 26 + ((sugarContent - 70) / 35) * 15; // Risiko tambahan jika >70g
-  //     }
-  //   }
-
-  //   // Risiko obesitas: setiap 35g gula = +10%
-  //   let riskObesity = baseRiskObesity + (sugarContent / 35) * 10;
-
-  //   // Batasi risiko maksimum (misalnya, tidak lebih dari 90%)
-  //   riskDiabetes = Math.min(riskDiabetes, 90);
-  //   riskObesity = Math.min(riskObesity, 90);
-
-  //   return {
-  //     totalSugarIntake: sugarContent.toFixed(2) + "g",
-  //     diabetesRisk: riskDiabetes.toFixed(2) + "%",
-  //     obesityRisk: riskObesity.toFixed(2) + "%",
-  //   };
-  // }
-
-  // // Contoh penggunaan
-  // console.log(calculateRisk(22)); // Maksimal konsumsi 50g, minuman mengandung 10g/100ml, volume 250ml
+  const pathname = usePathname();
 
   return (
-    <div>
-      <NavigasiBar path={path} props={""} />
-      <div className="max-[640px]:h-full sm:h-full mt-16">
-        <div className="flex md:gap-5 lg:gap-x-7 h-full max-[640px]:flex-col sm:flex-col md:flex-row lg:flex-row lg:w-5/6 lg:mx-auto mx-5">
-          <div className="bg-[#73EC8B] rounded-xl px-5 md:basis-1/3 lg:basis-[30%] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 shadow-lg shadow-slate-800 my-5">
-            <div className="flex items-center flex-col justify-evenly h-full max-[640px]:p-5 sm:py-7 max-[640px]:gap-y-5">
-              <div className="sm:flex sm:justify-center sm:items-center sm:w-11/12 sm:gap-5 max-[640px]:flex max-[640px]:justify-center max-[640px]:items-center max-[640px]:gap-5 max-[640px]:w-full md:flex-col">
-                <Image
-                  src={"/images/userProfile.png"}
-                  alt="profile"
-                  width={50}
-                  height={50}
-                  className="w-4/6 bg-cover bg-center max-[640px]:w-2/5 sm:w-2/6 md:w-2/3 lg:w-1/2"
-                  loading="lazy"
-                />
-                <div className="text-center">
-                  <h1 className="font-bold text-2xl max-[640px]:mb-2 sm:mb-3">
-                    Galuh Panca Wirasa
-                  </h1>
-                  <h2 className="font-semibold text-xl">Nim. 2103015175</h2>
-                </div>
-              </div>
-              <div className="flex flex-col justify-center items-center gap-y-5 max-[640px]:max-w-sm">
-                <Image
-                  src={"/images/logo_uhamka_FTII.png"}
-                  alt="logo UHAMKA"
-                  width={50}
-                  height={50}
-                  className="w-2/5 bg-cover bg-center"
-                  loading="lazy"
-                />
-                <h3 className="font-semibold text-lg text-center sm:text-xl">
-                  Mahasiswa Teknik Informatika Universitas Prof.Dr. Hamka
-                </h3>
-              </div>
+    <MainContentLayout path={pathname}>
+      <div className="flex gap-y-8 flex-col my-10">
+        <div className="bg-[#f9fff9] rounded-xl shadow-lg shadow-slate-700 flex flex-col items-center p-7 justify-center gap-5 sm:flex-row">
+          <div className="flex flex-col items-center basis-1/2">
+            <Image
+              src="/images/pageAbout/userProfile.png"
+              alt="profile"
+              width={500}
+              height={500}
+              className="size-44"
+              loading="eager"
+            />
+            <div className="font-semibold">
+              <h1 className="text-2xl mb-1">Galuh Panca Wirasa</h1>
+              <h2 className="text-xl">Nim. 2103015175</h2>
             </div>
           </div>
-          <div className="bg-[#73EC8B] rounded-xl p-8 md:basis-2/3 lg:basis-[70%] inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/10 shadow-lg shadow-slate-800 my-5 max-[640px]:p-6">
-            <h1 className="text-2xl font-bold text-center mb-5">
-              Tentang Project
+          <div className="flex flex-col items-center gap-y-5 basis-1/2">
+            <Image
+              src="/images/pageAbout/logo_uhamka_FTII.png"
+              alt="logo UHAMKA"
+              width={500}
+              height={500}
+              className="w-48"
+              loading="eager"
+            />
+            <h1 className="font-semibold text-xl text-center">
+              Mahasiswa Teknik Informatika Universitas Prof.Dr. Hamka
             </h1>
-            <div className="text-justify font-medium text-lg flex flex-col gap-2">
-              <p className="indent-7 max-[640px]:indent-0">
-                Saya membuat website ini untuk menyelesaikan studi perkuliahan
-                ini dengan judul skripsi yang saya kerjakan yaitu{" "}
-                <span className="font-semibold">
-                  “Sistem Informasi Perhitungan Batas Gula Harian Dalam
-                  Mengkonsumsi Minuman Kemasan Berbasis Web Dengan Menggunakan
-                  Metode Prototype”
-                </span>
-                .
-              </p>
-              <p className="indent-7 max-[640px]:indent-0">
-                Website ini dirancang untuk membantu pengguna dalam menghitung
-                batas konsumsi gula harian berdasarkan profil individu mereka.
-                Melalui sistem ini, pengguna dapat mengetahui nilai kalori dan
-                jumlah maksimal konsumsi gula perhari, Selain itu, website ini
-                juga Dapat memberikan rekomendasi, edukasi mengenai dampak
-                konsumsi gula berlebih, serta informasi mengenai tingkat resiko
-                kesehatan. Dengan adanya fitur ini, diharapkan pengguna dapat
-                lebih sadar akan jumlah gula yang mereka konsumsi setiap hari
-                dan dapat mengambil langkah yang lebih bijak dalam memilih
-                minuman yang mereka konsumsi.
-              </p>
-              <p className="indent-7 max-[640px]:indent-0">
-                Semoga website ini dapat memberikan manfaat bagi masyarakat yang
-                ingin mengontrol asupan gula dengan lebih baik dan menjalani
-                pola hidup yang lebih sehat.
-              </p>
-            </div>
+          </div>
+        </div>
+        <div className="bg-[#f9fff9] rounded-xl p-7 shadow-lg shadow-slate-800">
+          <h1 className="text-3xl font-bold mb-4">Tentang Project</h1>
+          <div className="text-justify font-medium text-lg flex flex-col gap-2">
+            <p>
+              Saya membuat website ini untuk menyelesaikan studi perkuliahan ini
+              dengan judul skripsi yang saya kerjakan yaitu{" "}
+              <span className="font-semibold">
+                “Sistem Informasi Perhitungan Batas Gula Harian Dalam
+                Mengkonsumsi Minuman Kemasan Berbasis Web Dengan Menggunakan
+                Metode Prototype”
+              </span>
+              .
+            </p>
+            <p>
+              Website ini dirancang untuk membantu pengguna dalam menghitung
+              batas konsumsi gula harian berdasarkan profil individu mereka.
+              Melalui sistem ini, pengguna dapat mengetahui nilai kalori dan
+              jumlah maksimal konsumsi gula perhari, Selain itu, website ini
+              juga Dapat memberikan rekomendasi, edukasi mengenai dampak
+              konsumsi gula berlebih, serta informasi mengenai tingkat resiko
+              kesehatan. Dengan adanya fitur ini, diharapkan pengguna dapat
+              lebih sadar akan jumlah gula yang mereka konsumsi setiap hari dan
+              dapat mengambil langkah yang lebih bijak dalam memilih minuman
+              yang mereka konsumsi.
+            </p>
+            <p>
+              Semoga website ini dapat memberikan manfaat bagi masyarakat yang
+              ingin mengontrol asupan gula dengan lebih baik dan menjalani pola
+              hidup yang lebih sehat.
+            </p>
           </div>
         </div>
       </div>
-    </div>
+    </MainContentLayout>
   );
 }
