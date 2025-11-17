@@ -25,6 +25,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import LoadingCompenent from "@/components/loading/content";
 
 export default function DisplayInputUser() {
   const [selectedValueActivityLevel, setSelectedValueActivityLevel] =
@@ -32,6 +33,7 @@ export default function DisplayInputUser() {
   const [errorCalculation, setErrorCalculation] = useState<boolean>(false);
   const [isValidCalculation, setIsValidCalculation] = useState<boolean>(false);
   const [yourMaxSugar, setYourMaxSugar] = useState<number>(0);
+  const [loadingNextPage, setLoadingNextPage] = useState<boolean>(false);
   const [TDEE, setTDEE] = useState<number>(0);
   const { push } = useRouter();
 
@@ -133,17 +135,20 @@ export default function DisplayInputUser() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ validCaculations: isValidCalculation }),
       });
+      setLoadingNextPage(true);
 
       const response = await req.json();
       if (response.status) {
-        console.log(response.message);
+        setLoadingNextPage(false);
         push("/mainContent/calculate");
         localStorage.setItem("maxSugarUser", String(yourMaxSugar));
+        toast("✅ Berhasil", {
+          description: "Lanjut ke halaman perhitungan konsumsi minuman",
+        });
       }
     }
     isCalculateSuccess();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isValidCalculation, yourMaxSugar]);
+  }, [isValidCalculation, yourMaxSugar, push]);
 
   return (
     <div className="flex items-center justify-center h-screen">
@@ -349,6 +354,7 @@ export default function DisplayInputUser() {
           </Dialog>
         </form>
       </div>
+      {loadingNextPage && <LoadingCompenent />}
     </div>
   );
 }

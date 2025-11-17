@@ -260,7 +260,7 @@ export default function MainContent() {
     } else if (
       fillBottle.length === 1 &&
       fillLess100 < 100 &&
-      fillLess100 !== 0 //(fillBottle.length === 1 && fillLess100 < 100 && remainingMl < 0 && fillLess100 !== 0)
+      fillLess100 !== 0
     ) {
       return (
         <p>
@@ -328,17 +328,15 @@ export default function MainContent() {
                         <CommandList className="p-3 bg-slate-200 absolute z-10 w-full text-[#333333] font-medium max-h-40 overflow-y-auto rounded-b-lg">
                           <CommandEmpty>Produk Tidak Ditemukan.</CommandEmpty>
                           <CommandGroup heading="Pilih Produk">
-                            {result.map(
-                              (item: productBeverageTypes, i: number) => (
-                                <CommandItem
-                                  key={item.id}
-                                  onSelect={() => handleItemClick(item)}
-                                  className="cursor-pointer mb-1"
-                                >
-                                  {item.nameProduct}
-                                </CommandItem>
-                              )
-                            )}
+                            {result.map((item: productBeverageTypes) => (
+                              <CommandItem
+                                key={item.id}
+                                onSelect={() => handleItemClick(item)}
+                                className="cursor-pointer mb-1"
+                              >
+                                {item.nameProduct}
+                              </CommandItem>
+                            ))}
                           </CommandGroup>
                         </CommandList>
                       )}
@@ -434,7 +432,7 @@ export default function MainContent() {
           <div className="gap-6 flex justify-center items-center flex-col md:basis-1/2 lg:basis-3/4">
             <div
               className={`${
-                appearContent === true ? `block` : `hidden`
+                appearContent ? `block` : `hidden`
               } font-semibold text-lg tracking-wide mx-3`}
             >
               {getConsumtionMessage()}
