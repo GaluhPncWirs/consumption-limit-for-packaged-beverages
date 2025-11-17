@@ -13,7 +13,7 @@ import {
 } from "../ui/dialog";
 import { Button } from "../ui/button";
 
-export default function ButtonBack({ path }) {
+export default function ButtonBack({ curentLocation }) {
   const { push } = useRouter();
   async function backToCalculateCalories() {
     const req = await fetch("/api/delCookies", {
@@ -31,7 +31,8 @@ export default function ButtonBack({ path }) {
   }
   return (
     <>
-      {path === "/mainContent/addProduct" || path === "/mainContent/about" ? (
+      {curentLocation === "/mainContent/addProduct" ||
+      curentLocation === "/mainContent/about" ? (
         <button
           className="py-2 px-5 hover:bg-yellow-400 bg-yellow-300 rounded-xl flex flex-row-reverse justify-center items-center gap-x-2 cursor-pointer"
           onClick={() => push("/mainContent/calculate")}
@@ -39,10 +40,11 @@ export default function ButtonBack({ path }) {
           <span>Kembali</span>
           <Image
             src="/images/global/arrow_left.png"
-            alt="arrow_left"
-            className="size-9"
             width={200}
             height={200}
+            alt="arrow_left"
+            className="size-9"
+            loading="eager"
           />
         </button>
       ) : (

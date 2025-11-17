@@ -342,12 +342,14 @@ export default function DisplayInputUser() {
                   <DialogClose asChild>
                     <Button variant="outline">Batal</Button>
                   </DialogClose>
-                  <Button
-                    onClick={() => setIsValidCalculation(true)}
-                    className="bg-[#54C392] hover:bg-green-500 text-black"
-                  >
-                    Oke
-                  </Button>
+                  <DialogClose asChild>
+                    <Button
+                      onClick={() => setIsValidCalculation(true)}
+                      className="bg-[#54C392] hover:bg-green-500 text-black"
+                    >
+                      Oke
+                    </Button>
+                  </DialogClose>
                 </DialogFooter>
               </DialogContent>
             )}

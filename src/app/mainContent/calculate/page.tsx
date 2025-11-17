@@ -40,6 +40,7 @@ export default function MainContent() {
   const [sugar, setSugar] = useState<number>(0);
   const [volume, setVolume] = useState<number>(0);
   const [type, setType] = useState<string>("");
+  const listNameProduct = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState<number>(-1);
   const [servingSize, setServingSize] = useState<boolean>(false);
   const [funFactSugar, setFunFactSugar] = useState<string[]>([]);
@@ -200,17 +201,31 @@ export default function MainContent() {
     }
   }
 
+  function scrollToActiveItem(index: number) {
+    const listProduct = listNameProduct.current;
+    if (listProduct) {
+      const activeItemProd = listProduct.children[index] as HTMLElement;
+      if (activeItemProd) {
+        activeItemProd.scrollIntoView({
+          block: "nearest",
+        });
+      }
+    }
+  }
+
   useEffect(() => {
     function handleKeyEvent(e: KeyboardEvent) {
       if (result.length > 0) {
         if (e.key === "ArrowDown") {
           setActiveIndex((prev) => {
             const newIndex = (prev + 1) % result.length;
+            scrollToActiveItem(newIndex);
             return newIndex;
           });
         } else if (e.key === "ArrowUp") {
           setActiveIndex((prev) => {
             const newIndex = (prev - 1 + result.length) % result.length;
+            scrollToActiveItem(newIndex);
             return newIndex;
           });
         } else if (e.key === "Enter" && activeIndex >= 0) {
@@ -325,18 +340,25 @@ export default function MainContent() {
                   {isOpenSearchProduct && (
                     <div>
                       {searchProduk !== "" && result.length > 0 && (
-                        <CommandList className="p-3 bg-slate-200 absolute z-10 w-full text-[#333333] font-medium max-h-40 overflow-y-auto rounded-b-lg">
+                        <CommandList
+                          className="p-3 bg-slate-200 absolute z-10 w-full text-[#333333] font-medium max-h-40 overflow-y-auto rounded-b-lg"
+                          ref={listNameProduct}
+                        >
                           <CommandEmpty>Produk Tidak Ditemukan.</CommandEmpty>
                           <CommandGroup heading="Pilih Produk">
-                            {result.map((item: productBeverageTypes) => (
-                              <CommandItem
-                                key={item.id}
-                                onSelect={() => handleItemClick(item)}
-                                className="cursor-pointer mb-1"
-                              >
-                                {item.nameProduct}
-                              </CommandItem>
-                            ))}
+                            {result.map(
+                              (item: productBeverageTypes, i: number) => (
+                                <CommandItem
+                                  key={item.id}
+                                  onSelect={() => handleItemClick(item)}
+                                  className={`cursor-pointer mb-1 ${
+                                    activeIndex === i ? "bg-slate-100" : ""
+                                  }`}
+                                >
+                                  {item.nameProduct}
+                                </CommandItem>
+                              )
+                            )}
                           </CommandGroup>
                         </CommandList>
                       )}

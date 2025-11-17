@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import PathNavbar from "../sidebar/pathNavbar";
+import PathNavbar from "../pathSidebar/content";
 
-export default function HamburgerMenu({ path }) {
+export default function HamburgerMenu() {
   const [isCheked, setIsCheked] = useState(false);
   const [trueOrFalse, setTrueOrFalse] = useState(false);
   const clickOutsidePath = useRef(null);
@@ -55,7 +55,7 @@ export default function HamburgerMenu({ path }) {
       ${isCheked ? `translate-x-0` : `-translate-x-full`}`}
         ref={clickOutsidePath}
       >
-        <PathNavbar path={path} />
+        <PathNavbar />
       </div>
     </div>
   );
