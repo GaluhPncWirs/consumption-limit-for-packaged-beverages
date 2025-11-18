@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function ComponentInput(props) {
   const { children, titleInput, srcImg, altImg, htmlFor } = props;
   return (
-    <div className="relative pt-6 font-semibold group">
+    <div className="relative pt-6 font-semibold group w-full">
       {children}
       <label htmlFor={htmlFor} className="labelText flex gap-3 items-center">
         <Image

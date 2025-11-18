@@ -24,6 +24,7 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { toast } from "sonner";
+import ComponentInput from "@/components/input/content";
 
 export default function MainContent() {
   const pathname = usePathname();
@@ -137,6 +138,7 @@ export default function MainContent() {
   useEffect(() => {
     const unsubscribeDataProductBeverage = subscribeToProducts(
       (dataProduct) => {
+        console.log(dataProduct);
         setProduct(dataProduct);
       }
     );
@@ -323,7 +325,53 @@ export default function MainContent() {
             onSubmit={(e) => handleCalculateProductBeverage(e)}
           >
             <div className="flex flex-col gap-y-5 items-center justify-center">
-              <div className="relative pt-4 w-11/12">
+              <ComponentInput
+                titleInput="Cari Produk"
+                srcImg="/images/global/search.png"
+                altImg="Cari"
+                htmlFor="product"
+              >
+                <Command>
+                  <input
+                    type="text"
+                    className="inputField peer"
+                    id="product"
+                    value={searchProduk}
+                    onChange={handleInputChange}
+                    required
+                    ref={focusInput}
+                  />
+                  {isOpenSearchProduct && (
+                    <div>
+                      {searchProduk !== "" && result.length > 0 && (
+                        <CommandList
+                          className="p-3 bg-slate-200 absolute z-10 w-full text-[#333333] font-medium max-h-40 overflow-y-auto rounded-b-lg"
+                          ref={listNameProduct}
+                        >
+                          <CommandEmpty>Produk Tidak Ditemukan.</CommandEmpty>
+                          <CommandGroup heading="Pilih Produk">
+                            {result.map(
+                              (item: productBeverageTypes, i: number) => (
+                                <CommandItem
+                                  key={item.id}
+                                  onSelect={() => handleItemClick(item)}
+                                  className={`cursor-pointer mb-1 ${
+                                    activeIndex === i ? "bg-slate-100" : ""
+                                  }`}
+                                >
+                                  {item.nameProduct}
+                                </CommandItem>
+                              )
+                            )}
+                          </CommandGroup>
+                        </CommandList>
+                      )}
+                    </div>
+                  )}
+                </Command>
+              </ComponentInput>
+
+              {/* <div className="relative pt-4 w-11/12">
                 <Command>
                   <input
                     type="text"
@@ -365,9 +413,41 @@ export default function MainContent() {
                     </div>
                   )}
                 </Command>
-              </div>
+              </div> */}
 
-              <div className="relative pt-4 w-11/12">
+              <ComponentInput
+                titleInput="Kadar Gula (G)"
+                srcImg="/images/pageAddProduct/sugar.png"
+                altImg="sugar"
+                htmlFor="sugarContent"
+              >
+                <input
+                  type="number"
+                  id="sugarContent"
+                  className="inputField"
+                  readOnly
+                  disabled
+                  value={sugar || ""}
+                />
+                <div className="text-xs mt-1.5">
+                  <h1
+                    className="tracking-wide text-[#F93827] font-semibold cursor-pointer mb-1"
+                    onClick={() => setServingSize((prev) => !prev)}
+                  >
+                    * Gula Disini Sudah di Totalkan Dengan Takaran Saji Per
+                    Kemasan
+                  </h1>
+                  {servingSize && (
+                    <p className="text-justify ">
+                      Jika minuman yang takaran sajinya itu 3 per kemasan dan
+                      kandungan gulanya 10g maka 3 X 10 yaitu total gulanya
+                      menjadi 30g gula
+                    </p>
+                  )}
+                </div>
+              </ComponentInput>
+
+              {/* <div className="relative pt-4 w-11/12">
                 <input
                   type="number"
                   id="sugarContent"
@@ -398,9 +478,25 @@ export default function MainContent() {
                 >
                   Kadar Gula (G)
                 </label>
-              </div>
+              </div> */}
 
-              <div className="relative pt-4 w-11/12">
+              <ComponentInput
+                titleInput="Isi Bersih (ml)"
+                srcImg="/images/pageAddProduct/ml.png"
+                altImg="isi Bersih"
+                htmlFor="isiBeratBersih"
+              >
+                <input
+                  type="number"
+                  id="isiBeratBersih"
+                  className="inputField"
+                  readOnly
+                  disabled
+                  value={volume || ""}
+                />
+              </ComponentInput>
+
+              {/* <div className="relative pt-4 w-11/12">
                 <input
                   type="number"
                   id="isiBeratBersih"
@@ -415,9 +511,24 @@ export default function MainContent() {
                 >
                   Isi Bersih (ml)
                 </label>
-              </div>
+              </div> */}
 
-              <div className="relative pt-4 w-11/12">
+              <ComponentInput
+                titleInput="Tipe Minuman"
+                srcImg="/images/pageAddProduct/typeBeverage.png"
+                altImg="Tipe"
+                htmlFor="type"
+              >
+                <input
+                  id="type"
+                  className="inputField"
+                  readOnly
+                  disabled
+                  value={type || ""}
+                />
+              </ComponentInput>
+
+              {/* <div className="relative pt-4 w-11/12">
                 <input
                   id="type"
                   className="inputField"
@@ -428,9 +539,9 @@ export default function MainContent() {
                 <label htmlFor="type" className="labelText tracking-wide">
                   Tipe Minuman
                 </label>
-              </div>
+              </div> */}
 
-              <h1 className="text-sm w-11/12">
+              <h1 className="text-sm w-full">
                 Produk yang di cari tidak ada?{" "}
                 <Link
                   href={"/mainContent/addProduct"}
@@ -455,7 +566,7 @@ export default function MainContent() {
             <div
               className={`${
                 appearContent ? `block` : `hidden`
-              } font-semibold text-lg tracking-wide mx-3`}
+              } font-semibold text-lg tracking-wide max-w-md`}
             >
               {getConsumtionMessage()}
               <h2 className="text-xs text-[#F93827] mt-0.5 text-justify">
@@ -478,7 +589,7 @@ export default function MainContent() {
               )}
             </div>
             {totalBotol >= 1 && (
-              <h1 className="text-sm tracking-wide font-semibold text-justify max-w-sm">
+              <h1 className="text-sm tracking-wide font-semibold text-justify max-w-md">
                 {`Jika Kamu Mengkonsumsi Hanya ${messageIfDrinkSomeBottles.botol} Botol Maka Sisa Dari Gula
                   Harian Kamu Adalah ${messageIfDrinkSomeBottles.sisaGula} Gram`}
               </h1>
@@ -491,7 +602,7 @@ export default function MainContent() {
             <div className="basis-1/2 flex flex-col gap-y-3">
               <div>
                 <h1 className="font-semibold text-xl mb-1 tracking-wide">
-                  Fun Fact Gula
+                  Fun Fact
                 </h1>
                 <p className="font-medium text-justify">{funFactSugar[0]}</p>
               </div>
