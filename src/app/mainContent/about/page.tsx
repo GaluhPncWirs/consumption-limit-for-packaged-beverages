@@ -1,5 +1,5 @@
 "use client";
-import MainContentLayout from "@/layout/mainContent";
+import MainContentLayout from "@/layout/mainSystem/content";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 

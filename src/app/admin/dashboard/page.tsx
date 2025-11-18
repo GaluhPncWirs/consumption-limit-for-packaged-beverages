@@ -18,7 +18,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import ComponentInput from "@/components/input/content";
+import ComponentInput from "@/layout/input/content";
 import {
   Select,
   SelectContent,

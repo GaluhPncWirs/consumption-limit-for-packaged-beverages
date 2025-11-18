@@ -5,7 +5,7 @@ import { useHandleInput } from "@/app/hooks/handle-input";
 import { useEffect, useState } from "react";
 import { productBeverageTypes } from "@/types/dataTypes";
 import { subscribeToProducts } from "@/lib/firebase/services";
-import MainContentLayout from "@/layout/mainContent";
+import MainContentLayout from "@/layout/mainSystem/content";
 import {
   Command,
   CommandEmpty,
@@ -14,7 +14,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import ComponentInput from "@/components/input/content";
+import ComponentInput from "@/layout/input/content";
 import {
   Select,
   SelectContent,

@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useHandleInput } from "./hooks/handle-input";
 import Image from "next/image";
-import ComponentInput from "@/components/input/content";
+import ComponentInput from "@/layout/input/content";
 import {
   Select,
   SelectContent,

@@ -10,13 +10,13 @@ export default function MainContentLayout({ children, path }) {
   }, [path, curPathname]);
   return (
     <div className="flex">
-      <div className="md:w-1/4">
-        <div className="bg-green-400 h-screen shadow-lg shadow-slate-700 fixed hidden md:w-1/4 md:block">
+      <div className="md:w-1/4 xl:w-80">
+        <div className="bg-green-400 h-screen shadow-lg shadow-slate-700 fixed hidden md:w-1/4 md:block xl:w-80">
           <PathNavbar />
         </div>
         <HamburgerMenu />
       </div>
-      <div className="w-11/12 md:w-2/3 mx-auto">{children}</div>
+      <div className="w-11/12 md:w-2/3 mx-auto xl:w-[57rem]">{children}</div>
     </div>
   );
 }
