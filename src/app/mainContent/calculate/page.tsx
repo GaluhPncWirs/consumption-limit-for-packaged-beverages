@@ -298,8 +298,8 @@ export default function MainContent() {
   return (
     <MainContentLayout path={pathname}>
       <div className="fixed top-0 right-0 bg-green-400 p-3 rounded-bl-md shadow-md shadow-slate-700 z-20">
-        <h1 className="font-semibold text-lg tracking-wide px-2">
-          Maksimal Konsumsi Gula Perhari{" "}
+        <h1 className="font-semibold text-base md:text-lg tracking-wide px-2">
+          Batas Gula Harian{" "}
           <span>
             {maksimalGulaHarianPengguna.toLocaleString("id-ID", {
               maximumFractionDigits: 0,
@@ -308,12 +308,12 @@ export default function MainContent() {
           </span>
         </h1>
       </div>
-      <div className="flex flex-col justify-center p-7 rounded-lg bg-[#f9fff9] mt-20 mb-12 shadow-lg shadow-slate-700 max-[640px]:p-5">
-        <h1 className="text-2xl font-semibold tracking-wide mx-2">
+      <div className="flex flex-col justify-center p-7 rounded-lg bg-[#f9fff9] mt-20 mb-12 shadow-lg shadow-slate-700 md:p-9">
+        <h1 className="text-2xl font-semibold tracking-wide">
           Hitung Konsumsi Minuman
         </h1>
         <div
-          className={`mt-8 ${
+          className={`mt-7 ${
             fillBottle.length >= 1
               ? `flex items-center justify-center flex-col gap-y-7 lg:flex-row lg:gap-x-3`
               : `flex-col`
@@ -491,7 +491,7 @@ export default function MainContent() {
         </div>
 
         {appearContent === true && (
-          <div className="flex justify-center items-center flex-col mt-7 mx-3 gap-y-7">
+          <div className="flex justify-center items-center flex-col mt-7 gap-y-7">
             <div className="basis-1/2 flex flex-col gap-y-3">
               <div>
                 <h1 className="font-semibold text-xl mb-1 tracking-wide">

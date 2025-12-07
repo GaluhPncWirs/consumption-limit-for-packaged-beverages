@@ -16,7 +16,7 @@ export default function MainContentLayout({ children, path }) {
         </div>
         <HamburgerMenu />
       </div>
-      <div className="w-11/12 md:w-2/3 mx-auto xl:w-[57rem]">{children}</div>
+      <div className="w-11/12 mx-auto md:w-2/3 xl:w-[57rem]">{children}</div>
     </div>
   );
 }
