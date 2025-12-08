@@ -3,6 +3,20 @@ import { useEffect, useState } from "react";
 import { useHandleInput } from "./hooks/handle-input";
 import Image from "next/image";
 import ComponentInput from "@/layout/input/content";
+// import {
+//   Dialog,
+//   DialogClose,
+//   DialogContent,
+//   DialogDescription,
+//   DialogFooter,
+//   DialogHeader,
+//   DialogTitle,
+//   DialogTrigger,
+// } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import LoadingCompenent from "@/components/loading/content";
 import {
   Select,
   SelectContent,
@@ -12,20 +26,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import LoadingCompenent from "@/components/loading/content";
 
 export default function DisplayInputUser() {
   const [selectedValueActivityLevel, setSelectedValueActivityLevel] =
@@ -255,7 +255,7 @@ export default function DisplayInputUser() {
                   Activity Level
                 </label>
               </div>
-              <Select
+              {/* <Select
                 value={mustFilled.activityLevel}
                 onValueChange={(value) => {
                   setSelectedValueActivityLevel(value);
@@ -290,11 +290,19 @@ export default function DisplayInputUser() {
                     </SelectItem>
                   </SelectGroup>
                 </SelectContent>
-              </Select>
+              </Select> */}
             </div>
           </div>
 
-          <Dialog>
+          <button
+            type="submit"
+            disabled={!isFormFilled()}
+            className="disabled:cursor-not-allowed mt-5 py-1 text-center rounded-md bg-[#54C392] hover:bg-green-500 cursor-pointer font-semibold tracking-wide px-7 text-lg"
+          >
+            Hitung
+          </button>
+
+          {/* <Dialog>
             <DialogTrigger asChild>
               <button
                 type="submit"
@@ -353,7 +361,7 @@ export default function DisplayInputUser() {
                 </DialogFooter>
               </DialogContent>
             )}
-          </Dialog>
+          </Dialog> */}
         </form>
       </div>
       {loadingNextPage && <LoadingCompenent />}
