@@ -58,6 +58,7 @@ export default function ButtonBack({ curentLocation }) {
                 className="size-9"
                 width={200}
                 height={200}
+                loading="lazy"
               />
             </button>
           </DialogTrigger>

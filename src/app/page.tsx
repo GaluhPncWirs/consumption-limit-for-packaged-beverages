@@ -3,16 +3,16 @@ import { useEffect, useState } from "react";
 import { useHandleInput } from "./hooks/handle-input";
 import Image from "next/image";
 import ComponentInput from "@/layout/input/content";
-// import {
-//   Dialog,
-//   DialogClose,
-//   DialogContent,
-//   DialogDescription,
-//   DialogFooter,
-//   DialogHeader,
-//   DialogTitle,
-//   DialogTrigger,
-// } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -169,6 +169,7 @@ export default function DisplayInputUser() {
                   src="/images/pageCalculateCalories/gender.png"
                   alt="gender"
                   className="size-8"
+                  loading="eager"
                 />
                 <span className="text-lg">Gender</span>
                 <input
@@ -247,6 +248,7 @@ export default function DisplayInputUser() {
                   src="/images/pageCalculateCalories/activity.png"
                   alt="activity"
                   className="size-8"
+                  loading="eager"
                 />
                 <label
                   htmlFor="activityLevel"
@@ -255,9 +257,10 @@ export default function DisplayInputUser() {
                   Activity Level
                 </label>
               </div>
-              {/* <Select
+
+              <Select
                 value={mustFilled.activityLevel}
-                onValueChange={(value) => {
+                onValueChange={(value: any) => {
                   setSelectedValueActivityLevel(value);
                   handleValueInput({
                     target: {
@@ -270,7 +273,7 @@ export default function DisplayInputUser() {
                 <SelectTrigger>
                   <SelectValue placeholder="Pilih Tingkat Aktivitas" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="px-2">
                   <SelectGroup>
                     <SelectLabel>Tingkat Aktivitas</SelectLabel>
                     <SelectItem value="sedentary">
@@ -290,19 +293,11 @@ export default function DisplayInputUser() {
                     </SelectItem>
                   </SelectGroup>
                 </SelectContent>
-              </Select> */}
+              </Select>
             </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={!isFormFilled()}
-            className="disabled:cursor-not-allowed mt-5 py-1 text-center rounded-md bg-[#54C392] hover:bg-green-500 cursor-pointer font-semibold tracking-wide px-7 text-lg"
-          >
-            Hitung
-          </button>
-
-          {/* <Dialog>
+          <Dialog>
             <DialogTrigger asChild>
               <button
                 type="submit"
@@ -315,7 +310,9 @@ export default function DisplayInputUser() {
             {!errorCalculation && (
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Maksimal Konsumsi Gula</DialogTitle>
+                  <DialogTitle className="mb-3">
+                    Maksimal Konsumsi Gula
+                  </DialogTitle>
                   <div className="flex items-center gap-x-4">
                     <Image
                       src="/images/global/check.png"
@@ -323,6 +320,7 @@ export default function DisplayInputUser() {
                       width={200}
                       height={200}
                       className="bg-white rounded-full size-14"
+                      loading="eager"
                     />
                     <DialogDescription className="flex flex-col gap-y-1 tracking-wide">
                       <span>
@@ -353,7 +351,7 @@ export default function DisplayInputUser() {
                   <DialogClose asChild>
                     <Button
                       onClick={() => setIsValidCalculation(true)}
-                      className="bg-[#54C392] hover:bg-green-500 text-black"
+                      className="bg-[#54C392] hover:bg-green-400 text-black"
                     >
                       Oke
                     </Button>
@@ -361,7 +359,7 @@ export default function DisplayInputUser() {
                 </DialogFooter>
               </DialogContent>
             )}
-          </Dialog> */}
+          </Dialog>
         </form>
       </div>
       {loadingNextPage && <LoadingCompenent />}

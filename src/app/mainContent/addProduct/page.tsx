@@ -20,6 +20,7 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -291,7 +292,7 @@ export default function AddProduct() {
               </div>
               <Select
                 value={mustFilled.typeMinuman ?? ""}
-                onValueChange={(value) => {
+                onValueChange={(value: any) => {
                   setValueTypeMinuman(value);
                   handleValueInput({
                     target: {
@@ -304,7 +305,7 @@ export default function AddProduct() {
                 <SelectTrigger>
                   <SelectValue placeholder="Pilih Tipe Minuman" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="px-2">
                   <SelectGroup>
                     <SelectItem value="Siap Minum">Siap Minum</SelectItem>
                     <SelectItem value="Harus Dilarutkan">

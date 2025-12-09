@@ -12,6 +12,7 @@ export default function ComponentInput(props) {
           src={srcImg}
           alt={altImg}
           className="size-8 transition-all duration-200 ease-in-out group-focus-within:size-7"
+          loading="eager"
         />
         <span>{titleInput}</span>
       </label>
