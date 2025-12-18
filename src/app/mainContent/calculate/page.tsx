@@ -138,7 +138,6 @@ export default function MainContent() {
   useEffect(() => {
     const unsubscribeDataProductBeverage = subscribeToProducts(
       (dataProduct) => {
-        console.log(dataProduct);
         setProduct(dataProduct);
       }
     );
@@ -343,7 +342,7 @@ export default function MainContent() {
                   />
                   {isOpenSearchProduct && (
                     <div>
-                      {searchProduk !== "" && result.length > 0 && (
+                      {result.length > 0 && (
                         <CommandList
                           className="p-3 bg-slate-200 absolute z-10 w-full text-[#333333] font-medium max-h-40 overflow-y-auto rounded-b-lg"
                           ref={listNameProduct}
