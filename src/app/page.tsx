@@ -48,14 +48,16 @@ export default function DisplayInputUser() {
   function handleCalculateCalories(event: any) {
     event.preventDefault();
 
-    const gender = event.target.gender.value;
-    const age = Number(event.target.age.value);
-    const heightBody = Number(event.target.height.value);
-    const weightBody = Number(event.target.weight.value);
+    const targetValue = event.target;
 
-    const maxLengthAge = event.target.age.value.length;
-    const maxLengthHeight = event.target.height.value.length;
-    const maxLengthWeight = event.target.weight.value.length;
+    const gender = targetValue.gender.value;
+    const age = Number(targetValue.age.value);
+    const heightBody = Number(targetValue.height.value);
+    const weightBody = Number(targetValue.weight.value);
+
+    const maxLengthAge = targetValue.age.value.length;
+    const maxLengthHeight = targetValue.height.value.length;
+    const maxLengthWeight = targetValue.weight.value.length;
 
     if (
       maxLengthAge > 2 ||
@@ -259,7 +261,7 @@ export default function DisplayInputUser() {
               </div>
 
               <Select
-                value={mustFilled.activityLevel}
+                defaultValue={mustFilled.activityLevel}
                 onValueChange={(value: any) => {
                   setSelectedValueActivityLevel(value);
                   handleValueInput({
