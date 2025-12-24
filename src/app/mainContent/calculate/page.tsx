@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/command";
 import { toast } from "sonner";
 import ComponentInput from "@/layout/input/content";
+import InputProductBeverageComp from "@/components/calculateBeverage/inputProduk/content";
 
 export default function MainContent() {
   const pathname = usePathname();
@@ -318,6 +319,11 @@ export default function MainContent() {
               : `flex-col`
           }`}
         >
+          {/* <InputProductBeverageComp
+            handleCalculateProductBeverage={handleCalculateProductBeverage}
+            handleInputChange={handleInputChange}
+            result={result}
+          /> */}
           <form
             className="basis-2/5"
             autoComplete="off"
@@ -342,27 +348,30 @@ export default function MainContent() {
                   />
                   {isOpenSearchProduct && (
                     <div>
-                      {result.length > 0 && (
+                      {searchProduk !== "" && (
                         <CommandList
                           className="p-3 bg-slate-200 absolute z-10 w-full text-[#333333] font-medium max-h-40 overflow-y-auto rounded-b-lg"
                           ref={listNameProduct}
                         >
-                          <CommandEmpty>Produk Tidak Ditemukan.</CommandEmpty>
-                          <CommandGroup heading="Pilih Produk">
-                            {result.map(
-                              (item: productBeverageTypes, i: number) => (
-                                <CommandItem
-                                  key={item.id}
-                                  onSelect={() => handleItemClick(item)}
-                                  className={`cursor-pointer mb-1 ${
-                                    activeIndex === i ? "bg-slate-100" : ""
-                                  }`}
-                                >
-                                  {item.nameProduct}
-                                </CommandItem>
-                              )
-                            )}
-                          </CommandGroup>
+                          {result.length > 0 ? (
+                            <CommandGroup heading="Pilih Produk">
+                              {result.map(
+                                (item: productBeverageTypes, i: number) => (
+                                  <CommandItem
+                                    key={item.id}
+                                    onSelect={() => handleItemClick(item)}
+                                    className={`cursor-pointer mb-1 ${
+                                      activeIndex === i ? "bg-slate-100" : ""
+                                    }`}
+                                  >
+                                    {item.nameProduct}
+                                  </CommandItem>
+                                )
+                              )}
+                            </CommandGroup>
+                          ) : (
+                            <CommandEmpty>Produk Tidak Ada.</CommandEmpty>
+                          )}
                         </CommandList>
                       )}
                     </div>
