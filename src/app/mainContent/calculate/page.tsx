@@ -25,7 +25,6 @@ import {
 } from "@/components/ui/command";
 import { toast } from "sonner";
 import ComponentInput from "@/layout/input/content";
-import InputProductBeverageComp from "@/components/calculateBeverage/inputProduk/content";
 
 export default function MainContent() {
   const pathname = usePathname();
@@ -188,6 +187,8 @@ export default function MainContent() {
     const query = e.target.value;
     setSearchProduk(query);
 
+    console.log("terender");
+
     if (query !== "") {
       const filterSearchProduct = product.filter(
         (item: productBeverageTypes) => {
@@ -319,11 +320,6 @@ export default function MainContent() {
               : `flex-col`
           }`}
         >
-          {/* <InputProductBeverageComp
-            handleCalculateProductBeverage={handleCalculateProductBeverage}
-            handleInputChange={handleInputChange}
-            result={result}
-          /> */}
           <form
             className="basis-2/5"
             autoComplete="off"

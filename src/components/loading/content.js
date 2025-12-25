@@ -13,6 +13,7 @@ export default function LoadingCompenent() {
           width={200}
           height={200}
           className="animate-[spin_1s_linear_infinite] size-20"
+          loading="eager"
         />
       </div>
     </div>
