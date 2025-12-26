@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useHandleInput } from "../../hooks/handle-input";
 import {
   educationsForArtikel,
@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/command";
 import { toast } from "sonner";
 import ComponentInput from "@/layout/input/content";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 export default function MainContent() {
   const pathname = usePathname();
@@ -71,8 +72,12 @@ export default function MainContent() {
     }
   }, []);
 
-  function handleCalculateProductBeverage(event: any) {
+  function handleCalculateProductBeverage(
+    event: React.FormEvent<HTMLFormElement>
+  ) {
     event.preventDefault();
+
+    const targetValue = event.target as HTMLFormElement;
 
     if (result.length > 0) {
       if (funFactSugar.length > 0 && video.length > 0) {
@@ -82,9 +87,9 @@ export default function MainContent() {
       }
       setAppearContent(true);
       const kandunganGulaDidalamProduk = parseFloat(
-        event.target.sugarContent.value
+        targetValue.sugarContent.value
       );
-      const totalIsiMinuman = parseFloat(event.target.isiBeratBersih.value);
+      const totalIsiMinuman = parseFloat(targetValue.isiBeratBersih.value);
       const gulaPerSatuML = kandunganGulaDidalamProduk / totalIsiMinuman; //ubah total gula menjadi per 1 ml
 
       // menghitung jumalah botol yang datap dikonsumsi
@@ -346,7 +351,7 @@ export default function MainContent() {
                     <div>
                       {searchProduk !== "" && (
                         <CommandList
-                          className="p-3 bg-slate-200 absolute z-10 w-full text-[#333333] font-medium max-h-40 overflow-y-auto rounded-b-lg"
+                          className="p-2 bg-slate-200 absolute z-10 w-full text-[#333333] font-medium max-h-36 overflow-y-auto rounded-b-lg"
                           ref={listNameProduct}
                         >
                           {result.length > 0 ? (
@@ -389,21 +394,31 @@ export default function MainContent() {
                   disabled
                   value={sugar || ""}
                 />
-                <div className="text-xs mt-1.5">
-                  <h1
-                    className="tracking-wide text-[#F93827] font-semibold cursor-pointer mb-1"
+                <div className="text-[10px] mt-1.5">
+                  <div
+                    className="flex items-center cursor-pointer w-fit gap-x-1"
                     onClick={() => setServingSize((prev) => !prev)}
                   >
-                    * Gula Disini Sudah di Totalkan Dengan Takaran Saji Per
-                    Kemasan
-                  </h1>
-                  {servingSize && (
-                    <p className="text-justify ">
-                      Jika minuman yang takaran sajinya itu 3 per kemasan dan
-                      kandungan gulanya 10g maka 3 X 10 yaitu total gulanya
-                      menjadi 30g gula
-                    </p>
-                  )}
+                    {servingSize ? (
+                      <ChevronUp className="size-5" />
+                    ) : (
+                      <ChevronDown className="size-5" />
+                    )}
+                    <h1 className="tracking-wide text-[#F93827] font-semibold">
+                      *Gula Sudah Ditotal Dengan Takaran Saji
+                    </h1>
+                  </div>
+
+                  <p
+                    className={`text-justify transition-all duration-300 ease-in-out ${
+                      servingSize
+                        ? `max-h-10 sm:max-h-7 opacity-100`
+                        : `max-h-0 opacity-0`
+                    }`}
+                  >
+                    Minuman dengan takaran saji 3 perkemasan dan kandungan gula
+                    10g maka 3 x 10 maka total menjadi 30g gula
+                  </p>
                 </div>
               </ComponentInput>
 

@@ -45,10 +45,10 @@ export default function DisplayInputUser() {
     activityLevel: "",
   });
 
-  function handleCalculateCalories(event: any) {
+  function handleCalculateCalories(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const targetValue = event.target;
+    const targetValue = event.target as HTMLFormElement;
 
     const gender = targetValue.gender.value;
     const age = Number(targetValue.age.value);
@@ -116,7 +116,7 @@ export default function DisplayInputUser() {
       const resultTotalCalorie = totalDailyEnergyExpenditure * 0.1;
       const resultTotalMaxSugar = resultTotalCalorie / 4;
 
-      if (resultTotalMaxSugar < 10 || resultTotalMaxSugar > 50) {
+      if (resultTotalMaxSugar < 5 || resultTotalMaxSugar > 100) {
         toast("Perhitungan Tidak Valid ❌", {
           description:
             "Hasilnya Tidak Memenuhi Standar, Silahkan Input Kembali !",
@@ -132,21 +132,27 @@ export default function DisplayInputUser() {
   useEffect(() => {
     if (!isValidCalculation || !yourMaxSugar) return;
     async function isCalculateSuccess() {
-      const req = await fetch("/api/setCookies", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ validCaculations: isValidCalculation }),
-      });
-      setLoadingNextPage(true);
-
-      const response = await req.json();
-      if (response.status) {
-        setLoadingNextPage(false);
-        push("/mainContent/calculate");
-        localStorage.setItem("maxSugarUser", String(yourMaxSugar));
-        toast("✅ Berhasil", {
-          description: "Lanjut ke halaman perhitungan konsumsi minuman",
+      try {
+        setLoadingNextPage(true);
+        const req = await fetch("/api/setCookies", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ validCaculations: isValidCalculation }),
         });
+        const response = await req.json();
+        if (response.status) {
+          push("/mainContent/calculate");
+          localStorage.setItem("maxSugarUser", String(yourMaxSugar));
+          toast("✅ Berhasil", {
+            description: "Lanjut ke halaman perhitungan konsumsi minuman",
+          });
+        }
+      } catch {
+        toast("❌ Gagal", {
+          description: "Fetch API error",
+        });
+      } finally {
+        setLoadingNextPage(false);
       }
     }
     isCalculateSuccess();
