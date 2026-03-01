@@ -12,9 +12,7 @@ export function useHandleInput(initState) {
     }
   }
 
-  function isFormFilled() {
-    return Object.values(mustFilled).every((str) => str !== "");
-  }
+  const isFormFilled = Object.values(mustFilled).every((str) => str !== "");
 
   return { mustFilled, handleValueInput, isFormFilled, setMustFilled };
 }

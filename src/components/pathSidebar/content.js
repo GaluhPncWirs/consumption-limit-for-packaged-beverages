@@ -1,7 +1,7 @@
 import Link from "next/link";
 import ButtonBack from "../button/content";
 import Image from "next/image";
-import { useLocationPage } from "@/app/stateManagement/pathname/state";
+import { useLocationPage } from "@/store/usePathname/state";
 
 export default function PathNavbar() {
   const curentLocation = useLocationPage((state) => state.curentLocationPage);

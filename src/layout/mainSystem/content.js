@@ -1,4 +1,4 @@
-import { useLocationPage } from "@/app/stateManagement/pathname/state";
+import { useLocationPage } from "@/store/usePathname/state";
 import HamburgerMenu from "@/components/hamburgerMenu/hamburgerMenu";
 import PathNavbar from "@/components/pathSidebar/content";
 import { useEffect } from "react";

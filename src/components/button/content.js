@@ -12,6 +12,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { Button } from "../ui/button";
+import { ArrowLeft } from "lucide-react";
 
 export default function ButtonBack({ curentLocation }) {
   const { push } = useRouter();
@@ -26,7 +27,7 @@ export default function ButtonBack({ curentLocation }) {
       toast("✅ Berhasil", {
         description: "Kembali ke Perhitungan Kalori",
       });
-      push("/");
+      push("/calculateCalories");
     }
   }
   return (
@@ -52,14 +53,7 @@ export default function ButtonBack({ curentLocation }) {
           <DialogTrigger asChild>
             <button className="py-2 px-5 hover:bg-yellow-400 bg-yellow-300 rounded-xl flex flex-row-reverse justify-center items-center gap-x-2 cursor-pointer">
               <span>Kembali</span>
-              <Image
-                src="/images/global/arrow_left.png"
-                alt="arrow_left"
-                className="size-9"
-                width={200}
-                height={200}
-                loading="lazy"
-              />
+              <ArrowLeft />
             </button>
           </DialogTrigger>
           <DialogContent>

@@ -62,7 +62,7 @@ export default function AddProduct() {
   const maxLengthNumberTakaranSajiGula = mustFilled.takaranSaji.length;
   const maxLengthNumberVolume = mustFilled.volume.length;
 
-  const [errors, setErrors] = useState<any>({
+  const [errors, setErrors] = useState({
     isNameTooLong: false,
     isSugarTooLong: false,
     isServingSizeTooLong: false,
@@ -70,7 +70,7 @@ export default function AddProduct() {
   });
 
   useEffect(() => {
-    setErrors((prev: any) => ({
+    setErrors((prev) => ({
       ...prev,
       isNameTooLong: maxLengthAlphabethNameProduct >= 50 ? true : false,
       isSugarTooLong: maxLengthNumberKandunganGula >= 3 ? true : false,
@@ -101,12 +101,12 @@ export default function AddProduct() {
           errors.isNameTooLong
             ? `Input Nama produk tidak boleh lebih dari 50 karakter`
             : errors.isSugarTooLong
-            ? `Input Kandungan gula tidak boleh lebih dari 2 digit`
-            : errors.isServingSizeTooLong
-            ? `Takaran saji tidak boleh lebih dari 2 digit`
-            : errors.isVolumeTooLong
-            ? `Input Volume tidak boleh lebih dari 3 digit`
-            : `Input Nama Produk Tidak Boleh Kosong dan Tidak Boleh Hanya
+              ? `Input Kandungan gula tidak boleh lebih dari 2 digit`
+              : errors.isServingSizeTooLong
+                ? `Takaran saji tidak boleh lebih dari 2 digit`
+                : errors.isVolumeTooLong
+                  ? `Input Volume tidak boleh lebih dari 3 digit`
+                  : `Input Nama Produk Tidak Boleh Kosong dan Tidak Boleh Hanya
                 Berisi Angka!`
         }
         `,
@@ -149,7 +149,6 @@ export default function AddProduct() {
           description:
             "Data produk telah berhasil di tambahkan, Silahkan kembali ke halaman sebelumnya",
         });
-        console.log(resStatus.message);
       } else {
         setIsStatus(resStatus.status);
         setIsConfirm(false);
@@ -192,7 +191,7 @@ export default function AddProduct() {
           return item.nameProduct
             ?.toLowerCase()
             .startsWith(query.toLowerCase());
-        }
+        },
       );
       setResult(filterSearchProduct);
     } else {
@@ -202,7 +201,7 @@ export default function AddProduct() {
 
   return (
     <MainContentLayout path={pathname}>
-      <div className="flex flex-col justify-center p-7 rounded-lg bg-[#f9fff9] my-10 shadow-lg shadow-slate-700 max-[640px]:p-5">
+      <div className="flex flex-col justify-center p-5 rounded-lg bg-[#f9fff9] my-10 shadow-lg shadow-slate-700">
         <h1 className="text-2xl font-semibold text-center">
           Penambah Produk Minuman
         </h1>
@@ -292,7 +291,7 @@ export default function AddProduct() {
               </div>
               <Select
                 value={mustFilled.typeMinuman ?? ""}
-                onValueChange={(value: any) => {
+                onValueChange={(value) => {
                   setValueTypeMinuman(value);
                   handleValueInput({
                     target: {
@@ -320,7 +319,7 @@ export default function AddProduct() {
               <DialogTrigger asChild>
                 <button
                   className="bg-green-400 rounded-lg hover:bg-green-500 py-1.5 flex text-lg font-semibold disabled:cursor-not-allowed justify-center items-center gap-2"
-                  disabled={!isFormFilled()}
+                  disabled={!isFormFilled}
                 >
                   <Image
                     src="/images/pageAddProduct/add-product.png"

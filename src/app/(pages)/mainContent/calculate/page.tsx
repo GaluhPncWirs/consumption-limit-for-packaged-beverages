@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
-import { useHandleInput } from "../../hooks/handle-input";
+import { useHandleInput } from "../../../hooks/handle-input";
 import {
   educationsForArtikel,
   educationsForFunfactSugar,
@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/command";
 import { toast } from "sonner";
 import ComponentInput from "@/layout/input/content";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronUp } from "lucide-react";
 
 export default function MainContent() {
   const pathname = usePathname();
@@ -73,7 +73,7 @@ export default function MainContent() {
   }, []);
 
   function handleCalculateProductBeverage(
-    event: React.FormEvent<HTMLFormElement>
+    event: React.FormEvent<HTMLFormElement>,
   ) {
     event.preventDefault();
 
@@ -87,7 +87,7 @@ export default function MainContent() {
       }
       setAppearContent(true);
       const kandunganGulaDidalamProduk = parseFloat(
-        targetValue.sugarContent.value
+        targetValue.sugarContent.value,
       );
       const totalIsiMinuman = parseFloat(targetValue.isiBeratBersih.value);
       const gulaPerSatuML = kandunganGulaDidalamProduk / totalIsiMinuman; //ubah total gula menjadi per 1 ml
@@ -114,14 +114,14 @@ export default function MainContent() {
           ...prev,
           botol: displayBottle,
           sisaGula: Math.round(remainingSugar),
-        })
+        }),
       );
 
       // menghitung sisa konsumsi
       const remaining = maxKonsumsiPerMl % totalIsiMinuman;
       // sisa tersebut dikonversi ke dalam persen
       const percentageFillForRemaining = Math.round(
-        (remaining / totalIsiMinuman) * 100
+        (remaining / totalIsiMinuman) * 100,
       );
       // jumlah botol diubah menjadi array yang diisi 100 disetiap botol yang ada
       const fillArray: number[] = Array(numberOfBottles).fill(100);
@@ -144,7 +144,7 @@ export default function MainContent() {
     const unsubscribeDataProductBeverage = subscribeToProducts(
       (dataProduct) => {
         setProduct(dataProduct);
-      }
+      },
     );
     return () => unsubscribeDataProductBeverage();
   }, []);
@@ -156,28 +156,28 @@ export default function MainContent() {
         (dataFunfact) => {
           setFunFactSugar(
             dataFunfact.map(
-              (getFunFact: educationsForFunfactSugar) => getFunFact.funFact
-            )
+              (getFunFact: educationsForFunfactSugar) => getFunFact.funFact,
+            ),
           );
-        }
+        },
       );
 
       const unsubscribeDataArtikel = subscribeToReleatedArtikel(
         (dataArtikel) => {
           setArtikel(dataArtikel);
-        }
+        },
       );
 
       const unsubscribeDataVideoEducation = subscribeToVideoEducation(
         (dataVideo) => {
           setVideo(dataVideo);
-        }
+        },
       );
 
       return () => {
-        unsubscribeDataFunFactSugar(),
+        (unsubscribeDataFunFactSugar(),
           unsubscribeDataArtikel(),
-          unsubscribeDataVideoEducation();
+          unsubscribeDataVideoEducation());
       };
     }
   }, [appearContent]);
@@ -192,15 +192,13 @@ export default function MainContent() {
     const query = e.target.value;
     setSearchProduk(query);
 
-    console.log("terender");
-
     if (query !== "") {
       const filterSearchProduct = product.filter(
         (item: productBeverageTypes) => {
           return item.nameProduct
             ?.toLowerCase()
             .startsWith(query.toLowerCase());
-        }
+        },
       );
       setResult(filterSearchProduct);
       setActiveIndex(-1);
@@ -367,7 +365,7 @@ export default function MainContent() {
                                   >
                                     {item.nameProduct}
                                   </CommandItem>
-                                )
+                                ),
                               )}
                             </CommandGroup>
                           ) : (
@@ -399,11 +397,9 @@ export default function MainContent() {
                     className="flex items-center cursor-pointer w-fit gap-x-1"
                     onClick={() => setServingSize((prev) => !prev)}
                   >
-                    {servingSize ? (
-                      <ChevronUp className="size-5" />
-                    ) : (
-                      <ChevronDown className="size-5" />
-                    )}
+                    <ChevronUp
+                      className={`size-5 transition-all ${servingSize ? "rotate-180" : ""}`}
+                    />
                     <h1 className="tracking-wide text-[#F93827] font-semibold">
                       *Gula Sudah Ditotal Dengan Takaran Saji
                     </h1>
@@ -468,7 +464,7 @@ export default function MainContent() {
             <button
               type="submit"
               className="disabled:cursor-not-allowed py-1.5 text-center rounded-md bg-green-400 hover:bg-green-500 cursor-pointer font-semibold tracking-wider px-7 text-lg mx-2 w-32 mt-7"
-              disabled={!isFormFilled()}
+              disabled={!isFormFilled}
             >
               Hitung
             </button>
@@ -497,7 +493,7 @@ export default function MainContent() {
                   <div key={i} className="glassCupInside w-32">
                     <div className="fill" style={{ height: `${item}%` }}></div>
                   </div>
-                )
+                ),
               )}
             </div>
             {totalBotol >= 1 && (

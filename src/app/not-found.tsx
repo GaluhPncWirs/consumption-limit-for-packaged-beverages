@@ -19,7 +19,7 @@ export default function NotFound() {
           Halaman Tidak Ditemukan
         </h1>
         <Link
-          href={"/"}
+          href="/calculateCalories"
           className="text-lg font-bold bg-[#6C63FF] text-white px-5 py-1 rounded-xl mt-5 hover:text-purple-300"
         >
           Kembali
