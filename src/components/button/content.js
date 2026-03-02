@@ -39,14 +39,7 @@ export default function ButtonBack({ curentLocation }) {
           onClick={() => push("/mainContent/calculate")}
         >
           <span>Kembali</span>
-          <Image
-            src="/images/global/arrow_left.png"
-            width={200}
-            height={200}
-            alt="arrow_left"
-            className="size-9"
-            loading="eager"
-          />
+          <ArrowLeft />
         </button>
       ) : (
         <Dialog>

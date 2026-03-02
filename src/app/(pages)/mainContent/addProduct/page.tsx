@@ -227,7 +227,7 @@ export default function AddProduct() {
 
             <ComponentInput
               titleInput="Kandungan Gula (g)"
-              srcImg="/images/pageAddProduct/sugar.png"
+              srcImg="/images/global/sugar.png"
               altImg="sugar"
               htmlFor="kandunganGula"
             >
@@ -260,7 +260,7 @@ export default function AddProduct() {
 
             <ComponentInput
               titleInput="Isi Bersih Produk (ml)"
-              srcImg="/images/pageAddProduct/ml.png"
+              srcImg="/images/global/ml.png"
               altImg="volume"
               htmlFor="volume"
             >
@@ -278,7 +278,7 @@ export default function AddProduct() {
                 <Image
                   width={200}
                   height={200}
-                  src="/images/pageAddProduct/typeBeverage.png"
+                  src="/images/global/typeBeverage.png"
                   alt="type"
                   className="size-8"
                 />
@@ -345,6 +345,7 @@ export default function AddProduct() {
                         width={200}
                         height={200}
                         className="size-14"
+                        loading="lazy"
                       />
                       <DialogDescription>
                         <span className="mt-2 flex flex-col items-start gap-y-0.5">
@@ -411,6 +412,7 @@ export default function AddProduct() {
             <div>
               <Command>
                 <CommandInput
+                  className="inputField peer px-3"
                   placeholder="Cari Produk..."
                   onChangeCapture={handleInputChange}
                   value={searchProduk}

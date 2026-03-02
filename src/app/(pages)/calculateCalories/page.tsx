@@ -26,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { CheckCircle } from "lucide-react";
 
 export default function DisplayInputUser() {
   const [selectedValueActivityLevel, setSelectedValueActivityLevel] =
@@ -320,14 +321,8 @@ export default function DisplayInputUser() {
                     Maksimal Konsumsi Gula
                   </DialogTitle>
                   <div className="flex items-center gap-x-4">
-                    <Image
-                      src="/images/global/check.png"
-                      alt="check"
-                      width={200}
-                      height={200}
-                      className="bg-white rounded-full size-14"
-                      loading="eager"
-                    />
+                    <CheckCircle className="text-green-500 size-14" />
+
                     <DialogDescription className="flex flex-col gap-y-1 tracking-wide">
                       <span>
                         Total Kalori Kamu{" "}

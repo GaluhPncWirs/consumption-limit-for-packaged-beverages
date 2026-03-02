@@ -91,12 +91,12 @@ export default function AdminPage() {
             errors.isNameTooLong
               ? `Input Nama produk tidak boleh lebih dari 50 karakter`
               : errors.isSugarTooLong
-              ? `Input Kandungan gula tidak boleh lebih dari 2 digit`
-              : errors.isServingSizeTooLong
-              ? `Takaran saji tidak boleh lebih dari 2 digit`
-              : errors.isVolumeTooLong
-              ? `Input Volume tidak boleh lebih dari 3 digit`
-              : `Input Nama Produk Tidak Boleh Kosong dan Tidak Boleh Hanya
+                ? `Input Kandungan gula tidak boleh lebih dari 2 digit`
+                : errors.isServingSizeTooLong
+                  ? `Takaran saji tidak boleh lebih dari 2 digit`
+                  : errors.isVolumeTooLong
+                    ? `Input Volume tidak boleh lebih dari 3 digit`
+                    : `Input Nama Produk Tidak Boleh Kosong dan Tidak Boleh Hanya
                   Berisi Angka!`
           }
           `,
@@ -156,7 +156,7 @@ export default function AdminPage() {
     const unsubscribeDataProductBeverage = subscribeToPendingProducts(
       (dataProduct) => {
         setProduct(dataProduct);
-      }
+      },
     );
 
     return () => unsubscribeDataProductBeverage();
@@ -182,7 +182,7 @@ export default function AdminPage() {
 
   async function acceptData(idProd: any, name: string) {
     const choosenProduct = product.find(
-      (idProduct: any) => idProduct.id === idProd
+      (idProduct: any) => idProduct.id === idProd,
     );
 
     if (!choosenProduct) {
@@ -332,7 +332,7 @@ export default function AdminPage() {
             <DialogTrigger asChild>
               <button
                 className="bg-green-400 rounded-lg hover:bg-green-500 py-1.5 flex text-lg font-semibold disabled:cursor-not-allowed justify-center items-center gap-2"
-                disabled={!isFormFilled()}
+                disabled={!isFormFilled}
               >
                 <Image
                   src="/images/pageAddProduct/add-product.png"

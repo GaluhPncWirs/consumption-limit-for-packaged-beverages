@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHandleInput } from "../../../hooks/handle-input";
 import {
   educationsForArtikel,
@@ -20,6 +20,7 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
+  CommandInput,
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
@@ -42,15 +43,12 @@ export default function MainContent() {
   const [sugar, setSugar] = useState<number>(0);
   const [volume, setVolume] = useState<number>(0);
   const [type, setType] = useState<string>("");
-  const listNameProduct = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState<number>(-1);
   const [servingSize, setServingSize] = useState<boolean>(false);
   const [funFactSugar, setFunFactSugar] = useState<string[]>([]);
   const [video, setVideo] = useState<educationsForVideo[]>([]);
   const { isFormFilled, setMustFilled } = useHandleInput({
     product: "",
   });
-  const focusInput = useRef<HTMLInputElement>(null);
   const [remainingMl, setRemainingMl] = useState<number>(0);
   const [artikel, setArtikel] = useState<educationsForArtikel[]>([]);
   const [typeProduct, setTypeProduct] = useState<string>("");
@@ -188,66 +186,22 @@ export default function MainContent() {
     }
   }, [type]);
 
-  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const query = e.target.value;
-    setSearchProduk(query);
+  function handleInputChange(value: string) {
+    setSearchProduk(value);
 
-    if (query !== "") {
+    if (value !== "") {
       const filterSearchProduct = product.filter(
         (item: productBeverageTypes) => {
           return item.nameProduct
             ?.toLowerCase()
-            .startsWith(query.toLowerCase());
+            .startsWith(value.toLowerCase());
         },
       );
       setResult(filterSearchProduct);
-      setActiveIndex(-1);
     } else {
       setResult([]);
     }
   }
-
-  function scrollToActiveItem(index: number) {
-    const listProduct = listNameProduct.current;
-    if (listProduct) {
-      const activeItemProd = listProduct.children[index] as HTMLElement;
-      if (activeItemProd) {
-        activeItemProd.scrollIntoView({
-          block: "nearest",
-        });
-      }
-    }
-  }
-
-  useEffect(() => {
-    function handleKeyEvent(e: KeyboardEvent) {
-      if (result.length > 0) {
-        if (e.key === "ArrowDown") {
-          setActiveIndex((prev) => {
-            const newIndex = (prev + 1) % result.length;
-            scrollToActiveItem(newIndex);
-            return newIndex;
-          });
-        } else if (e.key === "ArrowUp") {
-          setActiveIndex((prev) => {
-            const newIndex = (prev - 1 + result.length) % result.length;
-            scrollToActiveItem(newIndex);
-            return newIndex;
-          });
-        } else if (e.key === "Enter" && activeIndex >= 0) {
-          setSelectedProduct(result[activeIndex]);
-          setIsOpenSearchProduct(false);
-        } else {
-          setIsOpenSearchProduct(true);
-        }
-      }
-    }
-
-    document.addEventListener("keydown", handleKeyEvent);
-    return () => {
-      document.removeEventListener("keydown", handleKeyEvent);
-    };
-  }, [result, activeIndex]);
 
   function handleItemClick(item: productBeverageTypes) {
     setSelectedProduct(item);
@@ -328,7 +282,7 @@ export default function MainContent() {
             autoComplete="off"
             onSubmit={(e) => handleCalculateProductBeverage(e)}
           >
-            <div className="flex flex-col gap-y-5 items-center justify-center">
+            <div className="flex flex-col gap-y-4 items-center justify-center">
               <ComponentInput
                 titleInput="Cari Produk"
                 srcImg="/images/global/search.png"
@@ -336,37 +290,27 @@ export default function MainContent() {
                 htmlFor="product"
               >
                 <Command>
-                  <input
-                    type="text"
+                  <CommandInput
                     className="inputField peer"
-                    id="product"
                     value={searchProduk}
-                    onChange={handleInputChange}
+                    onValueChange={(val) => handleInputChange(val)}
                     required
-                    ref={focusInput}
                   />
                   {isOpenSearchProduct && (
                     <div>
                       {searchProduk !== "" && (
-                        <CommandList
-                          className="p-2 bg-slate-200 absolute z-10 w-full text-[#333333] font-medium max-h-36 overflow-y-auto rounded-b-lg"
-                          ref={listNameProduct}
-                        >
+                        <CommandList className="p-2 bg-slate-200 absolute z-10 w-full text-[#333333] font-medium max-h-36 overflow-y-auto rounded-b-lg">
                           {result.length > 0 ? (
                             <CommandGroup heading="Pilih Produk">
-                              {result.map(
-                                (item: productBeverageTypes, i: number) => (
-                                  <CommandItem
-                                    key={item.id}
-                                    onSelect={() => handleItemClick(item)}
-                                    className={`cursor-pointer mb-1 ${
-                                      activeIndex === i ? "bg-slate-100" : ""
-                                    }`}
-                                  >
-                                    {item.nameProduct}
-                                  </CommandItem>
-                                ),
-                              )}
+                              {result.map((item: productBeverageTypes) => (
+                                <CommandItem
+                                  key={item.id}
+                                  onSelect={() => handleItemClick(item)}
+                                  className="cursor-pointer mb-1"
+                                >
+                                  {item.nameProduct}
+                                </CommandItem>
+                              ))}
                             </CommandGroup>
                           ) : (
                             <CommandEmpty>Produk Tidak Ada.</CommandEmpty>
@@ -380,7 +324,7 @@ export default function MainContent() {
 
               <ComponentInput
                 titleInput="Kadar Gula (G)"
-                srcImg="/images/pageAddProduct/sugar.png"
+                srcImg="/images/global/sugar.png"
                 altImg="sugar"
                 htmlFor="sugarContent"
               >
@@ -420,7 +364,7 @@ export default function MainContent() {
 
               <ComponentInput
                 titleInput="Isi Bersih (ml)"
-                srcImg="/images/pageAddProduct/ml.png"
+                srcImg="/images/global/ml.png"
                 altImg="isi Bersih"
                 htmlFor="isiBeratBersih"
               >
@@ -436,7 +380,7 @@ export default function MainContent() {
 
               <ComponentInput
                 titleInput="Tipe Minuman"
-                srcImg="/images/pageAddProduct/typeBeverage.png"
+                srcImg="/images/global/typeBeverage.png"
                 altImg="Tipe"
                 htmlFor="type"
               >
