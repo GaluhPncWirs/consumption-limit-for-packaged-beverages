@@ -30,7 +30,7 @@ export default function PathNavbar() {
               className="size-8 mb-2"
               loading="eager"
             />
-            <span>Hitung </span>
+            <span>Hitung</span>
           </Link>
 
           <Link href="/mainContent/addProduct" className="hover:text-slate-600">
@@ -63,7 +63,7 @@ export default function PathNavbar() {
             />
             <span>Tentang</span>
           </Link>
-          <ButtonBack curentLocation={curentLocation} />
+          <ButtonBack />
         </div>
       </div>
     </div>

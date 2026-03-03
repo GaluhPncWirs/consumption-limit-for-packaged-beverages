@@ -4,10 +4,10 @@ import PathNavbar from "@/components/pathSidebar/content";
 import { useEffect } from "react";
 
 export default function MainContentLayout({ children, path }) {
-  const curPathname = useLocationPage((func) => func.executefunc);
+  const currentPathname = useLocationPage((func) => func.setCurrrentLocation);
   useEffect(() => {
-    curPathname(path);
-  }, [path, curPathname]);
+    currentPathname(path);
+  }, [path, currentPathname]);
   return (
     <div className="flex">
       <div className="md:w-1/4 xl:w-80">

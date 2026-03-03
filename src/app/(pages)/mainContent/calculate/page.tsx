@@ -28,7 +28,7 @@ import { toast } from "sonner";
 import ComponentInput from "@/layout/input/content";
 import { ChevronUp } from "lucide-react";
 
-export default function MainContent() {
+export default function CalculateBeverages() {
   const pathname = usePathname();
   const [fillBottle, setFillBottle] = useState<number[]>([]);
   const [appearContent, setAppearContent] = useState<boolean>(false);
@@ -94,7 +94,6 @@ export default function MainContent() {
       const maxKonsumsiPerMl = maksimalGulaHarianPengguna / gulaPerSatuML;
       // hasilnya dibulatkan kebawah
       const numberOfBottles = Math.floor(maxKonsumsiPerMl / totalIsiMinuman);
-
       setTotalBotol(numberOfBottles);
 
       let displayBottle = Math.round(numberOfBottles / 2);

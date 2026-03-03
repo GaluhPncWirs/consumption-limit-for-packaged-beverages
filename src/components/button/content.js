@@ -13,9 +13,11 @@ import {
 } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { ArrowLeft } from "lucide-react";
+import { useLocationPage } from "@/store/usePathname/state";
 
-export default function ButtonBack({ curentLocation }) {
+export default function ButtonBack() {
   const { push } = useRouter();
+  const curentLocation = useLocationPage((state) => state.curentLocationPage);
   async function backToCalculateCalories() {
     const req = await fetch("/api/delCookies", {
       method: "DELETE",
