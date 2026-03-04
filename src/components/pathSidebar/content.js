@@ -17,10 +17,13 @@ export default function PathNavbar() {
           loading="eager"
         />
         <div className="mt-10 flex flex-col font-semibold gap-y-10 text-xl lg:text-2xl">
-          <Link href="/mainContent/calculate" className="hover:text-slate-600">
+          <Link
+            href="/mainContent/calculateBeverage"
+            className="hover:text-slate-600"
+          >
             <Image
               src={`/images/global/${
-                curentLocation === "/mainContent/calculate"
+                curentLocation === "/mainContent/calculateBeverage"
                   ? `calculate-full`
                   : `calculate`
               }.png`}

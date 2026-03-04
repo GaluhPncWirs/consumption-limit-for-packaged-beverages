@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/select";
 import { CheckCircle } from "lucide-react";
 
-export default function DisplayInputUser() {
+export default function InputCalculateCalories() {
   const [selectedValueActivityLevel, setSelectedValueActivityLevel] =
     useState<string>("");
   const [errorCalculation, setErrorCalculation] = useState<boolean>(false);
@@ -140,7 +140,7 @@ export default function DisplayInputUser() {
         });
         const response = await req.json();
         if (response.status) {
-          push("/mainContent/calculate");
+          push("/mainContent/calculateBeverage");
           localStorage.setItem("maxSugarUser", String(yourMaxSugar));
           toast("✅ Berhasil", {
             description: "Lanjut ke halaman perhitungan konsumsi minuman",
