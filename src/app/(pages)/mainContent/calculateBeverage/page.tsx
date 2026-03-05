@@ -60,15 +60,23 @@ export default function CalculateBeverages() {
   const [isOpenSearchProduct, setIsOpenSearchProduct] = useState<boolean>(true);
 
   useEffect(() => {
-    setMustFilled((prev: Object) => ({ ...prev, product: searchProduk }));
-  }, [searchProduk, setMustFilled]);
+    async function decodeToken() {
+      try {
+        const req = await fetch("/api/tokenJWT/decodeTokenJWT");
+        const res = await req.json();
+        if (res.status) {
+          setMaksimalGulaHarianPengguna(res.data.result);
+        }
+      } catch (err) {
+        console.log("Gagal decode token", err);
+      }
+    }
+    decodeToken();
+  }, []);
 
   useEffect(() => {
-    const maxSugars = localStorage.getItem("maxSugarUser");
-    if (maxSugars) {
-      setMaksimalGulaHarianPengguna(Number(maxSugars));
-    }
-  }, []);
+    setMustFilled((prev: Object) => ({ ...prev, product: searchProduk }));
+  }, [searchProduk, setMustFilled]);
 
   function handleCalculateProductBeverage(
     event: React.FormEvent<HTMLFormElement>,

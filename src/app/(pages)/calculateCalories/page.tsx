@@ -129,19 +129,18 @@ export default function InputCalculateCalories() {
   }
 
   useEffect(() => {
-    if (!isValidCalculation || !yourMaxSugar) return;
+    if (!yourMaxSugar) return;
     async function isCalculateSuccess() {
       try {
         setLoadingNextPage(true);
-        const req = await fetch("/api/setCookies", {
+        const req = await fetch("/api/tokenJWT/resultCalories", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ validCaculations: isValidCalculation }),
+          body: JSON.stringify({ resultCalculate: yourMaxSugar }),
         });
         const response = await req.json();
-        if (response.status) {
+        if (response.status === "success") {
           push("/mainContent/calculateBeverage");
-          localStorage.setItem("maxSugarUser", String(yourMaxSugar));
           toast("✅ Berhasil", {
             description: "Lanjut ke halaman perhitungan konsumsi minuman",
           });
@@ -155,7 +154,7 @@ export default function InputCalculateCalories() {
       }
     }
     isCalculateSuccess();
-  }, [isValidCalculation, yourMaxSugar, push]);
+  }, [yourMaxSugar, push]);
 
   return (
     <div className="flex items-center justify-center h-screen">

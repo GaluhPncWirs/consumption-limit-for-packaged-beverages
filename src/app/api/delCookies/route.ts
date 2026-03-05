@@ -3,7 +3,8 @@ import { NextResponse } from "next/server";
 
 export async function DELETE() {
   const cookiesStore = await cookies();
-  cookiesStore.delete("formFilledSuccess");
+  cookiesStore.delete("calculationSuccess");
+  cookiesStore.delete("resultCalculate");
   return NextResponse.json({
     status: true,
     message: "Cookies berhasil dihapus",
