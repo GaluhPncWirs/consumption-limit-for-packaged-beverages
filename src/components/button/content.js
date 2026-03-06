@@ -14,24 +14,31 @@ import {
 import { Button } from "../ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useLocationPage } from "@/store/usePathname/state";
+import { useDeleteToken } from "@/store/useDeleteToken/state";
+import { useEffect, useState } from "react";
+import { useShallow } from "zustand/shallow";
 
 export default function ButtonBack() {
   const { push } = useRouter();
   const curentLocation = useLocationPage((state) => state.curentLocationPage);
-  async function backToCalculateCalories() {
-    const req = await fetch("/api/delCookies", {
-      method: "DELETE",
-      credentials: "include",
-    });
-    const res = await req.json();
-    if (res.status) {
-      localStorage.removeItem("maxSugarUser");
+  const [deleteTokenBtn, setDeleteTokenBtn] = useState(false);
+  const { setDeleteToken, isDeleteToken } = useDeleteToken(
+    useShallow((state) => ({
+      setDeleteToken: state.setDeleteToken,
+      isDeleteToken: state.isDeleteSuccess,
+    })),
+  );
+
+  useEffect(() => {
+    setDeleteToken(deleteTokenBtn);
+    if (isDeleteToken) {
       toast("✅ Berhasil", {
         description: "Kembali ke Perhitungan Kalori",
       });
       push("/calculateCalories");
     }
-  }
+  }, [deleteTokenBtn, setDeleteToken, isDeleteToken, push]);
+
   return (
     <>
       {curentLocation === "/mainContent/addProduct" ||
@@ -63,7 +70,7 @@ export default function ButtonBack() {
                 <Button variant="outline">Batal</Button>
               </DialogClose>
               <Button
-                onClick={backToCalculateCalories}
+                onClick={() => setDeleteTokenBtn(true)}
                 className="bg-[#54C392] hover:bg-green-500 text-black"
               >
                 Oke

@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useHandleInput } from "../../../hooks/handle-input";
+import { useHandleInput } from "../../../hooks/getIsFormFilled";
 import {
   educationsForArtikel,
   educationsForFunfactSugar,
@@ -228,6 +228,7 @@ export default function CalculateBeverages() {
   useEffect(() => {
     if (searchProduk === "") {
       setSelectedProduct(null);
+      setIsOpenSearchProduct(true);
     }
   }, [searchProduk]);
 

@@ -1,7 +1,7 @@
 "use client";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { useHandleInput } from "@/app/hooks/handle-input";
+import { useHandleInput } from "@/app/hooks/getIsFormFilled";
 import { useEffect, useState } from "react";
 import { productBeverageTypes } from "@/types/dataTypes";
 import { subscribeToProducts } from "@/lib/firebase/services";
