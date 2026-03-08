@@ -31,8 +31,8 @@ import { CheckCircle } from "lucide-react";
 export default function InputCalculateCalories() {
   const [selectedValueActivityLevel, setSelectedValueActivityLevel] =
     useState<string>("");
-  const [errorCalculation, setErrorCalculation] = useState<boolean>(false);
   const [isValidCalculation, setIsValidCalculation] = useState<boolean>(false);
+  const [isErrorCalculation, setIsErrorCalculation] = useState<boolean>(false);
   const [yourMaxSugar, setYourMaxSugar] = useState<number>(0);
   const [loadingNextPage, setLoadingNextPage] = useState<boolean>(false);
   const [TDEE, setTDEE] = useState<number>(0);
@@ -70,13 +70,12 @@ export default function InputCalculateCalories() {
       weightBody >= 80 ||
       weightBody <= 10
     ) {
-      setErrorCalculation(true);
       toast("❌ Perhitungan Tidak Valid", {
         description:
           "Hasilnya tidak memenuhi standar, silahkan input kembali !",
       });
+      setIsErrorCalculation(true);
     } else {
-      setErrorCalculation(false);
       let basalMetabolicRate: number | null = null;
 
       if (gender === "male") {
@@ -116,45 +115,45 @@ export default function InputCalculateCalories() {
       const resultTotalMaxSugar = resultTotalCalorie / 4;
 
       if (resultTotalMaxSugar < 5 || resultTotalMaxSugar > 100) {
+        setIsErrorCalculation(true);
         toast("Perhitungan Tidak Valid ❌", {
           description:
             "Hasilnya Tidak Memenuhi Standar, Silahkan Input Kembali !",
         });
-        setIsValidCalculation(false);
       }
-
       setTDEE(totalDailyEnergyExpenditure);
       setYourMaxSugar(resultTotalMaxSugar);
     }
   }
 
   useEffect(() => {
-    if (!yourMaxSugar) return;
-    async function isCalculateSuccess() {
-      try {
-        setLoadingNextPage(true);
-        const req = await fetch("/api/tokenJWT/resultCalories", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ resultCalculate: yourMaxSugar }),
-        });
-        const response = await req.json();
-        if (response.status === "success") {
-          push("/mainContent/calculateBeverage");
-          toast("✅ Berhasil", {
-            description: "Lanjut ke halaman perhitungan konsumsi minuman",
+    if (isValidCalculation) {
+      async function isCalculateSuccess() {
+        try {
+          setLoadingNextPage(true);
+          const req = await fetch("/api/tokenJWT/resultCalories", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ resultCalculate: yourMaxSugar }),
           });
+          const response = await req.json();
+          if (response.status === "success") {
+            push("/mainContent/calculateBeverage");
+            toast("✅ Berhasil", {
+              description: "Lanjut ke halaman perhitungan konsumsi minuman",
+            });
+          }
+        } catch {
+          toast("❌ Gagal", {
+            description: "Fetch API error",
+          });
+        } finally {
+          setLoadingNextPage(false);
         }
-      } catch {
-        toast("❌ Gagal", {
-          description: "Fetch API error",
-        });
-      } finally {
-        setLoadingNextPage(false);
       }
+      isCalculateSuccess();
     }
-    isCalculateSuccess();
-  }, [yourMaxSugar, push]);
+  }, [isValidCalculation, yourMaxSugar, push]);
 
   return (
     <div className="flex items-center justify-center h-screen">
@@ -313,7 +312,7 @@ export default function InputCalculateCalories() {
                 Hitung
               </button>
             </DialogTrigger>
-            {!errorCalculation && (
+            {!isErrorCalculation && (
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle className="mb-3">
@@ -321,7 +320,6 @@ export default function InputCalculateCalories() {
                   </DialogTitle>
                   <div className="flex items-center gap-x-4">
                     <CheckCircle className="text-green-500 size-14" />
-
                     <DialogDescription className="flex flex-col gap-y-1 tracking-wide">
                       <span>
                         Total Kalori Kamu{" "}

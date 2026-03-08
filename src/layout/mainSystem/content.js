@@ -21,17 +21,19 @@ export default function MainContentLayout({ children, path }) {
     })),
   );
 
-  // useEffect(() => {
-  //   setDeleteToken(statusToken);
-  //   if (isDeleteToken) {
-  //     toast("Token sudah expired", {
-  //       description: "Silahkan input kembali untuk melanjutkan",
-  //     });
-  //     setTimeout(() => {
-  //       push("/calculateCalories");
-  //     }, 3000);
-  //   }
-  // }, [setDeleteToken, statusToken, isDeleteToken, push]);
+  console.log(isDeleteToken);
+
+  useEffect(() => {
+    setDeleteToken(statusToken);
+    if (statusToken) {
+      toast("Token sudah expired", {
+        description: "Silahkan input kembali untuk melanjutkan",
+      });
+      setTimeout(() => {
+        push("/calculateCalories");
+      }, 3000);
+    }
+  }, [setDeleteToken, statusToken, isDeleteToken, push]);
 
   useEffect(() => {
     currentPathname(path);

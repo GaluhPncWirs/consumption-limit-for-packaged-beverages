@@ -15,13 +15,12 @@ import { Button } from "../ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useLocationPage } from "@/store/usePathname/state";
 import { useDeleteToken } from "@/store/useDeleteToken/state";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useShallow } from "zustand/shallow";
 
 export default function ButtonBack() {
   const { push } = useRouter();
   const curentLocation = useLocationPage((state) => state.curentLocationPage);
-  const [deleteTokenBtn, setDeleteTokenBtn] = useState(false);
   const { setDeleteToken, isDeleteToken } = useDeleteToken(
     useShallow((state) => ({
       setDeleteToken: state.setDeleteToken,
@@ -30,14 +29,13 @@ export default function ButtonBack() {
   );
 
   useEffect(() => {
-    setDeleteToken(deleteTokenBtn);
     if (isDeleteToken) {
       toast("✅ Berhasil", {
         description: "Kembali ke Perhitungan Kalori",
       });
       push("/calculateCalories");
     }
-  }, [deleteTokenBtn, setDeleteToken, isDeleteToken, push]);
+  }, [isDeleteToken, push]);
 
   return (
     <>
@@ -70,7 +68,7 @@ export default function ButtonBack() {
                 <Button variant="outline">Batal</Button>
               </DialogClose>
               <Button
-                onClick={() => setDeleteTokenBtn(true)}
+                onClick={() => setDeleteToken(true)}
                 className="bg-[#54C392] hover:bg-green-500 text-black"
               >
                 Oke
