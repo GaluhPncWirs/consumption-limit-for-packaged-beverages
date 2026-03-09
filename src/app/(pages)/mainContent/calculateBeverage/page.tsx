@@ -27,6 +27,7 @@ import {
 import { toast } from "sonner";
 import ComponentInput from "@/layout/input/content";
 import { ChevronUp } from "lucide-react";
+import { getConvertMaxSugar } from "@/app/hooks/getConvertMaxSugar";
 
 export default function CalculateBeverages() {
   const pathname = usePathname();
@@ -266,12 +267,7 @@ export default function CalculateBeverages() {
       <div className="fixed top-0 right-0 bg-green-400 p-3 rounded-bl-md shadow-md shadow-slate-700 z-20">
         <h1 className="font-semibold text-base md:text-lg tracking-wide px-2">
           Batas Gula Harian{" "}
-          <span>
-            {maksimalGulaHarianPengguna.toLocaleString("id-ID", {
-              maximumFractionDigits: 0,
-            })}{" "}
-            Gram
-          </span>
+          <span>{getConvertMaxSugar(maksimalGulaHarianPengguna)} Gram</span>
         </h1>
       </div>
       <div className="flex flex-col justify-center p-7 rounded-lg bg-[#f9fff9] mt-20 mb-12 shadow-lg shadow-slate-700 md:p-9">

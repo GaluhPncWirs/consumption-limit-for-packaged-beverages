@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CheckCircle } from "lucide-react";
+import { getConvertMaxSugar } from "../../hooks/getConvertMaxSugar";
 
 export default function InputCalculateCalories() {
   const [selectedValueActivityLevel, setSelectedValueActivityLevel] =
@@ -324,18 +325,12 @@ export default function InputCalculateCalories() {
                       <span>
                         Total Kalori Kamu{" "}
                         <span className="font-bold text-[#54C392] text-lg">
-                          {TDEE.toLocaleString("id-ID", {
-                            maximumFractionDigits: 0,
-                          })}{" "}
-                          kcal
+                          {getConvertMaxSugar(TDEE)} kcal
                         </span>
                       </span>
                       <span>
                         <span className="font-bold text-[#54C392] text-lg">
-                          {yourMaxSugar.toLocaleString("id-ID", {
-                            maximumFractionDigits: 0,
-                          })}{" "}
-                          Gram
+                          {getConvertMaxSugar(yourMaxSugar)} Gram
                         </span>{" "}
                         Gula per Hari
                       </span>
