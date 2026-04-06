@@ -21,8 +21,6 @@ export default function MainContentLayout({ children, path }) {
     })),
   );
 
-  console.log(isDeleteToken);
-
   useEffect(() => {
     setDeleteToken(statusToken);
     if (statusToken) {
