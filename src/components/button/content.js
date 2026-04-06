@@ -43,7 +43,7 @@ export default function ButtonBack() {
       curentLocation === "/mainContent/about" ? (
         <button
           className="py-2 px-5 hover:bg-yellow-400 bg-yellow-300 rounded-xl flex flex-row-reverse justify-center items-center gap-x-2 cursor-pointer"
-          onClick={() => push("/mainContent/calculate")}
+          onClick={() => push("/mainContent/calculateBeverage")}
         >
           <span>Kembali</span>
           <ArrowLeft />
