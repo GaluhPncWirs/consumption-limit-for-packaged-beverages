@@ -31,12 +31,15 @@ import {
   CalendarDays,
   CheckCircle,
   CheckCircle2,
+  PersonStanding,
   Ruler,
   Scale,
   UserRound,
 } from "lucide-react";
 import { getConvertMaxSugar } from "../../hooks/getConvertMaxSugar";
 import { Input } from "@/components/ui/input";
+import FloatingLabel from "@/components/floating-label/component";
+import { activityLevels } from "@/data-ui/calculate-page/data-activity";
 
 export default function InputCalculateCalories() {
   const [selectedValueActivityLevel, setSelectedValueActivityLevel] =
@@ -394,7 +397,7 @@ export default function InputCalculateCalories() {
             {/* Gender */}
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <UserRound className="size-5" />
+                <UserRound className="size-5 shrink-0" />
                 <span className="text-sm font-semibold text-slate-700 tracking-wide">
                   Jenis Kelamin
                 </span>
@@ -497,98 +500,62 @@ export default function InputCalculateCalories() {
 
             {/* Physical Information */}
             <div className="space-y-3">
-              <div>
-                <h2 className="text-sm font-semibold text-slate-700">
-                  Informasi Tubuh
-                </h2>
+              <div className="flex items-center gap-2">
+                <PersonStanding className="size-6 shrink-0" />
+                <div>
+                  <h2 className="text-sm font-semibold text-slate-700 tracking-wide">
+                    Informasi Tubuh
+                  </h2>
 
-                <p className="mt-1 text-xs text-slate-500">
-                  Masukkan data tubuhmu untuk mendapatkan hasil yang lebih
-                  akurat.
-                </p>
+                  <p className="mt-1 text-xs text-slate-500">
+                    Masukkan data tubuhmu untuk mendapatkan hasil yang lebih
+                    akurat.
+                  </p>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 {/* Age */}
                 <div className="space-y-2">
-                  <label
-                    htmlFor="age"
-                    className="flex items-center gap-2 text-sm font-medium text-slate-600"
-                  >
-                    <CalendarDays className="size-4 text-slate-400" />
-                    Usia
-                  </label>
-
-                  <div className="relative">
-                    <input
-                      type="number"
-                      id="age"
-                      min={1}
-                      max={100}
-                      value={mustFilled.age}
-                      onChange={handleValueInput}
-                      placeholder="22"
-                      className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 pr-14 text-sm font-medium text-slate-800 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10"
-                    />
-
-                    <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs font-medium text-slate-400">
-                      tahun
-                    </span>
-                  </div>
+                  <FloatingLabel
+                    type="number"
+                    id="age"
+                    label="Usia"
+                    desc="tahun"
+                    Icon={CalendarDays}
+                    min={1}
+                    max={100}
+                    value={mustFilled.age}
+                    placeholder=" "
+                  />
                 </div>
 
                 {/* Height */}
                 <div className="space-y-2">
-                  <label
-                    htmlFor="height"
-                    className="flex items-center gap-2 text-sm font-medium text-slate-600"
-                  >
-                    <Ruler className="size-4 text-slate-400" />
-                    Tinggi
-                  </label>
-
-                  <div className="relative">
-                    <input
-                      type="number"
-                      id="height"
-                      min={1}
-                      value={mustFilled.height}
-                      onChange={handleValueInput}
-                      placeholder="170"
-                      className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 pr-12 text-sm font-medium text-slate-800 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10"
-                    />
-
-                    <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs font-medium text-slate-400">
-                      cm
-                    </span>
-                  </div>
+                  <FloatingLabel
+                    type="number"
+                    id="height"
+                    label="Tinggi"
+                    desc="cm"
+                    Icon={Ruler}
+                    min={10}
+                    value={mustFilled.height}
+                    placeholder=" "
+                  />
                 </div>
 
                 {/* Weight */}
                 <div className="space-y-2">
-                  <label
-                    htmlFor="weight"
-                    className="flex items-center gap-2 text-sm font-medium text-slate-600"
-                  >
-                    <Scale className="size-4 text-slate-400" />
-                    Berat
-                  </label>
-
-                  <div className="relative">
-                    <input
-                      type="number"
-                      id="weight"
-                      min={1}
-                      value={mustFilled.weight}
-                      onChange={handleValueInput}
-                      placeholder="65"
-                      className="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 pr-12 text-sm font-medium text-slate-800 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10"
-                    />
-
-                    <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs font-medium text-slate-400">
-                      kg
-                    </span>
-                  </div>
+                  <FloatingLabel
+                    type="number"
+                    id="weight"
+                    label="Berat"
+                    desc="kg"
+                    Icon={Scale}
+                    min={5}
+                    value={mustFilled.weight}
+                    placeholder=" "
+                  />
                 </div>
               </div>
             </div>
@@ -596,11 +563,11 @@ export default function InputCalculateCalories() {
             {/* Activity Level */}
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <Activity className="size-4 text-slate-500" />
+                <Activity className="size-5 text-slate-500" />
 
                 <label
                   htmlFor="activityLevel"
-                  className="text-sm font-semibold text-slate-700"
+                  className="text-sm font-semibold text-slate-700 tracking-wide"
                 >
                   Tingkat Aktivitas
                 </label>
@@ -610,7 +577,6 @@ export default function InputCalculateCalories() {
                 value={mustFilled.activityLevel}
                 onValueChange={(value) => {
                   setSelectedValueActivityLevel(value);
-
                   handleValueInput({
                     target: {
                       id: "activityLevel",
@@ -619,35 +585,22 @@ export default function InputCalculateCalories() {
                   });
                 }}
               >
-                <SelectTrigger className="h-12 rounded-xl border-slate-200 bg-slate-50 px-4 text-sm font-medium shadow-none transition hover:border-slate-300 focus:ring-4 focus:ring-emerald-500/10">
+                <SelectTrigger className="h-12 rounded-xl focus:border-emerald-500 px-4 text-sm font-medium shadow-none transition hover:border-slate-300 focus:ring-4 focus:ring-emerald-500/10">
                   <SelectValue placeholder="Pilih tingkat aktivitas" />
                 </SelectTrigger>
 
                 <SelectContent className="rounded-xl">
                   <SelectGroup>
-                    <SelectLabel className="px-3 py-2 text-xs text-slate-400">
-                      Tingkat Aktivitas
-                    </SelectLabel>
-
-                    <SelectItem value="sedentary">
-                      Tidak Aktif — tidak melakukan aktivitas berat
-                    </SelectItem>
-
-                    <SelectItem value="lightlyActive">
-                      Aktif Ringan — olahraga 1-3 hari/minggu
-                    </SelectItem>
-
-                    <SelectItem value="moderatelyActive">
-                      Cukup Aktif — olahraga 3-5 hari/minggu
-                    </SelectItem>
-
-                    <SelectItem value="veryActive">
-                      Sangat Aktif — olahraga 6-7 hari/minggu
-                    </SelectItem>
-
-                    <SelectItem value="extraActive">
-                      Extra Aktif — olahraga berat / pekerjaan fisik
-                    </SelectItem>
+                    {activityLevels.map((item) => (
+                      <SelectItem key={item.value} value={item.value}>
+                        <div className="flex items-center gap-2">
+                          <item.icon className="size-4" />
+                          <span>
+                            {item.label} - {item.description}
+                          </span>
+                        </div>
+                      </SelectItem>
+                    ))}
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -734,7 +687,7 @@ export default function InputCalculateCalories() {
         </div>
 
         {/* Optional helper text */}
-        <p className="mt-5 text-center text-xs text-slate-400">
+        <p className="mt-5 text-center text-xs">
           Hasil perhitungan merupakan estimasi dan dapat berbeda pada setiap
           orang.
         </p>
