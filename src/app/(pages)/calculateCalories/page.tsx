@@ -82,13 +82,6 @@ export default function InputCalculateCalories() {
     formState: { errors, isSubmitting },
   } = useForm<DataPersonalUserSchema>({
     resolver: zodResolver(dataPersonalUserSchema),
-    defaultValues: {
-      jenisKelamin: "male",
-      usia: 0,
-      tinggiBadan: 0,
-      beratBadan: 0,
-      tingkatAktifitas: "",
-    },
   });
 
   const selectedGender = watch("jenisKelamin");
@@ -216,12 +209,17 @@ export default function InputCalculateCalories() {
                     register={register("jenisKelamin")}
                   />
                 ))}
+                {errors.jenisKelamin && (
+                  <p className="text-red-500 text-xs mt-0.5">
+                    {errors.jenisKelamin.message}
+                  </p>
+                )}
               </div>
             </div>
 
             {/* Physical Information */}
             <div className="space-y-3">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 mb-5">
                 <PersonStanding className="size-6 shrink-0" />
                 <div>
                   <h2 className="text-sm font-semibold text-slate-700 tracking-wide">
@@ -246,6 +244,7 @@ export default function InputCalculateCalories() {
                     Icon={CalendarDays}
                     placeholder=" "
                     register={register("usia")}
+                    error={errors.usia}
                   />
                 </div>
 
@@ -259,6 +258,7 @@ export default function InputCalculateCalories() {
                     Icon={Ruler}
                     placeholder=" "
                     register={register("tinggiBadan")}
+                    error={errors.tinggiBadan}
                   />
                 </div>
 
@@ -272,6 +272,7 @@ export default function InputCalculateCalories() {
                     Icon={Scale}
                     placeholder=" "
                     register={register("beratBadan")}
+                    error={errors.beratBadan}
                   />
                 </div>
               </div>
@@ -325,12 +326,78 @@ export default function InputCalculateCalories() {
               />
             </div>
 
-            <Button
-              type="submit"
-              className="flex h-12 w-full items-center justify-center rounded-xl bg-emerald-500 px-6 text-sm font-semibold text-slate-50 tracking-wide shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-600 hover:shadow-emerald-500/30 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none"
-            >
-              Hitung Kalori & Gula
-            </Button>
+            {/* Submit */}
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  type="submit"
+                  className="flex h-12 w-full items-center justify-center rounded-xl bg-emerald-500 px-6 text-sm font-semibold text-slate-50 tracking-wide shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-600 hover:shadow-emerald-500/30 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none"
+                >
+                  Hitung Kalori & Gula
+                </Button>
+              </DialogTrigger>
+
+              <DialogContent className="max-w-md rounded-2xl">
+                <DialogHeader className="flex flex-row items-center gap-3">
+                  <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-emerald-100">
+                    <CheckCircle2 className="size-7 text-emerald-500" />
+                  </div>
+                  <div className="flex-1">
+                    <DialogTitle className="text-lg text-start">
+                      Hasil Perhitungan
+                    </DialogTitle>
+
+                    <DialogDescription className="pt-1 text-sm text-start">
+                      Berdasarkan data tubuh dan aktivitas yang kamu masukkan.
+                    </DialogDescription>
+                  </div>
+                </DialogHeader>
+
+                <div className="space-y-3 py-3">
+                  {/* Calories */}
+                  <div className="rounded-xl border border-slate-100 bg-slate-100 p-4">
+                    <p className="text-xs font-medium text-slate-500">
+                      Total Kalori Harian
+                    </p>
+
+                    <p className="mt-1 text-2xl font-bold text-emerald-600">
+                      {getConvertMaxSugar(TDEE)}
+                      <span className="ml-1 text-sm font-medium text-slate-500">
+                        kcal
+                      </span>
+                    </p>
+                  </div>
+
+                  {/* Sugar */}
+                  <div className="rounded-xl border border-slate-100 bg-slate-100 p-4">
+                    <p className="text-xs font-medium text-slate-500">
+                      Batas Gula Harian
+                    </p>
+
+                    <p className="mt-1 text-2xl font-bold text-emerald-600">
+                      {getConvertMaxSugar(yourMaxSugar)}
+                      <span className="ml-1 text-sm font-medium text-slate-500">
+                        gram
+                      </span>
+                    </p>
+                  </div>
+                </div>
+
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button variant="outline" className="rounded-xl">
+                      Batal
+                    </Button>
+                  </DialogClose>
+
+                  <DialogClose asChild>
+                    <Button className="rounded-xl bg-emerald-500 text-slate-50 tracking-wide hover:bg-emerald-600">
+                      Lihat Hasil
+                    </Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </form>
           <p className="text-xs px-7 text-right mb-5 text-muted-foreground">
             Hasil perhitungan merupakan estimasi dan bisa berbeda pada setiap
@@ -343,80 +410,3 @@ export default function InputCalculateCalories() {
     </div>
   );
 }
-
-// {/* Submit */}
-// <Dialog>
-//   <DialogTrigger asChild>
-//     <Button
-//       type="button"
-//       className="flex h-12 w-full items-center justify-center rounded-xl bg-emerald-500 px-6 text-sm font-semibold text-slate-50 tracking-wide shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-600 hover:shadow-emerald-500/30 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none"
-//     >
-//       Hitung Kalori & Gula
-//     </Button>
-//   </DialogTrigger>
-
-//   {!isErrorCalculation && (
-//     <DialogContent className="max-w-md rounded-2xl">
-//       <DialogHeader>
-//         <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-emerald-50">
-//           <CheckCircle2 className="size-7 text-emerald-500" />
-//         </div>
-
-//         <DialogTitle className="text-xl">
-//           Hasil Perhitungan
-//         </DialogTitle>
-
-//         <DialogDescription className="pt-2">
-//           Berdasarkan data tubuh dan aktivitas yang kamu masukkan.
-//         </DialogDescription>
-//       </DialogHeader>
-
-//       <div className="space-y-3 py-4">
-//         {/* Calories */}
-//         <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
-//           <p className="text-xs font-medium text-slate-500">
-//             Total Kalori Harian
-//           </p>
-
-//           <p className="mt-1 text-2xl font-bold text-emerald-600">
-//             {getConvertMaxSugar(TDEE)}
-//             <span className="ml-1 text-sm font-medium text-slate-500">
-//               kcal
-//             </span>
-//           </p>
-//         </div>
-
-//         {/* Sugar */}
-//         <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
-//           <p className="text-xs font-medium text-slate-500">
-//             Batas Gula Harian
-//           </p>
-
-//           <p className="mt-1 text-2xl font-bold text-emerald-600">
-//             {getConvertMaxSugar(yourMaxSugar)}
-//             <span className="ml-1 text-sm font-medium text-slate-500">
-//               gram
-//             </span>
-//           </p>
-//         </div>
-//       </div>
-
-//       <DialogFooter>
-//         <DialogClose asChild>
-//           <Button variant="outline" className="rounded-xl">
-//             Batal
-//           </Button>
-//         </DialogClose>
-
-//         <DialogClose asChild>
-//           <Button
-//             onClick={() => setIsValidCalculation(true)}
-//             className="rounded-xl bg-emerald-500 text-white hover:bg-emerald-600"
-//           >
-//             Lihat Hasil
-//           </Button>
-//         </DialogClose>
-//       </DialogFooter>
-//     </DialogContent>
-//   )}
-// </Dialog>

@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { UseFormRegisterReturn } from "react-hook-form";
+import { FieldError, UseFormRegisterReturn } from "react-hook-form";
 
 type SelectOptionProps = {
   option: {
@@ -37,10 +37,12 @@ export function SelectOption({
         className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${
           isSelected
             ? "bg-emerald-500 text-white"
-            : "bg-slate-100 text-slate-500"
+            : "bg-slate-200 text-slate-500"
         }`}
       >
-        <option.icon className="size-5" />
+        <option.icon
+          className={`size-5 ${isSelected ? `text-amber-100` : `text-black`}`}
+        />
       </div>
 
       {/* Label */}
