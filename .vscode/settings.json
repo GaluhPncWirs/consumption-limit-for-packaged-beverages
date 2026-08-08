@@ -1,6 +1,7 @@
 {
     "conventionalCommits.scopes": [
         "memperbaiki fitur search tidak muncul tab suggestnya",
-        "selesai untuk merombak hanya ui nya saja di halaman perhitungan kalori dan gula"
+        "selesai untuk merombak hanya ui nya saja di halaman perhitungan kalori dan gula",
+        "refaktor code ui bagian selectOption (jenis kelamin) diubah menjadi component agar reusable"
     ]
 }

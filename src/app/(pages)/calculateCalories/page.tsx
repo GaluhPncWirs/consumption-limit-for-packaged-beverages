@@ -22,7 +22,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -41,133 +40,139 @@ import FloatingLabel from "@/components/floating-label/component";
 import { activityLevels } from "@/data-ui/calculate-page/data-activity";
 import { SelectOption } from "@/components/optionCard/component";
 import { genderOptions } from "@/data-ui/calculate-page/gender-option";
+import { z } from "zod";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const dataPersonalUserSchema = z.object({
+  jenisKelamin: z.enum(["male", "female"], {
+    message: "Pilih jenis kelamin terlebih dahulu",
+  }),
+  usia: z.coerce
+    .number()
+    .int("Usia harus berupa angka bulat")
+    .min(1, "Usia minimal 1 tahun")
+    .max(99, "Usia maksimal 99 tahun"),
+  tinggiBadan: z.coerce
+    .number()
+    .int("Tinggi badan harus berupa angka bulat")
+    .min(5, "Tinggi badan minimal 5 cm")
+    .max(999, "Tinggi badan maksimal 999 cm"),
+  beratBadan: z.coerce
+    .number()
+    .min(1, "Berat badan minimal 1 kg")
+    .max(999, "Berat badan maksimal 999 kg"),
+  tingkatAktifitas: z
+    .string()
+    .min(1, "Pilih tingkat aktifitas terlebih dahulu"),
+});
+
+type DataPersonalUserSchema = z.infer<typeof dataPersonalUserSchema>;
 
 export default function InputCalculateCalories() {
-  const [selectedValueActivityLevel, setSelectedValueActivityLevel] =
-    useState<string>("");
-  const [isValidCalculation, setIsValidCalculation] = useState<boolean>(false);
-  const [isErrorCalculation, setIsErrorCalculation] = useState<boolean>(false);
   const [yourMaxSugar, setYourMaxSugar] = useState<number>(0);
   const [loadingNextPage, setLoadingNextPage] = useState<boolean>(false);
   const [TDEE, setTDEE] = useState<number>(0);
   const { push } = useRouter();
-
-  const { mustFilled, handleValueInput, isFormFilled } = useHandleInput({
-    gender: "",
-    age: "",
-    height: "",
-    weight: "",
-    activityLevel: "",
+  const {
+    register,
+    watch,
+    handleSubmit,
+    control,
+    formState: { errors, isSubmitting },
+  } = useForm<DataPersonalUserSchema>({
+    resolver: zodResolver(dataPersonalUserSchema),
+    defaultValues: {
+      jenisKelamin: "male",
+      usia: 0,
+      tinggiBadan: 0,
+      beratBadan: 0,
+      tingkatAktifitas: "",
+    },
   });
 
-  function handleCalculateCalories(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const targetValue = event.target as HTMLFormElement;
+  const selectedGender = watch("jenisKelamin");
 
-    const gender = targetValue.gender.value;
-    const age = Number(targetValue.age.value);
-    const heightBody = Number(targetValue.height.value);
-    const weightBody = Number(targetValue.weight.value);
+  async function onSubmit(data: DataPersonalUserSchema) {
+    let basalMetabolicRate: number | null = null;
 
-    const maxLengthAge = targetValue.age.value.length;
-    const maxLengthHeight = targetValue.height.value.length;
-    const maxLengthWeight = targetValue.weight.value.length;
-
-    if (
-      maxLengthAge > 2 ||
-      maxLengthHeight > 3 ||
-      maxLengthWeight > 2 ||
-      age >= 60 ||
-      age <= 10 ||
-      heightBody >= 200 ||
-      heightBody <= 50 ||
-      weightBody >= 80 ||
-      weightBody <= 10
-    ) {
-      toast("❌ Perhitungan Tidak Valid", {
-        description:
-          "Hasilnya tidak memenuhi standar, silahkan input kembali !",
-      });
-      setIsErrorCalculation(true);
-    } else {
-      let basalMetabolicRate: number | null = null;
-
-      if (gender === "male") {
-        basalMetabolicRate = 10 * weightBody + 6.25 * heightBody - 5 * age + 5;
-      }
-
-      if (gender === "female") {
-        basalMetabolicRate =
-          10 * weightBody + 6.25 * heightBody - 5 * age + 161;
-      }
-
-      let choosenActivityLevel: number | null = null;
-
-      switch (selectedValueActivityLevel) {
-        case "sedentary":
-          choosenActivityLevel = 1.2;
-          break;
-        case "lightlyActive":
-          choosenActivityLevel = 1.375;
-          break;
-        case "moderatelyActive":
-          choosenActivityLevel = 1.55;
-          break;
-        case "veryActive":
-          choosenActivityLevel = 1.725;
-          break;
-        case "extraActive":
-          choosenActivityLevel = 1.9;
-          break;
-        default:
-          choosenActivityLevel = 1.2;
-      }
-
-      const totalDailyEnergyExpenditure =
-        basalMetabolicRate! * choosenActivityLevel;
-      const resultTotalCalorie = totalDailyEnergyExpenditure * 0.1;
-      const resultTotalMaxSugar = resultTotalCalorie / 4;
-
-      if (resultTotalMaxSugar < 5 || resultTotalMaxSugar > 100) {
-        setIsErrorCalculation(true);
-        toast("Perhitungan Tidak Valid ❌", {
-          description:
-            "Hasilnya Tidak Memenuhi Standar, Silahkan Input Kembali !",
-        });
-      }
-      setTDEE(totalDailyEnergyExpenditure);
-      setYourMaxSugar(resultTotalMaxSugar);
+    if (data.jenisKelamin === "male") {
+      basalMetabolicRate =
+        10 * data.beratBadan + 6.25 * data.tinggiBadan - 5 * data.usia + 5;
     }
+
+    if (data.jenisKelamin === "female") {
+      basalMetabolicRate =
+        10 * data.beratBadan + 6.25 * data.tinggiBadan - 5 * data.usia + 161;
+    }
+
+    let choosenActivityLevel: number | null = null;
+
+    switch (data.tingkatAktifitas) {
+      case "sedentary":
+        choosenActivityLevel = 1.2;
+        break;
+      case "lightlyActive":
+        choosenActivityLevel = 1.375;
+        break;
+      case "moderatelyActive":
+        choosenActivityLevel = 1.55;
+        break;
+      case "veryActive":
+        choosenActivityLevel = 1.725;
+        break;
+      case "extraActive":
+        choosenActivityLevel = 1.9;
+        break;
+      default:
+        choosenActivityLevel = 1.2;
+    }
+
+    const totalDailyEnergyExpenditure =
+      basalMetabolicRate! * choosenActivityLevel;
+    const resultTotalCalorie = totalDailyEnergyExpenditure * 0.1;
+    const resultTotalMaxSugar = resultTotalCalorie / 4;
+
+    if (resultTotalMaxSugar < 5 || resultTotalMaxSugar > 100) {
+      toast("Perhitungan Tidak Valid ❌", {
+        description:
+          "Hasilnya Tidak Memenuhi Standar, Silahkan Input Kembali !",
+      });
+      return;
+    }
+
+    setTDEE(totalDailyEnergyExpenditure);
+    setYourMaxSugar(resultTotalMaxSugar);
   }
 
-  useEffect(() => {
-    if (isValidCalculation) {
-      async function isCalculateSuccess() {
-        try {
-          setLoadingNextPage(true);
-          const req = await fetch("/api/tokenJWT/resultCalories", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ resultCalculate: yourMaxSugar }),
-          });
-          const response = await req.json();
-          if (response.status === "success") {
-            push("/mainContent/calculateBeverage");
-            toast("✅ Berhasil", {
-              description: "Lanjut ke halaman perhitungan konsumsi minuman",
-            });
-          }
-        } catch {
-          toast("❌ Gagal", {
-            description: "Fetch API error",
-          });
-        } finally {
-          setLoadingNextPage(false);
-        }
-      }
-      isCalculateSuccess();
-    }
-  }, [isValidCalculation, yourMaxSugar, push]);
+  // useEffect(() => {
+  //   if (isValidCalculation) {
+  //     async function isCalculateSuccess() {
+  //       try {
+  //         setLoadingNextPage(true);
+  //         const req = await fetch("/api/tokenJWT/resultCalories", {
+  //           method: "POST",
+  //           headers: { "Content-Type": "application/json" },
+  //           body: JSON.stringify({ resultCalculate: yourMaxSugar }),
+  //         });
+  //         const response = await req.json();
+  //         if (response.status === "success") {
+  //           push("/mainContent/calculateBeverage");
+  //           toast("✅ Berhasil", {
+  //             description: "Lanjut ke halaman perhitungan konsumsi minuman",
+  //           });
+  //         }
+  //       } catch {
+  //         toast("❌ Gagal", {
+  //           description: "Fetch API error",
+  //         });
+  //       } finally {
+  //         setLoadingNextPage(false);
+  //       }
+  //     }
+  //     isCalculateSuccess();
+  //   }
+  // }, [isValidCalculation, yourMaxSugar, push]);
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-8">
@@ -192,7 +197,7 @@ export default function InputCalculateCalories() {
           {/* Form */}
           <form
             className="space-y-5 p-6 sm:px-8 sm:py-5"
-            onSubmit={(e) => handleCalculateCalories(e)}
+            onSubmit={handleSubmit(onSubmit)}
           >
             {/* Gender */}
             <div className="space-y-3">
@@ -207,13 +212,8 @@ export default function InputCalculateCalories() {
                   <SelectOption
                     key={option.value}
                     option={option}
-                    isSelected={mustFilled.gender === option.value}
-                    onChange={(value) =>
-                      mustFilled((prev) => ({
-                        ...prev,
-                        gender: value,
-                      }))
-                    }
+                    isSelected={selectedGender === option.value}
+                    register={register("jenisKelamin")}
                   />
                 ))}
               </div>
@@ -244,10 +244,8 @@ export default function InputCalculateCalories() {
                     label="Usia"
                     desc="tahun"
                     Icon={CalendarDays}
-                    min={1}
-                    max={100}
-                    value={mustFilled.age}
                     placeholder=" "
+                    register={register("usia")}
                   />
                 </div>
 
@@ -259,9 +257,8 @@ export default function InputCalculateCalories() {
                     label="Tinggi"
                     desc="cm"
                     Icon={Ruler}
-                    min={10}
-                    value={mustFilled.height}
                     placeholder=" "
+                    register={register("tinggiBadan")}
                   />
                 </div>
 
@@ -273,9 +270,8 @@ export default function InputCalculateCalories() {
                     label="Berat"
                     desc="kg"
                     Icon={Scale}
-                    min={5}
-                    value={mustFilled.weight}
                     placeholder=" "
+                    register={register("beratBadan")}
                   />
                 </div>
               </div>
@@ -294,116 +290,47 @@ export default function InputCalculateCalories() {
                 </label>
               </div>
 
-              <Select
-                value={mustFilled.activityLevel}
-                onValueChange={(value) => {
-                  setSelectedValueActivityLevel(value);
-                  handleValueInput({
-                    target: {
-                      id: "activityLevel",
-                      value: value,
-                    },
-                  });
-                }}
-              >
-                <SelectTrigger className="h-12 rounded-xl px-4 text-sm font-medium shadow-none transition hover:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10">
-                  <SelectValue placeholder="Pilih tingkat aktivitas" />
-                </SelectTrigger>
+              <Controller
+                control={control}
+                name="tingkatAktifitas"
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <>
+                      <SelectTrigger className="h-12 rounded-xl px-4 text-sm font-medium shadow-none transition hover:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10">
+                        <SelectValue placeholder="Pilih tingkat aktivitas" />
+                      </SelectTrigger>
+                      {errors.tingkatAktifitas && (
+                        <p className="text-red-500 text-xs mt-0.5">
+                          {errors.tingkatAktifitas.message}
+                        </p>
+                      )}
+                    </>
 
-                <SelectContent className="rounded-xl">
-                  <SelectGroup>
-                    {activityLevels.map((item) => (
-                      <SelectItem key={item.value} value={item.value}>
-                        <div className="flex items-center gap-2">
-                          <item.icon className="size-4" />
-                          <span>
-                            {item.label} - {item.description}
-                          </span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+                    <SelectContent className="rounded-xl">
+                      <SelectGroup>
+                        {activityLevels.map((item) => (
+                          <SelectItem key={item.value} value={item.value}>
+                            <div className="flex items-center gap-2">
+                              <item.icon className="size-4" />
+                              <span>
+                                {item.label} - {item.description}
+                              </span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
             </div>
 
-            {/* Submit */}
-            <Dialog>
-              <DialogTrigger asChild>
-                <button
-                  type="submit"
-                  disabled={!isFormFilled}
-                  className="flex h-12 w-full items-center justify-center rounded-xl bg-emerald-500 px-6 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-600 hover:shadow-emerald-500/30 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none"
-                >
-                  Hitung Kalori & Gula
-                </button>
-              </DialogTrigger>
-
-              {!isErrorCalculation && (
-                <DialogContent className="max-w-md rounded-2xl">
-                  <DialogHeader>
-                    <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-emerald-50">
-                      <CheckCircle2 className="size-7 text-emerald-500" />
-                    </div>
-
-                    <DialogTitle className="text-xl">
-                      Hasil Perhitungan
-                    </DialogTitle>
-
-                    <DialogDescription className="pt-2">
-                      Berdasarkan data tubuh dan aktivitas yang kamu masukkan.
-                    </DialogDescription>
-                  </DialogHeader>
-
-                  <div className="space-y-3 py-4">
-                    {/* Calories */}
-                    <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
-                      <p className="text-xs font-medium text-slate-500">
-                        Total Kalori Harian
-                      </p>
-
-                      <p className="mt-1 text-2xl font-bold text-emerald-600">
-                        {getConvertMaxSugar(TDEE)}
-                        <span className="ml-1 text-sm font-medium text-slate-500">
-                          kcal
-                        </span>
-                      </p>
-                    </div>
-
-                    {/* Sugar */}
-                    <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
-                      <p className="text-xs font-medium text-slate-500">
-                        Batas Gula Harian
-                      </p>
-
-                      <p className="mt-1 text-2xl font-bold text-emerald-600">
-                        {getConvertMaxSugar(yourMaxSugar)}
-                        <span className="ml-1 text-sm font-medium text-slate-500">
-                          gram
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-
-                  <DialogFooter>
-                    <DialogClose asChild>
-                      <Button variant="outline" className="rounded-xl">
-                        Batal
-                      </Button>
-                    </DialogClose>
-
-                    <DialogClose asChild>
-                      <Button
-                        onClick={() => setIsValidCalculation(true)}
-                        className="rounded-xl bg-emerald-500 text-white hover:bg-emerald-600"
-                      >
-                        Lihat Hasil
-                      </Button>
-                    </DialogClose>
-                  </DialogFooter>
-                </DialogContent>
-              )}
-            </Dialog>
+            <Button
+              type="submit"
+              className="flex h-12 w-full items-center justify-center rounded-xl bg-emerald-500 px-6 text-sm font-semibold text-slate-50 tracking-wide shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-600 hover:shadow-emerald-500/30 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none"
+            >
+              Hitung Kalori & Gula
+            </Button>
           </form>
           <p className="text-xs px-7 text-right mb-5 text-muted-foreground">
             Hasil perhitungan merupakan estimasi dan bisa berbeda pada setiap
@@ -416,3 +343,80 @@ export default function InputCalculateCalories() {
     </div>
   );
 }
+
+// {/* Submit */}
+// <Dialog>
+//   <DialogTrigger asChild>
+//     <Button
+//       type="button"
+//       className="flex h-12 w-full items-center justify-center rounded-xl bg-emerald-500 px-6 text-sm font-semibold text-slate-50 tracking-wide shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-600 hover:shadow-emerald-500/30 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none"
+//     >
+//       Hitung Kalori & Gula
+//     </Button>
+//   </DialogTrigger>
+
+//   {!isErrorCalculation && (
+//     <DialogContent className="max-w-md rounded-2xl">
+//       <DialogHeader>
+//         <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-emerald-50">
+//           <CheckCircle2 className="size-7 text-emerald-500" />
+//         </div>
+
+//         <DialogTitle className="text-xl">
+//           Hasil Perhitungan
+//         </DialogTitle>
+
+//         <DialogDescription className="pt-2">
+//           Berdasarkan data tubuh dan aktivitas yang kamu masukkan.
+//         </DialogDescription>
+//       </DialogHeader>
+
+//       <div className="space-y-3 py-4">
+//         {/* Calories */}
+//         <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
+//           <p className="text-xs font-medium text-slate-500">
+//             Total Kalori Harian
+//           </p>
+
+//           <p className="mt-1 text-2xl font-bold text-emerald-600">
+//             {getConvertMaxSugar(TDEE)}
+//             <span className="ml-1 text-sm font-medium text-slate-500">
+//               kcal
+//             </span>
+//           </p>
+//         </div>
+
+//         {/* Sugar */}
+//         <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
+//           <p className="text-xs font-medium text-slate-500">
+//             Batas Gula Harian
+//           </p>
+
+//           <p className="mt-1 text-2xl font-bold text-emerald-600">
+//             {getConvertMaxSugar(yourMaxSugar)}
+//             <span className="ml-1 text-sm font-medium text-slate-500">
+//               gram
+//             </span>
+//           </p>
+//         </div>
+//       </div>
+
+//       <DialogFooter>
+//         <DialogClose asChild>
+//           <Button variant="outline" className="rounded-xl">
+//             Batal
+//           </Button>
+//         </DialogClose>
+
+//         <DialogClose asChild>
+//           <Button
+//             onClick={() => setIsValidCalculation(true)}
+//             className="rounded-xl bg-emerald-500 text-white hover:bg-emerald-600"
+//           >
+//             Lihat Hasil
+//           </Button>
+//         </DialogClose>
+//       </DialogFooter>
+//     </DialogContent>
+//   )}
+// </Dialog>

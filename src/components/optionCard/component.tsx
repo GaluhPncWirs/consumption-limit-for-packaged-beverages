@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { Input } from "../ui/input";
+import { UseFormRegisterReturn } from "react-hook-form";
 
 type SelectOptionProps = {
   option: {
@@ -9,16 +9,14 @@ type SelectOptionProps = {
     icon: LucideIcon;
   };
   isSelected: boolean;
-  onChange: (value: string) => void;
+  register: UseFormRegisterReturn;
 };
 
 export function SelectOption({
   option,
   isSelected,
-  onChange,
+  register,
 }: SelectOptionProps) {
-  const Icon = option.icon;
-
   return (
     <label
       className={`group flex cursor-pointer items-center gap-3 rounded-2xl border p-4 transition-all ${
@@ -27,13 +25,11 @@ export function SelectOption({
           : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
       }`}
     >
-      <Input
+      <input
         type="radio"
-        name="gender"
         value={option.value}
         className="sr-only"
-        checked={isSelected}
-        onChange={() => onChange(option.value)}
+        {...register}
       />
 
       {/* Icon */}
@@ -44,7 +40,7 @@ export function SelectOption({
             : "bg-slate-100 text-slate-500"
         }`}
       >
-        <Icon className="size-5" />
+        <option.icon className="size-5" />
       </div>
 
       {/* Label */}

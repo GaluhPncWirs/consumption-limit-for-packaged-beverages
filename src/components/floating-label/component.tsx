@@ -1,30 +1,27 @@
 import { Input } from "@/components/ui/input";
 import { LucideIcon } from "lucide-react";
 import { HTMLInputTypeAttribute } from "react";
+import { UseFormRegisterReturn } from "react-hook-form";
 
 type PropsFloatingLabel = {
   type: HTMLInputTypeAttribute | undefined;
   id: string;
-  value: string | number | readonly string[] | undefined;
   label: string;
+  register: UseFormRegisterReturn;
   Icon?: LucideIcon | undefined;
   desc?: string;
   placeholder?: string;
-  min?: number;
-  max?: number;
 };
 
 export default function FloatingLabel(props: PropsFloatingLabel) {
-  const { type, id, value, label, desc, placeholder, min, max, Icon } = props;
+  const { type, id, label, register, desc, placeholder, Icon } = props;
   return (
     <div className="relative">
       <Input
         type={type}
         id={id}
-        min={min}
-        max={max}
-        value={value}
         placeholder={placeholder}
+        {...register}
         className="peer h-12 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 pr-14 text-sm font-medium text-slate-800 outline-none transition-all hover:border-slate-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10"
       />
       <label
