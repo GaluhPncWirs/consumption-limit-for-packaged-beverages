@@ -1,5 +1,5 @@
 export function getConvertMaxSugar(maxSugar) {
-  return maxSugar.toLocaleString("id-ID", {
+  return maxSugar?.toLocaleString("id-ID", {
     maximumFractionDigits: 0,
   });
 }

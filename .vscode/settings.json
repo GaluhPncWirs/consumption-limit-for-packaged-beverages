@@ -3,6 +3,7 @@
         "memperbaiki fitur search tidak muncul tab suggestnya",
         "selesai untuk merombak hanya ui nya saja di halaman perhitungan kalori dan gula",
         "refaktor code ui bagian selectOption (jenis kelamin) diubah menjadi component agar reusable",
-        "selesai untuk konfigurasi semua input menggunakan react-hook-form dan juga zod di halaman perhitungan kalori dan gula "
+        "selesai untuk konfigurasi semua input menggunakan react-hook-form dan juga zod di halaman perhitungan kalori dan gula ",
+        "selesai untuk rombak ui/ux halaman perhitungan kalori dan gula"
     ]
 }

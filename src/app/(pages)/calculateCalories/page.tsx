@@ -69,10 +69,15 @@ const dataPersonalUserSchema = z.object({
 
 type DataPersonalUserSchema = z.infer<typeof dataPersonalUserSchema>;
 
+type CalculateResult = {
+  totalDailyEnergyExpenditure: number;
+  resultTotalMaxSugar: number;
+};
+
 export default function InputCalculateCalories() {
-  const [yourMaxSugar, setYourMaxSugar] = useState<number>(0);
-  const [loadingNextPage, setLoadingNextPage] = useState<boolean>(false);
-  const [TDEE, setTDEE] = useState<number>(0);
+  const [openResultDialog, setOpenResultDialog] = useState(false);
+  const [resultCalculate, setResultCalculate] =
+    useState<CalculateResult | null>(null);
   const { push } = useRouter();
   const {
     register,
@@ -86,20 +91,20 @@ export default function InputCalculateCalories() {
 
   const selectedGender = watch("jenisKelamin");
 
-  async function onSubmit(data: DataPersonalUserSchema) {
-    let basalMetabolicRate: number | null = null;
+  function handleResultCalculate(
+    data: DataPersonalUserSchema,
+  ): CalculateResult | null {
+    let basalMetabolicRate: number;
 
     if (data.jenisKelamin === "male") {
       basalMetabolicRate =
         10 * data.beratBadan + 6.25 * data.tinggiBadan - 5 * data.usia + 5;
-    }
-
-    if (data.jenisKelamin === "female") {
+    } else {
       basalMetabolicRate =
-        10 * data.beratBadan + 6.25 * data.tinggiBadan - 5 * data.usia + 161;
+        10 * data.beratBadan + 6.25 * data.tinggiBadan - 5 * data.usia - 161;
     }
 
-    let choosenActivityLevel: number | null = null;
+    let choosenActivityLevel: number;
 
     switch (data.tingkatAktifitas) {
       case "sedentary":
@@ -122,7 +127,7 @@ export default function InputCalculateCalories() {
     }
 
     const totalDailyEnergyExpenditure =
-      basalMetabolicRate! * choosenActivityLevel;
+      basalMetabolicRate * choosenActivityLevel;
     const resultTotalCalorie = totalDailyEnergyExpenditure * 0.1;
     const resultTotalMaxSugar = resultTotalCalorie / 4;
 
@@ -131,41 +136,56 @@ export default function InputCalculateCalories() {
         description:
           "Hasilnya Tidak Memenuhi Standar, Silahkan Input Kembali !",
       });
-      return;
+      return null;
     }
 
-    setTDEE(totalDailyEnergyExpenditure);
-    setYourMaxSugar(resultTotalMaxSugar);
+    return {
+      totalDailyEnergyExpenditure,
+      resultTotalMaxSugar,
+    };
   }
 
-  // useEffect(() => {
-  //   if (isValidCalculation) {
-  //     async function isCalculateSuccess() {
-  //       try {
-  //         setLoadingNextPage(true);
-  //         const req = await fetch("/api/tokenJWT/resultCalories", {
-  //           method: "POST",
-  //           headers: { "Content-Type": "application/json" },
-  //           body: JSON.stringify({ resultCalculate: yourMaxSugar }),
-  //         });
-  //         const response = await req.json();
-  //         if (response.status === "success") {
-  //           push("/mainContent/calculateBeverage");
-  //           toast("✅ Berhasil", {
-  //             description: "Lanjut ke halaman perhitungan konsumsi minuman",
-  //           });
-  //         }
-  //       } catch {
-  //         toast("❌ Gagal", {
-  //           description: "Fetch API error",
-  //         });
-  //       } finally {
-  //         setLoadingNextPage(false);
-  //       }
-  //     }
-  //     isCalculateSuccess();
-  //   }
-  // }, [isValidCalculation, yourMaxSugar, push]);
+  async function onSubmit(data: DataPersonalUserSchema) {
+    const result = handleResultCalculate(data);
+    setResultCalculate(result);
+    setOpenResultDialog(true);
+  }
+
+  async function handleContinue() {
+    if (!resultCalculate) return;
+
+    try {
+      const req = await fetch("/api/tokenJWT/resultCalories", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          resultCalculate: resultCalculate.resultTotalMaxSugar,
+        }),
+      });
+
+      const response = await req.json();
+
+      if (response.status !== "success") {
+        toast("❌ Gagal", {
+          description: "Gagal menyimpan hasil kalkulasi",
+        });
+
+        return;
+      }
+
+      toast("✅ Berhasil", {
+        description: "Lanjut ke halaman perhitungan konsumsi minuman",
+      });
+
+      push("/mainContent/calculateBeverage");
+    } catch {
+      toast("❌ Gagal", {
+        description: "Fetch API error",
+      });
+    }
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-8">
@@ -361,7 +381,9 @@ export default function InputCalculateCalories() {
                     </p>
 
                     <p className="mt-1 text-2xl font-bold text-emerald-600">
-                      {getConvertMaxSugar(TDEE)}
+                      {getConvertMaxSugar(
+                        resultCalculate?.totalDailyEnergyExpenditure,
+                      )}
                       <span className="ml-1 text-sm font-medium text-slate-500">
                         kcal
                       </span>
@@ -375,7 +397,7 @@ export default function InputCalculateCalories() {
                     </p>
 
                     <p className="mt-1 text-2xl font-bold text-emerald-600">
-                      {getConvertMaxSugar(yourMaxSugar)}
+                      {getConvertMaxSugar(resultCalculate?.resultTotalMaxSugar)}
                       <span className="ml-1 text-sm font-medium text-slate-500">
                         gram
                       </span>
@@ -390,11 +412,13 @@ export default function InputCalculateCalories() {
                     </Button>
                   </DialogClose>
 
-                  <DialogClose asChild>
-                    <Button className="rounded-xl bg-emerald-500 text-slate-50 tracking-wide hover:bg-emerald-600">
-                      Lihat Hasil
-                    </Button>
-                  </DialogClose>
+                  <Button
+                    className="rounded-xl bg-emerald-500 text-slate-50 tracking-wide hover:bg-emerald-600"
+                    type="button"
+                    onClick={handleContinue}
+                  >
+                    Lanjut
+                  </Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
@@ -406,7 +430,7 @@ export default function InputCalculateCalories() {
         </div>
       </div>
 
-      {loadingNextPage && <LoadingCompenent />}
+      {isSubmitting && <LoadingCompenent />}
     </div>
   );
 }
