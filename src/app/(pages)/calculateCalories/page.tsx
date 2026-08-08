@@ -37,9 +37,10 @@ import {
   UserRound,
 } from "lucide-react";
 import { getConvertMaxSugar } from "../../hooks/getConvertMaxSugar";
-import { Input } from "@/components/ui/input";
 import FloatingLabel from "@/components/floating-label/component";
 import { activityLevels } from "@/data-ui/calculate-page/data-activity";
+import { SelectOption } from "@/components/optionCard/component";
+import { genderOptions } from "@/data-ui/calculate-page/gender-option";
 
 export default function InputCalculateCalories() {
   const [selectedValueActivityLevel, setSelectedValueActivityLevel] =
@@ -169,207 +170,6 @@ export default function InputCalculateCalories() {
   }, [isValidCalculation, yourMaxSugar, push]);
 
   return (
-    // <div className="min-h-screen flex items-center justify-center px-4 py-8">
-    //   <div className="bg-[#f9fff9] rounded-lg py-7 shadow-lg shadow-slate-700 w-11/12 sm:w-[30rem] lg:w-[35rem]">
-    //     <h1 className="text-center mb-7 text-2xl font-bold tracking-wide">
-    //       Penghitung Kalori & Gula Harian
-    //     </h1>
-    //     <form className="mx-12" onSubmit={(e) => handleCalculateCalories(e)}>
-    //       <div className="flex flex-col justify-center gap-y-5">
-    //         <div
-    //           className="flex gap-5 items-center font-semibold"
-    //           id="inputGender"
-    //         >
-    //           <div className="flex gap-x-4 items-center">
-    //             <Image
-    //               width={200}
-    //               height={200}
-    //               src="/images/pageCalculateCalories/gender.png"
-    //               alt="gender"
-    //               className="size-8"
-    //               loading="eager"
-    //             />
-    //             <span className="text-lg">Gender</span>
-    //             <input
-    //               type="radio"
-    //               value="male"
-    //               id="gender"
-    //               className="cursor-pointer"
-    //               onChange={handleValueInput}
-    //               checked={mustFilled.gender === "male"}
-    //             />
-    //             <label htmlFor="gender">Pria</label>
-
-    //             <input
-    //               type="radio"
-    //               value="female"
-    //               id="gender"
-    //               className="cursor-pointer"
-    //               onChange={handleValueInput}
-    //               checked={mustFilled.gender === "female"}
-    //             />
-    //             <label htmlFor="gender">Wanita</label>
-    //           </div>
-    //         </div>
-
-    //         <ComponentInput
-    //           titleInput="Usia (tahun)"
-    //           srcImg="/images/pageCalculateCalories/age.png"
-    //           altImg="age"
-    //           htmlFor="age"
-    //         >
-    //           <input
-    //             type="number"
-    //             id="age"
-    //             className="inputField peer"
-    //             onChange={handleValueInput}
-    //             value={mustFilled.age}
-    //             maxLength={2}
-    //           />
-    //         </ComponentInput>
-
-    //         <ComponentInput
-    //           titleInput="Tinggi Badan (cm)"
-    //           srcImg="/images/pageCalculateCalories/height.png"
-    //           altImg="height"
-    //           htmlFor="height"
-    //         >
-    //           <input
-    //             type="number"
-    //             id="height"
-    //             className="inputField peer"
-    //             onChange={handleValueInput}
-    //             value={mustFilled.height}
-    //           />
-    //         </ComponentInput>
-
-    //         <ComponentInput
-    //           titleInput="Berat Badan (kg)"
-    //           srcImg="/images/pageCalculateCalories/weight.png"
-    //           altImg="weight"
-    //           htmlFor="weight"
-    //         >
-    //           <input
-    //             type="number"
-    //             id="weight"
-    //             className="inputField peer"
-    //             onChange={handleValueInput}
-    //             value={mustFilled.weight}
-    //           />
-    //         </ComponentInput>
-
-    //         <div>
-    //           <div className="flex gap-x-3 mb-3 items-center">
-    //             <Image
-    //               width={200}
-    //               height={200}
-    //               src="/images/pageCalculateCalories/activity.png"
-    //               alt="activity"
-    //               className="size-8"
-    //               loading="eager"
-    //             />
-    //             <label
-    //               htmlFor="activityLevel"
-    //               className="inline-block text-lg font-semibold"
-    //             >
-    //               Activity Level
-    //             </label>
-    //           </div>
-
-    //           <Select
-    //             defaultValue={mustFilled.activityLevel}
-    //             onValueChange={(value) => {
-    //               setSelectedValueActivityLevel(value);
-    //               handleValueInput({
-    //                 target: {
-    //                   id: "activityLevel",
-    //                   value: value,
-    //                 },
-    //               });
-    //             }}
-    //           >
-    //             <SelectTrigger>
-    //               <SelectValue placeholder="Pilih Tingkat Aktivitas" />
-    //             </SelectTrigger>
-    //             <SelectContent className="px-2">
-    //               <SelectGroup>
-    //                 <SelectLabel>Tingkat Aktivitas</SelectLabel>
-    //                 <SelectItem value="sedentary">
-    //                   Tidak Aktif (Tidak Melakukan Aktifitas Berat)
-    //                 </SelectItem>
-    //                 <SelectItem value="lightlyActive">
-    //                   Aktif (olahraga ringan 1-3 hari per minggu)
-    //                 </SelectItem>
-    //                 <SelectItem value="moderatelyActive">
-    //                   Cukup Aktif (olahraga sedang 3-5 hari per minggu)
-    //                 </SelectItem>
-    //                 <SelectItem value="veryActive">
-    //                   Sangat Aktif (olahraga keras 6-7 hari per minggu)
-    //                 </SelectItem>
-    //                 <SelectItem value="extraActive">
-    //                   Extra Aktif (olahraga sangat keras / pekerjaan fisik)
-    //                 </SelectItem>
-    //               </SelectGroup>
-    //             </SelectContent>
-    //           </Select>
-    //         </div>
-    //       </div>
-
-    //       <Dialog>
-    //         <DialogTrigger asChild>
-    //           <button
-    //             type="submit"
-    //             disabled={!isFormFilled}
-    //             className="disabled:cursor-not-allowed mt-5 py-1 text-center rounded-md bg-[#54C392] hover:bg-green-500 cursor-pointer font-semibold tracking-wide px-7 text-lg"
-    //           >
-    //             Hitung
-    //           </button>
-    //         </DialogTrigger>
-    //         {!isErrorCalculation && (
-    //           <DialogContent>
-    //             <DialogHeader>
-    //               <DialogTitle className="mb-3">
-    //                 Maksimal Konsumsi Gula
-    //               </DialogTitle>
-    //               <div className="flex items-center gap-x-4">
-    //                 <CheckCircle className="text-green-500 size-14" />
-    //                 <DialogDescription className="flex flex-col gap-y-1 tracking-wide">
-    //                   <span>
-    //                     Total Kalori Kamu{" "}
-    //                     <span className="font-bold text-[#54C392] text-lg">
-    //                       {getConvertMaxSugar(TDEE)} kcal
-    //                     </span>
-    //                   </span>
-    //                   <span>
-    //                     <span className="font-bold text-[#54C392] text-lg">
-    //                       {getConvertMaxSugar(yourMaxSugar)} Gram
-    //                     </span>{" "}
-    //                     Gula per Hari
-    //                   </span>
-    //                 </DialogDescription>
-    //               </div>
-    //             </DialogHeader>
-    //             <DialogFooter>
-    //               <DialogClose asChild>
-    //                 <Button variant="outline">Batal</Button>
-    //               </DialogClose>
-    //               <DialogClose asChild>
-    //                 <Button
-    //                   onClick={() => setIsValidCalculation(true)}
-    //                   className="bg-[#54C392] hover:bg-green-400 text-black"
-    //                 >
-    //                   Oke
-    //                 </Button>
-    //               </DialogClose>
-    //             </DialogFooter>
-    //           </DialogContent>
-    //         )}
-    //       </Dialog>
-    //     </form>
-    //   </div>
-    //   {loadingNextPage && <LoadingCompenent />}
-    // </div>
-
     <div className="min-h-screen flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-2xl">
         {/* Card */}
@@ -402,99 +202,20 @@ export default function InputCalculateCalories() {
                   Jenis Kelamin
                 </span>
               </div>
-
               <div className="grid grid-cols-2 gap-3">
-                {/* Male */}
-                <label
-                  className={`group flex cursor-pointer items-center gap-3 rounded-2xl border p-4 transition-all ${
-                    mustFilled.gender === "male"
-                      ? "border-emerald-500 bg-emerald-50 ring-2 ring-emerald-100"
-                      : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
-                  }`}
-                >
-                  <Input
-                    type="radio"
-                    name="gender"
-                    value="male"
-                    className="sr-only"
-                    onChange={handleValueInput}
-                    checked={mustFilled.gender === "male"}
+                {genderOptions.map((option) => (
+                  <SelectOption
+                    key={option.value}
+                    option={option}
+                    isSelected={mustFilled.gender === option.value}
+                    onChange={(value) =>
+                      mustFilled((prev) => ({
+                        ...prev,
+                        gender: value,
+                      }))
+                    }
                   />
-
-                  <div
-                    className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${
-                      mustFilled.gender === "male"
-                        ? "bg-emerald-500 text-white"
-                        : "bg-slate-100 text-slate-500"
-                    }`}
-                  >
-                    <span className="text-lg">♂</span>
-                  </div>
-
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold text-slate-800">Pria</p>
-                    <p className="text-xs text-slate-500">Laki-laki</p>
-                  </div>
-
-                  <div
-                    className={`ml-auto flex size-5 items-center justify-center rounded-full border ${
-                      mustFilled.gender === "male"
-                        ? "border-emerald-500 bg-emerald-500"
-                        : "border-slate-300"
-                    }`}
-                  >
-                    {mustFilled.gender === "male" && (
-                      <div className="size-2 rounded-full bg-white" />
-                    )}
-                  </div>
-                </label>
-
-                {/* Female */}
-                <label
-                  className={`group flex cursor-pointer items-center gap-3 rounded-2xl border p-4 transition-all ${
-                    mustFilled.gender === "female"
-                      ? "border-emerald-500 bg-emerald-50 ring-2 ring-emerald-100"
-                      : "border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50"
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="gender"
-                    value="female"
-                    className="sr-only"
-                    onChange={handleValueInput}
-                    checked={mustFilled.gender === "female"}
-                  />
-
-                  <div
-                    className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${
-                      mustFilled.gender === "female"
-                        ? "bg-emerald-500 text-white"
-                        : "bg-slate-100 text-slate-500"
-                    }`}
-                  >
-                    <span className="text-lg">♀</span>
-                  </div>
-
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold text-slate-800">
-                      Wanita
-                    </p>
-                    <p className="text-xs text-slate-500">Perempuan</p>
-                  </div>
-
-                  <div
-                    className={`ml-auto flex size-5 items-center justify-center rounded-full border ${
-                      mustFilled.gender === "female"
-                        ? "border-emerald-500 bg-emerald-500"
-                        : "border-slate-300"
-                    }`}
-                  >
-                    {mustFilled.gender === "female" && (
-                      <div className="size-2 rounded-full bg-white" />
-                    )}
-                  </div>
-                </label>
+                ))}
               </div>
             </div>
 
@@ -585,7 +306,7 @@ export default function InputCalculateCalories() {
                   });
                 }}
               >
-                <SelectTrigger className="h-12 rounded-xl focus:border-emerald-500 px-4 text-sm font-medium shadow-none transition hover:border-slate-300 focus:ring-4 focus:ring-emerald-500/10">
+                <SelectTrigger className="h-12 rounded-xl px-4 text-sm font-medium shadow-none transition hover:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10">
                   <SelectValue placeholder="Pilih tingkat aktivitas" />
                 </SelectTrigger>
 
@@ -684,13 +405,11 @@ export default function InputCalculateCalories() {
               )}
             </Dialog>
           </form>
+          <p className="text-xs px-7 text-right mb-5 text-muted-foreground">
+            Hasil perhitungan merupakan estimasi dan bisa berbeda pada setiap
+            orang
+          </p>
         </div>
-
-        {/* Optional helper text */}
-        <p className="mt-5 text-center text-xs">
-          Hasil perhitungan merupakan estimasi dan dapat berbeda pada setiap
-          orang.
-        </p>
       </div>
 
       {loadingNextPage && <LoadingCompenent />}

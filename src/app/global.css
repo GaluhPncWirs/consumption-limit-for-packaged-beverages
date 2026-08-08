@@ -111,14 +111,6 @@
     transition:  width 0.5s ease-in-out;
   } */
 
-  .background_template{
-    background-image: url("/images/global/background-beverage.jpg");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
-  }
-
 
   /* untuk gelas */
   .glassCupInside{
@@ -171,8 +163,6 @@
     @apply [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-green-600 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-green-400
   }
 }
-
-
 
 @layer base {
   :root {
@@ -227,16 +217,5 @@
         --chart-3: 30 80% 55%;
         --chart-4: 280 65% 60%;
         --chart-5: 340 75% 55%;
-    }
-}
-
-
-
-@layer base {
-  * {
-    @apply border-border;
-    }
-  body {
-    @apply bg-background text-foreground;
     }
 }
