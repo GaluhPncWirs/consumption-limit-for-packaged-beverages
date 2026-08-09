@@ -1,8 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useHandleInput } from "../../hooks/getIsFormFilled";
-import Image from "next/image";
-import ComponentInput from "@/layout/input/content";
+import { useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -11,7 +8,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -41,7 +37,7 @@ import { activityLevels } from "@/data-ui/calculate-page/data-activity";
 import { SelectOption } from "@/components/optionCard/component";
 import { genderOptions } from "@/data-ui/calculate-page/gender-option";
 import { z } from "zod";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, FieldError } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const dataPersonalUserSchema = z.object({
@@ -69,6 +65,9 @@ const dataPersonalUserSchema = z.object({
 
 type DataPersonalUserSchema = z.infer<typeof dataPersonalUserSchema>;
 
+type FormInput = z.input<typeof dataPersonalUserSchema>;
+type FormOutput = z.output<typeof dataPersonalUserSchema>;
+
 type CalculateResult = {
   totalDailyEnergyExpenditure: number;
   resultTotalMaxSugar: number;
@@ -84,8 +83,8 @@ export default function InputCalculateCalories() {
     watch,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting, isValid },
-  } = useForm<DataPersonalUserSchema>({
+    formState: { errors, isSubmitting },
+  } = useForm<FormInput, unknown, FormOutput>({
     resolver: zodResolver(dataPersonalUserSchema),
   });
 
@@ -269,7 +268,7 @@ export default function InputCalculateCalories() {
                     Icon={CalendarDays}
                     placeholder=" "
                     register={register("usia")}
-                    error={errors.usia}
+                    error={errors.usia as unknown as FieldError | undefined}
                   />
                 </div>
 
@@ -283,7 +282,9 @@ export default function InputCalculateCalories() {
                     Icon={Ruler}
                     placeholder=" "
                     register={register("tinggiBadan")}
-                    error={errors.tinggiBadan}
+                    error={
+                      errors.tinggiBadan as unknown as FieldError | undefined
+                    }
                   />
                 </div>
 
@@ -297,7 +298,9 @@ export default function InputCalculateCalories() {
                     Icon={Scale}
                     placeholder=" "
                     register={register("beratBadan")}
-                    error={errors.beratBadan}
+                    error={
+                      errors.beratBadan as unknown as FieldError | undefined
+                    }
                   />
                 </div>
               </div>
