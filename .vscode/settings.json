@@ -7,6 +7,7 @@
         "selesai untuk rombak ui/ux halaman perhitungan kalori dan gula",
         "memperbaiki bug pada saat dialog muncul dan juga pada saat error field input",
         "memperbaiki error type di halaman perhitungan kalori dan gula",
-        "sedang merombak ui/ux pada halaman hitung konsumsi minuman per hari"
+        "sedang merombak ui/ux pada halaman hitung konsumsi minuman per hari",
+        "menambahkan fitur untuk menampilkan visualisasi limit dari batas gula harian user berdasarkan minuman yang di pilih"
     ]
 }

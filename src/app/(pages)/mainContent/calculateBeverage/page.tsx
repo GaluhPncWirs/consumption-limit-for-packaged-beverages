@@ -26,11 +26,24 @@ import {
 } from "@/components/ui/command";
 import { toast } from "sonner";
 import ComponentInput from "@/layout/input/content";
-import { Candy, ChevronUp, CupSoda, Layers3, Search } from "lucide-react";
+import {
+  ArrowRight,
+  BookOpen,
+  Candy,
+  ChevronUp,
+  CupSoda,
+  ExternalLink,
+  Layers3,
+  Lightbulb,
+  PlayIcon,
+  Search,
+  Sparkles,
+} from "lucide-react";
 import { getConvertMaxSugar } from "@/app/hooks/getConvertMaxSugar";
 import FloatingLabel from "@/components/floating-label/component";
 import { Button } from "@/components/ui/button";
 import { SugarLimitStatus } from "@/components/sugarLimitStatus/component";
+import { Play } from "next/font/google";
 
 export default function CalculateBeverages() {
   const pathname = usePathname();
@@ -267,14 +280,8 @@ export default function CalculateBeverages() {
 
   return (
     <MainContentLayout path={pathname}>
-      {/* <div className="fixed top-0 right-0 bg-green-400 p-3 rounded-bl-md shadow-md shadow-slate-700 z-20">
-        <h1 className="font-semibold text-base md:text-lg tracking-wide px-2">
-          Batas Gula Harian{" "}
-          <span>{getConvertMaxSugar(maksimalGulaHarianPengguna)} Gram</span>
-        </h1>
-      </div> */}
       <div className="flex flex-col justify-center p-7 rounded-lg bg-[#f9fff9] shadow-lg shadow-slate-700">
-        <div className="border-b border-slate-400 p-5 sm:px-8">
+        <div className="border-b border-slate-400 px-5 pb-5 pt-3 sm:px-8">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
             {/* Heading */}
             <div>
@@ -310,21 +317,27 @@ export default function CalculateBeverages() {
             autoComplete="off"
             onSubmit={(e) => handleCalculateProductBeverage(e)}
           >
-            <div className="space-y-5">
+            <div className="space-y-5 mb-5">
               <Command className="pt-2">
                 <FloatingLabel
                   type="text"
                   id="search"
-                  label="Cari Produk"
+                  label="Cari Produk Minuman"
                   Icon={Search}
                   placeholder=" "
                   // register={register("search")}
                   // error={errors.search as unknown as FieldError | undefined}
                 />
+                <p className="mt-2 text-xs text-muted-foreground">
+                  Cari berdasarkan nama produk atau merek minuman
+                </p>
                 {isOpenSearchProduct && (
                   <div>
                     {searchProduk !== "" && (
-                      <CommandList className="p-2 bg-slate-200 absolute z-10 w-full text-[#333333] font-medium max-h-36 overflow-y-auto rounded-b-lg">
+                      <CommandList
+                        className="absolute left-0 top-full z-50 mt-2 w-full rounded-xl border border-slate-200 bg-white p-2 shadow-xl
+"
+                      >
                         {result.length > 0 ? (
                           <CommandGroup heading="Pilih Produk">
                             {result.map((item: productBeverageTypes) => (
@@ -425,11 +438,12 @@ export default function CalculateBeverages() {
             </div>
 
             <Button
-              type="submit"
-              className="disabled:cursor-not-allowed py-1.5 text-center rounded-md bg-emerald-400 hover:bg-emerald-500 cursor-pointer font-semibold tracking-wide w-full text-lg mt-7"
-              disabled={!isFormFilled}
+              type="button"
+              disabled={!selectedProduct}
+              className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-600 active:scale-[0.99] disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none"
             >
-              Hitung
+              Hitung Konsumsi Gula
+              <ArrowRight className="size-5" />
             </Button>
           </form>
 
@@ -468,59 +482,139 @@ export default function CalculateBeverages() {
           </div>
         </div>
 
-        {appearContent === true && (
-          <div className="flex justify-center items-center flex-col mt-7 gap-y-7">
-            <div className="basis-1/2 flex flex-col gap-y-3">
+        {appearContent && (
+          <section className="mt-8 border-t border-slate-400 pt-8">
+            <div className="space-y-6">
+              {/* Section Header */}
               <div>
-                <h1 className="font-semibold text-xl mb-1 tracking-wide">
-                  Fun Fact
-                </h1>
-                <p className="font-medium text-justify">{funFactSugar[0]}</p>
-              </div>
-              <div>
-                <h1 className="font-semibold text-xl mb-1 tracking-wide">
-                  Berdasarkan Sumber Artikel
-                </h1>
-                <p className="font-medium text-justify">
-                  {artikel[0]?.kalimatEdukasi}
-                </p>
-                <p className="mt-1">
-                  — Baca Selengkapnya di{" "}
-                  <a
-                    href={artikel[0]?.linkEdukasi}
-                    target="_blank"
-                    className="text-blue-600 hover:underline font-semibold"
-                  >
-                    {artikel[0]?.sumberReferensi}
-                  </a>
-                </p>
-              </div>
-            </div>
-            <div className="w-full md:w-10/12 flex justify-center items-center">
-              {video[0]?.sumber === "Youtube" ? (
-                <iframe
-                  title="YouTube Shorts And Facebook Short"
-                  src={`https://www.youtube.com/embed/${video[0]?.linkVideo}`}
-                  width={300}
-                  height={400}
-                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  className="rounded-xl w-full"
-                />
-              ) : video[0]?.sumber === "Instagram" ? (
-                <div className="h-[500px] overflow-hidden bg-white">
-                  <blockquote
-                    className="instagram-media m-auto"
-                    data-instgrm-permalink={video[0]?.linkVideo}
-                    data-instgrm-version="14"
-                  ></blockquote>
-                  <script
-                    async
-                    src="https://www.instagram.com/embed.js"
-                  ></script>
+                <div className="flex items-center gap-4">
+                  <div className="flex size-10 items-center justify-center rounded-xl bg-amber-100 text-amber-600">
+                    <Lightbulb className="size-6" />
+                  </div>
+
+                  <div>
+                    <h2 className="text-lg font-bold tracking-tight text-slate-900 sm:text-xl">
+                      Edukasi untuk kamu
+                    </h2>
+
+                    <p className="mt-0.5 text-xs text-slate-500 sm:text-sm">
+                      Kenali lebih jauh tentang konsumsi gula harian.
+                    </p>
+                  </div>
                 </div>
-              ) : null}
+              </div>
+
+              {/* Fun Fact */}
+              <div className="relative overflow-hidden rounded-2xl border border-emerald-100 bg-emerald-100 p-5 sm:p-6">
+                {/* Decorative */}
+                <div className="pointer-events-none absolute -right-8 -top-8 size-28 rounded-full bg-emerald-200/70" />
+
+                <div className="relative">
+                  <div className="mb-3 flex items-center gap-2">
+                    <Sparkles className="size-4 text-emerald-600" />
+
+                    <span className="text-xs font-bold uppercase tracking-wider text-emerald-700">
+                      Fun Fact
+                    </span>
+                  </div>
+
+                  <p className="max-w-3xl text-sm font-medium leading-7 text-slate-700 sm:text-base">
+                    {funFactSugar[0]}
+                  </p>
+                </div>
+              </div>
+
+              {/* Article + Video */}
+              <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+                {/* Article */}
+                <article className="flex flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                  <div className="flex items-start gap-3">
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
+                      <BookOpen className="size-5" />
+                    </div>
+
+                    <div>
+                      <h3 className="text-sm font-bold text-slate-900 sm:text-base">
+                        Berdasarkan Sumber Artikel
+                      </h3>
+
+                      <p className="mt-1 text-xs text-slate-500">
+                        Informasi berdasarkan sumber terpercaya.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 flex-1">
+                    <p className="text-sm leading-7 text-slate-600">
+                      {artikel[0]?.kalimatEdukasi}
+                    </p>
+                  </div>
+
+                  {artikel[0]?.linkEdukasi && (
+                    <div className="mt-5 border-t border-slate-100 pt-4">
+                      <p className="text-xs text-slate-400">Sumber referensi</p>
+
+                      <a
+                        href={artikel[0]?.linkEdukasi}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-1 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 transition-colors hover:text-blue-700 hover:underline"
+                      >
+                        {artikel[0]?.sumberReferensi}
+
+                        <ExternalLink className="size-3.5" />
+                      </a>
+                    </div>
+                  )}
+                </article>
+
+                {/* Video */}
+                {video[0]?.sumber && (
+                  <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                    {/* Video Header */}
+                    <div className="flex items-center gap-3 p-5 sm:p-6">
+                      <div className="flex size-10 items-center justify-center rounded-xl bg-red-100 text-red-500">
+                        <PlayIcon className="size-5 fill-current" />
+                      </div>
+
+                      <div>
+                        <h3 className="text-sm font-bold text-slate-900 sm:text-base">
+                          Video Edukasi
+                        </h3>
+
+                        <p className="mt-1 text-xs text-slate-500">
+                          Pelajari lebih lanjut melalui video.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Video */}
+                    <div className="px-5 pb-5 sm:px-6 sm:pb-6">
+                      {video[0]?.sumber === "Youtube" ? (
+                        <div className="relative aspect-[9/16] max-h-[460px] overflow-hidden rounded-xl bg-slate-100">
+                          <iframe
+                            title="Video edukasi tentang konsumsi gula"
+                            src={`https://www.youtube.com/embed/${video[0]?.linkVideo}`}
+                            className="absolute inset-0 size-full"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowFullScreen
+                          />
+                        </div>
+                      ) : video[0]?.sumber === "Instagram" ? (
+                        <div className="overflow-hidden rounded-xl bg-slate-100">
+                          <blockquote
+                            className="instagram-media m-auto"
+                            data-instgrm-permalink={video[0]?.linkVideo}
+                            data-instgrm-version="14"
+                          />
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          </section>
         )}
       </div>
     </MainContentLayout>
