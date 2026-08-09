@@ -26,8 +26,30 @@ import {
 } from "@/components/ui/command";
 import { toast } from "sonner";
 import ComponentInput from "@/layout/input/content";
-import { ChevronUp } from "lucide-react";
+import { Candy, ChevronUp, CupSoda, Layers3, Search } from "lucide-react";
 import { getConvertMaxSugar } from "@/app/hooks/getConvertMaxSugar";
+import FloatingLabel from "@/components/floating-label/component";
+
+const detailProduct = [
+  {
+    label: "Isi Bersih",
+    color: "bg-emerald-100 text-emerald-600",
+    unit: "ml",
+    icon: CupSoda,
+  },
+  {
+    label: "Gula",
+    color: "bg-pink-100 text-pink-600",
+    unit: "g",
+    icon: Candy,
+  },
+  {
+    label: "Tipe Minuman",
+    color: "bg-blue-100 text-blue-600",
+    unit: null,
+    icon: Layers3,
+  },
+] as const;
 
 export default function CalculateBeverages() {
   const pathname = usePathname();
@@ -275,56 +297,90 @@ export default function CalculateBeverages() {
           Hitung Konsumsi Minuman
         </h1>
         <div
-          className={`mt-7 ${
+          className={`mt-5 grid ${
             fillBottle.length >= 1
-              ? `flex items-center justify-center flex-col gap-y-7 lg:flex-row lg:gap-x-3`
-              : `flex-col`
+              ? `grid-cols-2 gap-y-5 lg:gap-x-3`
+              : `grid-cols-1`
           }`}
         >
           <form
-            className="basis-2/5"
             autoComplete="off"
             onSubmit={(e) => handleCalculateProductBeverage(e)}
           >
-            <div className="flex flex-col gap-y-4 items-center justify-center">
-              <ComponentInput
-                titleInput="Cari Produk"
-                srcImg="/images/global/search.png"
-                altImg="Cari"
-                htmlFor="product"
-              >
-                <Command>
-                  <CommandInput
-                    className="inputField peer"
-                    value={searchProduk}
-                    onValueChange={(val) => handleInputChange(val)}
-                    required
-                  />
-                  {isOpenSearchProduct && (
-                    <div>
-                      {searchProduk !== "" && (
-                        <CommandList className="p-2 bg-slate-200 absolute z-10 w-full text-[#333333] font-medium max-h-36 overflow-y-auto rounded-b-lg">
-                          {result.length > 0 ? (
-                            <CommandGroup heading="Pilih Produk">
-                              {result.map((item: productBeverageTypes) => (
-                                <CommandItem
-                                  key={item.id}
-                                  onSelect={() => handleItemClick(item)}
-                                  className="cursor-pointer mb-1"
-                                >
-                                  {item.nameProduct}
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          ) : (
-                            <CommandEmpty>Produk Tidak Ada.</CommandEmpty>
-                          )}
-                        </CommandList>
-                      )}
+            <div className="space-y-5">
+              <Command className="pt-2">
+                <FloatingLabel
+                  type="text"
+                  id="search"
+                  label="Cari Produk"
+                  Icon={Search}
+                  placeholder=" "
+                  // register={register("search")}
+                  // error={errors.search as unknown as FieldError | undefined}
+                />
+                {isOpenSearchProduct && (
+                  <div>
+                    {searchProduk !== "" && (
+                      <CommandList className="p-2 bg-slate-200 absolute z-10 w-full text-[#333333] font-medium max-h-36 overflow-y-auto rounded-b-lg">
+                        {result.length > 0 ? (
+                          <CommandGroup heading="Pilih Produk">
+                            {result.map((item: productBeverageTypes) => (
+                              <CommandItem
+                                key={item.id}
+                                onSelect={() => handleItemClick(item)}
+                                className="cursor-pointer mb-1"
+                              >
+                                {item.nameProduct}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        ) : (
+                          <CommandEmpty>Produk Tidak Ada.</CommandEmpty>
+                        )}
+                      </CommandList>
+                    )}
+                  </div>
+                )}
+              </Command>
+
+              <div className="space-y-4">
+                <div>
+                  <h3 className="font-semibold text-slate-800">
+                    Detail Produk
+                  </h3>
+
+                  <p className="mt-1 text-sm text-slate-500">
+                    Informasi produk yang kamu pilih
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-3 gap-3">
+                  {detailProduct.map((item) => (
+                    <div
+                      key={item.label}
+                      className="rounded-xl border border-slate-200 bg-slate-50 p-4"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`flex size-10 items-center justify-center rounded-lg ${item.color}`}
+                        >
+                          <item.icon className="size-6" />
+                        </div>
+
+                        <div>
+                          <p className="text-sm font-medium text-slate-500">
+                            {item.label}
+                          </p>
+
+                          <p className="mt-0.5 text-sm font-semibold text-slate-800">
+                            {item.unit ? `145 ${item.unit}` : "Diseduh"}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                  )}
-                </Command>
-              </ComponentInput>
+                  ))}
+                </div>
+              </div>
 
               <ComponentInput
                 titleInput="Kadar Gula (G)"
