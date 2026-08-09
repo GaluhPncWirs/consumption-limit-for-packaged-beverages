@@ -29,27 +29,7 @@ import ComponentInput from "@/layout/input/content";
 import { Candy, ChevronUp, CupSoda, Layers3, Search } from "lucide-react";
 import { getConvertMaxSugar } from "@/app/hooks/getConvertMaxSugar";
 import FloatingLabel from "@/components/floating-label/component";
-
-const detailProduct = [
-  {
-    label: "Isi Bersih",
-    color: "bg-emerald-100 text-emerald-600",
-    unit: "ml",
-    icon: CupSoda,
-  },
-  {
-    label: "Gula",
-    color: "bg-pink-100 text-pink-600",
-    unit: "g",
-    icon: Candy,
-  },
-  {
-    label: "Tipe Minuman",
-    color: "bg-blue-100 text-blue-600",
-    unit: null,
-    icon: Layers3,
-  },
-] as const;
+import { Button } from "@/components/ui/button";
 
 export default function CalculateBeverages() {
   const pathname = usePathname();
@@ -292,10 +272,16 @@ export default function CalculateBeverages() {
           <span>{getConvertMaxSugar(maksimalGulaHarianPengguna)} Gram</span>
         </h1>
       </div>
-      <div className="flex flex-col justify-center p-7 rounded-lg bg-[#f9fff9] mt-20 mb-12 shadow-lg shadow-slate-700 md:p-9">
-        <h1 className="text-2xl font-semibold tracking-wide">
-          Hitung Konsumsi Minuman
-        </h1>
+      <div className="flex flex-col justify-center p-7 rounded-lg bg-[#f9fff9] mt-20 mb-12 shadow-lg shadow-slate-700">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-wide">
+            Hitung Konsumsi Minuman
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Pilih minuman untuk mengetahui seberapa banyak yang bisa kamu
+            konsumsi.
+          </p>
+        </div>
         <div
           className={`mt-5 grid ${
             fillBottle.length >= 1
@@ -345,133 +331,87 @@ export default function CalculateBeverages() {
 
               <div className="space-y-4">
                 <div>
-                  <h3 className="font-semibold text-slate-800">
+                  <h3 className="text-lg font-semibold text-slate-800">
                     Detail Produk
                   </h3>
 
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="mt-1 text-sm text-muted-foreground">
                     Informasi produk yang kamu pilih
                   </p>
                 </div>
 
-                <div className="grid grid-cols-3 gap-3">
-                  {detailProduct.map((item) => (
-                    <div
-                      key={item.label}
-                      className="rounded-xl border border-slate-200 bg-slate-50 p-4"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={`flex size-10 items-center justify-center rounded-lg ${item.color}`}
-                        >
-                          <item.icon className="size-6" />
+                <div className="grid grid-cols-1 gap-3">
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <div className="flex justify-between items-center gap-3">
+                      <div className="flex gap-5 items-center">
+                        <div className="flex size-10 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
+                          <CupSoda className="size-6" />
                         </div>
 
-                        <div>
-                          <p className="text-sm font-medium text-slate-500">
-                            {item.label}
-                          </p>
-
-                          <p className="mt-0.5 text-sm font-semibold text-slate-800">
-                            {item.unit ? `145 ${item.unit}` : "Diseduh"}
-                          </p>
-                        </div>
+                        <p className="font-semibold text-slate-700">
+                          Isi Bersih
+                        </p>
                       </div>
+
+                      <p className="mt-0.5 font-semibold text-slate-800">
+                        {volume} ml
+                      </p>
                     </div>
-                  ))}
+                  </div>
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <div className="flex justify-between items-center gap-3">
+                      <div className="flex gap-5 items-center">
+                        <div className="flex size-10 items-center justify-center rounded-lg bg-pink-100 text-pink-600">
+                          <Candy className="size-6" />
+                        </div>
+
+                        <p className="font-semibold text-slate-700">Gula</p>
+                      </div>
+
+                      <p className="mt-0.5 font-semibold text-slate-800">
+                        {sugar} g
+                      </p>
+                    </div>
+                  </div>
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <div className="flex justify-between items-center gap-3">
+                      <div className="flex gap-5 items-center">
+                        <div className="flex size-10 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
+                          <Layers3 className="size-6" />
+                        </div>
+
+                        <p className="font-semibold text-slate-700">
+                          Tipe Minuman
+                        </p>
+                      </div>
+
+                      <p className="mt-0.5 font-semibold text-slate-800">
+                        {type}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <ComponentInput
-                titleInput="Kadar Gula (G)"
-                srcImg="/images/global/sugar.png"
-                altImg="sugar"
-                htmlFor="sugarContent"
-              >
-                <input
-                  type="number"
-                  id="sugarContent"
-                  className="inputField"
-                  readOnly
-                  disabled
-                  value={sugar || ""}
-                />
-                <div className="text-[10px] mt-1.5">
-                  <div
-                    className="flex items-center cursor-pointer w-fit gap-x-1"
-                    onClick={() => setServingSize((prev) => !prev)}
-                  >
-                    <ChevronUp
-                      className={`size-5 transition-all ${servingSize ? "rotate-180" : ""}`}
-                    />
-                    <h1 className="tracking-wide text-[#F93827] font-semibold">
-                      *Gula Sudah Ditotal Dengan Takaran Saji
-                    </h1>
-                  </div>
-
-                  <p
-                    className={`text-justify transition-all duration-300 ease-in-out ${
-                      servingSize
-                        ? `max-h-10 sm:max-h-7 opacity-100`
-                        : `max-h-0 opacity-0`
-                    }`}
-                  >
-                    Minuman dengan takaran saji 3 perkemasan dan kandungan gula
-                    10g maka 3 x 10 maka total menjadi 30g gula
-                  </p>
-                </div>
-              </ComponentInput>
-
-              <ComponentInput
-                titleInput="Isi Bersih (ml)"
-                srcImg="/images/global/ml.png"
-                altImg="isi Bersih"
-                htmlFor="isiBeratBersih"
-              >
-                <input
-                  type="number"
-                  id="isiBeratBersih"
-                  className="inputField"
-                  readOnly
-                  disabled
-                  value={volume || ""}
-                />
-              </ComponentInput>
-
-              <ComponentInput
-                titleInput="Tipe Minuman"
-                srcImg="/images/global/typeBeverage.png"
-                altImg="Tipe"
-                htmlFor="type"
-              >
-                <input
-                  id="type"
-                  className="inputField"
-                  readOnly
-                  disabled
-                  value={type || ""}
-                />
-              </ComponentInput>
-
-              <h1 className="text-sm w-full">
+              <p className="text-sm text-right text-muted-foreground">
                 Produk yang di cari tidak ada?{" "}
                 <Link
-                  href={"/mainContent/addProduct"}
+                  href="/mainContent/addProduct"
                   className="text-blue-600 hover:underline font-semibold"
                 >
                   klik disini
                 </Link>{" "}
                 untuk menambahkan produk
-              </h1>
+              </p>
             </div>
 
-            <button
+            <Button
               type="submit"
-              className="disabled:cursor-not-allowed py-1.5 text-center rounded-md bg-green-400 hover:bg-green-500 cursor-pointer font-semibold tracking-wider px-7 text-lg mx-2 w-32 mt-7"
+              className="disabled:cursor-not-allowed py-1.5 text-center rounded-md bg-emerald-400 hover:bg-emerald-500 cursor-pointer font-semibold tracking-wide w-full text-lg mt-7"
               disabled={!isFormFilled}
             >
               Hitung
-            </button>
+            </Button>
           </form>
 
           <div className="gap-6 flex justify-center items-center flex-col md:basis-1/2 lg:basis-3/4">

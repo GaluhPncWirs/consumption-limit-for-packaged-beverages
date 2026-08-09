@@ -24,7 +24,6 @@ import {
 import {
   Activity,
   CalendarDays,
-  CheckCircle,
   CheckCircle2,
   PersonStanding,
   Ruler,
@@ -131,7 +130,7 @@ export default function InputCalculateCalories() {
     const resultTotalMaxSugar = resultTotalCalorie / 4;
 
     if (resultTotalMaxSugar < 5 || resultTotalMaxSugar > 100) {
-      toast("Perhitungan Tidak Valid ❌", {
+      toast.error("Perhitungan Tidak Valid", {
         description:
           "Hasilnya Tidak Memenuhi Standar, Silahkan Input Kembali !",
       });
@@ -172,20 +171,20 @@ export default function InputCalculateCalories() {
       const response = await req.json();
 
       if (response.status !== "success") {
-        toast("❌ Gagal", {
+        toast.error("Gagal", {
           description: "Gagal menyimpan hasil kalkulasi",
         });
 
         return;
       }
 
-      toast("✅ Berhasil", {
+      toast.success("Berhasil", {
         description: "Lanjut ke halaman perhitungan konsumsi minuman",
       });
 
       push("/mainContent/calculateBeverage");
     } catch {
-      toast("❌ Gagal", {
+      toast.error("❌ Gagal", {
         description: "Fetch API error",
       });
     }

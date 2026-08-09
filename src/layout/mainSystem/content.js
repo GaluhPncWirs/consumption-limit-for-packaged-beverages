@@ -37,14 +37,17 @@ export default function MainContentLayout({ children, path }) {
     currentPathname(path);
   }, [path, currentPathname]);
   return (
-    <div className="flex relative">
-      <div className="md:w-1/4 xl:w-80">
-        <div className="bg-green-400 h-screen shadow-lg shadow-slate-700 fixed hidden md:w-1/4 md:block xl:w-80">
-          <PathNavbar />
-        </div>
-        <HamburgerMenu />
+    <div className="relative flex min-h-screen">
+      <PathNavbar />
+
+      {/* Mobile */}
+      <HamburgerMenu />
+
+      {/* Main Content */}
+      <div className="min-w-0 flex-1">
+        <div className="mx-auto w-11/12 max-w-7xl py-6">{children}</div>
       </div>
-      <div className="w-11/12 mx-auto md:w-2/3 xl:w-[57rem]">{children}</div>
+
       {loadingSession && <LoadingCompenent />}
     </div>
   );

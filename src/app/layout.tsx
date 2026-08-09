@@ -34,7 +34,7 @@ export default function RootLayout({
             alt=""
             fill
             priority
-            className="fixed inset-0 -z-10 object-cover"
+            className="fixed inset-0 -z-10 object-cover opacity-50"
             sizes="100vw"
           />
 
