@@ -30,6 +30,7 @@ import { Candy, ChevronUp, CupSoda, Layers3, Search } from "lucide-react";
 import { getConvertMaxSugar } from "@/app/hooks/getConvertMaxSugar";
 import FloatingLabel from "@/components/floating-label/component";
 import { Button } from "@/components/ui/button";
+import { SugarLimitStatus } from "@/components/sugarLimitStatus/component";
 
 export default function CalculateBeverages() {
   const pathname = usePathname();
@@ -266,21 +267,37 @@ export default function CalculateBeverages() {
 
   return (
     <MainContentLayout path={pathname}>
-      <div className="fixed top-0 right-0 bg-green-400 p-3 rounded-bl-md shadow-md shadow-slate-700 z-20">
+      {/* <div className="fixed top-0 right-0 bg-green-400 p-3 rounded-bl-md shadow-md shadow-slate-700 z-20">
         <h1 className="font-semibold text-base md:text-lg tracking-wide px-2">
           Batas Gula Harian{" "}
           <span>{getConvertMaxSugar(maksimalGulaHarianPengguna)} Gram</span>
         </h1>
-      </div>
-      <div className="flex flex-col justify-center p-7 rounded-lg bg-[#f9fff9] mt-20 mb-12 shadow-lg shadow-slate-700">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-wide">
-            Hitung Konsumsi Minuman
-          </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Pilih minuman untuk mengetahui seberapa banyak yang bisa kamu
-            konsumsi.
-          </p>
+      </div> */}
+      <div className="flex flex-col justify-center p-7 rounded-lg bg-[#f9fff9] shadow-lg shadow-slate-700">
+        <div className="border-b border-slate-400 p-5 sm:px-8">
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+            {/* Heading */}
+            <div>
+              <p className="mb-1 text-sm font-medium text-emerald-600">
+                Konsumsi Harian
+              </p>
+
+              <h1 className="text-2xl font-bold tracking-wide text-slate-900">
+                Hitung Konsumsi Minuman
+              </h1>
+
+              <p className="mt-1.5 max-w-xl text-sm text-muted-foreground">
+                Pilih minuman untuk mengetahui seberapa banyak yang bisa kamu
+                konsumsi.
+              </p>
+            </div>
+
+            {/* Sugar Status */}
+            <SugarLimitStatus
+              consumed={42}
+              limit={getConvertMaxSugar(maksimalGulaHarianPengguna)}
+            />
+          </div>
         </div>
         <div
           className={`mt-5 grid ${
@@ -365,7 +382,9 @@ export default function CalculateBeverages() {
                           <Candy className="size-6" />
                         </div>
 
-                        <p className="font-semibold text-slate-700">Gula</p>
+                        <p className="font-semibold text-slate-700">
+                          Kandungan Gula
+                        </p>
                       </div>
 
                       <p className="mt-0.5 font-semibold text-slate-800">
