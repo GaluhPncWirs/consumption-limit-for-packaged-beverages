@@ -84,7 +84,7 @@ export default function InputCalculateCalories() {
     watch,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isValid },
   } = useForm<DataPersonalUserSchema>({
     resolver: zodResolver(dataPersonalUserSchema),
   });
@@ -147,6 +147,11 @@ export default function InputCalculateCalories() {
 
   async function onSubmit(data: DataPersonalUserSchema) {
     const result = handleResultCalculate(data);
+
+    if (!result) {
+      return;
+    }
+
     setResultCalculate(result);
     setOpenResultDialog(true);
   }
@@ -346,83 +351,81 @@ export default function InputCalculateCalories() {
               />
             </div>
 
-            {/* Submit */}
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button
-                  type="submit"
-                  className="flex h-12 w-full items-center justify-center rounded-xl bg-emerald-500 px-6 text-sm font-semibold text-slate-50 tracking-wide shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-600 hover:shadow-emerald-500/30 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none"
-                >
-                  Hitung Kalori & Gula
-                </Button>
-              </DialogTrigger>
+            <Button
+              type="submit"
+              className="flex h-12 w-full items-center justify-center rounded-xl bg-emerald-500 px-6 text-sm font-semibold text-slate-50 tracking-wide shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-600 hover:shadow-emerald-500/30 active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none"
+            >
+              Hitung Kalori & Gula
+            </Button>
+          </form>
 
-              <DialogContent className="max-w-md rounded-2xl">
-                <DialogHeader className="flex flex-row items-center gap-3">
-                  <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-emerald-100">
-                    <CheckCircle2 className="size-7 text-emerald-500" />
-                  </div>
-                  <div className="flex-1">
-                    <DialogTitle className="text-lg text-start">
-                      Hasil Perhitungan
-                    </DialogTitle>
+          {/* Submit */}
+          <Dialog open={openResultDialog} onOpenChange={setOpenResultDialog}>
+            <DialogContent className="max-w-md rounded-2xl">
+              <DialogHeader className="flex flex-row items-center gap-3">
+                <div className="mb-4 flex size-12 items-center justify-center rounded-full bg-emerald-100">
+                  <CheckCircle2 className="size-7 text-emerald-500" />
+                </div>
+                <div className="flex-1">
+                  <DialogTitle className="text-lg text-start">
+                    Hasil Perhitungan
+                  </DialogTitle>
 
-                    <DialogDescription className="pt-1 text-sm text-start">
-                      Berdasarkan data tubuh dan aktivitas yang kamu masukkan.
-                    </DialogDescription>
-                  </div>
-                </DialogHeader>
+                  <DialogDescription className="pt-1 text-sm text-start">
+                    Berdasarkan data tubuh dan aktivitas yang kamu masukkan.
+                  </DialogDescription>
+                </div>
+              </DialogHeader>
 
-                <div className="space-y-3 py-3">
-                  {/* Calories */}
-                  <div className="rounded-xl border border-slate-100 bg-slate-100 p-4">
-                    <p className="text-xs font-medium text-slate-500">
-                      Total Kalori Harian
-                    </p>
+              <div className="space-y-3 py-3">
+                {/* Calories */}
+                <div className="rounded-xl border border-slate-100 bg-slate-100 p-4">
+                  <p className="text-xs font-medium text-slate-500">
+                    Total Kalori Harian
+                  </p>
 
-                    <p className="mt-1 text-2xl font-bold text-emerald-600">
-                      {getConvertMaxSugar(
-                        resultCalculate?.totalDailyEnergyExpenditure,
-                      )}
-                      <span className="ml-1 text-sm font-medium text-slate-500">
-                        kcal
-                      </span>
-                    </p>
-                  </div>
-
-                  {/* Sugar */}
-                  <div className="rounded-xl border border-slate-100 bg-slate-100 p-4">
-                    <p className="text-xs font-medium text-slate-500">
-                      Batas Gula Harian
-                    </p>
-
-                    <p className="mt-1 text-2xl font-bold text-emerald-600">
-                      {getConvertMaxSugar(resultCalculate?.resultTotalMaxSugar)}
-                      <span className="ml-1 text-sm font-medium text-slate-500">
-                        gram
-                      </span>
-                    </p>
-                  </div>
+                  <p className="mt-1 text-2xl font-bold text-emerald-600">
+                    {getConvertMaxSugar(
+                      resultCalculate?.totalDailyEnergyExpenditure,
+                    )}
+                    <span className="ml-1 text-sm font-medium text-slate-500">
+                      kcal
+                    </span>
+                  </p>
                 </div>
 
-                <DialogFooter>
-                  <DialogClose asChild>
-                    <Button variant="outline" className="rounded-xl">
-                      Batal
-                    </Button>
-                  </DialogClose>
+                {/* Sugar */}
+                <div className="rounded-xl border border-slate-100 bg-slate-100 p-4">
+                  <p className="text-xs font-medium text-slate-500">
+                    Batas Gula Harian
+                  </p>
 
-                  <Button
-                    className="rounded-xl bg-emerald-500 text-slate-50 tracking-wide hover:bg-emerald-600"
-                    type="button"
-                    onClick={handleContinue}
-                  >
-                    Lanjut
+                  <p className="mt-1 text-2xl font-bold text-emerald-600">
+                    {getConvertMaxSugar(resultCalculate?.resultTotalMaxSugar)}
+                    <span className="ml-1 text-sm font-medium text-slate-500">
+                      gram
+                    </span>
+                  </p>
+                </div>
+              </div>
+
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="outline" className="rounded-xl">
+                    Batal
                   </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          </form>
+                </DialogClose>
+
+                <Button
+                  className="rounded-xl bg-emerald-500 text-slate-50 tracking-wide hover:bg-emerald-600"
+                  type="button"
+                  onClick={handleContinue}
+                >
+                  Lanjut
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
           <p className="text-xs px-7 text-right mb-5 text-muted-foreground">
             Hasil perhitungan merupakan estimasi dan bisa berbeda pada setiap
             orang
