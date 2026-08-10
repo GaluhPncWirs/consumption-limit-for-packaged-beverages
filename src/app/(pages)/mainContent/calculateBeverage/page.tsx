@@ -59,33 +59,23 @@ type DataBeverage = {
   nameProduct: string;
   nameProductLowerCase: string;
   sugars: number;
-  type: string;
+  type: "Siap Minum" | "Harus Dilarutkan";
   volume: number;
 };
 
 export default function CalculateBeverages() {
   const pathname = usePathname();
   const [fillBottle, setFillBottle] = useState<number[]>([]);
-  const [appearContent, setAppearContent] = useState<boolean>(false);
   const [searchResult, setSearchResult] = useState<DataBeverage[]>([]);
   const [totalBotol, setTotalBotol] = useState<number>(0);
-  const [product, setProduct] = useState<productBeverageTypes[]>([]);
   const [maksimalGulaHarianPengguna, setMaksimalGulaHarianPengguna] =
     useState<number>(0);
   const [nameProduct, setNameProduct] = useState<string>("");
   const [selectedProduct, setSelectedProduct] = useState<DataBeverage | null>(
     null,
   );
-  const [result, setResult] = useState<productBeverageTypes[]>([]);
-  const [sugar, setSugar] = useState<number>(0);
-  const [volume, setVolume] = useState<number>(0);
-  const [type, setType] = useState<string>("");
-  const [servingSize, setServingSize] = useState<boolean>(false);
   const [funFactSugar, setFunFactSugar] = useState<string[]>([]);
   const [video, setVideo] = useState<educationsForVideo[]>([]);
-  const { isFormFilled, setMustFilled } = useHandleInput({
-    product: "",
-  });
   const [remainingMl, setRemainingMl] = useState<number>(0);
   const [artikel, setArtikel] = useState<educationsForArtikel[]>([]);
   const [typeProduct, setTypeProduct] = useState<string>("");
@@ -100,9 +90,8 @@ export default function CalculateBeverages() {
     register,
     watch,
     handleSubmit,
-    control,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isSubmitted },
   } = useForm<searchKeyworSchema>({
     resolver: zodResolver(searchKeywordSchema),
   });
@@ -140,8 +129,58 @@ export default function CalculateBeverages() {
     handleSearchNameBeverage();
   }, [keyword]);
 
+  //     if (funFactSugar.length > 0 && video.length > 0) {
+  //   setFunFactSugar((prev) => [...prev.sort(() => Math.random() - 0.5)]);
+  //   setVideo((prev) => [...prev.sort(() => Math.random() - 0.5)]);
+  //   setArtikel((prev) => [...prev.sort(() => Math.random() - 0.5)]);
+  // }
   async function onSubmit(data: searchKeyworSchema) {
-    console.log(data);
+    if (!selectedProduct) return;
+
+    const kandunganGulaDidalamProduk = selectedProduct.sugars;
+    const totalIsiMinuman = selectedProduct.volume;
+
+    const gulaPerSatuML = kandunganGulaDidalamProduk / totalIsiMinuman; //ubah total gula menjadi per 1 ml
+
+    // menghitung jumalah botol yang datap dikonsumsi
+    const maxKonsumsiPerMl = maksimalGulaHarianPengguna / gulaPerSatuML;
+    // hasilnya dibulatkan kebawah
+    const numberOfBottles = Math.floor(maxKonsumsiPerMl / totalIsiMinuman);
+    setTotalBotol(numberOfBottles);
+
+    let displayBottle = Math.round(numberOfBottles / 2);
+    if (displayBottle < 1) {
+      displayBottle = 1;
+    }
+
+    // untuk sisa gula
+    const sugarPerBotol = gulaPerSatuML * totalIsiMinuman;
+    const totalSugarConsume = sugarPerBotol * displayBottle;
+    const remainingSugar = maksimalGulaHarianPengguna - totalSugarConsume;
+
+    setMessageIfDrinkSomeBottles(
+      (prev: { botol: number; sisaGula: number }) => ({
+        ...prev,
+        botol: displayBottle,
+        sisaGula: Math.round(remainingSugar),
+      }),
+    );
+
+    // menghitung sisa konsumsi
+    const remaining = maxKonsumsiPerMl % totalIsiMinuman;
+    // sisa tersebut dikonversi ke dalam persen
+    const percentageFillForRemaining = Math.round(
+      (remaining / totalIsiMinuman) * 100,
+    );
+    // jumlah botol diubah menjadi array yang diisi 100 disetiap botol yang ada
+    const fillArray: number[] = Array(numberOfBottles).fill(100);
+    // jika terdapat sisa maka array "jumlahBotol" diisi oleh variabel ini "berapaPersenYangTersedia"
+    if (percentageFillForRemaining > 0) {
+      fillArray.push(percentageFillForRemaining);
+    }
+    setFillBottle(fillArray);
+    setRemainingMl(Math.round(remaining));
+    setFillLess100(percentageFillForRemaining);
   }
 
   useEffect(() => {
@@ -159,156 +198,11 @@ export default function CalculateBeverages() {
     decodeToken();
   }, []);
 
-  useEffect(() => {
-    setMustFilled((prev: Object) => ({ ...prev, product: nameProduct }));
-  }, [nameProduct, setMustFilled]);
-
-  function handleCalculateProductBeverage(
-    event: React.FormEvent<HTMLFormElement>,
-  ) {
-    event.preventDefault();
-
-    const targetValue = event.target as HTMLFormElement;
-
-    if (result.length > 0) {
-      if (funFactSugar.length > 0 && video.length > 0) {
-        setFunFactSugar((prev) => [...prev.sort(() => Math.random() - 0.5)]);
-        setVideo((prev) => [...prev.sort(() => Math.random() - 0.5)]);
-        setArtikel((prev) => [...prev.sort(() => Math.random() - 0.5)]);
-      }
-      setAppearContent(true);
-      const kandunganGulaDidalamProduk = parseFloat(
-        targetValue.sugarContent.value,
-      );
-      const totalIsiMinuman = parseFloat(targetValue.isiBeratBersih.value);
-      const gulaPerSatuML = kandunganGulaDidalamProduk / totalIsiMinuman; //ubah total gula menjadi per 1 ml
-
-      // menghitung jumalah botol yang datap dikonsumsi
-      const maxKonsumsiPerMl = maksimalGulaHarianPengguna / gulaPerSatuML;
-      // hasilnya dibulatkan kebawah
-      const numberOfBottles = Math.floor(maxKonsumsiPerMl / totalIsiMinuman);
-      setTotalBotol(numberOfBottles);
-
-      let displayBottle = Math.round(numberOfBottles / 2);
-      if (displayBottle < 1) {
-        displayBottle = 1;
-      }
-
-      // untuk sisa gula
-      const sugarPerBotol = gulaPerSatuML * totalIsiMinuman;
-      const totalSugarConsume = sugarPerBotol * displayBottle;
-      const remainingSugar = maksimalGulaHarianPengguna - totalSugarConsume;
-
-      setMessageIfDrinkSomeBottles(
-        (prev: { botol: number; sisaGula: number }) => ({
-          ...prev,
-          botol: displayBottle,
-          sisaGula: Math.round(remainingSugar),
-        }),
-      );
-
-      // menghitung sisa konsumsi
-      const remaining = maxKonsumsiPerMl % totalIsiMinuman;
-      // sisa tersebut dikonversi ke dalam persen
-      const percentageFillForRemaining = Math.round(
-        (remaining / totalIsiMinuman) * 100,
-      );
-      // jumlah botol diubah menjadi array yang diisi 100 disetiap botol yang ada
-      const fillArray: number[] = Array(numberOfBottles).fill(100);
-      // jika terdapat sisa maka array "jumlahBotol" diisi oleh variabel ini "berapaPersenYangTersedia"
-      if (percentageFillForRemaining > 0) {
-        fillArray.push(percentageFillForRemaining);
-      }
-      setFillBottle(fillArray);
-      setRemainingMl(Math.round(remaining));
-      setFillLess100(percentageFillForRemaining);
-      setTypeProduct((prev: string) => (prev === type ? prev : type));
-    } else {
-      toast("❌ Input Harus Sesuai", {
-        description: "Tolong untuk cari produk minuman yang sudah ada !",
-      });
-    }
-  }
-
-  useEffect(() => {
-    const unsubscribeDataProductBeverage = subscribeToProducts(
-      (dataProduct) => {
-        setProduct(dataProduct);
-      },
-    );
-    return () => unsubscribeDataProductBeverage();
-  }, []);
-
-  // ambil data produk minuman
-  useEffect(() => {
-    if (appearContent) {
-      const unsubscribeDataFunFactSugar = subscribeToFunFactSugars(
-        (dataFunfact) => {
-          setFunFactSugar(
-            dataFunfact.map(
-              (getFunFact: educationsForFunfactSugar) => getFunFact.funFact,
-            ),
-          );
-        },
-      );
-
-      const unsubscribeDataArtikel = subscribeToReleatedArtikel(
-        (dataArtikel) => {
-          setArtikel(dataArtikel);
-        },
-      );
-
-      const unsubscribeDataVideoEducation = subscribeToVideoEducation(
-        (dataVideo) => {
-          setVideo(dataVideo);
-        },
-      );
-
-      return () => {
-        (unsubscribeDataFunFactSugar(),
-          unsubscribeDataArtikel(),
-          unsubscribeDataVideoEducation());
-      };
-    }
-  }, [appearContent]);
-
-  useEffect(() => {
-    if (!type) {
-      setTypeProduct(type);
-    }
-  }, [type]);
-
-  function handleInputChange(value: string) {
-    setNameProduct(value);
-
-    if (value !== "") {
-      const filterSearchProduct = product.filter(
-        (item: productBeverageTypes) => {
-          return item.nameProduct
-            ?.toLowerCase()
-            .startsWith(value.toLowerCase());
-        },
-      );
-      setResult(filterSearchProduct);
-    } else {
-      setResult([]);
-    }
-  }
-
   function handleItemClick(item: DataBeverage) {
     setSelectedProduct(item);
     setNameProduct(item.nameProduct);
     setIsOpenSearchProduct(false);
   }
-
-  useEffect(() => {
-    if (selectedProduct) {
-      setNameProduct(selectedProduct.nameProduct);
-      setSugar(selectedProduct.sugars);
-      setVolume(selectedProduct.volume);
-      setType(selectedProduct.type);
-    }
-  }, [selectedProduct]);
 
   useEffect(() => {
     if (keyword === "") {
@@ -320,10 +214,10 @@ export default function CalculateBeverages() {
   function getConsumtionMessage() {
     if (fillBottle.length > 1 && fillLess100 < 100 && remainingMl !== 0) {
       return (
-        <p>
+        <span>
           Bisa Konsumsi Maksimal {fillBottle.length}{" "}
           {typeProduct === "Siap Minum" ? "Botol" : "Gelas"} {remainingMl} ml
-        </p>
+        </span>
       );
     } else if (
       fillBottle.length === 1 &&
@@ -331,17 +225,17 @@ export default function CalculateBeverages() {
       fillLess100 !== 0
     ) {
       return (
-        <p>
+        <span>
           Maksimal Bisa Dikonsumsi {remainingMl} ml, hanya 1{" "}
           {typeProduct === "Siap Minum" ? "Botol" : "Gelas"}
-        </p>
+        </span>
       );
     } else {
       return (
-        <p>
+        <span>
           Bisa Konsumsi Maksimal {fillBottle.length}{" "}
           {typeProduct === "Siap Minum" ? "Botol" : "Gelas"}
-        </p>
+        </span>
       );
     }
   }
@@ -543,7 +437,7 @@ export default function CalculateBeverages() {
               </div>
             </div>
 
-            {selectedProduct ? (
+            {isSubmitted ? (
               <>
                 {/* Main Message */}
                 <div className="rounded-2xl bg-emerald-50 p-5">
@@ -569,11 +463,7 @@ export default function CalculateBeverages() {
                         key={i}
                         percentage={item}
                         index={i}
-                        srcImage={
-                          typeProduct === "Siap Minum"
-                            ? "/images/pageCalculateBeverage/plastic-bottle-water.png"
-                            : "/images/pageCalculateBeverage/glass_new.png"
-                        }
+                        typeBeverage={selectedProduct?.type}
                       />
                     ))}
                   </div>
@@ -604,7 +494,7 @@ export default function CalculateBeverages() {
           </div>
         </div>
 
-        {appearContent && (
+        {isSubmitted && (
           <section className="mt-8 border-t border-slate-400 pt-8">
             <div className="space-y-6">
               {/* Section Header */}

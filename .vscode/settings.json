@@ -13,6 +13,7 @@
         "memperbaiki ui/ux bagian hasil perhitungan menggunakan visualisasi botol dan gelas",
         "untuk sementara selesai konfigurasi ulang pada proses pengambilan data minuman",
         "selesai untuk refaktor code bagian pengambilan data minuman menggunakan querry langsung tanpa harus mengambil semua data yang ada",
-        "sudah dihubungkan ke bagian frontend untuk search data minuman "
+        "sudah dihubungkan ke bagian frontend untuk search data minuman ",
+        "memperbaiki tombol kembali ke halaman awal yang tidak berfungsi"
     ]
 }

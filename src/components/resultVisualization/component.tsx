@@ -3,13 +3,13 @@ import Image from "next/image";
 type VisualizationProps = {
   percentage: number;
   index: number;
-  srcImage: string;
+  typeBeverage: "Siap Minum" | "Harus Dilarutkan";
 };
 
 export default function ResultVisualization({
   index,
   percentage,
-  srcImage,
+  typeBeverage,
 }: VisualizationProps) {
   const safePercentage = Math.min(Math.max(percentage, 0), 100);
   return (
@@ -17,7 +17,7 @@ export default function ResultVisualization({
       <div className="bottleVisualization">
         {/* Fill */}
         <div
-          className="bottleFill"
+          className={`${typeBeverage === "Harus Dilarutkan" ? "glassFill" : "bottleFill"}`}
           style={
             {
               "--fill-height": `${safePercentage}%`,
@@ -27,9 +27,11 @@ export default function ResultVisualization({
 
         {/* Visualization Image */}
         <Image
-          src={srcImage}
+          src={`/images/pageCalculateBeverage/${typeBeverage === "Harus Dilarutkan" ? "glass_new.png" : "plastic-bottle-water.png"}`}
           alt="Visualization Image"
-          className="bottleImage"
+          height={300}
+          width={300}
+          className={`${typeBeverage === "Harus Dilarutkan" ? "glassImage" : "bottleImage"}`}
         />
       </div>
 
