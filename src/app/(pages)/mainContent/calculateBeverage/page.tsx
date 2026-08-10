@@ -43,6 +43,15 @@ import FloatingLabel from "@/components/floating-label/component";
 import { Button } from "@/components/ui/button";
 import { SugarLimitStatus } from "@/components/sugarLimitStatus/component";
 import ResultVisualization from "@/components/resultVisualization/component";
+import { z } from "zod";
+import { FieldError, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const searchKeywordSchema = z.object({
+  searchKeyword: z.string().min(3, "Minimal 3 karakter"),
+});
+
+type searchKeyworSchema = z.infer<typeof searchKeywordSchema>;
 
 export default function CalculateBeverages() {
   const pathname = usePathname();
@@ -75,13 +84,29 @@ export default function CalculateBeverages() {
   });
   const [isOpenSearchProduct, setIsOpenSearchProduct] = useState<boolean>(true);
 
+  const {
+    register,
+    watch,
+    handleSubmit,
+    control,
+    formState: { errors, isSubmitting },
+  } = useForm<searchKeyworSchema>({
+    resolver: zodResolver(searchKeywordSchema),
+  });
+
+  async function onSubmit(data: searchKeyworSchema) {
+    console.log(data);
+  }
+
   async function handleSearchBeverage(keyword: string) {
     const req = await fetch("/api/pageCalculate/getDataBeverage", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(keyword),
+      body: JSON.stringify({
+        keyword: keyword,
+      }),
     });
 
     const res = await req.json();
@@ -320,10 +345,7 @@ export default function CalculateBeverages() {
           </div>
         </div>
         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-          <form
-            autoComplete="off"
-            onSubmit={(e) => handleCalculateProductBeverage(e)}
-          >
+          <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
             <div className="space-y-5 mb-5">
               <Command className="pt-2">
                 <FloatingLabel
@@ -332,8 +354,10 @@ export default function CalculateBeverages() {
                   label="Cari Produk Minuman"
                   Icon={Search}
                   placeholder=" "
-                  // register={register("search")}
-                  // error={errors.search as unknown as FieldError | undefined}
+                  register={register("searchKeyword")}
+                  error={
+                    errors.searchKeyword as unknown as FieldError | undefined
+                  }
                 />
                 <p className="mt-2 text-xs text-muted-foreground">
                   Cari berdasarkan nama produk atau merek minuman
@@ -446,7 +470,7 @@ export default function CalculateBeverages() {
 
             <Button
               type="submit"
-              disabled={!selectedProduct}
+              // disabled={!selectedProduct}
               className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-600 active:scale-[0.99] disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none"
             >
               Hitung Konsumsi Gula

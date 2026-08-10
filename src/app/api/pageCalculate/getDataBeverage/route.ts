@@ -2,7 +2,8 @@ import { getDataRegister } from "@/services/firebase/dataProducts/service";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const keyword = await req.json();
+  const { keyword } = await req.json();
+
   try {
     const result = await getDataRegister(keyword);
 

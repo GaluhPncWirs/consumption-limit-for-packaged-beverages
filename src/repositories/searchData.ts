@@ -1,36 +1,39 @@
-import type { CollectionReference, Query } from "firebase/firestore";
+import {
+  endAt,
+  orderBy,
+  query,
+  startAt,
+  type CollectionReference,
+  type Query,
+} from "firebase/firestore";
 
-export interface SearchConfig {
+interface SearchConfig {
   keyword?: string;
   field: string;
   transform?: (keyword: string) => string;
 }
 
-export interface SearchDataParams {
+interface SearchDataParams {
   collectionRef: CollectionReference;
   search?: SearchConfig;
 }
 
 export function searchData({ collectionRef, search }: SearchDataParams): Query {
-  let query: any = collectionRef;
-
-  // ===========================
-  // Search
-  // ===========================
-
   const keyword = search?.keyword?.trim();
 
-  if (search && keyword) {
-    const transform =
-      search.transform ?? ((keyword: string) => keyword.toLowerCase());
-
-    const searchValue = transform(keyword);
-
-    query = query
-      .orderBy(search.field)
-      .startAt(searchValue)
-      .endAt(`${searchValue}\uf8ff`);
+  if (!search || !keyword) {
+    return query(collectionRef);
   }
 
-  return query as Query;
+  const transform =
+    search.transform ?? ((keyword: string) => keyword.toLowerCase());
+
+  const searchValue = transform(keyword);
+
+  return query(
+    collectionRef,
+    orderBy(search.field, "asc"),
+    startAt(searchValue),
+    endAt(`${searchValue}\uf8ff`),
+  );
 }
