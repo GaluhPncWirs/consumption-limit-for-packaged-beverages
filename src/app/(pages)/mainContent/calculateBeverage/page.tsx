@@ -20,39 +20,28 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
 import { toast } from "sonner";
-import ComponentInput from "@/layout/input/content";
 import {
   ArrowRight,
-  Badge,
   BookOpen,
-  BottleWine,
   Candy,
-  ChevronUp,
   CupSoda,
   ExternalLink,
   GlassWater,
   Info,
-  Layers3,
   Lightbulb,
-  ListFilter,
   PlayIcon,
   Search,
-  Shapes,
-  SlidersHorizontal,
   Sparkles,
-  Tag,
   Tags,
 } from "lucide-react";
 import { getConvertMaxSugar } from "@/app/hooks/getConvertMaxSugar";
 import FloatingLabel from "@/components/floating-label/component";
 import { Button } from "@/components/ui/button";
 import { SugarLimitStatus } from "@/components/sugarLimitStatus/component";
-import { Play } from "next/font/google";
 import ResultVisualization from "@/components/resultVisualization/component";
 
 export default function CalculateBeverages() {
@@ -85,6 +74,20 @@ export default function CalculateBeverages() {
     sisaGula: 0,
   });
   const [isOpenSearchProduct, setIsOpenSearchProduct] = useState<boolean>(true);
+
+  async function handleSearchBeverage(keyword: string) {
+    const req = await fetch("/api/pageCalculate/getDataBeverage", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(keyword),
+    });
+
+    const res = await req.json();
+
+    console.log(res.data);
+  }
 
   useEffect(() => {
     async function decodeToken() {
@@ -429,7 +432,7 @@ export default function CalculateBeverages() {
                 </div>
               </div>
 
-              <p className="text-sm text-right text-muted-foreground">
+              <p className="text-xs text-right text-muted-foreground">
                 Produk yang di cari tidak ada?{" "}
                 <Link
                   href="/mainContent/addProduct"

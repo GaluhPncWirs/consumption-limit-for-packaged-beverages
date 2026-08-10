@@ -9,6 +9,7 @@
         "memperbaiki error type di halaman perhitungan kalori dan gula",
         "sedang merombak ui/ux pada halaman hitung konsumsi minuman per hari",
         "menambahkan fitur untuk menampilkan visualisasi limit dari batas gula harian user berdasarkan minuman yang di pilih",
-        "memperbaiki ui pada bagian edukasi dan juga memperbaiki hamburger menu yang tidak muncul sidebarnya"
+        "memperbaiki ui pada bagian edukasi dan juga memperbaiki hamburger menu yang tidak muncul sidebarnya",
+        "memperbaiki ui/ux bagian hasil perhitungan menggunakan visualisasi botol dan gelas"
     ]
 }
