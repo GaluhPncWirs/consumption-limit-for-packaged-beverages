@@ -27,6 +27,7 @@ import { toast } from "sonner";
 import {
   ArrowRight,
   BookOpen,
+  BottleWine,
   Candy,
   CupSoda,
   ExternalLink,
@@ -63,10 +64,21 @@ type DataBeverage = {
   volume: number;
 };
 
+type ConsumptionResult = {
+  fullBottles: number;
+  remainingMl: number;
+  remainingPercentage: number;
+  sugarPerBottle: number;
+  totalConsumptionMl: number;
+  remainingSugar: number;
+};
+
 export default function CalculateBeverages() {
   const pathname = usePathname();
-  const [fillBottle, setFillBottle] = useState<number[]>([]);
+  const [fillBottles, setFillBottles] = useState<number[]>([]);
   const [searchResult, setSearchResult] = useState<DataBeverage[]>([]);
+  const [consumptionResult, setConsumptionResult] =
+    useState<ConsumptionResult | null>(null);
   const [totalBotol, setTotalBotol] = useState<number>(0);
   const [maksimalGulaHarianPengguna, setMaksimalGulaHarianPengguna] =
     useState<number>(0);
@@ -76,14 +88,9 @@ export default function CalculateBeverages() {
   );
   const [funFactSugar, setFunFactSugar] = useState<string[]>([]);
   const [video, setVideo] = useState<educationsForVideo[]>([]);
-  const [remainingMl, setRemainingMl] = useState<number>(0);
   const [artikel, setArtikel] = useState<educationsForArtikel[]>([]);
   const [typeProduct, setTypeProduct] = useState<string>("");
-  const [fillLess100, setFillLess100] = useState<number>(0);
-  const [messageIfDrinkSomeBottles, setMessageIfDrinkSomeBottles] = useState({
-    botol: 0,
-    sisaGula: 0,
-  });
+
   const [isOpenSearchProduct, setIsOpenSearchProduct] = useState<boolean>(true);
 
   const {
@@ -97,6 +104,9 @@ export default function CalculateBeverages() {
   });
 
   const keyword = watch("searchKeyword");
+
+  const visibleBottles = fillBottles.slice(0, 2);
+  const remainingBottles = Math.max(fillBottles.length - 2, 0);
 
   useEffect(() => {
     reset({
@@ -137,50 +147,98 @@ export default function CalculateBeverages() {
   async function onSubmit(data: searchKeyworSchema) {
     if (!selectedProduct) return;
 
-    const kandunganGulaDidalamProduk = selectedProduct.sugars;
-    const totalIsiMinuman = selectedProduct.volume;
+    const totalSugar = Number(selectedProduct.sugars);
+    const volumePerBottle = Number(selectedProduct.volume);
+    const maxDailySugar = Number(maksimalGulaHarianPengguna);
 
-    const gulaPerSatuML = kandunganGulaDidalamProduk / totalIsiMinuman; //ubah total gula menjadi per 1 ml
+    // ============================================
+    // Validation
+    // ============================================
 
-    // menghitung jumalah botol yang datap dikonsumsi
-    const maxKonsumsiPerMl = maksimalGulaHarianPengguna / gulaPerSatuML;
-    // hasilnya dibulatkan kebawah
-    const numberOfBottles = Math.floor(maxKonsumsiPerMl / totalIsiMinuman);
-    setTotalBotol(numberOfBottles);
-
-    let displayBottle = Math.round(numberOfBottles / 2);
-    if (displayBottle < 1) {
-      displayBottle = 1;
+    if (
+      !Number.isFinite(totalSugar) ||
+      !Number.isFinite(volumePerBottle) ||
+      !Number.isFinite(maxDailySugar) ||
+      totalSugar <= 0 ||
+      volumePerBottle <= 0 ||
+      maxDailySugar <= 0
+    ) {
+      return;
     }
 
-    // untuk sisa gula
-    const sugarPerBotol = gulaPerSatuML * totalIsiMinuman;
-    const totalSugarConsume = sugarPerBotol * displayBottle;
-    const remainingSugar = maksimalGulaHarianPengguna - totalSugarConsume;
+    // ============================================
+    // 1. Gula per 1 ml
+    // ============================================
 
-    setMessageIfDrinkSomeBottles(
-      (prev: { botol: number; sisaGula: number }) => ({
-        ...prev,
-        botol: displayBottle,
-        sisaGula: Math.round(remainingSugar),
-      }),
+    const sugarPerMl = totalSugar / volumePerBottle;
+
+    // ============================================
+    // 2. Total volume minuman yang masih dapat
+    //    dikonsumsi berdasarkan batas gula
+    // ============================================
+
+    const maxConsumptionMl = maxDailySugar / sugarPerMl;
+
+    // ============================================
+    // 3. Jumlah botol penuh
+    // ============================================
+
+    const fullBottles = Math.floor(maxConsumptionMl / volumePerBottle);
+
+    // ============================================
+    // 4. Sisa volume yang masih dapat dikonsumsi
+    // ============================================
+
+    const remainingMl = Math.round(
+      maxConsumptionMl - fullBottles * volumePerBottle,
     );
 
-    // menghitung sisa konsumsi
-    const remaining = maxKonsumsiPerMl % totalIsiMinuman;
-    // sisa tersebut dikonversi ke dalam persen
-    const percentageFillForRemaining = Math.round(
-      (remaining / totalIsiMinuman) * 100,
+    // ============================================
+    // 5. Persentase botol terakhir
+    // ============================================
+
+    const remainingPercentage = Math.round(
+      (remainingMl / volumePerBottle) * 100,
     );
-    // jumlah botol diubah menjadi array yang diisi 100 disetiap botol yang ada
-    const fillArray: number[] = Array(numberOfBottles).fill(100);
-    // jika terdapat sisa maka array "jumlahBotol" diisi oleh variabel ini "berapaPersenYangTersedia"
-    if (percentageFillForRemaining > 0) {
-      fillArray.push(percentageFillForRemaining);
+
+    // ============================================
+    // 6. Visualisasi botol
+    // ============================================
+
+    const fillArray: number[] = Array(fullBottles).fill(100);
+
+    if (remainingPercentage > 0) {
+      fillArray.push(remainingPercentage);
     }
-    setFillBottle(fillArray);
-    setRemainingMl(Math.round(remaining));
-    setFillLess100(percentageFillForRemaining);
+
+    setFillBottles(fillArray);
+
+    // ============================================
+    // 7. Total botol penuh
+    // ============================================
+
+    setTotalBotol(fullBottles);
+
+    // ============================================
+    // 8. Contoh konsumsi berdasarkan botol
+    // ============================================
+
+    const displayBottles = fullBottles > 0 ? Math.min(fullBottles, 2) : 0;
+
+    const sugarConsumed = displayBottles * totalSugar;
+
+    const remainingSugar = Math.max(maxDailySugar - sugarConsumed, 0);
+
+    const result: ConsumptionResult = {
+      fullBottles,
+      remainingMl,
+      remainingPercentage,
+      sugarPerBottle: totalSugar,
+      totalConsumptionMl: Math.round(maxConsumptionMl),
+      remainingSugar: Math.round(remainingSugar),
+    };
+
+    setConsumptionResult(result);
   }
 
   useEffect(() => {
@@ -211,33 +269,59 @@ export default function CalculateBeverages() {
     }
   }, [keyword]);
 
-  function getConsumtionMessage() {
-    if (fillBottle.length > 1 && fillLess100 < 100 && remainingMl !== 0) {
-      return (
-        <span>
-          Bisa Konsumsi Maksimal {fillBottle.length}{" "}
-          {typeProduct === "Siap Minum" ? "Botol" : "Gelas"} {remainingMl} ml
-        </span>
-      );
-    } else if (
-      fillBottle.length === 1 &&
-      fillLess100 < 100 &&
-      fillLess100 !== 0
+  function getConsumptionMessage() {
+    const unit = selectedProduct?.type === "Siap Minum" ? "botol" : "gelas";
+
+    // Tidak dapat mengonsumsi satu unit penuh
+    if (
+      consumptionResult?.fullBottles === 0 &&
+      consumptionResult.remainingMl > 0
     ) {
       return (
         <span>
-          Maksimal Bisa Dikonsumsi {remainingMl} ml, hanya 1{" "}
-          {typeProduct === "Siap Minum" ? "Botol" : "Gelas"}
-        </span>
-      );
-    } else {
-      return (
-        <span>
-          Bisa Konsumsi Maksimal {fillBottle.length}{" "}
-          {typeProduct === "Siap Minum" ? "Botol" : "Gelas"}
+          Kamu dapat mengonsumsi maksimal{" "}
+          <strong>{consumptionResult.remainingMl} ml</strong> atau sekitar{" "}
+          <strong>{consumptionResult?.remainingPercentage}%</strong> dari 1{" "}
+          {unit}.
         </span>
       );
     }
+
+    // Hanya dapat mengonsumsi unit penuh tanpa sisa
+    if (
+      (consumptionResult?.fullBottles ?? 0) > 0 &&
+      (consumptionResult?.remainingMl ?? 0) === 0
+    ) {
+      return (
+        <span>
+          Kamu dapat mengonsumsi maksimal{" "}
+          <strong>
+            {consumptionResult?.fullBottles} {unit}
+          </strong>
+          .
+        </span>
+      );
+    }
+
+    // Dapat mengonsumsi unit penuh + sebagian unit berikutnya
+    if (
+      (consumptionResult?.fullBottles ?? 0) > 0 &&
+      (consumptionResult?.remainingMl ?? 0) > 0
+    ) {
+      return (
+        <span>
+          Kamu dapat mengonsumsi maksimal{" "}
+          <strong>
+            {consumptionResult?.fullBottles} {unit}
+          </strong>{" "}
+          penuh, ditambah maksimal{" "}
+          <strong>{consumptionResult?.remainingMl} ml</strong> dari {unit}{" "}
+          berikutnya.
+        </span>
+      );
+    }
+
+    return null;
   }
 
   return (
@@ -263,7 +347,7 @@ export default function CalculateBeverages() {
 
             {/* Sugar Status */}
             <SugarLimitStatus
-              consumed={42}
+              consumed={selectedProduct?.sugars || 0}
               limit={getConvertMaxSugar(maksimalGulaHarianPengguna)}
             />
           </div>
@@ -327,7 +411,7 @@ export default function CalculateBeverages() {
 
                 <div className="grid grid-cols-1 gap-3">
                   <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                    <div className="flex justify-between items-center gap-3">
+                    <div className="flex justify-between items-center gap-3 text-sm">
                       <div className="flex gap-5 items-center">
                         <div className="flex size-10 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
                           <Package className="size-6" />
@@ -344,10 +428,10 @@ export default function CalculateBeverages() {
                     </div>
                   </div>
                   <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                    <div className="flex justify-between items-center gap-3">
+                    <div className="flex justify-between items-center gap-3 text-sm">
                       <div className="flex gap-5 items-center">
                         <div className="flex size-10 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
-                          <CupSoda className="size-6" />
+                          <GlassWater className="size-6" />
                         </div>
 
                         <p className="font-semibold text-slate-700">
@@ -363,7 +447,7 @@ export default function CalculateBeverages() {
                     </div>
                   </div>
                   <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                    <div className="flex justify-between items-center gap-3">
+                    <div className="flex justify-between items-center gap-3 text-sm">
                       <div className="flex gap-5 items-center">
                         <div className="flex size-10 items-center justify-center rounded-lg bg-pink-100 text-pink-600">
                           <Candy className="size-6" />
@@ -382,7 +466,7 @@ export default function CalculateBeverages() {
                     </div>
                   </div>
                   <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                    <div className="flex justify-between items-center gap-3">
+                    <div className="flex justify-between items-center gap-3 text-sm">
                       <div className="flex gap-5 items-center">
                         <div className="flex size-10 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
                           <Tags className="size-6" />
@@ -415,7 +499,7 @@ export default function CalculateBeverages() {
 
             <Button
               type="submit"
-              // disabled={!selectedProduct}
+              disabled={!selectedProduct}
               className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-600 active:scale-[0.99] disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none"
             >
               Hitung Konsumsi Gula
@@ -442,11 +526,11 @@ export default function CalculateBeverages() {
                 {/* Main Message */}
                 <div className="rounded-2xl bg-emerald-50 p-5">
                   <p className="text-sm font-medium leading-6 text-slate-700">
-                    {getConsumtionMessage()}
+                    {getConsumptionMessage()}
                   </p>
 
                   <div className="mt-3 flex gap-2 border-t border-emerald-100 pt-3">
-                    <Info className="mt-0.5 size-4 shrink-0 text-amber-500" />
+                    <Info className="mt-0.5 size-4 shrink-0 text-red-500" />
 
                     <p className="text-xs leading-5 text-slate-500">
                       Perhitungan ini mengasumsikan kamu belum mengonsumsi gula
@@ -458,22 +542,32 @@ export default function CalculateBeverages() {
                 {/* Bottle Visualization */}
                 <div className="mt-8">
                   <div className="flex min-h-[220px] flex-wrap items-end justify-center gap-x-6 gap-y-8">
-                    {fillBottle.map((item: number, i: number) => (
+                    {visibleBottles.map((item: number, i: number) => (
                       <ResultVisualization
                         key={i}
                         percentage={item}
                         index={i}
-                        typeBeverage={selectedProduct?.type}
+                        typeBeverage={selectedProduct?.type || "Siap Minum"}
                       />
                     ))}
+
+                    {remainingBottles > 0 && (
+                      <div className="flex items-center justify-center pb-5">
+                        <div className="rounded-full bg-slate-100 px-3 py-1.5">
+                          <span className="text-xs font-semibold text-slate-500">
+                            +{remainingBottles} lainnya
+                          </span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </>
             ) : (
               /* Empty State */
               <div className="flex min-h-[320px] flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 px-6 text-center">
-                <div className="flex size-16 items-center justify-center rounded-2xl bg-slate-100 text-amber-400 shadow-sm">
-                  <GlassWater className="size-8" />
+                <div className="flex size-16 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 shadow-sm">
+                  <BottleWine className="size-8" />
                 </div>
 
                 <h3 className="mt-5 text-sm font-semibold text-slate-700">
