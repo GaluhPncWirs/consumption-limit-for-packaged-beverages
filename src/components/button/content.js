@@ -41,20 +41,23 @@ export default function ButtonBack() {
     <>
       {curentLocation === "/mainContent/addProduct" ||
       curentLocation === "/mainContent/about" ? (
-        <button
-          className="py-2 px-5 hover:bg-yellow-400 bg-yellow-300 rounded-xl flex flex-row-reverse justify-center items-center gap-x-2 cursor-pointer"
-          onClick={() => push("/mainContent/calculateBeverage")}
+        <Button
+          variant="outline"
+          className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-colors hover:bg-white/20"
         >
+          <ArrowLeft className="size-6" />
           <span>Kembali</span>
-          <ArrowLeft />
-        </button>
+        </Button>
       ) : (
         <Dialog>
           <DialogTrigger asChild>
-            <button className="py-2 px-5 hover:bg-yellow-400 bg-yellow-300 rounded-xl flex flex-row-reverse justify-center items-center gap-x-2 cursor-pointer">
+            <Button
+              variant="outline"
+              className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-colors hover:bg-white/20"
+            >
+              <ArrowLeft className="size-6" />
               <span>Kembali</span>
-              <ArrowLeft />
-            </button>
+            </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>

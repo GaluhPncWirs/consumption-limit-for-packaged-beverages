@@ -1,8 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useLocationPage } from "@/store/usePathname/state";
-import { ArrowLeft } from "lucide-react";
-import { Button } from "../ui/button";
+import ButtonBack from "../button/content";
 
 export default function PathNavbar() {
   const curentLocation = useLocationPage((state) => state.curentLocationPage);
@@ -132,13 +131,7 @@ export default function PathNavbar() {
 
       {/* Bottom Action */}
       <div className="border-t border-slate-100 p-4">
-        <Button
-          variant="outline"
-          className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-colors hover:bg-white/20"
-        >
-          <ArrowLeft className="size-6" />
-          <span>Kembali</span>
-        </Button>
+        <ButtonBack />
       </div>
     </>
   );

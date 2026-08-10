@@ -54,7 +54,7 @@ const searchKeywordSchema = z.object({
 
 type searchKeyworSchema = z.infer<typeof searchKeywordSchema>;
 
-type dataBeverage = {
+type DataBeverage = {
   id: string;
   nameProduct: string;
   nameProductLowerCase: string;
@@ -67,13 +67,13 @@ export default function CalculateBeverages() {
   const pathname = usePathname();
   const [fillBottle, setFillBottle] = useState<number[]>([]);
   const [appearContent, setAppearContent] = useState<boolean>(false);
-  const [searchResult, setSearchResult] = useState<dataBeverage[]>([]);
+  const [searchResult, setSearchResult] = useState<DataBeverage[]>([]);
   const [totalBotol, setTotalBotol] = useState<number>(0);
   const [product, setProduct] = useState<productBeverageTypes[]>([]);
   const [maksimalGulaHarianPengguna, setMaksimalGulaHarianPengguna] =
     useState<number>(0);
   const [nameProduct, setNameProduct] = useState<string>("");
-  const [selectedProduct, setSelectedProduct] = useState<dataBeverage | null>(
+  const [selectedProduct, setSelectedProduct] = useState<DataBeverage | null>(
     null,
   );
   const [result, setResult] = useState<productBeverageTypes[]>([]);
@@ -295,7 +295,7 @@ export default function CalculateBeverages() {
     }
   }
 
-  function handleItemClick(item: dataBeverage) {
+  function handleItemClick(item: DataBeverage) {
     setSelectedProduct(item);
     setNameProduct(item.nameProduct);
     setIsOpenSearchProduct(false);
