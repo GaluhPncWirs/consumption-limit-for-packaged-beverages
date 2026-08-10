@@ -33,6 +33,7 @@ import {
   GlassWater,
   Info,
   Lightbulb,
+  Package,
   PlayIcon,
   Search,
   Sparkles,
@@ -53,17 +54,28 @@ const searchKeywordSchema = z.object({
 
 type searchKeyworSchema = z.infer<typeof searchKeywordSchema>;
 
+type dataBeverage = {
+  id: string;
+  nameProduct: string;
+  nameProductLowerCase: string;
+  sugars: number;
+  type: string;
+  volume: number;
+};
+
 export default function CalculateBeverages() {
   const pathname = usePathname();
   const [fillBottle, setFillBottle] = useState<number[]>([]);
   const [appearContent, setAppearContent] = useState<boolean>(false);
+  const [searchResult, setSearchResult] = useState<dataBeverage[]>([]);
   const [totalBotol, setTotalBotol] = useState<number>(0);
   const [product, setProduct] = useState<productBeverageTypes[]>([]);
   const [maksimalGulaHarianPengguna, setMaksimalGulaHarianPengguna] =
     useState<number>(0);
-  const [searchProduk, setSearchProduk] = useState<string>("");
-  const [selectedProduct, setSelectedProduct] =
-    useState<productBeverageTypes | null>(null);
+  const [nameProduct, setNameProduct] = useState<string>("");
+  const [selectedProduct, setSelectedProduct] = useState<dataBeverage | null>(
+    null,
+  );
   const [result, setResult] = useState<productBeverageTypes[]>([]);
   const [sugar, setSugar] = useState<number>(0);
   const [volume, setVolume] = useState<number>(0);
@@ -89,29 +101,47 @@ export default function CalculateBeverages() {
     watch,
     handleSubmit,
     control,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<searchKeyworSchema>({
     resolver: zodResolver(searchKeywordSchema),
   });
 
+  const keyword = watch("searchKeyword");
+
+  useEffect(() => {
+    reset({
+      searchKeyword: nameProduct,
+    });
+  }, [nameProduct]);
+
+  useEffect(() => {
+    if (!keyword) return;
+
+    async function handleSearchNameBeverage() {
+      try {
+        const req = await fetch("/api/pageCalculate/getDataBeverage", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            keyword: keyword,
+          }),
+        });
+
+        const res = await req.json();
+
+        setSearchResult(res.data);
+      } catch {
+        toast.error("Gagal fetch data ke API");
+      }
+    }
+    handleSearchNameBeverage();
+  }, [keyword]);
+
   async function onSubmit(data: searchKeyworSchema) {
     console.log(data);
-  }
-
-  async function handleSearchBeverage(keyword: string) {
-    const req = await fetch("/api/pageCalculate/getDataBeverage", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        keyword: keyword,
-      }),
-    });
-
-    const res = await req.json();
-
-    console.log(res.data);
   }
 
   useEffect(() => {
@@ -130,8 +160,8 @@ export default function CalculateBeverages() {
   }, []);
 
   useEffect(() => {
-    setMustFilled((prev: Object) => ({ ...prev, product: searchProduk }));
-  }, [searchProduk, setMustFilled]);
+    setMustFilled((prev: Object) => ({ ...prev, product: nameProduct }));
+  }, [nameProduct, setMustFilled]);
 
   function handleCalculateProductBeverage(
     event: React.FormEvent<HTMLFormElement>,
@@ -249,7 +279,7 @@ export default function CalculateBeverages() {
   }, [type]);
 
   function handleInputChange(value: string) {
-    setSearchProduk(value);
+    setNameProduct(value);
 
     if (value !== "") {
       const filterSearchProduct = product.filter(
@@ -265,15 +295,15 @@ export default function CalculateBeverages() {
     }
   }
 
-  function handleItemClick(item: productBeverageTypes) {
+  function handleItemClick(item: dataBeverage) {
     setSelectedProduct(item);
-    setSearchProduk(item.nameProduct);
+    setNameProduct(item.nameProduct);
     setIsOpenSearchProduct(false);
   }
 
   useEffect(() => {
     if (selectedProduct) {
-      setSearchProduk(selectedProduct.nameProduct);
+      setNameProduct(selectedProduct.nameProduct);
       setSugar(selectedProduct.sugars);
       setVolume(selectedProduct.volume);
       setType(selectedProduct.type);
@@ -281,11 +311,11 @@ export default function CalculateBeverages() {
   }, [selectedProduct]);
 
   useEffect(() => {
-    if (searchProduk === "") {
+    if (keyword === "") {
       setSelectedProduct(null);
       setIsOpenSearchProduct(true);
     }
-  }, [searchProduk]);
+  }, [keyword]);
 
   function getConsumtionMessage() {
     if (fillBottle.length > 1 && fillLess100 < 100 && remainingMl !== 0) {
@@ -344,7 +374,7 @@ export default function CalculateBeverages() {
             />
           </div>
         </div>
-        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2 relative">
           <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
             <div className="space-y-5 mb-5">
               <Command className="pt-2">
@@ -364,14 +394,14 @@ export default function CalculateBeverages() {
                 </p>
                 {isOpenSearchProduct && (
                   <div>
-                    {searchProduk !== "" && (
+                    {keyword !== "" && (
                       <CommandList
-                        className="absolute left-0 top-full z-50 mt-2 w-full rounded-xl border border-slate-200 bg-white p-2 shadow-xl
+                        className="absolute w-1/2 z-50 rounded-xl border border-slate-200 bg-white p-2 shadow-xl
 "
                       >
-                        {result.length > 0 ? (
-                          <CommandGroup heading="Pilih Produk">
-                            {result.map((item: productBeverageTypes) => (
+                        {searchResult.length > 0 ? (
+                          <CommandGroup heading="Pilih Produk Minuman">
+                            {searchResult.map((item) => (
                               <CommandItem
                                 key={item.id}
                                 onSelect={() => handleItemClick(item)}
@@ -405,6 +435,23 @@ export default function CalculateBeverages() {
                   <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
                     <div className="flex justify-between items-center gap-3">
                       <div className="flex gap-5 items-center">
+                        <div className="flex size-10 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
+                          <Package className="size-6" />
+                        </div>
+
+                        <p className="font-semibold text-slate-700">
+                          Nama Produk
+                        </p>
+                      </div>
+
+                      <p className="mt-0.5 font-semibold text-slate-800">
+                        {selectedProduct?.nameProduct || "-"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <div className="flex justify-between items-center gap-3">
+                      <div className="flex gap-5 items-center">
                         <div className="flex size-10 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
                           <CupSoda className="size-6" />
                         </div>
@@ -415,7 +462,9 @@ export default function CalculateBeverages() {
                       </div>
 
                       <p className="mt-0.5 font-semibold text-slate-800">
-                        {volume} ml
+                        {selectedProduct?.volume
+                          ? `${selectedProduct?.volume} ml`
+                          : "-"}
                       </p>
                     </div>
                   </div>
@@ -432,7 +481,9 @@ export default function CalculateBeverages() {
                       </div>
 
                       <p className="mt-0.5 font-semibold text-slate-800">
-                        {sugar} g
+                        {selectedProduct?.sugars
+                          ? `${selectedProduct?.sugars} g`
+                          : "-"}
                       </p>
                     </div>
                   </div>
@@ -449,7 +500,7 @@ export default function CalculateBeverages() {
                       </div>
 
                       <p className="mt-0.5 font-semibold text-slate-800">
-                        {type}
+                        {selectedProduct?.type || "-"}
                       </p>
                     </div>
                   </div>

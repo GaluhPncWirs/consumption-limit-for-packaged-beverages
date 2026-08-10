@@ -11,6 +11,7 @@
         "menambahkan fitur untuk menampilkan visualisasi limit dari batas gula harian user berdasarkan minuman yang di pilih",
         "memperbaiki ui pada bagian edukasi dan juga memperbaiki hamburger menu yang tidak muncul sidebarnya",
         "memperbaiki ui/ux bagian hasil perhitungan menggunakan visualisasi botol dan gelas",
-        "untuk sementara selesai konfigurasi ulang pada proses pengambilan data minuman"
+        "untuk sementara selesai konfigurasi ulang pada proses pengambilan data minuman",
+        "selesai untuk refaktor code bagian pengambilan data minuman menggunakan querry langsung tanpa harus mengambil semua data yang ada"
     ]
 }
