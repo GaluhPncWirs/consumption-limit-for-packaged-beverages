@@ -28,22 +28,32 @@ import { toast } from "sonner";
 import ComponentInput from "@/layout/input/content";
 import {
   ArrowRight,
+  Badge,
   BookOpen,
+  BottleWine,
   Candy,
   ChevronUp,
   CupSoda,
   ExternalLink,
+  GlassWater,
+  Info,
   Layers3,
   Lightbulb,
+  ListFilter,
   PlayIcon,
   Search,
+  Shapes,
+  SlidersHorizontal,
   Sparkles,
+  Tag,
+  Tags,
 } from "lucide-react";
 import { getConvertMaxSugar } from "@/app/hooks/getConvertMaxSugar";
 import FloatingLabel from "@/components/floating-label/component";
 import { Button } from "@/components/ui/button";
 import { SugarLimitStatus } from "@/components/sugarLimitStatus/component";
 import { Play } from "next/font/google";
+import ResultVisualization from "@/components/resultVisualization/component";
 
 export default function CalculateBeverages() {
   const pathname = usePathname();
@@ -306,13 +316,7 @@ export default function CalculateBeverages() {
             />
           </div>
         </div>
-        <div
-          className={`mt-5 grid ${
-            fillBottle.length >= 1
-              ? `grid-cols-2 gap-y-5 lg:gap-x-3`
-              : `grid-cols-1`
-          }`}
-        >
+        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
           <form
             autoComplete="off"
             onSubmit={(e) => handleCalculateProductBeverage(e)}
@@ -409,7 +413,7 @@ export default function CalculateBeverages() {
                     <div className="flex justify-between items-center gap-3">
                       <div className="flex gap-5 items-center">
                         <div className="flex size-10 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
-                          <Layers3 className="size-6" />
+                          <Tags className="size-6" />
                         </div>
 
                         <p className="font-semibold text-slate-700">
@@ -438,7 +442,7 @@ export default function CalculateBeverages() {
             </div>
 
             <Button
-              type="button"
+              type="submit"
               disabled={!selectedProduct}
               className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-600 active:scale-[0.99] disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none"
             >
@@ -447,37 +451,77 @@ export default function CalculateBeverages() {
             </Button>
           </form>
 
-          <div className="gap-6 flex justify-center items-center flex-col md:basis-1/2 lg:basis-3/4">
-            <div
-              className={`${
-                appearContent ? `block` : `hidden`
-              } font-semibold text-lg tracking-wide max-w-md`}
-            >
-              {getConsumtionMessage()}
-              <h2 className="text-xs text-[#F93827] mt-0.5 text-justify">
-                *Disclaimer Ini hanya berlaku jika kamu belum ada asupan gula
-                sama sekali di hari ini. Jika sudah ada, sebaiknya jumlahnya
-                dikurangi dari yang ditampilkan.
-              </h2>
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+            {/* Header */}
+            <div className="mb-6">
+              <div>
+                <h2 className="text-lg font-bold text-slate-900">
+                  Visualisasi Konsumsi
+                </h2>
+
+                <p className="text-xs text-muted-foreground">
+                  Gambaran konsumsi berdasarkan batas gula harianmu.
+                </p>
+              </div>
             </div>
-            <div className="flex items-center justify-center flex-wrap gap-y-5">
-              {fillBottle.map((item: number, i: number) =>
-                typeProduct === "Siap Minum" ? (
-                  <div key={i} className="bottleInside w-32">
-                    <div className="fill" style={{ height: `${item}%` }}></div>
+
+            {selectedProduct ? (
+              <>
+                {/* Main Message */}
+                <div className="rounded-2xl bg-emerald-50 p-5">
+                  <p className="text-sm font-medium leading-6 text-slate-700">
+                    {getConsumtionMessage()}
+                  </p>
+
+                  <div className="mt-3 flex gap-2 border-t border-emerald-100 pt-3">
+                    <Info className="mt-0.5 size-4 shrink-0 text-amber-500" />
+
+                    <p className="text-xs leading-5 text-slate-500">
+                      Perhitungan ini mengasumsikan kamu belum mengonsumsi gula
+                      dari makanan atau minuman lain hari ini.
+                    </p>
                   </div>
-                ) : (
-                  <div key={i} className="glassCupInside w-32">
-                    <div className="fill" style={{ height: `${item}%` }}></div>
+                </div>
+
+                {/* Bottle Visualization */}
+                <div className="mt-8">
+                  <div className="flex min-h-[220px] flex-wrap items-end justify-center gap-x-6 gap-y-8">
+                    {fillBottle.map((item: number, i: number) => (
+                      <ResultVisualization
+                        key={i}
+                        percentage={item}
+                        index={i}
+                        srcImage={
+                          typeProduct === "Siap Minum"
+                            ? "/images/pageCalculateBeverage/plastic-bottle-water.png"
+                            : "/images/pageCalculateBeverage/glass_new.png"
+                        }
+                      />
+                    ))}
                   </div>
-                ),
-              )}
-            </div>
-            {totalBotol >= 1 && (
-              <h1 className="text-sm tracking-wide font-semibold text-justify max-w-md">
-                {`Jika Kamu Mengkonsumsi Hanya ${messageIfDrinkSomeBottles.botol} Botol Maka Sisa Dari Gula
-                  Harian Kamu Adalah ${messageIfDrinkSomeBottles.sisaGula} Gram`}
-              </h1>
+                </div>
+              </>
+            ) : (
+              /* Empty State */
+              <div className="flex min-h-[320px] flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 px-6 text-center">
+                <div className="flex size-16 items-center justify-center rounded-2xl bg-slate-100 text-amber-400 shadow-sm">
+                  <GlassWater className="size-8" />
+                </div>
+
+                <h3 className="mt-5 text-sm font-semibold text-slate-700">
+                  Belum ada produk dipilih
+                </h3>
+
+                <p className="mt-1.5 max-w-xs text-xs leading-5 text-slate-400">
+                  Pilih produk minuman terlebih dahulu untuk melihat gambaran
+                  konsumsi gula harianmu.
+                </p>
+
+                <div className="mt-5 flex items-center gap-2 rounded-full bg-emerald-50 px-5 py-2 text-xs font-medium text-emerald-600 shadow-sm">
+                  <Search className="size-3.5" />
+                  Cari produk di sebelah kiri
+                </div>
+              </div>
             )}
           </div>
         </div>

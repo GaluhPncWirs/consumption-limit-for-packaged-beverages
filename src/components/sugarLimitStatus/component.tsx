@@ -1,4 +1,4 @@
-import { Candy } from "lucide-react";
+import { ChartNoAxesColumnIncreasing } from "lucide-react";
 
 type SugarLimitStatusProps = {
   consumed: number;
@@ -51,7 +51,7 @@ export function SugarLimitStatus({ consumed, limit }: SugarLimitStatusProps) {
           <div
             className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${config.icon}`}
           >
-            <Candy className="size-5" />
+            <ChartNoAxesColumnIncreasing className="size-5" />
           </div>
 
           <div>
