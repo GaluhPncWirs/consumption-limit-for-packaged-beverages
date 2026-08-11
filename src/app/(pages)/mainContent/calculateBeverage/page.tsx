@@ -2,19 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useHandleInput } from "../../../hooks/getIsFormFilled";
-import {
-  educationsForArtikel,
-  educationsForFunfactSugar,
-  educationsForVideo,
-  productBeverageTypes,
-} from "@/types/dataTypes";
-import {
-  subscribeToFunFactSugars,
-  subscribeToProducts,
-  subscribeToReleatedArtikel,
-  subscribeToVideoEducation,
-} from "@/lib/firebase/services";
+import { educationsForArtikel, educationsForVideo } from "@/types/dataTypes";
 import MainContentLayout from "@/layout/mainSystem/content";
 import {
   Command,
@@ -48,6 +36,7 @@ import ResultVisualization from "@/components/resultVisualization/component";
 import { z } from "zod";
 import { FieldError, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { getDataFunFactData } from "@/services/firebase/dataFunFacts/service";
 
 const searchKeywordSchema = z.object({
   searchKeyword: z.string().min(3, "Minimal 3 karakter"),
@@ -64,20 +53,22 @@ type DataBeverage = {
   volume: number;
 };
 
-type ConsumptionResult = {
+type ResultCalculation = {
   fullBottles: number;
   remainingMl: number;
   remainingPercentage: number;
   fillBottles: number[];
   sugarPerBottle: number;
   totalConsumptionMl: number;
+
+  funFact: string;
 };
 
 export default function CalculateBeverages() {
   const pathname = usePathname();
   const [searchResult, setSearchResult] = useState<DataBeverage[]>([]);
-  const [consumptionResult, setConsumptionResult] =
-    useState<ConsumptionResult | null>(null);
+  const [resultCalculation, setResultCalculation] =
+    useState<ResultCalculation | null>(null);
   const [maksimalGulaHarianPengguna, setMaksimalGulaHarianPengguna] =
     useState<number>(0);
   const [nameProduct, setNameProduct] = useState<string>("");
@@ -87,10 +78,7 @@ export default function CalculateBeverages() {
   const [funFactSugar, setFunFactSugar] = useState<string[]>([]);
   const [video, setVideo] = useState<educationsForVideo[]>([]);
   const [artikel, setArtikel] = useState<educationsForArtikel[]>([]);
-  const [typeProduct, setTypeProduct] = useState<string>("");
-
   const [isOpenSearchProduct, setIsOpenSearchProduct] = useState<boolean>(true);
-
   const {
     register,
     watch,
@@ -100,12 +88,10 @@ export default function CalculateBeverages() {
   } = useForm<searchKeyworSchema>({
     resolver: zodResolver(searchKeywordSchema),
   });
-
   const keyword = watch("searchKeyword");
-
-  const visibleBottles = consumptionResult?.fillBottles.slice(0, 2);
+  const visibleBottles = resultCalculation?.fillBottles.slice(0, 2);
   const remainingBottles = Math.max(
-    (consumptionResult?.fillBottles?.length ?? 0) - 2,
+    (resultCalculation?.fillBottles?.length ?? 0) - 2,
     0,
   );
 
@@ -140,11 +126,6 @@ export default function CalculateBeverages() {
     handleSearchNameBeverage();
   }, [keyword]);
 
-  //     if (funFactSugar.length > 0 && video.length > 0) {
-  //   setFunFactSugar((prev) => [...prev.sort(() => Math.random() - 0.5)]);
-  //   setVideo((prev) => [...prev.sort(() => Math.random() - 0.5)]);
-  //   setArtikel((prev) => [...prev.sort(() => Math.random() - 0.5)]);
-  // }
   async function onSubmit(data: searchKeyworSchema) {
     if (!selectedProduct) return;
 
@@ -213,19 +194,29 @@ export default function CalculateBeverages() {
     }
 
     // ============================================
-    // 7. set hasil perhitungan
+    // 7. data pendukung
     // ============================================
 
-    const result: ConsumptionResult = {
+    const dataFunFact = await getDataFunFactData();
+
+    // ============================================
+    // 8. set hasil perhitungan
+    // ============================================
+
+    if (!dataFunFact.status) return;
+
+    const result: ResultCalculation = {
       fullBottles,
       remainingMl,
       remainingPercentage,
       fillBottles: fillArray,
       sugarPerBottle: totalSugar,
       totalConsumptionMl: Math.round(maxConsumptionMl),
+
+      funFact: dataFunFact.data?.funFact,
     };
 
-    setConsumptionResult(result);
+    setResultCalculation(result);
   }
 
   useEffect(() => {
@@ -261,14 +252,14 @@ export default function CalculateBeverages() {
 
     // Tidak dapat mengonsumsi satu unit penuh
     if (
-      consumptionResult?.fullBottles === 0 &&
-      consumptionResult.remainingMl > 0
+      resultCalculation?.fullBottles === 0 &&
+      resultCalculation.remainingMl > 0
     ) {
       return (
         <span>
           Kamu dapat mengonsumsi maksimal{" "}
-          <strong>{consumptionResult.remainingMl} ml</strong> atau sekitar{" "}
-          <strong>{consumptionResult?.remainingPercentage}%</strong> dari 1{" "}
+          <strong>{resultCalculation.remainingMl} ml</strong> atau sekitar{" "}
+          <strong>{resultCalculation?.remainingPercentage}%</strong> dari 1{" "}
           {unit}.
         </span>
       );
@@ -276,14 +267,14 @@ export default function CalculateBeverages() {
 
     // Hanya dapat mengonsumsi unit penuh tanpa sisa
     if (
-      (consumptionResult?.fullBottles ?? 0) > 0 &&
-      (consumptionResult?.remainingMl ?? 0) === 0
+      (resultCalculation?.fullBottles ?? 0) > 0 &&
+      (resultCalculation?.remainingMl ?? 0) === 0
     ) {
       return (
         <span>
           Kamu dapat mengonsumsi maksimal{" "}
           <strong>
-            {consumptionResult?.fullBottles} {unit}
+            {resultCalculation?.fullBottles} {unit}
           </strong>
           .
         </span>
@@ -292,17 +283,17 @@ export default function CalculateBeverages() {
 
     // Dapat mengonsumsi unit penuh + sebagian unit berikutnya
     if (
-      (consumptionResult?.fullBottles ?? 0) > 0 &&
-      (consumptionResult?.remainingMl ?? 0) > 0
+      (resultCalculation?.fullBottles ?? 0) > 0 &&
+      (resultCalculation?.remainingMl ?? 0) > 0
     ) {
       return (
         <span>
           Kamu dapat mengonsumsi maksimal{" "}
           <strong>
-            {consumptionResult?.fullBottles} {unit}
+            {resultCalculation?.fullBottles} {unit}
           </strong>{" "}
           penuh, ditambah maksimal{" "}
-          <strong>{consumptionResult?.remainingMl} ml</strong> dari {unit}{" "}
+          <strong>{resultCalculation?.remainingMl} ml</strong> dari {unit}{" "}
           berikutnya.
         </span>
       );
@@ -551,7 +542,7 @@ export default function CalculateBeverages() {
                 </div>
               </>
             ) : (
-              /* Empty State */
+              // Empty State
               <div className="flex min-h-[350px] flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 px-6 text-center">
                 <div className="flex size-16 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 shadow-sm">
                   <BottleWine className="size-8" />
