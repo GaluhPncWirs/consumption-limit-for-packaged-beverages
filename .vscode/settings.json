@@ -19,6 +19,7 @@
         "menghapus variabel yang tidak di perlukan di halaman perhitungan konsumsi minuman",
         "menambahkan data field randomNumber yang ada di firestore yang nantinya untuk mengambil data random",
         "selesai mengerjakan untuk memunculkan ui bagian edukasi",
-        "menghapus state yang tidak diperlukan"
+        "menghapus state yang tidak diperlukan",
+        "selesai untuk merombak ui/ux dan code di halaman perhitungan konsumsi minuman"
     ]
 }
