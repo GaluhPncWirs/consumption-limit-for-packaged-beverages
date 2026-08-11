@@ -68,18 +68,16 @@ type ConsumptionResult = {
   fullBottles: number;
   remainingMl: number;
   remainingPercentage: number;
+  fillBottles: number[];
   sugarPerBottle: number;
   totalConsumptionMl: number;
-  remainingSugar: number;
 };
 
 export default function CalculateBeverages() {
   const pathname = usePathname();
-  const [fillBottles, setFillBottles] = useState<number[]>([]);
   const [searchResult, setSearchResult] = useState<DataBeverage[]>([]);
   const [consumptionResult, setConsumptionResult] =
     useState<ConsumptionResult | null>(null);
-  const [totalBotol, setTotalBotol] = useState<number>(0);
   const [maksimalGulaHarianPengguna, setMaksimalGulaHarianPengguna] =
     useState<number>(0);
   const [nameProduct, setNameProduct] = useState<string>("");
@@ -105,8 +103,11 @@ export default function CalculateBeverages() {
 
   const keyword = watch("searchKeyword");
 
-  const visibleBottles = fillBottles.slice(0, 2);
-  const remainingBottles = Math.max(fillBottles.length - 2, 0);
+  const visibleBottles = consumptionResult?.fillBottles.slice(0, 2);
+  const remainingBottles = Math.max(
+    (consumptionResult?.fillBottles?.length ?? 0) - 2,
+    0,
+  );
 
   useEffect(() => {
     reset({
@@ -211,31 +212,17 @@ export default function CalculateBeverages() {
       fillArray.push(remainingPercentage);
     }
 
-    setFillBottles(fillArray);
-
     // ============================================
-    // 7. Total botol penuh
+    // 7. set hasil perhitungan
     // ============================================
-
-    setTotalBotol(fullBottles);
-
-    // ============================================
-    // 8. Contoh konsumsi berdasarkan botol
-    // ============================================
-
-    const displayBottles = fullBottles > 0 ? Math.min(fullBottles, 2) : 0;
-
-    const sugarConsumed = displayBottles * totalSugar;
-
-    const remainingSugar = Math.max(maxDailySugar - sugarConsumed, 0);
 
     const result: ConsumptionResult = {
       fullBottles,
       remainingMl,
       remainingPercentage,
+      fillBottles: fillArray,
       sugarPerBottle: totalSugar,
       totalConsumptionMl: Math.round(maxConsumptionMl),
-      remainingSugar: Math.round(remainingSugar),
     };
 
     setConsumptionResult(result);
@@ -541,8 +528,8 @@ export default function CalculateBeverages() {
 
                 {/* Bottle Visualization */}
                 <div className="mt-8">
-                  <div className="flex min-h-[220px] flex-wrap items-end justify-center gap-x-6 gap-y-8">
-                    {visibleBottles.map((item: number, i: number) => (
+                  <div className="flex min-h-[220px] flex-wrap items-end justify-center gap-x-5 gap-y-6">
+                    {(visibleBottles ?? []).map((item: number, i: number) => (
                       <ResultVisualization
                         key={i}
                         percentage={item}
@@ -565,7 +552,7 @@ export default function CalculateBeverages() {
               </>
             ) : (
               /* Empty State */
-              <div className="flex min-h-[320px] flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 px-6 text-center">
+              <div className="flex min-h-[350px] flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 px-6 text-center">
                 <div className="flex size-16 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 shadow-sm">
                   <BottleWine className="size-8" />
                 </div>

@@ -7,24 +7,24 @@ type SugarLimitStatusProps = {
 
 const statusConfig = {
   safe: {
-    container: "bg-emerald-50 border-emerald-100",
-    icon: "bg-emerald-100 text-emerald-600",
+    container: "bg-emerald-100 border-emerald-100",
+    icon: "bg-emerald-200 text-emerald-600",
     progress: "bg-emerald-500",
     text: "text-emerald-700",
     label: "Masih aman",
   },
 
   warning: {
-    container: "bg-amber-50 border-amber-100",
-    icon: "bg-amber-100 text-amber-600",
+    container: "bg-amber-100 border-amber-100",
+    icon: "bg-amber-200 text-amber-600",
     progress: "bg-amber-500",
     text: "Mulai mendekati batas",
     label: "Perhatikan konsumsi",
   },
 
   danger: {
-    container: "bg-red-50 border-red-100",
-    icon: "bg-red-100 text-red-600",
+    container: "bg-red-100 border-red-100",
+    icon: "bg-red-200 text-red-600",
     progress: "bg-red-500",
     text: "Sudah melewati batas",
     label: "Batasi konsumsi gula",
