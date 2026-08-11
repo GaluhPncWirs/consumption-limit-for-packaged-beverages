@@ -1,10 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
-import { useLocationPage } from "@/store/usePathname/state";
 import ButtonBack from "../button/content";
 
 export default function PathNavbar() {
-  const curentLocation = useLocationPage((state) => state.curentLocationPage);
   return (
     <>
       {/* Logo */}
@@ -31,26 +29,14 @@ export default function PathNavbar() {
           {/* Hitung */}
           <Link
             href="/mainContent/calculateBeverage"
-            className={`group flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 ${
-              curentLocation === "/mainContent/calculateBeverage"
-                ? "bg-white text-emerald-700 shadow-sm"
-                : "text-emerald-950 hover:bg-white/20"
-            }`}
+            className={`group flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 bg-white text-emerald-700 shadow-sm`}
           >
             <div
-              className={`flex size-10 shrink-0 items-center justify-center rounded-lg transition-colors ${
-                curentLocation === "/mainContent/calculateBeverage"
-                  ? "bg-emerald-100"
-                  : "bg-white/10 group-hover:bg-white/20"
-              }`}
+              className={`flex size-10 shrink-0 items-center justify-center rounded-lg transition-color`}
             >
               <Image
-                src={`/images/global/${
-                  curentLocation === "/mainContent/calculateBeverage"
-                    ? "calculate-full"
-                    : "calculate"
-                }.png`}
-                alt=""
+                src={`/images/global/calculate.png`}
+                alt="Calculate"
                 width={200}
                 height={200}
                 className="size-6"
@@ -64,26 +50,14 @@ export default function PathNavbar() {
           {/* Tambah Produk */}
           <Link
             href="/mainContent/addProduct"
-            className={`group flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 ${
-              curentLocation === "/mainContent/addProduct"
-                ? "bg-white text-emerald-700 shadow-sm"
-                : "text-emerald-950 hover:bg-white/20"
-            }`}
+            className={`group flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 bg-white text-emerald-700 shadow-sm`}
           >
             <div
-              className={`flex size-10 shrink-0 items-center justify-center rounded-lg transition-colors ${
-                curentLocation === "/mainContent/addProduct"
-                  ? "bg-emerald-100"
-                  : "bg-white/10 group-hover:bg-white/20"
-              }`}
+              className={`flex size-10 shrink-0 items-center justify-center rounded-lg transition-colors `}
             >
               <Image
-                src={`/images/global/${
-                  curentLocation === "/mainContent/addProduct"
-                    ? "addProduct-full"
-                    : "addProduct"
-                }.png`}
-                alt=""
+                src={`/images/global/addProduct.png`}
+                alt="Add Product"
                 width={200}
                 height={200}
                 className="size-6"
@@ -97,25 +71,13 @@ export default function PathNavbar() {
           {/* Tentang */}
           <Link
             href="/mainContent/about"
-            className={`group flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 ${
-              curentLocation === "/mainContent/about"
-                ? "bg-white text-emerald-700 shadow-sm"
-                : "text-emerald-950 hover:bg-white/20"
-            }`}
+            className={`group flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 bg-white text-emerald-700 shadow-sm`}
           >
             <div
-              className={`flex size-10 shrink-0 items-center justify-center rounded-lg transition-colors ${
-                curentLocation === "/mainContent/about"
-                  ? "bg-emerald-100"
-                  : "bg-white/10 group-hover:bg-white/20"
-              }`}
+              className={`flex size-10 shrink-0 items-center justify-center rounded-lg transition-colors`}
             >
               <Image
-                src={`/images/global/${
-                  curentLocation === "/mainContent/about"
-                    ? "aboutMe-full"
-                    : "aboutMe"
-                }.png`}
+                src={`/images/global/aboutMe.png`}
                 alt=""
                 width={200}
                 height={200}

@@ -26,13 +26,6 @@ export async function POST(req: NextRequest) {
       path: "/",
     });
 
-    response.cookies.set("calculationSuccess", "true", {
-      httpOnly: true,
-      secure: true,
-      sameSite: "strict",
-      path: "/",
-    });
-
     return response;
   }
 

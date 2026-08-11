@@ -1,4 +1,3 @@
-import { useLocationPage } from "@/store/usePathname/state";
 import HamburgerMenu from "@/components/hamburgerMenu/hamburgerMenu";
 import PathNavbar from "@/components/pathSidebar/content";
 import { useEffect } from "react";
@@ -10,7 +9,6 @@ import { useDeleteToken } from "@/store/useDeleteToken/state";
 import { useShallow } from "zustand/shallow";
 
 export default function MainContentLayout({ children, path }) {
-  const currentPathname = useLocationPage((func) => func.setCurrrentLocation);
   const { loadingSession, statusToken } = useGetVerifyToken();
   const { push } = useRouter();
 
@@ -33,9 +31,6 @@ export default function MainContentLayout({ children, path }) {
     }
   }, [setDeleteToken, statusToken, isDeleteToken, push]);
 
-  useEffect(() => {
-    currentPathname(path);
-  }, [path, currentPathname]);
   return (
     <div className="relative flex min-h-screen">
       <aside className="hidden md:block md:w-64 xl:w-72">

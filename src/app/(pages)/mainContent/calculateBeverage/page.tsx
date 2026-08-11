@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { educationsForArtikel, educationsForVideo } from "@/types/dataTypes";
 import MainContentLayout from "@/layout/mainSystem/content";
 import {
   Command,
@@ -17,7 +16,6 @@ import {
   BookOpen,
   BottleWine,
   Candy,
-  CupSoda,
   ExternalLink,
   GlassWater,
   Info,
@@ -145,7 +143,7 @@ export default function CalculateBeverages() {
     handleSearchNameBeverage();
   }, [keyword]);
 
-  async function onSubmit(data: searchKeyworSchema) {
+  async function onSubmit() {
     if (!selectedProduct) return;
 
     const totalSugar = Number(selectedProduct.sugars);
@@ -225,9 +223,9 @@ export default function CalculateBeverages() {
     // ============================================
 
     if (
-      !dataFunFact.status ||
-      !dataRelatedJournals.status ||
-      !dataVideoEducations.status
+      !dataFunFact.data ||
+      !dataRelatedJournals.data ||
+      !dataVideoEducations.data
     )
       return;
 
@@ -239,9 +237,11 @@ export default function CalculateBeverages() {
       sugarPerBottle: totalSugar,
       totalConsumptionMl: Math.round(maxConsumptionMl),
 
-      funFact: dataFunFact.data,
-      relatedJournal: dataRelatedJournals.data,
-      videoEducation: dataVideoEducations.data,
+      funFact: dataFunFact.data as ResultCalculation["funFact"],
+      relatedJournal:
+        dataRelatedJournals.data as ResultCalculation["relatedJournal"],
+      videoEducation:
+        dataVideoEducations.data as ResultCalculation["videoEducation"],
     };
 
     setResultCalculation(result);
@@ -535,7 +535,7 @@ export default function CalculateBeverages() {
                     {getConsumptionMessage()}
                   </p>
 
-                  <div className="mt-3 flex gap-2 border-t border-emerald-100 pt-3">
+                  <div className="mt-3 flex gap-2 border-t border-slate-300 pt-3">
                     <Info className="mt-0.5 size-4 shrink-0 text-red-500" />
 
                     <p className="text-xs leading-5 text-slate-500">
