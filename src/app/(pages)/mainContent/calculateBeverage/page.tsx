@@ -22,6 +22,7 @@ import {
   GlassWater,
   Info,
   Lightbulb,
+  Loader2,
   Package,
   PlayIcon,
   Search,
@@ -36,7 +37,10 @@ import ResultVisualization from "@/components/resultVisualization/component";
 import { z } from "zod";
 import { FieldError, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getDataFunFactData } from "@/services/firebase/dataFunFacts/service";
+import { getDataFunFact } from "@/services/firebase/dataFunFacts/service";
+import { getDataVideoEducations } from "@/services/firebase/dataVideoEducations/service";
+import { getDataRelatedJournals } from "@/services/firebase/dataRelatedJournal/service";
+import Script from "next/script";
 
 const searchKeywordSchema = z.object({
   searchKeyword: z.string().min(3, "Minimal 3 karakter"),
@@ -61,7 +65,25 @@ type ResultCalculation = {
   sugarPerBottle: number;
   totalConsumptionMl: number;
 
-  funFact: string;
+  funFact: {
+    funFact: string;
+    id: string;
+    randomNumber: number;
+  };
+  relatedJournal: {
+    id: string;
+    kalimatEdukasi: string;
+    linkEdukasi: string;
+    randomNumber: number;
+    sumberReferensi: string;
+  };
+  videoEducation: {
+    id: string;
+    linkVideo: string;
+    randomNumber: number;
+    sumber: string;
+    sumberReferensiVideo: string;
+  };
 };
 
 export default function CalculateBeverages() {
@@ -75,9 +97,6 @@ export default function CalculateBeverages() {
   const [selectedProduct, setSelectedProduct] = useState<DataBeverage | null>(
     null,
   );
-  const [funFactSugar, setFunFactSugar] = useState<string[]>([]);
-  const [video, setVideo] = useState<educationsForVideo[]>([]);
-  const [artikel, setArtikel] = useState<educationsForArtikel[]>([]);
   const [isOpenSearchProduct, setIsOpenSearchProduct] = useState<boolean>(true);
   const {
     register,
@@ -197,13 +216,20 @@ export default function CalculateBeverages() {
     // 7. data pendukung
     // ============================================
 
-    const dataFunFact = await getDataFunFactData();
+    const dataFunFact = await getDataFunFact();
+    const dataRelatedJournals = await getDataRelatedJournals();
+    const dataVideoEducations = await getDataVideoEducations();
 
     // ============================================
     // 8. set hasil perhitungan
     // ============================================
 
-    if (!dataFunFact.status) return;
+    if (
+      !dataFunFact.status ||
+      !dataRelatedJournals.status ||
+      !dataVideoEducations.status
+    )
+      return;
 
     const result: ResultCalculation = {
       fullBottles,
@@ -213,7 +239,9 @@ export default function CalculateBeverages() {
       sugarPerBottle: totalSugar,
       totalConsumptionMl: Math.round(maxConsumptionMl),
 
-      funFact: dataFunFact.data?.funFact,
+      funFact: dataFunFact.data,
+      relatedJournal: dataRelatedJournals.data,
+      videoEducation: dataVideoEducations.data,
     };
 
     setResultCalculation(result);
@@ -603,7 +631,7 @@ export default function CalculateBeverages() {
                   </div>
 
                   <p className="max-w-3xl text-sm font-medium leading-7 text-slate-700 sm:text-base">
-                    {funFactSugar[0]}
+                    {resultCalculation?.funFact.funFact}
                   </p>
                 </div>
               </div>
@@ -630,72 +658,107 @@ export default function CalculateBeverages() {
 
                   <div className="mt-5 flex-1">
                     <p className="text-sm leading-7 text-slate-600">
-                      {artikel[0]?.kalimatEdukasi}
+                      {resultCalculation?.relatedJournal.kalimatEdukasi}
                     </p>
                   </div>
 
-                  {artikel[0]?.linkEdukasi && (
-                    <div className="mt-5 border-t border-slate-100 pt-4">
-                      <p className="text-xs text-slate-400">Sumber referensi</p>
+                  <div className="mt-5 border-t border-slate-300 pt-4">
+                    <p className="text-xs text-slate-400">Sumber referensi</p>
 
-                      <a
-                        href={artikel[0]?.linkEdukasi}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-1 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 transition-colors hover:text-blue-700 hover:underline"
-                      >
-                        {artikel[0]?.sumberReferensi}
+                    <a
+                      href={resultCalculation?.relatedJournal.linkEdukasi}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 transition-colors hover:text-blue-700 hover:underline"
+                    >
+                      {resultCalculation?.relatedJournal.sumberReferensi}
 
-                        <ExternalLink className="size-3.5" />
-                      </a>
-                    </div>
-                  )}
+                      <ExternalLink className="size-3.5" />
+                    </a>
+                  </div>
                 </article>
 
                 {/* Video */}
-                {video[0]?.sumber && (
-                  <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                    {/* Video Header */}
-                    <div className="flex items-center gap-3 p-5 sm:p-6">
-                      <div className="flex size-10 items-center justify-center rounded-xl bg-red-100 text-red-500">
-                        <PlayIcon className="size-5 fill-current" />
-                      </div>
-
-                      <div>
-                        <h3 className="text-sm font-bold text-slate-900 sm:text-base">
-                          Video Edukasi
-                        </h3>
-
-                        <p className="mt-1 text-xs text-slate-500">
-                          Pelajari lebih lanjut melalui video.
-                        </p>
-                      </div>
+                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm min-h-96">
+                  {/* Video Header */}
+                  <div className="flex items-center gap-3 p-5 sm:p-6">
+                    <div className="flex size-10 items-center justify-center rounded-xl bg-red-100 text-red-500">
+                      <PlayIcon className="size-5 fill-current" />
                     </div>
 
-                    {/* Video */}
-                    <div className="px-5 pb-5 sm:px-6 sm:pb-6">
-                      {video[0]?.sumber === "Youtube" ? (
-                        <div className="relative aspect-[9/16] max-h-[460px] overflow-hidden rounded-xl bg-slate-100">
-                          <iframe
-                            title="Video edukasi tentang konsumsi gula"
-                            src={`https://www.youtube.com/embed/${video[0]?.linkVideo}`}
-                            className="absolute inset-0 size-full"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            allowFullScreen
-                          />
-                        </div>
-                      ) : video[0]?.sumber === "Instagram" ? (
-                        <div className="overflow-hidden rounded-xl bg-slate-100">
-                          <blockquote
-                            className="instagram-media m-auto"
-                            data-instgrm-permalink={video[0]?.linkVideo}
-                            data-instgrm-version="14"
-                          />
-                        </div>
-                      ) : null}
+                    <div>
+                      <h3 className="text-sm font-bold text-slate-900 sm:text-base">
+                        Video Edukasi
+                      </h3>
+
+                      <p className="mt-1 text-xs text-slate-500">
+                        Pelajari lebih lanjut melalui video.
+                      </p>
                     </div>
                   </div>
-                )}
+
+                  {/* Video */}
+                  <div className="px-5 pb-5 sm:px-6 sm:pb-6">
+                    {!resultCalculation?.videoEducation ? (
+                      <div className="flex justify-center items-center">
+                        <Loader2 className="size-7 shrink-0 animate-spin" />
+                      </div>
+                    ) : (
+                      <div>
+                        {resultCalculation?.videoEducation.sumber ===
+                        "Youtube" ? (
+                          <div className="relative aspect-[16/9] max-h-[460px] overflow-hidden rounded-xl">
+                            <iframe
+                              title="Video edukasi tentang konsumsi gula"
+                              src={`https://www.youtube.com/embed/${resultCalculation?.videoEducation.linkVideo}`}
+                              className="absolute inset-0 size-full"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                              allowFullScreen
+                            />
+                          </div>
+                        ) : resultCalculation?.videoEducation.sumber ===
+                          "Instagram" ? (
+                          <>
+                            <Script
+                              src="https://www.instagram.com/embed.js"
+                              strategy="lazyOnload"
+                            />
+
+                            <div className="overflow-hidden rounded-xl">
+                              <blockquote
+                                className="instagram-media m-auto"
+                                data-instgrm-permalink={
+                                  resultCalculation.videoEducation.linkVideo
+                                }
+                                data-instgrm-version="14"
+                              />
+                            </div>
+                          </>
+                        ) : null}
+
+                        <div className="mt-5 border-t border-slate-300 pt-4">
+                          <p className="text-xs text-slate-400">
+                            Sumber referensi
+                          </p>
+
+                          <a
+                            href={`${resultCalculation.videoEducation.sumber === "Youtube" ? `https://www.youtube.com/shorts/${resultCalculation?.videoEducation.linkVideo}` : `https://www.instagram.com/reel/DEzgKEWBXBa/?utm_source=ig_web_copy_link`}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-1 inline-flex items-center gap-1.5 text-sm font-semibold text-blue-600 transition-colors hover:text-blue-700 hover:underline"
+                          >
+                            {
+                              resultCalculation?.videoEducation
+                                .sumberReferensiVideo
+                            }
+
+                            <ExternalLink className="size-3.5" />
+                          </a>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           </section>

@@ -1,7 +1,7 @@
-import { collectionFunFactSugar, db } from "@/lib/firebase/collections";
+import { collectionFunFactSugar } from "@/lib/firebase/collections";
 import { getRandomData } from "@/repositories/getRandomData";
 
-export async function getDataFunFactData() {
+export async function getDataFunFact() {
   try {
     const getDataRandom = await getRandomData(collectionFunFactSugar);
     return {

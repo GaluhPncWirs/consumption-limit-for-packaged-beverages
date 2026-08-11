@@ -16,6 +16,7 @@
         "sudah dihubungkan ke bagian frontend untuk search data minuman ",
         "memperbaiki tombol kembali ke halaman awal yang tidak berfungsi",
         "telah selesai berfungsi untuk hasil visualisasi maksimal konsumsi minuman kemasan",
-        "menghapus variabel yang tidak di perlukan di halaman perhitungan konsumsi minuman"
+        "menghapus variabel yang tidak di perlukan di halaman perhitungan konsumsi minuman",
+        "menambahkan data field randomNumber yang ada di firestore yang nantinya untuk mengambil data random"
     ]
 }
