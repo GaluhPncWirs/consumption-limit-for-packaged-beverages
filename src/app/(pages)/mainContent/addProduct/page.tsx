@@ -52,12 +52,14 @@ import {
   PackageSearch,
   Plus,
   Search,
-  Tags,
   Wheat,
 } from "lucide-react";
 
 const addProductBeverageSchema = z.object({
-  nameProduct: z.string().min(3, "Minimal 3 karakter"),
+  nameProduct: z
+    .string()
+    .min(3, "Minimal 3 karakter")
+    .max(100, "Maksimal 100 karakter"),
   sugarContent: z.coerce
     .number()
     .min(1, "Minimal sampai angka 1")
@@ -94,6 +96,10 @@ export default function AddProduct() {
   const [isOpenSearchProduct, setIsOpenSearchProduct] = useState<boolean>(true);
   const keyword = watch("searchProduct");
 
+  async function onSubmit(data: AddProductBeverageSchema) {
+    console.log(data);
+  }
+
   const { mustFilled, handleValueInput, isFormFilled, setMustFilled } =
     useHandleInput({
       nameProduct: "",
@@ -110,11 +116,6 @@ export default function AddProduct() {
   const [isConfirm, setIsConfirm] = useState<boolean>(false);
   const [valueTypeMinuman, setValueTypeMinuman] = useState<string>("");
   const [errorInputProduct, setErrorInputProduct] = useState<boolean>(false);
-
-  const maxLengthAlphabethNameProduct = mustFilled.nameProduct.length;
-  const maxLengthNumberKandunganGula = mustFilled.kandunganGula.length;
-  const maxLengthNumberTakaranSajiGula = mustFilled.takaranSaji.length;
-  const maxLengthNumberVolume = mustFilled.volume.length;
 
   // const [errors, setErrors] = useState({
   //   isNameTooLong: false,
@@ -284,7 +285,10 @@ export default function AddProduct() {
             </div>
 
             {/* Form */}
-            <form className="w-full space-y-6">
+            <form
+              className="w-full space-y-6"
+              onSubmit={handleSubmit(onSubmit)}
+            >
               {/* ========================================= */}
               {/* PRODUCT INFORMATION */}
               {/* ========================================= */}
@@ -397,28 +401,7 @@ export default function AddProduct() {
                   render={({ field }) => (
                     <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger
-                        className={`
-              h-12
-              rounded-xl
-              border-slate-200
-              bg-slate-50
-              px-4
-              text-sm
-              font-medium
-              shadow-none
-              transition-all
-
-              hover:border-slate-300
-              focus:border-emerald-500
-              focus:ring-4
-              focus:ring-emerald-500/10
-
-              ${
-                errors.beverageType
-                  ? "border-red-300 focus:border-red-500 focus:ring-red-500/10"
-                  : ""
-              }
-            `}
+                        className={`h-12 rounded-xl border-slate-200 bg-slate-50 px-4 text-sm font-medium shadow-none transition-all hover:border-slate-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 ${errors.beverageType ? "border-red-300 focus:border-red-500 focus:ring-red-500/10" : ""} `}
                       >
                         <SelectValue placeholder="Pilih tipe minuman" />
                       </SelectTrigger>
@@ -489,26 +472,7 @@ export default function AddProduct() {
                     <Button
                       type="button"
                       disabled={!isFormFilled}
-                      className="
-            h-12
-            w-full
-            rounded-xl
-            bg-emerald-500
-            text-sm
-            font-semibold
-            text-white
-            shadow-lg
-            shadow-emerald-500/20
-            transition-all
-
-            hover:bg-emerald-600
-            active:scale-[0.99]
-
-            disabled:cursor-not-allowed
-            disabled:bg-slate-200
-            disabled:text-slate-400
-            disabled:shadow-none
-          "
+                      className="h-12 w-full rounded-xl bg-emerald-500 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-600 active:scale-[0.99] disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none"
                     >
                       <Plus className="size-5" />
                       Tambah Produk
