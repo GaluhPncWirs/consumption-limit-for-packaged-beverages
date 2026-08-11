@@ -17,9 +17,8 @@ import { useDeleteToken } from "@/store/useDeleteToken/state";
 import { useEffect } from "react";
 import { useShallow } from "zustand/shallow";
 
-export default function ButtonBack() {
+export default function ButtonBack({ pathName }) {
   const { push } = useRouter();
-  // const curentLocation = useLocationPage((state) => state.curentLocationPage);
   const { setDeleteToken, isDeleteToken } = useDeleteToken(
     useShallow((state) => ({
       setDeleteToken: state.setDeleteToken,
@@ -38,8 +37,8 @@ export default function ButtonBack() {
 
   return (
     <>
-      {/* {curentLocation === "/mainContent/addProduct" ||
-      curentLocation === "/mainContent/about" ? (
+      {pathName === "/mainContent/addProduct" ||
+      pathName === "/mainContent/about" ? (
         <Button
           variant="outline"
           className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-colors hover:bg-white/20"
@@ -78,38 +77,7 @@ export default function ButtonBack() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      )} */}
-
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button
-            variant="outline"
-            className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-colors hover:bg-white/20"
-          >
-            <ArrowLeft className="size-6" />
-            <span>Kembali</span>
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Konfirmasi Keluar</DialogTitle>
-            <DialogDescription>
-              Apakah kamu ingin kembali ke halaman awal ?
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Batal</Button>
-            </DialogClose>
-            <Button
-              onClick={() => setDeleteToken(true)}
-              className="bg-[#54C392] hover:bg-green-500 text-black"
-            >
-              Oke
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      )}
     </>
   );
 }

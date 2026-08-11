@@ -101,7 +101,7 @@ export default function CalculateBeverages() {
     watch,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting, isSubmitted },
+    formState: { errors, isSubmitted },
   } = useForm<searchKeyworSchema>({
     resolver: zodResolver(searchKeywordSchema),
   });
@@ -111,6 +111,21 @@ export default function CalculateBeverages() {
     (resultCalculation?.fillBottles?.length ?? 0) - 2,
     0,
   );
+
+  useEffect(() => {
+    async function decodeToken() {
+      try {
+        const req = await fetch("/api/tokenJWT/decodeTokenJWT");
+        const res = await req.json();
+        if (res.status) {
+          setMaksimalGulaHarianPengguna(res.data.result);
+        }
+      } catch (err) {
+        console.log("Gagal decode token", err);
+      }
+    }
+    decodeToken();
+  }, []);
 
   useEffect(() => {
     reset({
@@ -247,21 +262,6 @@ export default function CalculateBeverages() {
     setResultCalculation(result);
   }
 
-  useEffect(() => {
-    async function decodeToken() {
-      try {
-        const req = await fetch("/api/tokenJWT/decodeTokenJWT");
-        const res = await req.json();
-        if (res.status) {
-          setMaksimalGulaHarianPengguna(res.data.result);
-        }
-      } catch (err) {
-        console.log("Gagal decode token", err);
-      }
-    }
-    decodeToken();
-  }, []);
-
   function handleItemClick(item: DataBeverage) {
     setSelectedProduct(item);
     setNameProduct(item.nameProduct);
@@ -379,10 +379,7 @@ export default function CalculateBeverages() {
                 {isOpenSearchProduct && (
                   <div>
                     {keyword !== "" && (
-                      <CommandList
-                        className="absolute w-1/2 z-50 rounded-xl border border-slate-200 bg-white p-2 shadow-xl
-"
-                      >
+                      <CommandList className="absolute w-1/2 z-50 rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
                         {searchResult.length > 0 ? (
                           <CommandGroup heading="Pilih Produk Minuman">
                             {searchResult.map((item) => (

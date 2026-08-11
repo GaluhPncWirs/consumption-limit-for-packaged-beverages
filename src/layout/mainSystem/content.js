@@ -35,7 +35,7 @@ export default function MainContentLayout({ children, path }) {
     <div className="relative flex min-h-screen">
       <aside className="hidden md:block md:w-64 xl:w-72">
         <div className="fixed inset-y-0 left-0 flex w-64 flex-col border-r border-emerald-500/20 bg-emerald-400 xl:w-72">
-          <PathNavbar />
+          <PathNavbar pathName={path} />
         </div>
       </aside>
 

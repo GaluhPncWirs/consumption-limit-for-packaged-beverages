@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import ButtonBack from "../button/content";
 
-export default function PathNavbar() {
+export default function PathNavbar({ pathName }) {
   return (
     <>
       {/* Logo */}
@@ -29,14 +29,22 @@ export default function PathNavbar() {
           {/* Hitung */}
           <Link
             href="/mainContent/calculateBeverage"
-            className={`group flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 bg-white text-emerald-700 shadow-sm`}
+            className={`group flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 ${
+              pathName === "/mainContent/calculateBeverage"
+                ? "bg-white text-emerald-700 shadow-sm"
+                : "text-emerald-950 hover:bg-white/20"
+            }`}
           >
             <div
-              className={`flex size-10 shrink-0 items-center justify-center rounded-lg transition-color`}
+              className={`flex size-10 shrink-0 items-center justify-center rounded-lg transition-colors ${
+                pathName === "/mainContent/calculateBeverage"
+                  ? "bg-emerald-100"
+                  : "bg-white/10 group-hover:bg-white/20"
+              }`}
             >
               <Image
                 src={`/images/global/calculate.png`}
-                alt="Calculate"
+                alt=""
                 width={200}
                 height={200}
                 className="size-6"
@@ -50,14 +58,22 @@ export default function PathNavbar() {
           {/* Tambah Produk */}
           <Link
             href="/mainContent/addProduct"
-            className={`group flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 bg-white text-emerald-700 shadow-sm`}
+            className={`group flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 ${
+              pathName === "/mainContent/addProduct"
+                ? "bg-white text-emerald-700 shadow-sm"
+                : "text-emerald-950 hover:bg-white/20"
+            }`}
           >
             <div
-              className={`flex size-10 shrink-0 items-center justify-center rounded-lg transition-colors `}
+              className={`flex size-10 shrink-0 items-center justify-center rounded-lg transition-colors ${
+                pathName === "/mainContent/addProduct"
+                  ? "bg-emerald-100"
+                  : "bg-white/10 group-hover:bg-white/20"
+              }`}
             >
               <Image
                 src={`/images/global/addProduct.png`}
-                alt="Add Product"
+                alt=""
                 width={200}
                 height={200}
                 className="size-6"
@@ -71,10 +87,18 @@ export default function PathNavbar() {
           {/* Tentang */}
           <Link
             href="/mainContent/about"
-            className={`group flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 bg-white text-emerald-700 shadow-sm`}
+            className={`group flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 ${
+              pathName === "/mainContent/about"
+                ? "bg-white text-emerald-700 shadow-sm"
+                : "text-emerald-950 hover:bg-white/20"
+            }`}
           >
             <div
-              className={`flex size-10 shrink-0 items-center justify-center rounded-lg transition-colors`}
+              className={`flex size-10 shrink-0 items-center justify-center rounded-lg transition-colors ${
+                pathName === "/mainContent/about"
+                  ? "bg-emerald-100"
+                  : "bg-white/10 group-hover:bg-white/20"
+              }`}
             >
               <Image
                 src={`/images/global/aboutMe.png`}
@@ -93,7 +117,7 @@ export default function PathNavbar() {
 
       {/* Bottom Action */}
       <div className="border-t border-slate-100 p-4">
-        <ButtonBack />
+        <ButtonBack pathName={pathName} />
       </div>
     </>
   );
