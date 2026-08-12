@@ -46,7 +46,7 @@ const searchKeywordSchema = z.object({
 
 type searchKeyworSchema = z.infer<typeof searchKeywordSchema>;
 
-type DataBeverage = {
+export type DataBeverage = {
   id: string;
   nameProduct: string;
   nameProductLowerCase: string;

@@ -51,7 +51,6 @@ import {
   GlassWater,
   Info,
   Package,
-  Package2,
   PackagePlus,
   PackageSearch,
   Plus,
@@ -60,6 +59,7 @@ import {
   Tags,
   Wheat,
 } from "lucide-react";
+import { DataBeverage } from "../calculateBeverage/page";
 
 const addProductBeverageSchema = z.object({
   nameProduct: z
@@ -97,176 +97,89 @@ export default function AddProduct() {
   } = useForm<AddProductBeverageSchema>({
     resolver: zodResolver(addProductBeverageSchema),
   });
-
   const pathname = usePathname();
   const [isOpenSearchProduct, setIsOpenSearchProduct] = useState<boolean>(true);
+  const [searchResult, setSearchResult] = useState<DataBeverage[]>([]);
+  const [dataProduct, setDataProduct] = useState<object | null>(null);
   const keyword = watch("searchProduct");
 
   async function onSubmit(data: AddProductBeverageSchema) {
     console.log(data);
+    const eachCapitalFirstWord = data.nameProduct
+      .split(" ")
+      .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+    const totalSugars = data.sugarContent * data.servingSize;
+
+    const payload = {
+      nameProduct: eachCapitalFirstWord,
+      nameProductLowerCase: eachCapitalFirstWord.toLocaleLowerCase(),
+      sugars: Math.floor(totalSugars),
+      volume: data.volume,
+      type: data.beverageType,
+    };
+
+    // try {
+    //   const res = await fetch("/api/addData", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(newProduct),
+    //   });
+    //   const resStatus = await res.json();
+    //   if (resStatus.status) {
+    //     setIsStatus(resStatus.status);
+    //     setIsConfirm(false);
+    //     toast("✅ Berhasil Tambah Produk", {
+    //       description:
+    //         "Data produk telah berhasil di tambahkan, Silahkan kembali ke halaman sebelumnya",
+    //     });
+    //   } else {
+    //     setIsStatus(resStatus.status);
+    //     setIsConfirm(false);
+    //     toast("❌ Gagal Tambah Produk", {
+    //       description:
+    //         "Data produk sudah ada, Silahkan input kembali produk yang berbeda",
+    //     });
+    //   }
+    // } catch {
+    //   setIsStatus(false);
+    // }
   }
 
-  const { mustFilled, handleValueInput, isFormFilled, setMustFilled } =
-    useHandleInput({
-      nameProduct: "",
-      kandunganGula: "",
-      takaranSaji: "",
-      volume: "",
-      typeMinuman: "",
-    });
-
-  const [isStatus, setIsStatus] = useState<boolean | null>(null);
-  const [findData, setFindData] = useState<productBeverageTypes[]>([]);
-  const [searchProduk, setSearchProduk] = useState<string>("");
-  const [result, setResult] = useState<productBeverageTypes[]>([]);
-  const [isConfirm, setIsConfirm] = useState<boolean>(false);
-  const [valueTypeMinuman, setValueTypeMinuman] = useState<string>("");
-  const [errorInputProduct, setErrorInputProduct] = useState<boolean>(false);
-
-  // const [errors, setErrors] = useState({
-  //   isNameTooLong: false,
-  //   isSugarTooLong: false,
-  //   isServingSizeTooLong: false,
-  //   isVolumeTooLong: false,
-  // });
-
-  // useEffect(() => {
-  //   setErrors((prev) => ({
-  //     ...prev,
-  //     isNameTooLong: maxLengthAlphabethNameProduct >= 50 ? true : false,
-  //     isSugarTooLong: maxLengthNumberKandunganGula >= 3 ? true : false,
-  //     isServingSizeTooLong: maxLengthNumberTakaranSajiGula >= 3 ? true : false,
-  //     isVolumeTooLong: maxLengthNumberVolume >= 4 ? true : false,
-  //   }));
-  // }, [
-  //   maxLengthAlphabethNameProduct,
-  //   maxLengthNumberKandunganGula,
-  //   maxLengthNumberTakaranSajiGula,
-  //   maxLengthNumberVolume,
-  // ]);
-
-  // Tambah Data
-  // async function handleAddProduct() {
-  //   if (
-  //     !isNaN(mustFilled.nameProduct) ||
-  //     mustFilled.nameProduct.trim() === "" ||
-  //     maxLengthAlphabethNameProduct >= 50 ||
-  //     maxLengthNumberKandunganGula >= 3 ||
-  //     maxLengthNumberTakaranSajiGula >= 3 ||
-  //     maxLengthNumberVolume >= 4
-  //   ) {
-  //     setErrorInputProduct(true);
-  //     toast("❌ Produk yang ditambahkan tidak valid", {
-  //       description: `
-  //       ${
-  //         errors.isNameTooLong
-  //           ? `Input Nama produk tidak boleh lebih dari 50 karakter`
-  //           : errors.isSugarTooLong
-  //             ? `Input Kandungan gula tidak boleh lebih dari 2 digit`
-  //             : errors.isServingSizeTooLong
-  //               ? `Takaran saji tidak boleh lebih dari 2 digit`
-  //               : errors.isVolumeTooLong
-  //                 ? `Input Volume tidak boleh lebih dari 3 digit`
-  //                 : `Input Nama Produk Tidak Boleh Kosong dan Tidak Boleh Hanya
-  //               Berisi Angka!`
-  //       }
-  //       `,
-  //     });
-  //     return;
-  //   }
-
-  //   setIsConfirm(true);
-
-  //   // pengiriman data
-  //   const nameProductValue = mustFilled.nameProduct;
-  //   const gula = Number(mustFilled.kandunganGula);
-  //   const takaranSaji = Number(mustFilled.takaranSaji);
-  //   const totalSugars = gula * takaranSaji;
-  //   const eachCapitalFirstWord = nameProductValue
-  //     .split(" ")
-  //     .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
-  //     .join(" ");
-
-  //   const newProduct = {
-  //     nameProduct: eachCapitalFirstWord,
-  //     sugars: Math.floor(totalSugars),
-  //     volume: Number(mustFilled.volume),
-  //     type: valueTypeMinuman,
-  //   };
-
-  //   try {
-  //     const res = await fetch("/api/addData", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(newProduct),
-  //     });
-  //     const resStatus = await res.json();
-  //     if (resStatus.status) {
-  //       setIsStatus(resStatus.status);
-  //       setIsConfirm(false);
-  //       toast("✅ Berhasil Tambah Produk", {
-  //         description:
-  //           "Data produk telah berhasil di tambahkan, Silahkan kembali ke halaman sebelumnya",
-  //       });
-  //     } else {
-  //       setIsStatus(resStatus.status);
-  //       setIsConfirm(false);
-  //       toast("❌ Gagal Tambah Produk", {
-  //         description:
-  //           "Data produk sudah ada, Silahkan input kembali produk yang berbeda",
-  //       });
-  //     }
-  //   } catch {
-  //     setIsStatus(false);
-  //   }
-  // }
-
-  // cari data
   useEffect(() => {
-    const unsubscribeDataProductBeverage = subscribeToProducts((data) => {
-      setFindData(data);
-    });
-    return () => unsubscribeDataProductBeverage();
-  }, []);
+    if (!keyword) return;
 
-  useEffect(() => {
-    if (isStatus !== null || isStatus === true) {
-      setMustFilled({
-        nameProduct: "",
-        kandunganGula: "",
-        takaranSaji: "",
-        volume: "",
-      });
+    async function handleSearchNameBeverage() {
+      try {
+        const req = await fetch("/api/pageCalculate/getDataBeverage", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            keyword: keyword,
+          }),
+        });
+
+        const res = await req.json();
+
+        setSearchResult(res.data);
+      } catch {
+        toast.error("Gagal fetch data ke API");
+      }
     }
-  }, [isStatus, setMustFilled]);
-
-  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const query = e.target.value;
-    setSearchProduk(query);
-
-    if (query !== "") {
-      const filterSearchProduct = findData.filter(
-        (item: productBeverageTypes) => {
-          return item.nameProduct
-            ?.toLowerCase()
-            .startsWith(query.toLowerCase());
-        },
-      );
-      setResult(filterSearchProduct);
-    } else {
-      setResult([]);
-    }
-  }
+    handleSearchNameBeverage();
+  }, [keyword]);
 
   return (
     <MainContentLayout path={pathname}>
       <div className="mx-auto w-full p-5 sm:p-6 lg:p-7 bg-[#f9fff9] rounded-xl">
         {/* Page Header */}
-        <header className="mb-8">
+        <div className="mb-8">
           {/* Breadcrumb / Section */}
-          <div className="mb-3 flex items-center gap-2 text-xs font-medium text-slate-400">
+          <div className="mb-5 flex items-center gap-2 text-xs font-medium text-slate-400">
             <span>Produk</span>
             <ChevronRight className="size-3.5" />
             <span className="text-emerald-600">Tambah Produk</span>
@@ -291,7 +204,7 @@ export default function AddProduct() {
               </div>
             </div>
           </div>
-        </header>
+        </div>
 
         {/* Main Content */}
         <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
@@ -303,6 +216,7 @@ export default function AddProduct() {
             {/* Form */}
             <form
               className="w-full space-y-6"
+              id="addBeverage"
               onSubmit={handleSubmit(onSubmit)}
             >
               {/* ========================================= */}
@@ -503,7 +417,7 @@ export default function AddProduct() {
                   <DialogTrigger asChild>
                     <Button
                       type="button"
-                      disabled={!isFormFilled}
+                      // disabled={!isFormFilled}
                       className="h-12 w-full rounded-xl bg-emerald-500 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-600 active:scale-[0.99] disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none"
                     >
                       <Plus className="size-5" />
@@ -512,99 +426,96 @@ export default function AddProduct() {
                   </DialogTrigger>
 
                   {/* Dialog */}
-                  {!errorInputProduct && (
-                    <DialogContent className="max-w-md rounded-2xl">
-                      <DialogHeader>
-                        {/* Icon */}
-                        <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-amber-50 text-amber-500">
-                          <CircleAlert className="size-6" />
-                        </div>
-
-                        <DialogTitle className="mt-3 text-center text-lg">
-                          Periksa Data Produk
-                        </DialogTitle>
-
-                        <DialogDescription className="text-center text-sm leading-6">
-                          Pastikan informasi produk berikut sudah sesuai dengan
-                          data pada kemasan.
-                        </DialogDescription>
-                      </DialogHeader>
-
-                      {/* Summary */}
-                      <div className="mt-4 overflow-hidden rounded-xl border border-slate-200">
-                        <div className="divide-y divide-slate-100">
-                          <div className="flex items-center justify-between gap-4 px-4 py-3">
-                            <span className="text-xs text-slate-500">
-                              Nama Produk
-                            </span>
-
-                            <span className="max-w-[60%] text-right text-sm font-semibold text-slate-800">
-                              {mustFilled.nameProduct}
-                            </span>
-                          </div>
-
-                          <div className="flex items-center justify-between gap-4 px-4 py-3">
-                            <span className="text-xs text-slate-500">
-                              Kandungan Gula
-                            </span>
-
-                            <span className="text-sm font-semibold text-slate-800">
-                              {mustFilled.kandunganGula} g
-                            </span>
-                          </div>
-
-                          <div className="flex items-center justify-between gap-4 px-4 py-3">
-                            <span className="text-xs text-slate-500">
-                              Takaran Saji
-                            </span>
-
-                            <span className="text-sm font-semibold text-slate-800">
-                              {mustFilled.takaranSaji}
-                            </span>
-                          </div>
-
-                          <div className="flex items-center justify-between gap-4 px-4 py-3">
-                            <span className="text-xs text-slate-500">
-                              Isi Bersih
-                            </span>
-
-                            <span className="text-sm font-semibold text-slate-800">
-                              {mustFilled.volume} ml
-                            </span>
-                          </div>
-
-                          <div className="flex items-center justify-between gap-4 px-4 py-3">
-                            <span className="text-xs text-slate-500">
-                              Tipe Minuman
-                            </span>
-
-                            <span className="max-w-[60%] text-right text-sm font-semibold text-slate-800">
-                              {mustFilled.typeMinuman}
-                            </span>
-                          </div>
-                        </div>
+                  <DialogContent className="max-w-md rounded-2xl">
+                    <DialogHeader>
+                      {/* Icon */}
+                      <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-amber-50 text-amber-500">
+                        <CircleAlert className="size-6" />
                       </div>
 
-                      {/* Footer */}
-                      <DialogFooter className="mt-5 flex-col-reverse gap-2 sm:flex-row">
-                        <DialogClose asChild>
-                          <Button variant="outline" className="h-11 rounded-xl">
-                            Periksa Lagi
-                          </Button>
-                        </DialogClose>
+                      <DialogTitle className="mt-3 text-center text-lg">
+                        Periksa Data Produk
+                      </DialogTitle>
 
-                        <DialogClose asChild>
-                          <Button
-                            // onClick={handleAddProduct}
-                            className="h-11 rounded-xl bg-emerald-500 text-white hover:bg-emerald-600"
-                          >
-                            <Check className="size-4" />
-                            Ya, Tambahkan
-                          </Button>
-                        </DialogClose>
-                      </DialogFooter>
-                    </DialogContent>
-                  )}
+                      <DialogDescription className="text-center text-sm leading-6">
+                        Pastikan informasi produk berikut sudah sesuai dengan
+                        data pada kemasan.
+                      </DialogDescription>
+                    </DialogHeader>
+
+                    {/* Summary */}
+                    <div className="mt-4 overflow-hidden rounded-xl border border-slate-200">
+                      <div className="divide-y divide-slate-100">
+                        <div className="flex items-center justify-between gap-4 px-4 py-3">
+                          <span className="text-xs text-slate-500">
+                            Nama Produk
+                          </span>
+
+                          <span className="max-w-[60%] text-right text-sm font-semibold text-slate-800">
+                            {watch("nameProduct")}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center justify-between gap-4 px-4 py-3">
+                          <span className="text-xs text-slate-500">
+                            Takaran Saji
+                          </span>
+
+                          <span className="text-sm font-semibold text-slate-800">
+                            {watch("servingSize")}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center justify-between gap-4 px-4 py-3">
+                          <span className="text-xs text-slate-500">
+                            Kandungan Gula
+                          </span>
+
+                          <span className="text-sm font-semibold text-slate-800">
+                            {watch("sugarContent")} g
+                          </span>
+                        </div>
+
+                        <div className="flex items-center justify-between gap-4 px-4 py-3">
+                          <span className="text-xs text-slate-500">
+                            Isi Bersih
+                          </span>
+
+                          <span className="text-sm font-semibold text-slate-800">
+                            {watch("volume")} ml
+                          </span>
+                        </div>
+
+                        <div className="flex items-center justify-between gap-4 px-4 py-3">
+                          <span className="text-xs text-slate-500">
+                            Tipe Minuman
+                          </span>
+
+                          <span className="max-w-[60%] text-right text-sm font-semibold text-slate-800">
+                            {watch("beverageType")}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Footer */}
+                    <DialogFooter className="mt-5 flex-col-reverse gap-2 sm:flex-row">
+                      <DialogClose asChild>
+                        <Button variant="outline" className="h-11 rounded-xl">
+                          Periksa Lagi
+                        </Button>
+                      </DialogClose>
+
+                      <Button
+                        type="submit"
+                        form="addBeverage"
+                        className="h-11 rounded-xl bg-emerald-500 text-white hover:bg-emerald-600"
+                      >
+                        <Check className="size-5" />
+                        Ya, Tambahkan
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
                 </Dialog>
 
                 {/* Disclaimer */}
@@ -626,7 +537,7 @@ export default function AddProduct() {
 
           <section className="flex h-fit flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm lg:sticky lg:top-6">
             {/* Header */}
-            <div className="border-b border-slate-300 px-5 py-5 sm:px-6">
+            <div className="border-b border-slate-200 px-5 py-5 sm:px-6">
               <div className="flex items-center gap-4">
                 <Search className="size-6 shrink-0" />
                 <div>
@@ -662,27 +573,21 @@ export default function AddProduct() {
                 {/* Search Result */}
                 {isOpenSearchProduct && keyword !== "" && (
                   <CommandList className="relative z-50 mt-2 max-h-64 overflow-y-auto rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl">
-                    {result.length > 0 ? (
+                    {searchResult.length > 0 ? (
                       <CommandGroup heading="Produk Ditemukan">
-                        {result.map((item: productBeverageTypes) => (
+                        {searchResult.map((item) => (
                           <CommandItem
                             key={item.id}
                             className="mb-1 cursor-pointer rounded-lg px-3 py-2.5 last:mb-0"
                           >
-                            <div className="flex min-w-0 items-center gap-3">
-                              <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500">
-                                <Package className="size-4" />
-                              </div>
+                            <div>
+                              <p className="truncate text-sm font-medium text-slate-700">
+                                {item.nameProduct}
+                              </p>
 
-                              <div className="min-w-0">
-                                <p className="truncate text-sm font-medium text-slate-700">
-                                  {item.nameProduct}
-                                </p>
-
-                                <p className="text-[11px] text-slate-400">
-                                  Produk tersedia
-                                </p>
-                              </div>
+                              <p className="text-[11px] text-slate-400">
+                                Produk tersedia
+                              </p>
                             </div>
                           </CommandItem>
                         ))}
@@ -729,7 +634,7 @@ export default function AddProduct() {
           </section>
         </div>
 
-        {isConfirm && <LoadingCompenent />}
+        {isSubmitting && <LoadingCompenent />}
       </div>
     </MainContentLayout>
   );
