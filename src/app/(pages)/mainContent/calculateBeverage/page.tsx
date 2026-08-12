@@ -27,7 +27,6 @@ import {
   Sparkles,
   Tags,
 } from "lucide-react";
-import { getConvertMaxSugar } from "@/app/hooks/getConvertMaxSugar";
 import FloatingLabel from "@/components/floating-label/component";
 import { Button } from "@/components/ui/button";
 import { SugarLimitStatus } from "@/components/sugarLimitStatus/component";
@@ -39,6 +38,7 @@ import { getDataFunFact } from "@/services/firebase/dataFunFacts/service";
 import { getDataVideoEducations } from "@/services/firebase/dataVideoEducations/service";
 import { getDataRelatedJournals } from "@/services/firebase/dataRelatedJournal/service";
 import Script from "next/script";
+import { convertResultCalculate } from "@/lib/utils/convertResultCalculate";
 
 const searchKeywordSchema = z.object({
   searchKeyword: z.string().min(3, "Minimal 3 karakter"),
@@ -106,7 +106,7 @@ export default function CalculateBeverages() {
     resolver: zodResolver(searchKeywordSchema),
   });
   const keyword = watch("searchKeyword");
-  const visibleBottles = resultCalculation?.fillBottles.slice(0, 2);
+  const visibleBottles = resultCalculation?.fillBottles.slice(-2);
   const remainingBottles = Math.max(
     (resultCalculation?.fillBottles?.length ?? 0) - 2,
     0,
@@ -354,7 +354,9 @@ export default function CalculateBeverages() {
             {/* Sugar Status */}
             <SugarLimitStatus
               consumed={selectedProduct?.sugars || 0}
-              limit={getConvertMaxSugar(maksimalGulaHarianPengguna)}
+              limit={
+                Number(convertResultCalculate(maksimalGulaHarianPengguna)) ?? 0
+              }
             />
           </div>
         </div>
@@ -379,7 +381,7 @@ export default function CalculateBeverages() {
                 {isOpenSearchProduct && (
                   <div>
                     {keyword !== "" && (
-                      <CommandList className="absolute w-1/2 z-50 rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
+                      <CommandList className="absolute w-full z-50 rounded-xl border border-slate-200 bg-white p-2 shadow-xl lg:w-1/2">
                         {searchResult.length > 0 ? (
                           <CommandGroup heading="Pilih Produk Minuman">
                             {searchResult.map((item) => (
@@ -559,15 +561,6 @@ export default function CalculateBeverages() {
                 {/* Bottle Visualization */}
                 <div className="mt-8">
                   <div className="flex min-h-[220px] flex-wrap items-end justify-center gap-x-5 gap-y-6">
-                    {(visibleBottles ?? []).map((item: number, i: number) => (
-                      <ResultVisualization
-                        key={i}
-                        percentage={item}
-                        index={i}
-                        typeBeverage={selectedProduct?.type || "Siap Minum"}
-                      />
-                    ))}
-
                     {remainingBottles > 0 && (
                       <div className="flex items-center justify-center pb-5">
                         <div className="rounded-full bg-slate-100 px-3 py-1.5">
@@ -577,6 +570,14 @@ export default function CalculateBeverages() {
                         </div>
                       </div>
                     )}
+                    {(visibleBottles ?? []).map((item: number, i: number) => (
+                      <ResultVisualization
+                        key={i}
+                        percentage={item}
+                        index={i}
+                        typeBeverage={selectedProduct?.type || "Siap Minum"}
+                      />
+                    ))}
                   </div>
                 </div>
               </>
@@ -611,7 +612,7 @@ export default function CalculateBeverages() {
               {/* Section Header */}
               <div>
                 <div className="flex items-center gap-4">
-                  <div className="flex size-10 items-center justify-center rounded-xl bg-amber-100 text-amber-600">
+                  <div className="flex size-10 items-center justify-center rounded-xl bg-violet-100 text-violet-600">
                     <Lightbulb className="size-6" />
                   </div>
 
@@ -641,7 +642,7 @@ export default function CalculateBeverages() {
                     </span>
                   </div>
 
-                  <p className="max-w-3xl text-sm font-medium leading-7 text-slate-700 sm:text-base">
+                  <p className="max-w-3xl text-sm font-medium leading-7 text-slate-700">
                     {resultCalculation?.funFact.funFact}
                   </p>
                 </div>

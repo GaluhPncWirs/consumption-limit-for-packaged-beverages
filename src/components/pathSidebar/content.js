@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import ButtonBack from "../button/content";
+import { Calculator, PackagePlus, User2 } from "lucide-react";
 
 export default function PathNavbar({ pathName }) {
   return (
@@ -42,14 +43,7 @@ export default function PathNavbar({ pathName }) {
                   : "bg-white/10 group-hover:bg-white/20"
               }`}
             >
-              <Image
-                src={`/images/global/calculate.png`}
-                alt=""
-                width={200}
-                height={200}
-                className="size-6"
-                loading="eager"
-              />
+              <Calculator className="size-6" />
             </div>
 
             <span className="text-sm font-semibold">Hitung</span>
@@ -71,14 +65,7 @@ export default function PathNavbar({ pathName }) {
                   : "bg-white/10 group-hover:bg-white/20"
               }`}
             >
-              <Image
-                src={`/images/global/addProduct.png`}
-                alt=""
-                width={200}
-                height={200}
-                className="size-6"
-                loading="eager"
-              />
+              <PackagePlus className="size-6" />
             </div>
 
             <span className="text-sm font-semibold">Tambah Produk</span>
@@ -100,14 +87,7 @@ export default function PathNavbar({ pathName }) {
                   : "bg-white/10 group-hover:bg-white/20"
               }`}
             >
-              <Image
-                src={`/images/global/aboutMe.png`}
-                alt=""
-                width={200}
-                height={200}
-                className="size-6"
-                loading="eager"
-              />
+              <User2 className="size-6" />
             </div>
 
             <span className="text-sm font-semibold">Tentang</span>

@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { FieldError, UseFormRegisterReturn } from "react-hook-form";
+import { UseFormRegisterReturn } from "react-hook-form";
 
 type SelectOptionProps = {
   option: {

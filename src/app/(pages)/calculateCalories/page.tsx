@@ -30,7 +30,6 @@ import {
   Scale,
   UserRound,
 } from "lucide-react";
-import { getConvertMaxSugar } from "../../hooks/getConvertMaxSugar";
 import FloatingLabel from "@/components/floating-label/component";
 import { activityLevels } from "@/data-ui/calculate-page/data-activity";
 import { SelectOption } from "@/components/optionCard/component";
@@ -38,6 +37,7 @@ import { genderOptions } from "@/data-ui/calculate-page/gender-option";
 import { z } from "zod";
 import { Controller, useForm, FieldError } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { convertResultCalculate } from "@/lib/utils/convertResultCalculate";
 
 const dataPersonalUserSchema = z.object({
   jenisKelamin: z.enum(["male", "female"], {
@@ -387,8 +387,8 @@ export default function InputCalculateCalories() {
                   </p>
 
                   <p className="mt-1 text-2xl font-bold text-emerald-600">
-                    {getConvertMaxSugar(
-                      resultCalculate?.totalDailyEnergyExpenditure,
+                    {convertResultCalculate(
+                      resultCalculate?.totalDailyEnergyExpenditure ?? 0,
                     )}
                     <span className="ml-1 text-sm font-medium text-slate-500">
                       kcal
@@ -403,7 +403,7 @@ export default function InputCalculateCalories() {
                   </p>
 
                   <p className="mt-1 text-2xl font-bold text-emerald-600">
-                    {getConvertMaxSugar(resultCalculate?.resultTotalMaxSugar)}
+                    {convertResultCalculate(resultCalculate?.resultTotalMaxSugar ?? 0)}
                     <span className="ml-1 text-sm font-medium text-slate-500">
                       gram
                     </span>

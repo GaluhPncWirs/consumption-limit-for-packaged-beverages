@@ -1,11 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { LucideIcon } from "lucide-react";
 import { HTMLInputTypeAttribute } from "react";
-import {
-  FieldError,
-  UseFormRegisterReturn,
-  UseFormSetError,
-} from "react-hook-form";
+import { FieldError, UseFormRegisterReturn } from "react-hook-form";
 
 type PropsFloatingLabel = {
   type: HTMLInputTypeAttribute | undefined;
