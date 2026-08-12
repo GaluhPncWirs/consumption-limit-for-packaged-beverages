@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const resultCalculate = request.cookies.get("resultCalculate")?.value;
 
@@ -25,9 +25,8 @@ export function proxy(request: NextRequest) {
   // Main Content
   // =========================
   if (pathname.startsWith("/mainContent") && !resultCalculate) {
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL("/calculateCalories", request.url));
   }
-
   return NextResponse.next();
 }
 
