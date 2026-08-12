@@ -1,10 +1,6 @@
 "use client";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
-import { useHandleInput } from "@/app/hooks/getIsFormFilled";
 import { useEffect, useState } from "react";
-import { productBeverageTypes } from "@/types/dataTypes";
-import { subscribeToProducts } from "@/lib/firebase/services";
 import MainContentLayout from "@/layout/mainSystem/content";
 import {
   Command,
@@ -50,14 +46,11 @@ import {
   CupSoda,
   GlassWater,
   Info,
-  Package,
   PackagePlus,
   PackageSearch,
   Plus,
   Search,
-  Tag,
   Tags,
-  Wheat,
 } from "lucide-react";
 import { DataBeverage } from "../calculateBeverage/page";
 
@@ -98,13 +91,11 @@ export default function AddProduct() {
     resolver: zodResolver(addProductBeverageSchema),
   });
   const pathname = usePathname();
-  const [isOpenSearchProduct, setIsOpenSearchProduct] = useState<boolean>(true);
+  const [openResultDialog, setOpenResultDialog] = useState(false);
   const [searchResult, setSearchResult] = useState<DataBeverage[]>([]);
-  const [dataProduct, setDataProduct] = useState<object | null>(null);
   const keyword = watch("searchProduct");
 
   async function onSubmit(data: AddProductBeverageSchema) {
-    console.log(data);
     const eachCapitalFirstWord = data.nameProduct
       .split(" ")
       .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -119,33 +110,33 @@ export default function AddProduct() {
       type: data.beverageType,
     };
 
-    // try {
-    //   const res = await fetch("/api/addData", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(newProduct),
-    //   });
-    //   const resStatus = await res.json();
-    //   if (resStatus.status) {
-    //     setIsStatus(resStatus.status);
-    //     setIsConfirm(false);
-    //     toast("✅ Berhasil Tambah Produk", {
-    //       description:
-    //         "Data produk telah berhasil di tambahkan, Silahkan kembali ke halaman sebelumnya",
-    //     });
-    //   } else {
-    //     setIsStatus(resStatus.status);
-    //     setIsConfirm(false);
-    //     toast("❌ Gagal Tambah Produk", {
-    //       description:
-    //         "Data produk sudah ada, Silahkan input kembali produk yang berbeda",
-    //     });
-    //   }
-    // } catch {
-    //   setIsStatus(false);
-    // }
+    try {
+      const res = await fetch("/api/pageAddBeverage/addDataBeverage", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+      const response = await res.json();
+
+      if (!response.status) {
+        toast.error("Gagal Tambah Produk", {
+          description: response.message,
+        });
+        return;
+      }
+
+      toast.success("Berhasil", {
+        description: response.message,
+      });
+
+      setOpenResultDialog(true);
+    } catch {
+      toast.error("❌ Gagal", {
+        description: "Fetch API error",
+      });
+    }
   }
 
   useEffect(() => {
@@ -245,7 +236,7 @@ export default function AddProduct() {
                   type="text"
                   id="nameProduct"
                   label="Nama Produk"
-                  Icon={Package}
+                  Icon={BottleWine}
                   placeholder=" "
                   register={register("nameProduct")}
                   error={
@@ -358,42 +349,26 @@ export default function AddProduct() {
                             value="Siap Minum"
                             className="rounded-lg py-3"
                           >
-                            <div className="flex items-center gap-3">
-                              <div className="flex size-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
-                                <BottleWine className="size-4" />
-                              </div>
+                            <h3 className="text-sm font-semibold">
+                              Siap Minum
+                            </h3>
 
-                              <div>
-                                <p className="text-sm font-semibold">
-                                  Siap Minum
-                                </p>
-
-                                <p className="text-xs text-slate-400">
-                                  Langsung dikonsumsi setelah dibuka
-                                </p>
-                              </div>
-                            </div>
+                            <p className="text-xs text-slate-400">
+                              Langsung dikonsumsi setelah dibuka
+                            </p>
                           </SelectItem>
 
                           <SelectItem
                             value="Harus Dilarutkan"
                             className="rounded-lg py-3"
                           >
-                            <div className="flex items-center gap-3">
-                              <div className="flex size-8 items-center justify-center rounded-lg bg-amber-50 text-amber-600">
-                                <Wheat className="size-4" />
-                              </div>
+                            <h3 className="text-sm font-semibold">
+                              Harus Dilarutkan
+                            </h3>
 
-                              <div>
-                                <p className="text-sm font-semibold">
-                                  Harus Dilarutkan
-                                </p>
-
-                                <p className="text-xs text-slate-400">
-                                  Minuman serbuk yang perlu dilarutkan
-                                </p>
-                              </div>
-                            </div>
+                            <p className="text-xs text-slate-400">
+                              Minuman serbuk yang perlu dilarutkan
+                            </p>
                           </SelectItem>
                         </SelectGroup>
                       </SelectContent>
@@ -413,7 +388,10 @@ export default function AddProduct() {
               {/* ========================================= */}
 
               <div className="space-y-3">
-                <Dialog>
+                <Dialog
+                  open={openResultDialog}
+                  onOpenChange={setOpenResultDialog}
+                >
                   <DialogTrigger asChild>
                     <Button
                       type="button"
@@ -571,7 +549,7 @@ export default function AddProduct() {
                 </p>
 
                 {/* Search Result */}
-                {isOpenSearchProduct && keyword !== "" && (
+                {keyword !== "" && (
                   <CommandList className="relative z-50 mt-2 max-h-64 overflow-y-auto rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl">
                     {searchResult.length > 0 ? (
                       <CommandGroup heading="Produk Ditemukan">
@@ -614,7 +592,7 @@ export default function AddProduct() {
               </Command>
 
               {/* Initial State */}
-              {!isOpenSearchProduct && (
+              {keyword === "" && (
                 <div className="mt-6 flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50/70 px-5 py-8 text-center">
                   <div className="flex size-12 items-center justify-center rounded-xl bg-white text-slate-300 shadow-sm">
                     <PackageSearch className="size-6" />

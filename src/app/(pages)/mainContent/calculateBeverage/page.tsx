@@ -393,7 +393,21 @@ export default function CalculateBeverages() {
                             ))}
                           </CommandGroup>
                         ) : (
-                          <CommandEmpty>Produk Tidak Ada.</CommandEmpty>
+                          <CommandEmpty className="py-8 text-center">
+                            <div className="flex flex-col items-center">
+                              <div className="flex size-10 items-center justify-center rounded-full bg-slate-100">
+                                <Search className="size-4 text-slate-400" />
+                              </div>
+
+                              <p className="mt-3 text-sm font-medium text-slate-600">
+                                Produk tidak ditemukan
+                              </p>
+
+                              <p className="mt-1 text-xs text-slate-400">
+                                Coba gunakan nama atau merek yang berbeda.
+                              </p>
+                            </div>
+                          </CommandEmpty>
                         )}
                       </CommandList>
                     )}
