@@ -28,6 +28,7 @@
         "memperbaiki bug di dialog konfirmasi tambah produk karena tidak menghilang pada saat di click",
         "telah selesai mengerjakan untuk merombak halaman tambah produk minuman",
         "memperbaiki middleware yang tidak berfungsi",
-        "selesai memperbaiki desain ui di halaman tentang"
+        "selesai memperbaiki desain ui di halaman tentang",
+        "menghapus folder maupun file yang tidak di perlukan lagi"
     ]
 }
