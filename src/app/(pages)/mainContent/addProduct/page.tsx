@@ -131,7 +131,7 @@ export default function AddProduct() {
         description: response.message,
       });
 
-      setOpenResultDialog(true);
+      setOpenResultDialog(false);
     } catch {
       toast.error("❌ Gagal", {
         description: "Fetch API error",
