@@ -44,14 +44,20 @@ import {
   BottleWine,
   Candy,
   Check,
+  ChevronRight,
   CircleAlert,
+  ClipboardList,
   CupSoda,
   GlassWater,
   Info,
   Package,
+  Package2,
+  PackagePlus,
   PackageSearch,
   Plus,
   Search,
+  Tag,
+  Tags,
   Wheat,
 } from "lucide-react";
 
@@ -256,34 +262,44 @@ export default function AddProduct() {
 
   return (
     <MainContentLayout path={pathname}>
-      <div className="flex flex-col justify-center p-5 rounded-lg bg-[#f9fff9] my-10 shadow-lg shadow-slate-700">
-        <h1 className="text-2xl font-semibold text-center">
-          Penambah Produk Minuman
-        </h1>
-        <div className="mx-auto mt-7 grid w-full max-w-6xl grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr] lg:px-5">
-          {/* ================================================== */}
-          {/* TAMBAH PRODUK                                      */}
-          {/* ================================================== */}
+      <div className="mx-auto w-full p-5 sm:p-6 lg:p-7 bg-[#f9fff9] rounded-xl">
+        {/* Page Header */}
+        <header className="mb-8">
+          {/* Breadcrumb / Section */}
+          <div className="mb-3 flex items-center gap-2 text-xs font-medium text-slate-400">
+            <span>Produk</span>
+            <ChevronRight className="size-3.5" />
+            <span className="text-emerald-600">Tambah Produk</span>
+          </div>
 
-          <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-            {/* Header */}
-            <div className="mb-6 flex items-start gap-3">
-              <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
-                <Plus className="size-5" />
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+            {/* Title */}
+            <div className="flex items-start gap-4">
+              <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600">
+                <PackagePlus className="size-6" />
               </div>
 
               <div>
-                <h2 className="text-lg font-bold tracking-tight text-slate-900">
-                  Tambah Produk
-                </h2>
+                <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+                  Tambah Produk Minuman
+                </h1>
 
-                <p className="mt-1 text-xs leading-5 text-slate-500">
-                  Tambahkan produk minuman baru untuk digunakan dalam
+                <p className="mt-1.5 max-w-2xl text-sm leading-6 text-slate-500">
+                  Tambahkan informasi produk minuman untuk digunakan dalam
                   perhitungan konsumsi gula.
                 </p>
               </div>
             </div>
+          </div>
+        </header>
 
+        {/* Main Content */}
+        <div className="grid w-full grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
+          {/* ================================================== */}
+          {/* TAMBAH PRODUK                                      */}
+          {/* ================================================== */}
+
+          <section className="rounded-3xl shadow-sm">
             {/* Form */}
             <form
               className="w-full space-y-6"
@@ -294,33 +310,48 @@ export default function AddProduct() {
               {/* ========================================= */}
 
               <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-                <div className="mb-5">
-                  <h3 className="text-sm font-bold text-slate-800">
-                    Informasi Produk
-                  </h3>
+                <div className="flex items-center gap-4 mb-5">
+                  <div className="flex justify-center items-center">
+                    <PackageSearch className="size-6 shrink-0" />
+                  </div>
 
-                  <p className="mt-1 text-xs text-slate-500">
-                    Masukkan informasi dasar produk minuman.
-                  </p>
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-800">
+                      Nama Produk
+                    </h3>
+
+                    <p className="mt-1 text-xs text-slate-500">
+                      Masukkan nama minuman yang akan ditambahkan.
+                    </p>
+                  </div>
                 </div>
 
-                <div className="space-y-5">
-                  {/* Nama Produk */}
-                  <FloatingLabel
-                    type="text"
-                    id="nameProduct"
-                    label="Nama Produk"
-                    Icon={Package}
-                    placeholder=" "
-                    register={register("nameProduct")}
-                    error={
-                      errors.nameProduct as unknown as FieldError | undefined
-                    }
-                  />
+                {/* Nama Produk */}
+                <FloatingLabel
+                  type="text"
+                  id="nameProduct"
+                  label="Nama Produk"
+                  Icon={Package}
+                  placeholder=" "
+                  register={register("nameProduct")}
+                  error={
+                    errors.nameProduct as unknown as FieldError | undefined
+                  }
+                />
+              </div>
 
-                  {/* Numeric Information */}
-                  <div>
-                    <div className="mb-3">
+              {/* ========================================= */}
+              {/* PRODUCT CONTENT */}
+              {/* ========================================= */}
+
+              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                <div className="space-y-5">
+                  <div className="flex items-center gap-4 mb-5">
+                    <div className="flex justify-center items-center">
+                      <ClipboardList className="size-6 shrink-0" />
+                    </div>
+
+                    <div>
                       <h3 className="text-sm font-semibold text-slate-600">
                         Informasi Kandungan
                       </h3>
@@ -329,53 +360,48 @@ export default function AddProduct() {
                         Pastikan angka sesuai dengan informasi pada kemasan.
                       </p>
                     </div>
+                  </div>
+                  {/* Numeric Information */}
 
-                    <div className="grid grid-cols-1 gap-4">
-                      {/* Takaran Saji */}
-                      <FloatingLabel
-                        type="number"
-                        id="servingSize"
-                        label="Takaran Saji"
-                        Icon={CupSoda}
-                        placeholder=" "
-                        register={register("servingSize")}
-                        error={
-                          errors.servingSize as unknown as
-                            | FieldError
-                            | undefined
-                        }
-                      />
+                  <div className="grid grid-cols-1 gap-4">
+                    {/* Takaran Saji */}
+                    <FloatingLabel
+                      type="number"
+                      id="servingSize"
+                      label="Takaran Saji"
+                      Icon={CupSoda}
+                      placeholder=" "
+                      register={register("servingSize")}
+                      error={
+                        errors.servingSize as unknown as FieldError | undefined
+                      }
+                    />
 
-                      {/* Kandungan Gula */}
-                      <FloatingLabel
-                        type="number"
-                        id="contentSugar"
-                        label="Kandungan Gula"
-                        desc="g"
-                        Icon={Candy}
-                        placeholder=" "
-                        register={register("sugarContent")}
-                        error={
-                          errors.sugarContent as unknown as
-                            | FieldError
-                            | undefined
-                        }
-                      />
+                    {/* Kandungan Gula */}
+                    <FloatingLabel
+                      type="number"
+                      id="contentSugar"
+                      label="Kandungan Gula"
+                      desc="g"
+                      Icon={Candy}
+                      placeholder=" "
+                      register={register("sugarContent")}
+                      error={
+                        errors.sugarContent as unknown as FieldError | undefined
+                      }
+                    />
 
-                      {/* Isi Bersih */}
-                      <FloatingLabel
-                        type="number"
-                        id="volume"
-                        label="Isi Bersih"
-                        desc="ml"
-                        Icon={GlassWater}
-                        placeholder=" "
-                        register={register("volume")}
-                        error={
-                          errors.volume as unknown as FieldError | undefined
-                        }
-                      />
-                    </div>
+                    {/* Isi Bersih */}
+                    <FloatingLabel
+                      type="number"
+                      id="volume"
+                      label="Isi Bersih"
+                      desc="ml"
+                      Icon={GlassWater}
+                      placeholder=" "
+                      register={register("volume")}
+                      error={errors.volume as unknown as FieldError | undefined}
+                    />
                   </div>
                 </div>
               </div>
@@ -385,14 +411,20 @@ export default function AddProduct() {
               {/* ========================================= */}
 
               <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-                <div className="mb-5">
-                  <h3 className="text-sm font-bold text-slate-800">
-                    Tipe Minuman
-                  </h3>
+                <div className="flex items-center gap-4 mb-5">
+                  <div className="flex justify-center items-center">
+                    <Tags className="size-6 shrink-0" />
+                  </div>
 
-                  <p className="mt-1 text-xs text-slate-500">
-                    Pilih bagaimana produk dikonsumsi.
-                  </p>
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-800">
+                      Tipe Minuman
+                    </h3>
+
+                    <p className="mt-1 text-xs text-slate-500">
+                      Pilih bagaimana produk dikonsumsi.
+                    </p>
+                  </div>
                 </div>
 
                 <Controller
@@ -579,7 +611,7 @@ export default function AddProduct() {
                 <div className="flex items-start justify-center gap-2 px-2">
                   <Info className="mt-0.5 size-3.5 shrink-0 text-slate-400" />
 
-                  <p className="text-center text-xs leading-5 text-slate-400">
+                  <p className="text-xs leading-5 text-slate-400">
                     Pastikan data produk yang dimasukkan sesuai dengan informasi
                     pada kemasan.
                   </p>
@@ -594,17 +626,13 @@ export default function AddProduct() {
 
           <section className="flex h-fit flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm lg:sticky lg:top-6">
             {/* Header */}
-            <div className="border-b border-slate-100 px-5 py-5 sm:px-6">
-              <div className="flex items-start gap-3">
-                <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                  <Search className="size-5" />
-                </div>
-
+            <div className="border-b border-slate-300 px-5 py-5 sm:px-6">
+              <div className="flex items-center gap-4">
+                <Search className="size-6 shrink-0" />
                 <div>
-                  <h2 className="text-lg font-bold tracking-tight text-slate-900">
+                  <h3 className="font-bold tracking-tight text-slate-900">
                     Cek Produk
-                  </h2>
-
+                  </h3>
                   <p className="mt-1 text-xs leading-5 text-slate-500">
                     Cari produk yang sudah tersedia sebelum menambah data baru.
                   </p>
