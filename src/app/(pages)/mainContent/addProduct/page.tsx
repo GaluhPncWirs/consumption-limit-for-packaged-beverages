@@ -78,6 +78,10 @@ const addProductBeverageSchema = z.object({
   searchProduct: z.string().optional(),
 });
 
+type AddProductBeverageInput = z.input<typeof addProductBeverageSchema>;
+
+type AddProductBeverageOutput = z.output<typeof addProductBeverageSchema>;
+
 type AddProductBeverageSchema = z.infer<typeof addProductBeverageSchema>;
 
 export default function AddProduct() {
@@ -87,7 +91,7 @@ export default function AddProduct() {
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<AddProductBeverageSchema>({
+  } = useForm<AddProductBeverageInput, unknown, AddProductBeverageOutput>({
     resolver: zodResolver(addProductBeverageSchema),
   });
   const pathname = usePathname();
@@ -425,53 +429,51 @@ export default function AddProduct() {
                     <div className="mt-4 overflow-hidden rounded-xl border border-slate-200">
                       <div className="divide-y divide-slate-100">
                         <div className="flex items-center justify-between gap-4 px-4 py-3">
-                          <span className="text-xs text-slate-500">
+                          <h4 className="text-xs text-slate-500">
                             Nama Produk
-                          </span>
+                          </h4>
 
-                          <span className="max-w-[60%] text-right text-sm font-semibold text-slate-800">
+                          <p className="max-w-[60%] text-right text-sm font-semibold text-slate-800">
                             {watch("nameProduct")}
-                          </span>
+                          </p>
                         </div>
 
                         <div className="flex items-center justify-between gap-4 px-4 py-3">
-                          <span className="text-xs text-slate-500">
+                          <h4 className="text-xs text-slate-500">
                             Takaran Saji
-                          </span>
+                          </h4>
 
-                          <span className="text-sm font-semibold text-slate-800">
-                            {watch("servingSize")}
-                          </span>
+                          <p className="text-sm font-semibold text-slate-800">
+                            {watch("servingSize") as number}
+                          </p>
                         </div>
 
                         <div className="flex items-center justify-between gap-4 px-4 py-3">
-                          <span className="text-xs text-slate-500">
+                          <h4 className="text-xs text-slate-500">
                             Kandungan Gula
-                          </span>
+                          </h4>
 
-                          <span className="text-sm font-semibold text-slate-800">
-                            {watch("sugarContent")} g
-                          </span>
+                          <p className="text-sm font-semibold text-slate-800">
+                            {watch("sugarContent") as number} g
+                          </p>
                         </div>
 
                         <div className="flex items-center justify-between gap-4 px-4 py-3">
-                          <span className="text-xs text-slate-500">
-                            Isi Bersih
-                          </span>
+                          <h4 className="text-xs text-slate-500">Isi Bersih</h4>
 
-                          <span className="text-sm font-semibold text-slate-800">
-                            {watch("volume")} ml
-                          </span>
+                          <p className="text-sm font-semibold text-slate-800">
+                            {watch("volume") as number} ml
+                          </p>
                         </div>
 
                         <div className="flex items-center justify-between gap-4 px-4 py-3">
-                          <span className="text-xs text-slate-500">
+                          <h4 className="text-xs text-slate-500">
                             Tipe Minuman
-                          </span>
+                          </h4>
 
-                          <span className="max-w-[60%] text-right text-sm font-semibold text-slate-800">
+                          <p className="max-w-[60%] text-right text-sm font-semibold text-slate-800">
                             {watch("beverageType")}
-                          </span>
+                          </p>
                         </div>
                       </div>
                     </div>
